@@ -1,0 +1,17 @@
+;
+; PSU Webapp configuration.
+;
+
+api_url = https://api.plymouth.edu/0.1
+webapp_url = https://www.plymouth.edu/webapp
+tmp_dir = /web/temp
+uploads_dir = /web/uploads
+
+[calllog]
+base_url = https://www.plymouth.edu/webapp/calllog
+
+[teacher-cert]
+base_url = https://www.plymouth.edu/webapp/teacher-cert
+
+[google]
+api_key = YOUR_KEY
