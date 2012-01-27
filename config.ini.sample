@@ -15,3 +15,8 @@ base_url = https://www.plymouth.edu/webapp/teacher-cert
 
 [google]
 api_key = YOUR_KEY
+
+[smugmug]
+email = YOUR_EMAIL
+password = YOUR_BASE64_PASSWORD
+api_key = YOUR_API_KEY
