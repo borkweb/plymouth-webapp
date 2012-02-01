@@ -2,16 +2,16 @@
 ; PSU Webapp configuration.
 ;
 
-api_url = https://api.plymouth.edu/0.1
-webapp_url = https://www.plymouth.edu/webapp
-tmp_dir = /web/temp
-uploads_dir = /web/uploads
+api_url = "https://api.plymouth.edu/0.1"
+webapp_url = "https://www.plymouth.edu/webapp"
+tmp_dir = "/web/temp"
+uploads_dir = "/web/uploads"
 
 [calllog]
-base_url = https://www.plymouth.edu/webapp/calllog
+base_url = "https://www.plymouth.edu/webapp/calllog"
 
 [teacher-cert]
-base_url = https://www.plymouth.edu/webapp/teacher-cert
+base_url = "https://www.plymouth.edu/webapp/teacher-cert"
 
 [google]
 api_key = YOUR_KEY
@@ -20,3 +20,8 @@ api_key = YOUR_KEY
 email = YOUR_EMAIL
 password = YOUR_BASE64_PASSWORD
 api_key = YOUR_API_KEY
+
+[statsd]
+host = "statsd.plymouth.edu"
+port = "8125"
+enabled = 0
