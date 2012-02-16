@@ -5,7 +5,7 @@
             </li>
             <li>
               <label class="required">First Name:<em>*</em></label>
-              <input type="text" name="first_name" size="25">
+              <input type="text" name="first_name" size="25">{$name}</input>
             </li>
             <li>  
               <label class="required">Last Name:<em>*</em></label>
