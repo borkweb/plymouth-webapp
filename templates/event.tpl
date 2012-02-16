@@ -1,3 +1,4 @@
+
 <form class="label-left" name ="event_request" method="POST">
           <ul>
             <li>
@@ -5,7 +6,7 @@
             </li>
             <li>
               <label class="required">First Name:<em>*</em></label>
-              <input type="text" name="first_name" size="25">{$name}</input>
+              <input type="text" name="first_name" size="25"></input>
             </li>
             <li>  
               <label class="required">Last Name:<em>*</em></label>
