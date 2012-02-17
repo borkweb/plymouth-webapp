@@ -17,3 +17,7 @@ respond( 'POST', '/save', function( $request, $response, $app ) {
 respond( 'GET', '/save', function( $request, $response, $app ) {
 	die('omg IM A GET');
 });
+
+respond( '/event' , function( $request, $response, $app ){
+	$response->redirect( $GLOBALS['BASE_URL'] . '/templates/event.tpl' );
+});
