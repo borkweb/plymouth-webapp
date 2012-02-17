@@ -1,4 +1,8 @@
-
+<script type="text/javascript">
+jQuery(function($){
+	$("#phone").mask("(999) 999-9999");
+});
+</script>
 <form class="label-left" name ="event_request" method="POST">
           <ul>
             <li>
@@ -6,20 +10,20 @@
             </li>
             <li>
               <label class="required">First Name:<em>*</em></label>
-              <input type="text" name="first_name" size="25"></input>
+              <input type="text" name="first_name" size="25" value="{$user->first_name}"></input>
             </li>
             <li>  
               <label class="required">Last Name:<em>*</em></label>
-              <input type="text" name="last_name" size="25">
+              <input type="text" name="last_name" size="25" value="{$user->last_name}">
             </li>
             <li>
               <label class="required">Phone Number:<em>*</em></label>
-              <input type="text" name="phone" size="12">
+              <input id="phone" type="text" name="phone" size="14">
             </li>
             <li>
               <label class="required">Campus Email:<em>*</em></label>
               <div class="input-append">
-              <input type="email">
+              <input type="email" value="{$user->username}"> <!-- wp_email -->
               <span class="add-on active">@plymouth.edu</span>
             </li>
             <li>
