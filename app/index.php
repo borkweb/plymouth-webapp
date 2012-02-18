@@ -12,4 +12,9 @@ ini_set( 'include_path', str_replace( 'BASE', PSU_WEBAPP_BASE, '.:BASE/legacy:BA
 require PSU_WEBAPP_BASE . '/legacy/autoload.php';
 require PSU_WEBAPP_BASE . '/routes/routes.php';
 
-dispatch( $_SERVER['PATH_INFO'] );
+$config = new PSU\Config;
+$config->load();
+
+$uri = substr( $_SERVER['REQUEST_URI'], strlen( parse_url( $config->get( 'app_url' ), PHP_URL_PATH ) ) );
+
+dispatch( $uri );

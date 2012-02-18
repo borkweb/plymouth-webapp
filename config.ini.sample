@@ -3,6 +3,7 @@
 ;
 
 api_url = "https://api.plymouth.edu/0.1"
+app_url = "https://www.plymouth.edu/app"
 webapp_url = "https://www.plymouth.edu/webapp"
 tmp_dir = "/web/temp"
 uploads_dir = "/web/uploads"
