@@ -1,48 +1,54 @@
-<script type="text/javascript">
-jQuery(function($){
-	$("#phone").mask("(999) 999-9999");
+<script>
+var currentTime = new Date()
+$(function(){
+	$( "#startdate" ).datepicker({ minDate: currentTime });
+	$( "#enddate" ).datepicker();
 });
 </script>
 <form class="label-left" name ="event_request" method="POST">
           <ul>
             <li>
-            <h4>Contact Information</h4>
-            </li>
-            <li>
-              <label class="required">First Name:<em>*</em></label>
-              <input type="text" name="first_name" size="25" value="{$user->first_name}"></input>
-            </li>
-            <li>  
-              <label class="required">Last Name:<em>*</em></label>
-              <input type="text" name="last_name" size="25" value="{$user->last_name}">
-            </li>
-            <li>
-              <label class="required">Phone Number:<em>*</em></label>
-              <input id="phone" type="text" name="phone" size="14">
-            </li>
-            <li>
-              <label class="required">Campus Email:<em>*</em></label>
-              <div class="input-append">
-              <input type="email" value="{$user->username}"> <!-- wp_email -->
-              <span class="add-on active">@plymouth.edu</span>
-            </li>
-            <li>
               <h4>Event Information: </h4>
             </li>
             <li>
-              <label class="required">Event Title or Course Number and Section:</label>
+              <label class="required">Event Title or Course Number and Section:<em>*</em></label>
               <input type="text" name="title" size="25">
             </li>
             <li>
-              <label class="required">Room Number:</label>
-              <input type="text" name="last_name" size="5">
+              <label class="required">Location:<em>*</em></label>
+              <select name="location" value="Please select a location">
+				<option>Please select a location</option>
+				<option>Lamson</option>
+				<option>Hyde</option>
+
+		    </select>
+		  </li>
+		  <li>
+		    <label class="required">Room Number:<em>*</em></label>
+              <input type="text" name="room" size="5">
             </li>
             <li>
              <label>Purpose, Details or Comments:</label>
              <textarea  name="comments" rows="5" cols="40"></textarea>
             </li>
+		  <li>
+		  	<label class="required">Event Start:<em>*</em></label>
+		  	<input id="startdate" type="text" name="start_date"> at <input type="text" name="start_time">
+		  </li>
+		  <li>
+		  	<label class="required">Event End:<em>*</em></label>
+		  	<input id="enddate" type="text" name="end_date"> at <input type="text" name="end_time">
+		  </li>
             <li>
+		   <div id="radio">
+		  	<input type="radio" id="equipment" name="radio" />I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library
+		 <br>
+			<input type="radio" id="sponsored" name="radio" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
+
+			</div>
+		  </li>
+		  <li>
               <input type="Submit" name="submit" value="Next Step">
             </li>
-  </div>
+  </ul>
 </form>

@@ -3,8 +3,7 @@
   </div>
 </nav>
 
-{box size="16" title="Welcome"}
-	<p>Welcome to the new version of the CTS toolkit.</p>
-
-        {include file='event.tpl'}
+{box size="16" title="CTS Reservation System"}
+        {include file='contact.tpl'}
+	   {include file='event.tpl'}
 {/box}
