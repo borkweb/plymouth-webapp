@@ -2,7 +2,7 @@
 var currentTime = new Date()
 $(function(){
 	$( "#startdate" ).datepicker({ minDate: currentTime });
-	$( "#enddate" ).datepicker();
+	$( "#enddate" ).datepicker({ minDate: currentTime });
 });
 </script>
 <form class="label-left" name ="event_request" method="POST">
