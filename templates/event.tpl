@@ -46,11 +46,11 @@ $(function(){
             </li>
 		  <li>
 		  	<label class="required">Event Start:<em>*</em></label>
-		  	<input id="startdate" type="text" name="start_date"> at <input type="text" name="start_time">
+		  	<input id="startdate" type="text" name="start_date" readonly="true"> at <input type="text" name="start_time">
 		  </li>
 		  <li>
 		  	<label class="required">Event End:<em>*</em></label>
-		  	<input id="enddate" type="text" name="end_date"> at <input type="text" name="end_time">
+		  	<input id="enddate" type="text" name="end_date" readonly="true"> at <input type="text" name="end_time">
 		  </li>
 		   <div id="radio">
 		  	<input type="radio" id="equipment" name="radio" /><label for="equipment">I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library</label>
