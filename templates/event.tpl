@@ -1,8 +1,21 @@
 <script>
 var currentTime = new Date()
+var startTime= new Date();
+$(function(){
+	$( "#radio" ).buttonset();
+});
+
 $(function(){
 	$( "#startdate" ).datepicker({ minDate: currentTime });
-	$( "#enddate" ).datepicker({ minDate: currentTime });
+	
+	//When the startdate changes change the mindate for the enddate picker
+	$( "#startdate" ).change(function (){
+		startTime = ($("#startdate").val());
+		$("#enddate").datepicker({ minDate: startTime });
+
+	});
+	
+	//$( "#enddate" ).datepicker({ minDate: currentTime });
 });
 </script>
 <form class="label-left" name ="event_request" method="POST">
@@ -39,14 +52,11 @@ $(function(){
 		  	<label class="required">Event End:<em>*</em></label>
 		  	<input id="enddate" type="text" name="end_date"> at <input type="text" name="end_time">
 		  </li>
-            <li>
 		   <div id="radio">
-		  	<input type="radio" id="equipment" name="radio" />I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library
-		 <br>
-			<input type="radio" id="sponsored" name="radio" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
-
+		  	<input type="radio" id="equipment" name="radio" /><label for="equipment">I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library</label>
+		 
+			<input type="radio" id="sponsored" name="radio" /><label for="sponsored">I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified</label>
 			</div>
-		  </li>
 		  <li>
               <input type="Submit" name="submit" value="Next Step">
             </li>

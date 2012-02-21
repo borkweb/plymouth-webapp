@@ -1,4 +1,4 @@
-</script>
+
 <form class="label-left" name ="event_request" method="POST">
           <ul>
             <li>
