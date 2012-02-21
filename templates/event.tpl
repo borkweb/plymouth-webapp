@@ -17,6 +17,7 @@ $(function(){
 	
 	//$( "#enddate" ).datepicker({ minDate: currentTime });
 });
+
 </script>
 <form class="label-left" name ="event_request" method="POST">
           <ul>
@@ -46,11 +47,16 @@ $(function(){
             </li>
 		  <li>
 		  	<label class="required">Event Start:<em>*</em></label>
-		  	<input id="startdate" type="text" name="start_date" readonly="true"> at <input type="text" name="start_time">
+		  	<input id="startdate" type="text" name="start_date" readonly="true"> at <input id="time" readonly="true" type="text" name="start_time">
 		  </li>
 		  <li>
 		  	<label class="required">Event End:<em>*</em></label>
-		  	<input id="enddate" type="text" name="end_date" readonly="true"> at <input type="text" name="end_time">
+		  	<input id="enddate" type="text" name="end_date" readonly="true">
+			$app->tpl->assign('hours',array(1,2,3,4,5,6,7,8,9,10,11,12));
+			<select name="endhour">
+			{html_options values=$hours output=$hours selected="1"}
+			</select>
+			<input id="time2" readonly="true" type="text" name="end_time">
 		  </li>
 		   <div id="radio">
 		  	<input type="radio" id="equipment" name="radio" /><label for="equipment">I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library</label>
