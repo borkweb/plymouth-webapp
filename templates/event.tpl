@@ -47,20 +47,52 @@ $(function(){
             </li>
 		  <li>
 		  	<label class="required">Event Start:<em>*</em></label>
-		  	<input id="startdate" type="text" name="start_date" readonly="true"> at <input id="time" readonly="true" type="text" name="start_time">
-		  </li>
-		  <li>
-		  	<label class="required">Event End:<em>*</em></label>
-		  	<input id="enddate" type="text" name="end_date" readonly="true">
-			<select name="endhour">
-			{section name=hours start=1 loop=13}
-			{$app->tpl.section.hours.index}
-				<option value="{$app->tpl.section.hours.index}">{$app->tpl.section.hours.index}</option>
+		  	<input id="startdate" type="text" name="start_date" readonly="true"> at 
+			<select name="starthour">
+			{section name=starthours start=1 loop=13}
+
+				<option value="{$smarty.section.starthours.index}">{$smarty.section.starthours.index}</option>
 			{/section}
 			
 			</select>
-			<input id="time2" readonly="true" type="text" name="end_time">
+			:
+			<select name="startminute">
+			{section name=startminutes start=00 loop=60 step=5}
+
+				<option value="{$smarty.section.startminutes.index}">{$smarty.section.startminutes.index|string_format:"%02d"}</option>
+			{/section}
+			
+			</select>
+			-
+			<select name="startampm">
+				<option>AM</option>
+				<option>PM</option>
+			</select>
 		  </li>
+		  <li>
+		  	<label class="required">Event End:<em>*</em></label>
+		  	<input id="enddate" type="text" name="end_date" readonly="true"> at
+			<select name="endhour">
+			{section name=endhours start=1 loop=13}
+
+				<option value="{$smarty.section.endhours.index}">{$smarty.section.endhours.index}</option>
+			{/section}
+			
+			</select>
+			:
+			<select name="endminute">
+			{section name=endminutes start=00 loop=60 step=5}
+
+				<option value="{$smarty.section.endminutes.index}">{$smarty.section.endminutes.index|string_format:"%02d"}</option>
+			{/section}
+			
+			</select>
+			-
+			<select name="endampm">
+				<option>AM</option>
+				<option>PM</option>
+			</select>
+		   </li>
 		   <div id="radio">
 		  	<input type="radio" id="equipment" name="radio" /><label for="equipment">I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library</label>
 		 
