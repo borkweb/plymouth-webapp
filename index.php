@@ -50,24 +50,12 @@ respond( '/?', function( $request, $response, $app ) {
 	$app->tpl->display('index.tpl');
 });
 
-respond( '/monkey-fart', function( $request, $response, $app ) {
-	die('Boo');
-});
-
 
 $app_routes = array(
 	'bork',//testing
-	'reserve',//user main cp
-	'reserve/contact',//user contact information
-	'reserve/event',//user event information
-	'reserve/equipment',//available equipment page for user
-	'reserve/confirm',//confirmation page for use
-	'reserve/success',//success page for user
-	'history/pending',//pending reservations
-	'history/past',//past reservations
-	'admin',//admin page with all current reservations
-	'admin/reservation',//page which shows individual reservations
-	'equipment',//equipment page
+	'reserve',//user page for reservations
+	'history',//pending and past reservations
+	'admin',//admin page with all current reservations and equipment
 );
 
 foreach( $app_routes as $base ) {

@@ -52,9 +52,12 @@ $(function(){
 		  <li>
 		  	<label class="required">Event End:<em>*</em></label>
 		  	<input id="enddate" type="text" name="end_date" readonly="true">
-			$app->tpl->assign('hours',array(1,2,3,4,5,6,7,8,9,10,11,12));
 			<select name="endhour">
-			{html_options values=$hours output=$hours selected="1"}
+			{section name=hours start=1 loop=13}
+			{$app->tpl.section.hours.index}
+				<option value="{$app->tpl.section.hours.index}">{$app->tpl.section.hours.index}</option>
+			{/section}
+			
 			</select>
 			<input id="time2" readonly="true" type="text" name="end_time">
 		  </li>
