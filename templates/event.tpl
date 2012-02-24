@@ -19,7 +19,7 @@ $(function(){
 });
 
 </script>
-<form class="label-left" name ="event_request" method="POST">
+<form class="label-left" name ="event_info" method="POST" action="{$PHP.BASE_URL}/reserve/event">
           <ul>
             <li>
               <h4>Event Information: </h4>

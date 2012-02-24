@@ -6,3 +6,42 @@
 //reseve/confirm.php
 //reserve/success.php
 //reserve/equipment.php
+	
+$curr_page='/';
+respond( 'POST', '/contact',function( $request, $respond, $app){
+	//required parameters
+	$first_name=$request->param('first_name');
+	$last_name=$request->param('last_name');
+	$phone=$request->param('phone');
+	if( ! $first_name ){ //if there is no first name
+		$_SESSION['errors'][]='First name not found'; //throw error
+		$response->redirect( $GLOBALS['BASE_URL'] . $curr_page ); //redirect them back to the same page
+	}else if( ! $last_name ){ //if there is no first name
+		$_SESSION['errors'][]='Last name not found'; //throw error
+		$response->redirect( $GLOBALS['BASE_URL'] . $curr_page ); //redirect them back to the same page
+	}
+
+	else if( ! $phone ){ //if there is no first name
+		$_SESSION['errors'][]='Phone number not found'; //throw error
+		$response->redirect( $GLOBALS['BASE_URL'] . $curr_page ); //redirect them back to the same page
+	}
+});
+
+respond( 'POST','/event',function( $request, $response, $app){
+	$start_date=$request->param('start_date');
+	$end_date=$request->param('end_date');
+
+	if( ! $start_date ){
+		$_SESSION['errors'][]='Start Date not found';
+		//$response->redirect( $GLOBALS['BASE_URL'] );	
+	}else if( ! $end_date ){
+		$_SESSION['errors'][]='End Date not found';
+		$response->redirect( $GLOBALS['BASE_URL'] );
+	}
+	echo count($_SESSIONS['errors']);
+	if (count($_SESSIONS['errors']) > 0){
+		$response->redirect( $GLOBALS['BASE_URL'] );
+
+	}
+
+});

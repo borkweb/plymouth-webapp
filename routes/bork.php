@@ -19,5 +19,5 @@ respond( 'GET', '/save', function( $request, $response, $app ) {
 });
 
 respond( '/event' , function( $request, $response, $app ){
-	$response->redirect( $GLOBALS['BASE_URL'] . '/templates/event.tpl' );
+	die('TESDT');
 });
