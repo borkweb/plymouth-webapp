@@ -16,12 +16,13 @@ respond( 'POST', '/contact',function( $request, $respond, $app){
 	if( ! $first_name ){ //if there is no first name
 		$_SESSION['errors'][]='First name not found'; //throw error
 		$response->redirect( $GLOBALS['BASE_URL'] . $curr_page ); //redirect them back to the same page
-	}else if( ! $last_name ){ //if there is no first name
+	}
+	if( ! $last_name ){ //if there is no first name
 		$_SESSION['errors'][]='Last name not found'; //throw error
 		$response->redirect( $GLOBALS['BASE_URL'] . $curr_page ); //redirect them back to the same page
 	}
 
-	else if( ! $phone ){ //if there is no first name
+	if( ! $phone ){ //if there is no first name
 		$_SESSION['errors'][]='Phone number not found'; //throw error
 		$response->redirect( $GLOBALS['BASE_URL'] . $curr_page ); //redirect them back to the same page
 	}
@@ -33,15 +34,15 @@ respond( 'POST','/event',function( $request, $response, $app){
 
 	if( ! $start_date ){
 		$_SESSION['errors'][]='Start Date not found';
-		//$response->redirect( $GLOBALS['BASE_URL'] );	
-	}else if( ! $end_date ){
+	}elseif( ! $end_date ){
 		$_SESSION['errors'][]='End Date not found';
-		$response->redirect( $GLOBALS['BASE_URL'] );
 	}
-	echo count($_SESSIONS['errors']);
-	if (count($_SESSIONS['errors']) > 0){
-		$response->redirect( $GLOBALS['BASE_URL'] );
 
+		if( count($_SESSION['errors'])>0){
+		
+		$response->redirect( $GLOBALS['BASE_URL'] );
 	}
+	PSU::dbug($_SESSION['errors']);
+	PSU::dbug($_POST);
 
 });
