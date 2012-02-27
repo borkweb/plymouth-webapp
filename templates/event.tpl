@@ -99,7 +99,7 @@ $(function(){
 			<input type="radio" id="sponsored" name="radio" /><label for="sponsored">I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified</label>
 			</div>
 		  <li>
-              <input type="Submit" name="submit" value="Next Step">
+              <input type="Submit" name="Submit_event" value="Proceed to Equipment Choice">
             </li>
   </ul>
 </form>
