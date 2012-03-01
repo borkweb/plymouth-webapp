@@ -26,7 +26,7 @@
 
           <li>
           	<label class="required">Campus Email:<em>*</em></label>
-          	<input type="email" value="{$user->wp_email}"> <!-- wp_email -->
+          	<input type="email" name ="email" value="{$user->wp_email}"> <!-- wp_email -->
 		</li>
 
 		<li>
