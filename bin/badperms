@@ -1,0 +1,15 @@
+#!/bin/sh
+
+IGNORE="( -path */.svn -o -path /web/git/plymouth-webapp.git -o -path /web/temp -o -path /web/lost+found ) -prune"
+
+echo "### Files and Directories lacking group write"
+find /web $IGNORE -o -type f \! -perm -664 -exec ls -ld {} +
+echo
+
+echo "### Directories lacking setgid"
+find /web $IGNORE -o -type d \! -perm -2000 -exec ls -ld {} +
+echo
+
+echo "### Files and Directories not group owned by mis"
+find /web $IGNORE -o \! -group mis -exec ls -ld {} +
+echo
