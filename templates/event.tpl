@@ -21,6 +21,33 @@ $(function(){
 </script>
 <form class="label-left" name ="event_info" method="POST" action="{$PHP.BASE_URL}/reserve/event">
           <ul>
+<li>
+          	<h4>Contact Information:</h4>
+          </li>
+
+          <li>
+          	<label class="required">First Name:<em>*</em></label>
+          	<input type="text" name="first_name" size="25" value="{$user->first_name}"></input>
+          </li>
+
+          <li>  
+          	<label class="required">Last Name:<em>*</em></label>
+          	<input type="text" name="last_name" size="25" value="{$user->last_name}">
+          </li>
+
+          <li>
+          	<label class="required">Phone Number:<em>*</em></label>
+          	<input id="phone" type="text" name="phone" size="14">
+          </li>
+		<li>
+          	<label>Secondary Phone Number(Cell):</label>
+          	<input id="phone" type="text" name="secondary_phone" size="14">
+          </li>
+
+          <li>
+          	<label class="required">Campus Email:<em>*</em></label>
+          	<input type="email" name ="email" value="{$user->wp_email}"> <!-- wp_email -->
+		</li>
             <li>
               <h4>Event Information: </h4>
             </li>
@@ -94,9 +121,9 @@ $(function(){
 			</select>
 		   </li>
 		   <div id="radio">
-		  	<input type="radio" id="equipment" name="radio" /><label for="equipment">I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library</label>
+		  	<input type="radio" id="equipment" name="radio" value="equipment" checked="true"/><label for="equipment">I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library</label>
 		 
-			<input type="radio" id="sponsored" name="radio" /><label for="sponsored">I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified</label>
+			<input type="radio" id="sponsored" name="radio" value="sponsored" /><label for="sponsored">I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified</label>
 			</div>
 		  <li>
               <input type="Submit" name="Submit_event" value="Proceed to Equipment Choice">
