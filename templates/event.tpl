@@ -1,9 +1,6 @@
 <script>
 var currentTime = new Date()
 var startTime= new Date();
-$(function(){
-	$( "#radio" ).buttonset();
-});
 
 $(function(){
 	$( "#startdate , #enddate" ).datepicker({ minDate: currentTime });
@@ -120,11 +117,12 @@ $(function(){
 				<option>PM</option>
 			</select>
 		   </li>
-		   <div id="radio">
-		  	<input type="radio" id="equipment" name="radio" value="equipment" checked="true"/><label for="equipment">I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library</label>
-		 
-			<input type="radio" id="sponsored" name="radio" value="sponsored" /><label for="sponsored">I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified</label>
-			</div>
+		   <li>
+		<input type="radio" id="equipment" name="radio" value="equipment" checked="true"/>I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library
+		  </li>
+		  <li>
+			<input type="radio" id="sponsored" name="radio" value="sponsored" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
+		  </li>
 		  <li>
               <input type="Submit" name="Submit_event" value="Proceed to Equipment Choice">
             </li>
