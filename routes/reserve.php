@@ -16,9 +16,13 @@ respond( '/', function( $request, $response, $app){
 
 });//end /
 
+
 respond( '/confirm', function( $request, $response, $app){
+	$remove_id=(int)$request->param('remove_id');
+	if($remove_id || $remove_id=="0"){
+		unset($_SESSION['cts']['equipment'][$remove_id]);		
+	}
 	PSU::dbug($_SESSION['cts']);
-	PSU::dbug($app->user);
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
 	$app->tpl->assign( 'reserve', $_SESSION['cts']);
@@ -29,10 +33,16 @@ respond( '/confirm', function( $request, $response, $app){
 
 respond ( '/equipment', function( $request, $response, $app){
 	$equipment_id=$request->param('equipment_id');
-	if($equipment_id){
-		$_SESSION['cts']['equipment'][]=$equipment_id;
+	if($equipment_id || $equipment_id == "0"){
+		$app->tpl->assign( 'description',reserveDatabaseAPI::itemInfo($equipment_id));
 	}
 
+	$remove_id=(int)$request->param('remove_id');
+	if($remove_id || $remove_id=="0"){
+		unset($_SESSION['cts']['equipment'][$remove_id]);		
+	}
+
+	$app->tpl->assign( 'equipment_id', $equipment_id);
 	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
 	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
 	$app->tpl->display( 'equipment.tpl' );
@@ -40,12 +50,18 @@ respond ( '/equipment', function( $request, $response, $app){
 
 });//end equipment
 
-respond( '/equipment/[:id]/?', function( $request, $response, $app){
+respond( '/equipment/add', function ($request, $response, $app){
+	$equipment_id=$request->param('equipment_id');
+	if($equipment_id || $equipment_id =="0" ){
+		$_SESSION['cts']['equipment'][]=$equipment_id;
+	}
 	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
 	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
-	$app->tpl->assign( 'equipment_id' ,$request->id );
+
 	$app->tpl->display( 'equipment.tpl' );
-});//equipment with id
+
+	
+});
 
 respond( 'POST', '/event',function( $request, $response, $app){
 
@@ -139,3 +155,8 @@ respond( 'POST', '/event',function( $request, $response, $app){
 		$app->tpl->display( 'equipment.tpl' );
 	}//end else
 });//end event respond
+
+respond ('/success', function($request, $response, $app){
+
+
+});
