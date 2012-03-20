@@ -61,7 +61,7 @@ respond( '/equipment/add', function ($request, $response, $app){
 	$app->tpl->display( 'equipment.tpl' );
 
 	
-});
+});//end equipment add
 
 respond( 'POST', '/event',function( $request, $response, $app){
 
@@ -108,6 +108,12 @@ respond( 'POST', '/event',function( $request, $response, $app){
 		$_SESSION['errors'][]='Last name not found'; //throw error
 	}elseif( ! $phone ){ //if there is no phone number
 		$_SESSION['errors'][]='Phone number not found'; //throw error
+	}elseif( !filter_var($phone, FILTER_VALIDATE_INT)){
+	    $_SESSION['errors'][]='Phone number incorrect';	
+	}elseif( $secondary_phone ){
+		if( !filter_var($secondary_phone, FILTER_VALIDATE_INT) ){
+			$_SESSION['errors'][]='Secondary phone incorrect';
+		}
 	}elseif( ! $email ){
 		$_SESSION['errors'][]='Email not found';
 	}elseif( ! $title ){
@@ -123,6 +129,7 @@ respond( 'POST', '/event',function( $request, $response, $app){
 	}elseif( ! $end_date ){ //if there is no end date
 		$_SESSION['errors'][]='End Date not found';
 	}//end elseif
+
 
 	if( count($_SESSION['errors'])>0 ){//if the number of errors is > 0
 		$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
@@ -156,7 +163,12 @@ respond( 'POST', '/event',function( $request, $response, $app){
 	}//end else
 });//end event respond
 
+respond ('/new', function($request, $response, $app){
+	unset($_SESSION['cts']);//delete the cts session array
+	$response->redirect($GLOBALS['BASE_URL'] . '/reserve/'); 	
+});//end new reservation
+
 respond ('/success', function($request, $response, $app){
 
 
-});
+});//end success
