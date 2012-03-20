@@ -16,6 +16,7 @@ $(function(){
 });
 
 </script>
+{box}
 <form class="label-left" name ="event_info" method="POST" action="{$PHP.BASE_URL}/reserve/event">
           <ul>
 <li>
@@ -54,12 +55,7 @@ $(function(){
             </li>
             <li>
               <label class="required">Location:<em>*</em></label>
-              <select name="location" value="Please select a location">
-				<option>Please select a location</option>
-				<option>Lamson</option>
-				<option>Hyde</option>
-
-		    </select>
+			{html_options name=location options=$locations}
 		  </li>
 		  <li>
 		    <label class="required">Room Number:<em>*</em></label>
@@ -128,3 +124,4 @@ $(function(){
             </li>
   </ul>
 </form>
+{/box}

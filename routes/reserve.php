@@ -6,12 +6,38 @@
 //reseve/equipment
 //reserve/confirm
 //reserve/success
+require_once $GLOBALS['BASE_DIR'] . '/includes/reserveDatabaseAPI.class.php';
+require_once $GLOBALS['BASE_DIR'] . '/includes/CTSdatabaseAPI.class.php';
 
-respond( 'GET', 'equipment', function( $request, $response, $app){
-	$app->tpl->assign( 'type', CTSdatabaseAPI::types( $_GET ) );
-	PSU::dbug($_GET);
+respond( '/', function( $request, $response, $app){
+	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+	$app->tpl->display( 'event.tpl' );
+
+});//end /
+
+
+
+respond ( '/equipment', function( $request, $response, $app){
+	$equipment_id=$request->param('equipment_id');
+	if($equipment_id){
+		$_SESSION['cts']['equipment'][]=$equipment_id;
+	}
+
+	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
+	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
+	PSU::dbug($_SESSION['cts']);
+	PSU::dbug(reserveDatabaseAPI::categories());
+	$app->tpl->display( 'equipment.tpl' );
+	
 
 });//end equipment
+
+respond( '/equipment/[:id]/?', function( $request, $response, $app){
+	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
+
+	$app->tpl->assign( 'equipment_id' ,$request->id );
+	$app->tpl->display( 'equipment.tpl' );
+});//equipment with id
 
 respond( 'POST', '/event',function( $request, $response, $app){
 
@@ -50,7 +76,6 @@ respond( 'POST', '/event',function( $request, $response, $app){
 	$end_time=$endhour . ':' . $endminute . ':' .$endampm;
 
 
-
 	if( ! $first_name ){ //if there is no first name
 		$_SESSION['errors'][]='First name not found'; //throw error
 	}elseif( ! $last_name ){ //if there is no last name
@@ -74,7 +99,7 @@ respond( 'POST', '/event',function( $request, $response, $app){
 	}//end elseif
 
 	if( count($_SESSION['errors'])>0 ){//if the number of errors is > 0
-		$response->redirect( $GLOBALS['BASE_URL'] );
+		$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
 	}else{
 		$_SESSION['cts']['first_name']=$first_name;
 		$_SESSION['cts']['last_name']=$last_name;
@@ -98,13 +123,7 @@ respond( 'POST', '/event',function( $request, $response, $app){
 		$_SESSION['cts']['end_time']=$end_time;
 		$_SESSION['cts']['reserve_type']=$reserve_type;
 
-			
-		PSU::dbug($_SESSION['cts']);
-
-		//$app->tpl->display( 'equipment.tpl' );
+		$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
+		$app->tpl->display( 'equipment.tpl' );
 	}//end else
-
-//	PSU::dbug($_SESSION['errors']);
-	//PSU::dbug($_POST);
-
 });//end event respond
