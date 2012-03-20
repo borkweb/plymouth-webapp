@@ -11,10 +11,20 @@ require_once $GLOBALS['BASE_DIR'] . '/includes/CTSdatabaseAPI.class.php';
 
 respond( '/', function( $request, $response, $app){
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+
 	$app->tpl->display( 'event.tpl' );
 
 });//end /
 
+respond( '/confirm', function( $request, $response, $app){
+	PSU::dbug($_SESSION['cts']);
+	PSU::dbug($app->user);
+	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
+	$app->tpl->assign( 'reserve', $_SESSION['cts']);
+	$app->tpl->display( 'confirm.tpl');
+	
+});//end confirm
 
 
 respond ( '/equipment', function( $request, $response, $app){
@@ -25,8 +35,6 @@ respond ( '/equipment', function( $request, $response, $app){
 
 	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
 	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
-	PSU::dbug($_SESSION['cts']);
-	PSU::dbug(reserveDatabaseAPI::categories());
 	$app->tpl->display( 'equipment.tpl' );
 	
 
@@ -34,7 +42,7 @@ respond ( '/equipment', function( $request, $response, $app){
 
 respond( '/equipment/[:id]/?', function( $request, $response, $app){
 	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
-
+	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
 	$app->tpl->assign( 'equipment_id' ,$request->id );
 	$app->tpl->display( 'equipment.tpl' );
 });//equipment with id
@@ -48,6 +56,8 @@ respond( 'POST', '/event',function( $request, $response, $app){
 	$phone=$request->param('phone');
 	$secondary_phone=$request->param('secondary_phone');
 	$email=$request->param('email');
+	$submit_first_name=$app->user['first_name'];
+	$submit_last_name=$app->user['last_name'];
 
 	$first_name=filter_var($first_name, FILTER_SANITIZE_STRING);
 	$last_name=filter_var($last_name, FILTER_SANITIZE_STRING);
@@ -104,6 +114,8 @@ respond( 'POST', '/event',function( $request, $response, $app){
 		$_SESSION['cts']['first_name']=$first_name;
 		$_SESSION['cts']['last_name']=$last_name;
 		$_SESSION['cts']['phone']=$phone;
+		$_SESSION['cts']['submit_first_name']=$submit_first_name;
+		$_SESSION['cts']['submit_last_name']=$submit_last_name;
 		
 		if( $secondary_phone ){
 			$_SESSION['cts']['secondary_phone']=$secondary_phone;

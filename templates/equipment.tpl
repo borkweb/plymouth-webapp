@@ -19,8 +19,9 @@
 {/box}
 
 {box size="4" title="Shopping Cart"}
-	{foreach from=$equipment item=item}
-		{$categories[$item]}<br>
+	{foreach from=$equipment item=item key=k}
+		{$categories[$item]}-<em><a href="{$k}">Remove</a></em> <br>
 	{/foreach}
+	<input type="Submit" name="Final Submit" value="Done">
 {/box}
 </form>
