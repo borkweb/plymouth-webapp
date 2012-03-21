@@ -10,10 +10,60 @@ class reserveDatabaseAPI{
 
 	}//end function categories
 
-	function insertReservation($data){
-		$sql="INSERT INTO cts_reservation";
+	function insertReservation($last_name, $first_name, $phone, $email, $application_date, $start_date, $start_time, $end_date, $end_time, $comments, $building, $room, $title, $delivery_type, $requested_items, $status){
 
-		PSU::db('cts')->Execute( $sql );
+		$sql="
+		INSERT INTO cts_reservation 
+			(lname,
+			fname,
+			phone,
+			email,
+			application_date,
+			start_date,
+			end_date,
+			start_time,
+			end_time,
+			memo,
+			building_idx,
+			room,
+			title,
+			delivery_type,
+			request_items,
+			status) 
+		VALUES 
+			(?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?, 
+			?)";
+			
+		PSU::db('cts')->Execute( $sql, array($last_name, 
+			$first_name, 
+			$phone, 
+			$email, 
+			$application_date, 
+			$start_date, 
+			$end_date, 
+			$start_time, 
+			$end_time, 
+			$comments, 
+			$building, 
+			$room, 
+			$title, 
+			$delivery_type, 
+			$requested_items, 
+			$status));
 			
 	}//end function insertReservation
 

@@ -34,7 +34,7 @@
 		</li>
 		<h2>Equipment Requested</h2>
 			{foreach from=$reserve.equipment item=item key=k}
-				<li>{$categories[$item]} - <a href="{$PHP.BASE_URL}/reserve/confirm?remove_id={$k}"><em>Remove</em></a></li>
+				<li>{$categories[$item]} - <a href="{$PHP.BASE_URL}/reserve/confirm/{$k}/remove"><em>Remove</em></a></li>
 			{/foreach}
 	</ul>
 

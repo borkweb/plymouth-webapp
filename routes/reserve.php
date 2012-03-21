@@ -1,7 +1,6 @@
 <?php
 //This file will route all of the traffic for the user side of the reservation system.
 //
-//reserve/contact
 //reserve/event
 //reseve/equipment
 //reserve/confirm
@@ -19,10 +18,7 @@ respond( '/', function( $request, $response, $app){
 
 respond('POST', '/confirm', function( $request, $response, $app){
 	$_SESSION['cts']['step']="2";
-	$remove_id=(int)$request->param('remove_id');
-	if($remove_id || $remove_id=="0"){
-		unset($_SESSION['cts']['equipment'][$remove_id]);		
-	}
+	
 	PSU::dbug($_SESSION['cts']);
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
@@ -31,14 +27,21 @@ respond('POST', '/confirm', function( $request, $response, $app){
 	$app->tpl->assign( 'reserve', $_SESSION['cts']);
 	$app->tpl->display( 'confirm.tpl');
 	
-});//end confirm
+});//end confirm POST
+
+respond( '/confirm/[i:id]/remove', function( $request, $response, $app){
+	$equipment_id=$request->id;
+	if($equipment_id || $equipment_id =="0" ){
+		unset($_SESSION['cts']['equipment'][$equipment_id]);
+	}
+
+	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
+	$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/confirm' );
+	
+});
 
 respond( '/confirm', function( $request, $response, $app){
 	if($_SESSION['cts']['step']==2){
-		$remove_id=(int)$request->param('remove_id');
-		if($remove_id || $remove_id=="0"){
-			unset($_SESSION['cts']['equipment'][$remove_id]);		
-		}
 		$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 		$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
 		$app->tpl->assign( 'step', $_SESSION['cts']['step']);
@@ -55,7 +58,8 @@ respond( '/confirm', function( $request, $response, $app){
 
 
 respond ( '/equipment', function( $request, $response, $app){
-	if($_SESSION['cts']['step']>=1){	
+	if($_SESSION['cts']['step']>=1){
+		PSU::dbug($_SESSION['cts']);	
 		$equipment_id=$request->param('equipment_id');
 		if($equipment_id || $equipment_id == "0"){
 			$app->tpl->assign( 'description',reserveDatabaseAPI::itemInfo($equipment_id));
@@ -128,13 +132,15 @@ respond( 'POST', '/event',function( $request, $response, $app){
 
 	$starthour=$request->param('starthour');
 	$startminute=$request->param('startminute');
+	$startminute=sprintf("%02d",$startminute);
 	$startampm=$request->param('startampm');
-	$start_time=$starthour . ':' . $startminute . ':' . $startampm;
+	$start_time=$starthour . ':' . $startminute . ' ' . $startampm;
 
 	$endhour=$request->param('endhour');
 	$endminute=$request->param('endminute');
+	$endminute=sprintf("%02d",$endminute);
 	$endampm=$request->param('endampm');
-	$end_time=$endhour . ':' . $endminute . ':' .$endampm;
+	$end_time=$endhour . ':' . $endminute . ' ' . $endampm;
 
 
 	if( ! $first_name ){ //if there is no first name
@@ -206,7 +212,45 @@ respond ('/new', function($request, $response, $app){
 	$response->redirect($GLOBALS['BASE_URL'] . '/reserve/'); 	
 });//end new reservation
 
-respond ('/success', function($request, $response, $app){
-	unset($_SESSION['cts']);//delete the cts session array
+respond ('POST','/success', function($request, $response, $app){
+	\PSU::db('cts')->debug=true;
+	\PSU::dbug($_SESSION['cts']);
+	$currtime=date('Y-n-j G:i:s');
+	$categories=reserveDatabaseAPI::categories();
+
+	$start_time = date("H:i:s", strtotime($_SESSION['cts']['start_time']));
+
+	$end_time = date("H:i:s", strtotime($_SESSION['cts']['end_time']));
+
+
+	$start_date=date("Y-m-d", strtotime($_SESSION['cts']['start_date']));
+
+	$end_date=date("Y-m-d" , strtotime($_SESSION['cts']['end_date']));
+
+	foreach(($_SESSION['cts']['equipment']) as $i){
+		$name=$categories[$i]; 
+		$equipment .= $name . ", ";
+	}
+	reserveDatabaseAPI::insertReservation(
+		//need to use binding in the SQL
+		//VALUES(?,?)
+		$_SESSION['cts']['last_name'],
+		$_SESSION['cts']['first_name'],
+		$_SESSION['cts']['phone'],
+		$_SESSION['cts']['email'],
+		$currtime,
+		$start_date,
+		$start_time,
+		$end_date,
+		$end_time,
+		$_SESSION['cts']['comments'],
+		$_SESSION['cts']['location'],
+		$_SESSION['cts']['room'],
+		$_SESSION['cts']['title'],
+		$_SESSION['cts']['reserve_type'],
+		$equipment,
+		"pending"
+		);
+	//unset($_SESSION['cts']);//delete the cts session array
 	$app->tpl->display( 'success.tpl' );
 });//end success
