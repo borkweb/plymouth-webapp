@@ -16,7 +16,8 @@ $(function(){
 });
 
 </script>
-{box}
+{include file="status.tpl"}
+{box size="16" title="Event Information"}
 <form class="label-left" name ="event_info" method="POST" action="{$PHP.BASE_URL}/reserve/event">
           <ul>
 <li>

@@ -21,7 +21,7 @@
 <form name="equipment-full" method="POST" action="{$PHP.BASE_URL}/reserve/confirm">
 {box size="4" title="Shopping Cart"}
 	{foreach from=$equipment item=item key=k}
-		{$categories[$item]}-<em><a href="{$PHP.BASE_URL}/reserve/equipment?remove_id={$k}">Remove</a></em> <br>
+		{$categories[$item]}-<em><a href="{$PHP.BASE_URL}/reserve/equipment/{$k}/remove">Remove</a></em> <br>
 	{/foreach}
 	<input type="Submit" name="Final Submit" value="Done">
 {/box}

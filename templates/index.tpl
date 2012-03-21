@@ -4,7 +4,7 @@
 </nav>
 
 {box size="5" title="New Equipment Request"}
-	<p class="center"><a class="button" href="{$PHP.BASE_URL}/reserve/">Start Loan</a></p>
+	<p class="center"><a class="button" href="{$PHP.BASE_URL}/reserve/new">Start Loan</a></p>
 
 	<p>This is the ONLY way to request any equipment from Classroom Technology Services. Requests made via this form <strong>must</strong> be submitted 72 hours in advance.</p>
 {/box}

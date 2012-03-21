@@ -11,13 +11,14 @@ require_once $GLOBALS['BASE_DIR'] . '/includes/CTSdatabaseAPI.class.php';
 
 respond( '/', function( $request, $response, $app){
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
-
+	$app->tpl->assign( 'step', $_SESSION['cts']['step']);
 	$app->tpl->display( 'event.tpl' );
 
 });//end /
 
 
-respond( '/confirm', function( $request, $response, $app){
+respond('POST', '/confirm', function( $request, $response, $app){
+	$_SESSION['cts']['step']="2";
 	$remove_id=(int)$request->param('remove_id');
 	if($remove_id || $remove_id=="0"){
 		unset($_SESSION['cts']['equipment'][$remove_id]);		
@@ -25,43 +26,77 @@ respond( '/confirm', function( $request, $response, $app){
 	PSU::dbug($_SESSION['cts']);
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
+	$app->tpl->assign( 'step', $_SESSION['cts']['step']);
+
 	$app->tpl->assign( 'reserve', $_SESSION['cts']);
 	$app->tpl->display( 'confirm.tpl');
 	
 });//end confirm
 
+respond( '/confirm', function( $request, $response, $app){
+	if($_SESSION['cts']['step']==2){
+		$remove_id=(int)$request->param('remove_id');
+		if($remove_id || $remove_id=="0"){
+			unset($_SESSION['cts']['equipment'][$remove_id]);		
+		}
+		$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+		$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
+		$app->tpl->assign( 'step', $_SESSION['cts']['step']);
+
+		$app->tpl->assign( 'reserve', $_SESSION['cts']);
+		$app->tpl->display( 'confirm.tpl');
+	}elseif($_SESSION['cts']['step']==1){
+		$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
+	}else{	
+		$response->redirect($GLOBALS['BASE_URL'] . '/reserve/');
+	}
+	
+});//end confirm
+
 
 respond ( '/equipment', function( $request, $response, $app){
-	$equipment_id=$request->param('equipment_id');
-	if($equipment_id || $equipment_id == "0"){
-		$app->tpl->assign( 'description',reserveDatabaseAPI::itemInfo($equipment_id));
-	}
+	if($_SESSION['cts']['step']>=1){	
+		$equipment_id=$request->param('equipment_id');
+		if($equipment_id || $equipment_id == "0"){
+			$app->tpl->assign( 'description',reserveDatabaseAPI::itemInfo($equipment_id));
+		}
 
-	$remove_id=(int)$request->param('remove_id');
-	if($remove_id || $remove_id=="0"){
-		unset($_SESSION['cts']['equipment'][$remove_id]);		
+		$app->tpl->assign( 'step', $_SESSION['cts']['step']);
+		$app->tpl->assign( 'equipment_id', $equipment_id);
+		$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
+		$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
+		$app->tpl->display( 'equipment.tpl' );
+	}elseif($_SESSION['cts']['step']==NULL){
+		$response->redirect($GLOBALS['BASE_URL'] . '/reserve/');
 	}
-
-	$app->tpl->assign( 'equipment_id', $equipment_id);
-	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
-	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
-	$app->tpl->display( 'equipment.tpl' );
 	
 
 });//end equipment
 
 respond( '/equipment/add', function ($request, $response, $app){
-	$equipment_id=$request->param('equipment_id');
+	$equipment_id=$request->equipment_id;
 	if($equipment_id || $equipment_id =="0" ){
 		$_SESSION['cts']['equipment'][]=$equipment_id;
 	}
-	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
-	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
 
-	$app->tpl->display( 'equipment.tpl' );
+	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
+	$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/equipment' );
 
 	
 });//end equipment add
+
+respond( '/equipment/[i:id]/remove', function ($request, $response, $app){
+	$equipment_id=$request->id;
+	if($equipment_id || $equipment_id =="0" ){
+		unset($_SESSION['cts']['equipment'][$equipment_id]);
+	}
+
+	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
+	$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/equipment' );
+
+
+	
+});//end equipment remove
 
 respond( 'POST', '/event',function( $request, $response, $app){
 
@@ -157,6 +192,9 @@ respond( 'POST', '/event',function( $request, $response, $app){
 		$_SESSION['cts']['start_time']=$start_time;
 		$_SESSION['cts']['end_time']=$end_time;
 		$_SESSION['cts']['reserve_type']=$reserve_type;
+		$_SESSION['cts']['step']="1";
+
+		$app->tpl->assign( 'step', $_SESSION['cts']['step']);
 
 		$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
 		$app->tpl->display( 'equipment.tpl' );
@@ -169,6 +207,6 @@ respond ('/new', function($request, $response, $app){
 });//end new reservation
 
 respond ('/success', function($request, $response, $app){
-
-
+	unset($_SESSION['cts']);//delete the cts session array
+	$app->tpl->display( 'success.tpl' );
 });//end success
