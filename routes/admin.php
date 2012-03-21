@@ -4,8 +4,9 @@
 //admin/equipment
 //admin/reservation
 require_once $GLOBALS['BASE_DIR'] . '/includes/CTSdatabaseAPI.class.php';
+require_once $GLOBALS['BASE_DIR'] . '/includes/reserveDatabaseAPI.class.php';
 
-respond('/admin/equipment', function( $request, $response, $app) {
+respond('/equipment', function( $request, $response, $app) {
 	$app->tpl->assign( 'manufacturers', CTSdatabaseAPI::manufacturers() );
 	
 	PSU::dbug(CTSdatabaseAPI::manufacturer());
@@ -13,4 +14,61 @@ respond('/admin/equipment', function( $request, $response, $app) {
 	$app->tpl->assign( 'models', array_keys(CTSdatabaseAPI::models()) );
 	$app->tpl->display('admincps.tpl');
 
-});
+});//end equipment
+
+respond('/reservation' , function( $request, $response, $app){
+	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range_next_week());
+
+	//PSU::dbug(reserveDatabaseAPI::by_title("asdf"));
+	$app->tpl->display( 'admincp.tpl' );
+	PSU::db('cts')->debug=true;
+
+});//end reservation
+
+respond('/reservation/search/[a:action]' , function( $request, $response, $app){
+	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+	if($request->action=="nextweek"){
+		$start_date=date('Y-m-d', strtotime("+1 week"));
+		$end_date=date('Y-m-d', strtotime("+2 week"));
+		$dates=array($start_date, $end_date);
+		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range($dates));
+
+	}elseif($request->action=="thisweek"){
+		$start_date=date('Y-m-d');
+		$end_date=date('Y-m-d', strtotime("+1 week"));
+		$dates=array($start_date, $end_date);
+		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range($dates));
+	}elseif($request->action=="lastweek"){
+		$start_date=date('Y-m-d', strtotime("-1 week"));
+		$end_date=date('Y-m-d');
+		$dates=array($start_date, $end_date);
+		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range($dates));
+	}elseif($request->action=="today")
+	{
+		$start_date=date('Y-m-d');
+		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
+
+	}elseif($request->action=="yesterday")
+	{
+		$start_date=date('Y-m-d', strtotime("-1 day"));
+		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
+
+	}elseif($request->action=="tommorrow")
+	{
+		$start_date=date('Y-m-d', strtotime("+1 day"));
+		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
+
+	}elseif($request->action=="pending"){
+		$query="pending";
+		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_status($query));
+	}
+
+	$app->tpl->assign('start_date', $start_date);
+	$app->tpl->assign('end_date',$end_date);
+	//PSU::dbug(reserveDatabaseAPI::by_title("asdf"));
+	//$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_title("asdf"));
+	$app->tpl->display( 'reservation.tpl' );
+	PSU::db('cts')->debug=true;
+
+});//end reservation

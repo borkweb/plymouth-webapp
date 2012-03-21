@@ -59,6 +59,8 @@ respond( '/confirm', function( $request, $response, $app){
 
 respond ( '/equipment', function( $request, $response, $app){
 	if($_SESSION['cts']['step']>=1){
+
+	PSU::db('cts')->debug=true;
 		PSU::dbug($_SESSION['cts']);	
 		$equipment_id=$request->param('equipment_id');
 		if($equipment_id || $equipment_id == "0"){
@@ -251,6 +253,6 @@ respond ('POST','/success', function($request, $response, $app){
 		$equipment,
 		"pending"
 		);
-	//unset($_SESSION['cts']);//delete the cts session array
+	unset($_SESSION['cts']);//delete the cts session array
 	$app->tpl->display( 'success.tpl' );
 });//end success

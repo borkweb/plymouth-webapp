@@ -56,6 +56,7 @@ $app_routes = array(
 	'reserve',//user page for reservations
 	'history',//pending and past reservations
 	'admin',//admin page with all current reservations and equipment
+	'user'
 );
 
 foreach( $app_routes as $base ) {
