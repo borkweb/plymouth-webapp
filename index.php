@@ -52,7 +52,6 @@ respond( '/?', function( $request, $response, $app ) {
 
 
 $app_routes = array(
-	'bork',//testing
 	'reserve',//user page for reservations
 	'history',//pending and past reservations
 	'admin',//admin page with all current reservations and equipment

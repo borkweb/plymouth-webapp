@@ -5,6 +5,7 @@
 //reseve/equipment
 //reserve/confirm
 //reserve/success
+require_once $GLOBALS['BASE_DIR'] . '/includes/CTSemailAPI.class.php';
 require_once $GLOBALS['BASE_DIR'] . '/includes/reserveDatabaseAPI.class.php';
 require_once $GLOBALS['BASE_DIR'] . '/includes/CTSdatabaseAPI.class.php';
 
@@ -18,7 +19,7 @@ respond( '/', function( $request, $response, $app){
 
 respond('POST', '/confirm', function( $request, $response, $app){
 	$_SESSION['cts']['step']="2";
-	
+	PSU::dbug($_SESSION['username']);	
 	PSU::dbug($_SESSION['cts']);
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
@@ -179,6 +180,7 @@ respond( 'POST', '/event',function( $request, $response, $app){
 	}else{
 		$_SESSION['cts']['first_name']=$first_name;
 		$_SESSION['cts']['last_name']=$last_name;
+		$_SESSION['cts']['username']=$_SESSION['username'];
 		$_SESSION['cts']['phone']=$phone;
 		$_SESSION['cts']['submit_first_name']=$submit_first_name;
 		$_SESSION['cts']['submit_last_name']=$submit_last_name;
@@ -252,7 +254,10 @@ respond ('POST','/success', function($request, $response, $app){
 		$_SESSION['cts']['reserve_type'],
 		$equipment,
 		"pending"
-		);
-	unset($_SESSION['cts']);//delete the cts session array
+	);
+	$insert_id=mysql_insert_id();
+	CTSemailAPI::emailUser($_SESSION['cts']);
+	CTSemailAPI::emailCTS($_SESSION['cts'],$insert_id);	
+	//unset($_SESSION['cts']);//delete the cts session array
 	$app->tpl->display( 'success.tpl' );
 });//end success

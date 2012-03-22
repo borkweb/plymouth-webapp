@@ -19,7 +19,7 @@
 
 		<h2>Event Information</h2>
 		<li><strong>Course Title or Event Name: </strong>{$reserve.title}</li>
-		<li><strong>Location: </strong>{$locations[$reserve.location]}</li>
+		<li><strong>Location: </strong>{$locations[$reserve.location]} in room {$reserve.room}</li>
 		<li><strong>Start Date and Time: </strong>{$reserve.start_date} at {$reserve.start_time}</li>
 		<li><strong>End Date and Time: </strong>{$reserve.end_date} at {$reserve.end_time}</li>
 		<li><strong>Pickup/Dropoff Method: </strong>
