@@ -6,6 +6,7 @@
 require_once $GLOBALS['BASE_DIR'] . '/includes/CTSdatabaseAPI.class.php';
 require_once $GLOBALS['BASE_DIR'] . '/includes/reserveDatabaseAPI.class.php';
 
+
 respond('/equipment', function( $request, $response, $app) {
 	$app->tpl->assign( 'manufacturers', CTSdatabaseAPI::manufacturers() );
 	
@@ -21,7 +22,6 @@ respond('/reservation' , function( $request, $response, $app){
 	$start_date=date('Y-m-d');
 	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
 
-	//PSU::dbug(reserveDatabaseAPI::by_title("asdf"));
 	$app->tpl->display( 'admincp.tpl' );
 	PSU::db('cts')->debug=true;
 
@@ -29,6 +29,9 @@ respond('/reservation' , function( $request, $response, $app){
 
 respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$reservation_idx=$request->id;
+	$app->tpl->assign( 'messages', reserveDatabaseAPI::getMessages($reservation_idx));
+	$app->tpl->assign( 'equipment', reserveDatabaseAPI::getEquipment($reservation_idx));
+	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 	$app->tpl->assign( 'reservation_idx', $reservation_idx);
 	PSU::dbug($reservation_idx);
 	PSU::db('cts')->debug=true;
@@ -37,6 +40,19 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$app->tpl->display( 'singlereservation.tpl' );
 
 });//end reservation/searach/id
+
+
+respond('/reservation/addmessage/[i:id]', function( $request, $response, $app){
+	PSU::dbug($request->message);
+	$username=$_SESSION['username'];
+	$message=$request->message;
+	$reservation_idx=$request->id;
+	reserveDatabaseAPI::addMessage($reservation_idx,$message, $username);
+	PSU::db('cts')->debug=true;
+	$response->redirect($GLOBALS['BASE_URL'].'/admin/reservation/search/id/'.$reservation_idx);
+
+
+});//add message to reservation
 
 respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
@@ -78,8 +94,6 @@ respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 
 	$app->tpl->assign('start_date', $start_date);
 	$app->tpl->assign('end_date',$end_date);
-	//PSU::dbug(reserveDatabaseAPI::by_title("asdf"));
-	//$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_title("asdf"));
 	$app->tpl->display( 'reservation.tpl' );
 	PSU::db('cts')->debug=true;
 

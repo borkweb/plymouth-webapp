@@ -1,6 +1,16 @@
 <?php
 class reserveDatabaseAPI{
 
+	function addMessage($reservation_idx, $message, $username){
+		$date=date('Y-m-d');
+		$time=date('G-i-s');
+		$data=array($message, $reservation_idx, $date, $time, $username);
+		$sql="INSERT INTO cts_reservation_note (message,reservation_idx, date , time, author) VALUES (? , ? ,? , ?, ?)";
+		PSU::dbug($sql);
+		PSU::db('cts')->Execute($sql,$data);
+
+	}//function addMessage
+
 	function by_date($date){
 		$sql="
 			SELECT * FROM cts_reservation
@@ -182,5 +192,15 @@ class reserveDatabaseAPI{
 		return PSU::db('cts')->GetAssoc( $sql );
 
 	}//end function locations
+
+	function getMessages($reservation_idx){
+		$sql="SELECT * FROM cts_reservation_note WHERE reservation_idx = ?";
+		return PSU::db('cts')->GetAssoc( $sql , $reservation_idx);
+	}//end function get messages
+
+	function getEquipment($reservation_idx){
+		$sql="SELECT * FROM cts_reservation_equipment WHERE reservation_idx = ?";
+		return PSU::db('cts')->GetAssoc( $sql , $reservation_idx);
+	}//end fuction get equipment
 
 }//end class reserveDatabaseAPI
