@@ -18,13 +18,25 @@ respond('/equipment', function( $request, $response, $app) {
 
 respond('/reservation' , function( $request, $response, $app){
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
-	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range_next_week());
+	$start_date=date('Y-m-d');
+	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
 
 	//PSU::dbug(reserveDatabaseAPI::by_title("asdf"));
 	$app->tpl->display( 'admincp.tpl' );
 	PSU::db('cts')->debug=true;
 
 });//end reservation
+
+respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	$app->tpl->assign( 'reservation_idx', $reservation_idx);
+	PSU::dbug($reservation_idx);
+	PSU::db('cts')->debug=true;
+	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_id($reservation_idx));
+	PSU::dbug(reserveDatabaseAPI::by_id($reservation_idx));
+	$app->tpl->display( 'singlereservation.tpl' );
+
+});//end reservation/searach/id
 
 respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
@@ -71,4 +83,5 @@ respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 	$app->tpl->display( 'reservation.tpl' );
 	PSU::db('cts')->debug=true;
 
-});//end reservation
+});//end reservation/search/action
+

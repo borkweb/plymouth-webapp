@@ -96,20 +96,6 @@ class reserveDatabaseAPI{
 
 	}//end function by date_range
 
-	function by_date_range_next_week(){
-		$start_date=date('Y-m-d', strtotime("+1 week"));
-		$end_date=date('Y-m-d', strtotime("+2 week"));
-		$dates=array($start_date, $end_date);
-
-		$sql="
-			SELECT * FROM cts_reservation
-			WHERE start_date BETWEEN ? AND ?	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $dates);
-
-
-	}//end function by date_range_next_week
-
 	function by_id($id){
 		$sql="
 			SELECT * FROM cts_reservation

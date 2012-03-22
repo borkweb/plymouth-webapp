@@ -34,7 +34,7 @@
 	<tbody>
 	{foreach from=$reservation item=reserve key=id}
 		<tr>
-			<td>{$id}</td>
+			<td><a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
 			<td>{$reserve.fname}</td>		
 			<td>{$reserve.fname}</td>
 			<td>{$reserve.phone}</td>
