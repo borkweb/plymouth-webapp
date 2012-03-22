@@ -16,13 +16,11 @@
 	<a href="{$PHP.BASE_URL}/admin/reservation/search/missing">Missing</a>
 {/box}
 {box size="16" title="Reservation Details from $start_date to $end_date"}
-<table class="sortable">
+<table class="grid">
 	<thead>
-		<th class="header">Reservation Index</th>	
-		<th class="header">First Name</th>	
+		<th class="header">Index</th>	
 		<th class="header">Last Name</th>	
-		<th class="header">Phone</th>	
-		<th class="header">Email</th>	
+		<th class="header">First Name</th>	
 		<th class="header">Start Date</th>	
 		<th class="header">Start Time</th>	
 		<th class="header">End Date</th>	
@@ -35,10 +33,8 @@
 	{foreach from=$reservation item=reserve key=id}
 		<tr>
 			<td><a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
-			<td>{$reserve.fname}</td>		
+			<td>{$reserve.lname}</td>		
 			<td>{$reserve.fname}</td>
-			<td>{$reserve.phone}</td>
-			<td>{$reserve.email}</td>		
 			<td>{$reserve.start_date}</td>		
 			<td>{$reserve.start_time}</td>		
 			<td>{$reserve.end_date}</td>		

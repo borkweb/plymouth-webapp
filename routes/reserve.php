@@ -18,15 +18,20 @@ respond( '/', function( $request, $response, $app){
 
 
 respond('POST', '/confirm', function( $request, $response, $app){
-	$_SESSION['cts']['step']="2";
-	PSU::dbug($_SESSION['username']);	
-	PSU::dbug($_SESSION['cts']);
-	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
-	$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
-	$app->tpl->assign( 'step', $_SESSION['cts']['step']);
+	if(count($_SESSION['cts']['equipment'])>0){
+		$_SESSION['cts']['step']="2";
+		PSU::dbug($_SESSION['username']);	
+		PSU::dbug($_SESSION['cts']);
 
-	$app->tpl->assign( 'reserve', $_SESSION['cts']);
-	$app->tpl->display( 'confirm.tpl');
+		$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+		$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
+		$app->tpl->assign( 'step', $_SESSION['cts']['step']);	
+		$app->tpl->assign( 'reserve', $_SESSION['cts']);
+		$app->tpl->display( 'confirm.tpl');
+	}else{
+		$_SESSION['errors'][]="Please select at least one item from the list of equipment.";
+		$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
+	}
 	
 });//end confirm POST
 
@@ -219,45 +224,50 @@ respond ('/new', function($request, $response, $app){
 respond ('POST','/success', function($request, $response, $app){
 	\PSU::db('cts')->debug=true;
 	\PSU::dbug($_SESSION['cts']);
-	$currtime=date('Y-n-j G:i:s');
-	$categories=reserveDatabaseAPI::categories();
+	if(count($_SESSION['cts']['equipment'])>0){
+		$currtime=date('Y-n-j G:i:s');
+		$categories=reserveDatabaseAPI::categories();
 
-	$start_time = date("H:i:s", strtotime($_SESSION['cts']['start_time']));
+		$start_time = date("H:i:s", strtotime($_SESSION['cts']['start_time']));
 
-	$end_time = date("H:i:s", strtotime($_SESSION['cts']['end_time']));
+		$end_time = date("H:i:s", strtotime($_SESSION['cts']['end_time']));
 
 
-	$start_date=date("Y-m-d", strtotime($_SESSION['cts']['start_date']));
+		$start_date=date("Y-m-d", strtotime($_SESSION['cts']['start_date']));
 
-	$end_date=date("Y-m-d" , strtotime($_SESSION['cts']['end_date']));
+		$end_date=date("Y-m-d" , strtotime($_SESSION['cts']['end_date']));
 
-	foreach(($_SESSION['cts']['equipment']) as $i){
-		$name=$categories[$i]; 
-		$equipment .= $name . ", ";
+		foreach(($_SESSION['cts']['equipment']) as $i){
+			$name=$categories[$i]; 
+			$equipment .= $name . ", ";
+		}
+		reserveDatabaseAPI::insertReservation(
+			//need to use binding in the SQL
+			//VALUES(?,?)
+			$_SESSION['cts']['last_name'],
+			$_SESSION['cts']['first_name'],
+			$_SESSION['cts']['phone'],
+			$_SESSION['cts']['email'],
+			$currtime,
+			$start_date,
+			$start_time,
+			$end_date,
+			$end_time,
+			$_SESSION['cts']['comments'],
+			$_SESSION['cts']['location'],
+			$_SESSION['cts']['room'],
+			$_SESSION['cts']['title'],
+			$_SESSION['cts']['reserve_type'],
+			$equipment,
+			"pending"
+		);
+		$insert_id=mysql_insert_id();
+		CTSemailAPI::emailUser($_SESSION['cts']);
+		CTSemailAPI::emailCTS($_SESSION['cts'],$insert_id);	
+		//unset($_SESSION['cts']);//delete the cts session array
+		$app->tpl->display( 'success.tpl' );
+	}else{
+		$_SESSION['errors'][]="Please select at least one item from the list of equipment.";
+		$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
 	}
-	reserveDatabaseAPI::insertReservation(
-		//need to use binding in the SQL
-		//VALUES(?,?)
-		$_SESSION['cts']['last_name'],
-		$_SESSION['cts']['first_name'],
-		$_SESSION['cts']['phone'],
-		$_SESSION['cts']['email'],
-		$currtime,
-		$start_date,
-		$start_time,
-		$end_date,
-		$end_time,
-		$_SESSION['cts']['comments'],
-		$_SESSION['cts']['location'],
-		$_SESSION['cts']['room'],
-		$_SESSION['cts']['title'],
-		$_SESSION['cts']['reserve_type'],
-		$equipment,
-		"pending"
-	);
-	$insert_id=mysql_insert_id();
-	CTSemailAPI::emailUser($_SESSION['cts']);
-	CTSemailAPI::emailCTS($_SESSION['cts'],$insert_id);	
-	//unset($_SESSION['cts']);//delete the cts session array
-	$app->tpl->display( 'success.tpl' );
 });//end success
