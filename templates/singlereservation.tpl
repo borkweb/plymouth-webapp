@@ -35,7 +35,7 @@
 			<li><input type="Submit" name="Submit" value="Add new message"></li>
 
 			{foreach from=$messages item=message key=id}
-				<li><strong>{$message.author} at {$message.time}: </strong>{$message.message}<br></li>
+				<li><strong>{$message.author} at {$message.time|date_format:"%l:%M %p"} on {$message.date|date:"%m-%d-%Y"}: </strong>{$message.message}<br></li>
 			{/foreach}
 		</ul>
 	</ul>

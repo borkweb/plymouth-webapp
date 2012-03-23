@@ -10,7 +10,11 @@ require_once $GLOBALS['BASE_DIR'] . '/includes/reserveDatabaseAPI.class.php';
 require_once $GLOBALS['BASE_DIR'] . '/includes/CTSdatabaseAPI.class.php';
 
 respond( '/', function( $request, $response, $app){
+	$app->tpl->assign( 'hours' , array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10,11=>11,12=>12));
+	$app->tpl->assign( 'minutes', array(00=>0,05=>5,10=>10,15=>15,20=>20,25=>25,30=>30,35=>35,40=>40,45=>45,50=>50,55=>55));
+	$app->tpl->assign( 'ampm' , array("AM"=>"AM","PM"=>"PM"));
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+	$app->tpl->assign( 'reserve', $_SESSION['cts'] );
 	$app->tpl->assign( 'step', $_SESSION['cts']['step']);
 	$app->tpl->display( 'event.tpl' );
 
@@ -205,7 +209,13 @@ respond( 'POST', '/event',function( $request, $response, $app){
 		$_SESSION['cts']['start_date']=$start_date;
 		$_SESSION['cts']['end_date']=$end_date;
 		$_SESSION['cts']['start_time']=$start_time;
+		$_SESSION['cts']['starthour']=$starthour;
+		$_SESSION['cts']['startminute']=$startminute;
+		$_SESSION['cts']['startampm']=$startampm;
 		$_SESSION['cts']['end_time']=$end_time;
+		$_SESSION['cts']['endhour']=$endhour;
+		$_SESSION['cts']['endminute']=$endminute;
+		$_SESSION['cts']['endampm']=$endampm;
 		$_SESSION['cts']['reserve_type']=$reserve_type;
 		$_SESSION['cts']['step']="1";
 

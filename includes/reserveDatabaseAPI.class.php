@@ -3,10 +3,9 @@ class reserveDatabaseAPI{
 
 	function addMessage($reservation_idx, $message, $username){
 		$date=date('Y-m-d');
-		$time=date('G-i-s');
+		$time=date('G:i:s');
 		$data=array($message, $reservation_idx, $date, $time, $username);
 		$sql="INSERT INTO cts_reservation_note (message,reservation_idx, date , time, author) VALUES (? , ? ,? , ?, ?)";
-		PSU::dbug($sql);
 		PSU::db('cts')->Execute($sql,$data);
 
 	}//function addMessage
@@ -122,6 +121,16 @@ class reserveDatabaseAPI{
 		return PSU::db('cts')->GetAssoc( $sql );
 
 	}//end function categories
+
+	function convertDate($date){
+		$properdate=date('n-j-Y', strtotime($date));
+		return $properdate;
+	}//end fuction convert date
+
+	function convertTime($time){
+
+	}//end fuction convert date
+
 
 	function insertReservation($last_name, $first_name, $phone, $email, $application_date, $start_date, $start_time, $end_date, $end_time, $comments, $building, $room, $title, $delivery_type, $requested_items, $status){
 

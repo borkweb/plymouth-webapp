@@ -38,6 +38,8 @@ respond( function( $request, $response, $app ) {
 
 	// assign user to template
 	$app->tpl->assign( 'user', $app->user );
+
+	//$app->tpl->plugins_dir[] = $GLOBALS['BASE_URL'].'/includes';
 });
 
 /*
