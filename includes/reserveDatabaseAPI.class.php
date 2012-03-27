@@ -98,7 +98,7 @@ class reserveDatabaseAPI{
 	function by_date_range($dates){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE start_date BETWEEN ? AND ?	
+			WHERE start_date BETWEEN ? AND ? OR end_date BETWEEN ? AND ?	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $dates);
 
@@ -122,14 +122,19 @@ class reserveDatabaseAPI{
 
 	}//end function categories
 
-	function convertDate($date){
-		$properdate=date('n-j-Y', strtotime($date));
-		return $properdate;
-	}//end fuction convert date
-
-	function convertTime($time){
-
-	}//end fuction convert date
+	function deleteReservation($reservation_idx){
+		$sql="DELETE FROM cts_reservation WHERE reservation_idx = ?";
+		
+		PSU::db('cts')->Execute( $sql, $reservation_idx );
+	
+	}//end function deleteReservation
+	
+	function deleteMessages($reservation_idx){
+		$sql="DELETE FROM cts_reservation_note WHERE reservation_idx = ?";
+		
+		PSU::db('cts')->Execute( $sql, $reservation_idx );
+	
+	}//end function deleteReservation
 
 
 	function insertReservation($last_name, $first_name, $phone, $email, $application_date, $start_date, $start_time, $end_date, $end_time, $comments, $building, $room, $title, $delivery_type, $requested_items, $status){

@@ -15,7 +15,9 @@
 	<a href="{$PHP.BASE_URL}/admin/reservation/search/outstanding">Outstanding</a>|
 	<a href="{$PHP.BASE_URL}/admin/reservation/search/missing">Missing</a>
 {/box}
-{box size="16" title="Reservation Details from $start_date to $end_date"}
+{assign var="fixed_start_date" value=$start_date|date_format:$date_format}
+{assign var="fixed_end_date" value=$end_date|date_format:$date_format}
+{box size="16" title="Reservations from $fixed_start_date to $fixed_end_date"}
 <table class="grid">
 	<thead>
 		<th class="header">Index</th>	
@@ -35,10 +37,10 @@
 			<td><a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
 			<td>{$reserve.lname}</td>		
 			<td>{$reserve.fname}</td>
-			<td>{$reserve.start_date}</td>		
-			<td>{$reserve.start_time}</td>		
-			<td>{$reserve.end_date}</td>		
-			<td>{$reserve.end_time}</td>		
+			<td>{$reserve.start_date|date_format:$date_format}</td>		
+			<td>{$reserve.start_time|date_format:$time_format}</td>		
+			<td>{$reserve.end_date|date_format:$date_format}</td>		
+			<td>{$reserve.end_time|date_format:$time_format}</td>		
 			<td>{$locations[$reserve.building_idx]}</td>
 			<td>{$reserve.title}</td>		
 			<td>{$reserve.status}</td>		

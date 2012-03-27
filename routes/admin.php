@@ -6,6 +6,11 @@
 require_once $GLOBALS['BASE_DIR'] . '/includes/CTSdatabaseAPI.class.php';
 require_once $GLOBALS['BASE_DIR'] . '/includes/reserveDatabaseAPI.class.php';
 
+/*
+respond('[*]', function( $request, $response, $app){
+
+});
+ */
 
 respond('/equipment', function( $request, $response, $app) {
 	$app->tpl->assign( 'manufacturers', CTSdatabaseAPI::manufacturers() );
@@ -40,6 +45,31 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$app->tpl->display( 'singlereservation.tpl' );
 
 });//end reservation/searach/id
+respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $response, $app){
+	if($request->action=="edit"){
+		$editable=true;
+		$app->tpl->assign( 'editable', $editable);
+		$reservation_idx=$request->id;
+		$app->tpl->assign( 'messages', reserveDatabaseAPI::getMessages($reservation_idx));
+		$app->tpl->assign( 'equipment', reserveDatabaseAPI::getEquipment($reservation_idx));
+		$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+		$app->tpl->assign( 'reservation_idx', $reservation_idx);
+		PSU::dbug($reservation_idx);
+		PSU::db('cts')->debug=true;
+		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_id($reservation_idx));
+		PSU::dbug(reserveDatabaseAPI::by_id($reservation_idx));
+		$app->tpl->display( 'singlereservation.tpl' );
+
+	}//edit
+
+	if($request->action=="delete"){
+		$reservation_idx=$request->id;
+		reserveDatabaseAPI::deleteReservation($reservation_idx);
+		reserveDatabaseAPI::deleteMessages($reservation_idx);
+		$response->redirect($GLOBALS['BASE_URL'].'/admin/reservation');
+	}//edit
+	
+});//end reservation/searach/id
 
 
 respond('/reservation/addmessage/[i:id]', function( $request, $response, $app){
@@ -56,21 +86,26 @@ respond('/reservation/addmessage/[i:id]', function( $request, $response, $app){
 
 respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+	define('ONE_DAY', 60*60*24);//defining what one day is
+	$week=date('w');//define the current week
 	if($request->action=="nextweek"){
-		$start_date=date('Y-m-d', strtotime("+1 week"));
-		$end_date=date('Y-m-d', strtotime("+2 week"));
-		$dates=array($start_date, $end_date);
+		//$start_date=date('Y-m-d', strtotime("+1 week"));
+		//$end_date=date('Y-m-d', strtotime("+2 week"));
+		$start_date=date('Y-m-d',time()- ($week - 7) * ONE_DAY);
+		$end_date=date('Y-m-d',time()- ($week - 13) * ONE_DAY);
+
+		$dates=array($start_date, $end_date, $start_date, $end_date);
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range($dates));
 
 	}elseif($request->action=="thisweek"){
-		$start_date=date('Y-m-d');
-		$end_date=date('Y-m-d', strtotime("+1 week"));
-		$dates=array($start_date, $end_date);
+		$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
+		$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
+		$dates=array($start_date, $end_date, $start_date, $end_date);
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range($dates));
 	}elseif($request->action=="lastweek"){
-		$start_date=date('Y-m-d', strtotime("-1 week"));
-		$end_date=date('Y-m-d');
-		$dates=array($start_date, $end_date);
+		$start_date=date('Y-m-d',time()- ($week + 7) * ONE_DAY);
+		$end_date=date('Y-m-d',time()- ($week + 1) * ONE_DAY);
+		$dates=array($start_date, $end_date, $start_date, $end_date);
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range($dates));
 	}elseif($request->action=="today")
 	{
@@ -94,7 +129,7 @@ respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 
 	$app->tpl->assign('start_date', $start_date);
 	$app->tpl->assign('end_date',$end_date);
-	$app->tpl->display( 'reservation.tpl' );
+	$app->tpl->display( 'admincp.tpl' );
 	PSU::db('cts')->debug=true;
 
 });//end reservation/search/action

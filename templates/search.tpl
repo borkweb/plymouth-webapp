@@ -4,7 +4,7 @@
 	});
 </script>
 {box title="Search"}
-	<form action="{$PHP.BASE_URL}/reservation/search" method="POST">
+	<form action="{$PHP.BASE_URL}/admin/reservation/search" method="POST">
 		<div>
 			<label>From: </label><input type="text" id="fromdate" name="from_date">
 

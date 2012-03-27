@@ -38,16 +38,16 @@ respond( function( $request, $response, $app ) {
 
 	// assign user to template
 	$app->tpl->assign( 'user', $app->user );
-
-	//$app->tpl->plugins_dir[] = $GLOBALS['BASE_URL'].'/includes';
+	
 });
 
-/*
+
 // klein catch-all
 respond( '[*]', function( $request, $response, $app ) {
-	$app->tpl->display('index.tpl');
+	$app->tpl->assign('date_format','%m-%d-%Y');
+	$app->tpl->assign('time_format','%l:%M %p');
 });
-*/
+
 respond( '/?', function( $request, $response, $app ) {
 	$app->tpl->display('index.tpl');
 });
