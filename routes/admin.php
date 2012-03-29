@@ -15,7 +15,6 @@ respond('[*]', function( $request, $response, $app){
 respond('/equipment', function( $request, $response, $app) {
 	$app->tpl->assign( 'manufacturers', CTSdatabaseAPI::manufacturers() );
 	
-	PSU::dbug(CTSdatabaseAPI::manufacturer());
 	$app->tpl->assign( 'types', CTSdatabaseAPI::types() );
 	$app->tpl->assign( 'models', array_keys(CTSdatabaseAPI::models()) );
 	$app->tpl->display('admincps.tpl');
@@ -28,25 +27,30 @@ respond('/reservation' , function( $request, $response, $app){
 	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
 
 	$app->tpl->display( 'admincp.tpl' );
-	PSU::db('cts')->debug=true;
 
 });//end reservation
 
 respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$reservation_idx=$request->id;
+	$query=new \PSU\Population\Query\IDMAttribute('mis','permission');
+	$factory = new \PSU_Population_UserFactory_PSUPerson;
+	$population= new \PSU_Population( $query, $factory );	
+	$cts_technicians=$population->query();
+	PSU::dbug($population);
+	PSU::dbug($cts_technicians);
+	$app->tpl->assign( 'cts_technicians',$cts_technicians );
+	//$app->tpl->assign( 'cts_technicians',array(000256614=>"David Allen",000256615 => "Technician Dave"));//list of CTS technicians
 	$app->tpl->assign( 'messages', reserveDatabaseAPI::getMessages($reservation_idx));
 	$app->tpl->assign( 'equipment', reserveDatabaseAPI::getEquipment($reservation_idx));
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 	$app->tpl->assign( 'reservation_idx', $reservation_idx);
-	PSU::dbug($reservation_idx);
-	PSU::db('cts')->debug=true;
 	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_id($reservation_idx));
-	PSU::dbug(reserveDatabaseAPI::by_id($reservation_idx));
 	$app->tpl->display( 'singlereservation.tpl' );
 
-});//end reservation/searach/id
+});//end reservation/search/i
+
 respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $response, $app){
-	if($request->action=="edit"){
+	if($request->action=="edit"){//if the action is to edit the current reservation
 		$editable=true;
 		$app->tpl->assign( 'editable', $editable);
 		$reservation_idx=$request->id;
@@ -54,8 +58,6 @@ respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $respon
 		$app->tpl->assign( 'equipment', reserveDatabaseAPI::getEquipment($reservation_idx));
 		$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 		$app->tpl->assign( 'reservation_idx', $reservation_idx);
-		PSU::dbug($reservation_idx);
-		PSU::db('cts')->debug=true;
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_id($reservation_idx));
 		PSU::dbug(reserveDatabaseAPI::by_id($reservation_idx));
 		$app->tpl->display( 'singlereservation.tpl' );
@@ -67,7 +69,7 @@ respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $respon
 		reserveDatabaseAPI::deleteReservation($reservation_idx);
 		reserveDatabaseAPI::deleteMessages($reservation_idx);
 		$response->redirect($GLOBALS['BASE_URL'].'/admin/reservation');
-	}//edit
+	}//delete
 	
 });//end reservation/searach/id
 
@@ -78,7 +80,6 @@ respond('/reservation/addmessage/[i:id]', function( $request, $response, $app){
 	$message=$request->message;
 	$reservation_idx=$request->id;
 	reserveDatabaseAPI::addMessage($reservation_idx,$message, $username);
-	PSU::db('cts')->debug=true;
 	$response->redirect($GLOBALS['BASE_URL'].'/admin/reservation/search/id/'.$reservation_idx);
 
 
@@ -130,7 +131,6 @@ respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 	$app->tpl->assign('start_date', $start_date);
 	$app->tpl->assign('end_date',$end_date);
 	$app->tpl->display( 'admincp.tpl' );
-	PSU::db('cts')->debug=true;
 
 });//end reservation/search/action
 

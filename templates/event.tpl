@@ -95,12 +95,7 @@ $(function(){
 		  <li>
 			<input type="radio" id="sponsored" name="radio" value="sponsored" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
 		  </li>
-		  <li>
-              <input type="Submit" name="Submit_event" value="Proceed to Equipment Choice">
-            </li>
- 	 </ul>
-	</form>
-
+		  
 	{else}<!--ELSE STATEMENT -->
 <form class="label-left" name ="event_info" method="POST" action="{$PHP.BASE_URL}/reserve/event">
           <ul>
@@ -177,11 +172,15 @@ $(function(){
 		  <li>
 			<input type="radio" id="sponsored" name="radio" value="sponsored" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
 		  </li>
-		  <li>
+		  
+{/if}
+		<li>
+		<em>*required  </em><input type="checkbox" name="agreement"> I agree, as the individual requesting this equipment, to the terms of the <a href="{$PHP.BASE_URL}/reserve/agreement">Equipment Reservation Policy</a>.
+		</li>
+		<li>
               <input type="Submit" name="Submit_event" value="Proceed to Equipment Choice">
             </li>
  	 </ul>
 	</form>
 
-{/if}
 {/box}

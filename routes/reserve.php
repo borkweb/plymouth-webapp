@@ -20,6 +20,10 @@ respond( '/', function( $request, $response, $app){
 
 });//end /
 
+respond( '/agreement', function( $request, $response, $app){
+	$app->tpl->assign( 'agreement', "This is the agreement" );
+	$app->tpl->display( 'agreement.tpl' );
+});
 
 respond('POST', '/confirm', function( $request, $response, $app){
 	if(count($_SESSION['cts']['equipment'])>0){
@@ -153,6 +157,7 @@ respond( 'POST', '/event',function( $request, $response, $app){
 	$endminute=sprintf("%02d",$endminute);
 	$endampm=$request->param('endampm');
 	$end_time=$endhour . ':' . $endminute . ' ' . $endampm;
+	$agreement=$request->param('agreement');
 
 
 	if( ! $first_name ){ //if there is no first name
@@ -181,7 +186,9 @@ respond( 'POST', '/event',function( $request, $response, $app){
 		$_SESSION['errors'][]='Start Date not found';
 	}elseif( ! $end_date ){ //if there is no end date
 		$_SESSION['errors'][]='End Date not found';
-	}//end elseif
+	}elseif( ! $agreement ){
+	 	$_SESSION['errors'][]='You did not accept the agreement.';   
+	}	//end elseif
 
 
 	if( count($_SESSION['errors'])>0 ){//if the number of errors is > 0

@@ -104,10 +104,6 @@ $(function(){
 			<li><strong>End Date: </strong>{$reserve.end_date|date_format:$date_format}</li>		
 			<li><strong>End Time: </strong>{$reserve.end_time|date_format:$time_format}</li>		
 			<li><strong>Location: </strong>{$locations[$reserve.building_idx]} <strong>in room</strong> {$reserve.room}</li>
-			<!--
-			{html_options name=location options=$locations selected=$reserve.building_idx}
-			THIS IS FOR EDITING 
-			-->
 			<li><strong>Title: </strong>{$reserve.title}</li>		
 			<li><strong>Status of Loan: </strong>{$reserve.status}</li>
 			<li><strong>Comments: </strong><p>{$reserve.memo}</p></li>
@@ -134,6 +130,9 @@ $(function(){
 		{/foreach}
 		</tbody>
 		</table>
+		<h2>Technician Assigned</h2>
+		<li><strong>Pickup: </strong></label>{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.delivery_user}</li>
+		<li><strong>Dropoff: </strong>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.retrieval_user}</li>
 	</ul>
 {/if}
 	<h2>Messages</h2>
@@ -146,6 +145,6 @@ $(function(){
 				<li><strong>{$message.author} at {$message.time|date_format:$time_format} on {$message.date|date_format:$date_format}: </strong>{$message.message}<br></li>
 			{/foreach}
 	<li><a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$reservation_idx}/edit" class="button">Edit Reservation</a>
-<a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$reservation_idx}/delete" class="button">Delete Reservation</a></li>
+		<a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$reservation_idx}/delete" class="button">Delete Reservation</a></li>
 	</ul>
 {/box}
