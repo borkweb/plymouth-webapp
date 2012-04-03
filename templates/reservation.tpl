@@ -2,6 +2,7 @@
   <div class="container">
   </div>
 </nav>
+{include file='search.tpl'}
 {box title="Quick Filter"}
 
 	<a href="{$PHP.BASE_URL}/admin/reservation/search/lastweek">Last Week</a>|

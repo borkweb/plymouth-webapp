@@ -122,6 +122,15 @@ class reserveDatabaseAPI{
 
 	}//end function categories
 
+	function getFormOptions(){
+		
+		$sql="SELECT * FROM cts_form_options";
+
+		return PSU::db('cts')->GetAssoc( $sql );
+
+	}//end function get form options
+
+
 	function deleteReservation($reservation_idx){
 		$sql="DELETE FROM cts_reservation WHERE reservation_idx = ?";
 		
@@ -129,6 +138,13 @@ class reserveDatabaseAPI{
 	
 	}//end function deleteReservation
 	
+	function deleteEquipment($equipment_id){
+		$sql="DELETE FROM cts_form_options WHERE categoryID= ?";
+
+		PSU::db('cts')->Execute( $sql, $equipment_id );
+
+	}//end function deleteEquipment
+
 	function deleteMessages($reservation_idx){
 		$sql="DELETE FROM cts_reservation_note WHERE reservation_idx = ?";
 		
@@ -136,6 +152,12 @@ class reserveDatabaseAPI{
 	
 	}//end function deleteReservation
 
+	function insertFormOptions($category, $description){
+		$sql="INSERT INTO cts_form_options (category_name, description) VALUES (?,?)";
+		$values=array($category, $description);
+		PSU::db('cts')->Execute( $sql, $values );
+
+	}//end function insertCategory
 
 	function insertReservation($last_name, $first_name, $phone, $email, $application_date, $start_date, $start_time, $end_date, $end_time, $comments, $building, $room, $title, $delivery_type, $requested_items, $status){
 

@@ -12,12 +12,41 @@ respond('[*]', function( $request, $response, $app){
 });
  */
 
+respond('/admincp', function( $request, $response, $app){
+
+	$app->tpl->assign( 'categories', reserveDatabaseAPI::getFormOptions());
+	$app->tpl->display( 'admincp.tpl' );
+});//admin cp
+
+respond('/admincp/equipment', function( $request, $response, $app){
+	$app->tpl->assign( 'categories', reserveDatabaseAPI::getFormOptions());
+	$app->tpl->display( 'adminequipment.tpl' );
+
+});//admincp equipment page
+
+respond('POST', '/admincp/equipment/add', function( $request, $response, $app){
+	$category = $request->param('new_equipment');
+	$category=filter_var($category, FILTER_SANITIZE_STRING);
+	$description=$request->param('description');
+	$description=filter_var($description, FILTER_SANITIZE_STRING);
+	reserveDatabaseAPI::insertFormOptions($category,$description);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/admincp/equipment' );
+});//admin equipment add
+
+respond('/admincp/equipment/[i:id]/remove', function( $request, $response, $app){
+	$equipment_id=$request->id;
+	reserveDatabaseAPI::deleteEquipment($equipment_id);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/admincp/equipment');
+	
+
+});//admin equipment 
+
 respond('/equipment', function( $request, $response, $app) {
 	$app->tpl->assign( 'manufacturers', CTSdatabaseAPI::manufacturers() );
 	
 	$app->tpl->assign( 'types', CTSdatabaseAPI::types() );
 	$app->tpl->assign( 'models', array_keys(CTSdatabaseAPI::models()) );
-	$app->tpl->display('admincps.tpl');
+	//$app->tpl->display('admincp.tpl');
 
 });//end equipment
 
@@ -26,7 +55,7 @@ respond('/reservation' , function( $request, $response, $app){
 	$start_date=date('Y-m-d');
 	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
 
-	$app->tpl->display( 'admincp.tpl' );
+	$app->tpl->display( 'reservation.tpl' );
 
 });//end reservation
 
@@ -130,7 +159,7 @@ respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 
 	$app->tpl->assign('start_date', $start_date);
 	$app->tpl->assign('end_date',$end_date);
-	$app->tpl->display( 'admincp.tpl' );
+	$app->tpl->display( 'reservation.tpl' );
 
 });//end reservation/search/action
 
