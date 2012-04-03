@@ -28,9 +28,6 @@ respond( '/agreement', function( $request, $response, $app){
 respond('POST', '/confirm', function( $request, $response, $app){
 	if(count($_SESSION['cts']['equipment'])>0){
 		$_SESSION['cts']['step']="2";
-		PSU::dbug($_SESSION['username']);	
-		PSU::dbug($_SESSION['cts']);
-
 		$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 		$app->tpl->assign( 'categories', reserveDatabaseAPI::categories());
 		$app->tpl->assign( 'step', $_SESSION['cts']['step']);	
@@ -75,7 +72,6 @@ respond ( '/equipment', function( $request, $response, $app){
 	if($_SESSION['cts']['step']>=1){
 
 	PSU::db('cts')->debug=true;
-		PSU::dbug($_SESSION['cts']);	
 		$equipment_id=$request->param('equipment_id');
 		if($equipment_id || $equipment_id == "0"){
 			$app->tpl->assign( 'description',reserveDatabaseAPI::itemInfo($equipment_id));
@@ -239,8 +235,6 @@ respond ('/new', function($request, $response, $app){
 });//end new reservation
 
 respond ('POST','/success', function($request, $response, $app){
-	\PSU::db('cts')->debug=true;
-	\PSU::dbug($_SESSION['cts']);
 	if(count($_SESSION['cts']['equipment'])>0){
 		$currtime=date('Y-n-j G:i:s');
 		$categories=reserveDatabaseAPI::categories();
@@ -281,7 +275,7 @@ respond ('POST','/success', function($request, $response, $app){
 		$insert_id=mysql_insert_id();
 		CTSemailAPI::emailUser($_SESSION['cts']);
 		CTSemailAPI::emailCTS($_SESSION['cts'],$insert_id);	
-		//unset($_SESSION['cts']);//delete the cts session array
+		unset($_SESSION['cts']);//delete the cts session array
 		$app->tpl->display( 'success.tpl' );
 	}else{
 		$_SESSION['errors'][]="Please select at least one item from the list of equipment.";
