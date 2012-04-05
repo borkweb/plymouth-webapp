@@ -130,6 +130,30 @@ $(function(){
 		{/foreach}
 		</tbody>
 		</table>
+		
+		<h3>Subitems</h3>
+		<table class="grid" width="300">
+		<thead>
+			<tr>
+				<th>Subitem ID</th>
+				<th>Subitem</th>
+			</tr>
+		</thead>
+		<tbody>
+		{foreach from=$subitems item=subitem key=id}
+			<tr>
+				<td>{$id}</td>
+				<td>{$subitem}</td>
+			</tr>
+		{/foreach}
+		</tbody>
+		</table>
+		
+		<form action="{$PHP.BASE_URL}/admin/reservation/{$reservation_idx}/subitem/add" method="POST">
+			{html_options name="subitems" options=$subitemlist}
+		<input type="submit" name="Subitemsubmit" value="Assign Sub Item">
+		</form>
+
 		<h2>Technician Assigned</h2>
 		<li><strong>Pickup: </strong></label>{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.delivery_user}</li>
 		<li><strong>Dropoff: </strong>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.retrieval_user}</li>

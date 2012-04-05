@@ -145,6 +145,14 @@ class reserveDatabaseAPI{
 
 	}//end function deleteEquipment
 
+	function deleteSubitem($subitem_id){
+		$sql="DELETE FROM cts_subitem WHERE id= ?";
+
+		PSU::db('cts')->Execute( $sql, $subitem_id );
+
+	}//end function deleteSubitem
+
+
 	function deleteMessages($reservation_idx){
 		$sql="DELETE FROM cts_reservation_note WHERE reservation_idx = ?";
 		
@@ -158,6 +166,20 @@ class reserveDatabaseAPI{
 		PSU::db('cts')->Execute( $sql, $values );
 
 	}//end function insertCategory
+
+	function insertSubitem($name){
+		$sql="INSERT INTO cts_subitem (name) VALUES (?)";
+		PSU::db('cts')->Execute( $sql, $name );
+
+	}//end function insertCategory
+	
+	function insertReservationSubitem($reservation_idx, $subitem_id){
+		$sql="INSERT INTO cts_reservation_subitem (reservation_id,subitem_id) VALUES (?,?)";
+		$values=array($reservation_idx,$subitem_id);
+		PSU::db('cts')->Execute( $sql, $values );
+
+	}//end function insertCategory
+
 
 	function insertReservation($last_name, $first_name, $phone, $email, $application_date, $start_date, $start_time, $end_date, $end_time, $comments, $building, $room, $title, $delivery_type, $requested_items, $status){
 
@@ -233,6 +255,21 @@ class reserveDatabaseAPI{
 		$sql="SELECT * FROM cts_reservation_note WHERE reservation_idx = ?";
 		return PSU::db('cts')->GetAssoc( $sql , $reservation_idx);
 	}//end function get messages
+
+	function getSubItems(){
+		$sql="SELECT id,name FROM cts_subitem";
+		return PSU::db('cts')->GetAssoc( $sql );
+
+	}//end function get subitems
+
+	function getReserveSubItems($reservation_id){
+		//$sql="SELECT s.* FROM cts_reservation_subitem s INNER JOIN cts_subitem c ON s.subitem_id = c.id WHERE s.reservation_id= ?";
+		$sql="SELECT s.subitem_id,c.name FROM cts_reservation_subitem s,cts_subitem c WHERE s.reservation_id= ? AND c.id=s.subitem_id";
+
+		return PSU::db('cts')->GetAssoc( $sql, $reservation_id );
+
+	}//end function get subitmes
+
 
 	function getEquipment($reservation_idx){
 		$sql="SELECT * FROM cts_reservation_equipment WHERE reservation_idx = ?";

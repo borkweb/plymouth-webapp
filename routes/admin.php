@@ -24,6 +24,25 @@ respond('/admincp/equipment', function( $request, $response, $app){
 
 });//admincp equipment page
 
+respond('/admincp/subitems', function( $request, $response, $app){
+	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getSubItems());
+	$app->tpl->display( 'adminsubitems.tpl' );
+	PSU::db('cts')->debug=true;
+});//admincp equipment page
+
+respond('POST', '/admincp/subitems/add', function( $request, $response, $app){
+	$name=$request->param('new_subitem');
+	$name=filter_var($name, FILTER_SANITIZE_STRING);
+	reserveDatabaseAPI::insertSubitem($name);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/admincp/subitems' );
+});//admin subitem add
+
+respond('/admincp/subitems/[i:id]/remove', function( $request, $response, $app){
+	$subitem_id=$request->id;
+	reserveDatabaseAPI::deleteSubitem($subitem_id);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/admincp/subitems');
+});//admin subitem 
+
 respond('POST', '/admincp/equipment/add', function( $request, $response, $app){
 	$category = $request->param('new_equipment');
 	$category=filter_var($category, FILTER_SANITIZE_STRING);
@@ -37,8 +56,6 @@ respond('/admincp/equipment/[i:id]/remove', function( $request, $response, $app)
 	$equipment_id=$request->id;
 	reserveDatabaseAPI::deleteEquipment($equipment_id);
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/admincp/equipment');
-	
-
 });//admin equipment 
 
 respond('/equipment', function( $request, $response, $app) {
@@ -59,14 +76,24 @@ respond('/reservation' , function( $request, $response, $app){
 
 });//end reservation
 
+respond('/reservation/[i:id]/subitem/add', function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	$subitem_id=$request->param('subitems');
+	reserveDatabaseAPI::insertReservationSubitem($reservation_idx,$subitem_id);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+
+});
+
 respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$reservation_idx=$request->id;
 	$query=new \PSU\Population\Query\IDMAttribute('mis','permission');
 	$factory = new \PSU_Population_UserFactory_PSUPerson;
 	$population= new \PSU_Population( $query, $factory );	
 	$cts_technicians=$population->query();
+	$app->tpl->assign( 'subitemlist', reserveDatabaseAPI::getSubItems());
 	PSU::dbug($population);
 	PSU::dbug($cts_technicians);
+	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getReserveSubItems($reservation_idx));
 	$app->tpl->assign( 'cts_technicians',$cts_technicians );
 	//$app->tpl->assign( 'cts_technicians',array(000256614=>"David Allen",000256615 => "Technician Dave"));//list of CTS technicians
 	$app->tpl->assign( 'messages', reserveDatabaseAPI::getMessages($reservation_idx));
@@ -76,7 +103,7 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_id($reservation_idx));
 	$app->tpl->display( 'singlereservation.tpl' );
 
-});//end reservation/search/i
+});//end reservation/search/
 
 respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $response, $app){
 	if($request->action=="edit"){//if the action is to edit the current reservation
