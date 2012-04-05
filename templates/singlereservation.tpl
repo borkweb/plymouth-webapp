@@ -137,13 +137,15 @@ $(function(){
 			<tr>
 				<th>Subitem ID</th>
 				<th>Subitem</th>
+				<th>Reserve</th>
 			</tr>
 		</thead>
 		<tbody>
 		{foreach from=$subitems item=subitem key=id}
 			<tr>
-				<td>{$id}</td>
-				<td>{$subitem}</td>
+				<td>{$subitem.subitem_id}</td>
+				<td>{$subitem.name}</td>
+				<td><a href="{$PHP.BASE_URL}/admin/reservation/subitem/remove/{$id}/{$reservation_idx}">Remove</a>
 			</tr>
 		{/foreach}
 		</tbody>

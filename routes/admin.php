@@ -84,6 +84,14 @@ respond('/reservation/[i:id]/subitem/add', function( $request, $response, $app){
 
 });
 
+respond('/reservation/subitem/remove/[i:id]/[:key]', function( $request, $response, $app){
+	$id=$request->id;
+	$reservation_idx=$request->key;
+	reserveDatabaseAPI::deleteReserveSubitem($id);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+
+});
+
 respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$reservation_idx=$request->id;
 	$query=new \PSU\Population\Query\IDMAttribute('mis','permission');

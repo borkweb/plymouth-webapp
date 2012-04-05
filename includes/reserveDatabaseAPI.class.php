@@ -152,6 +152,13 @@ class reserveDatabaseAPI{
 
 	}//end function deleteSubitem
 
+	function deleteReserveSubitem($id){
+		$sql="DELETE FROM cts_reservation_subitem WHERE reservation_subitem_id=?";
+
+		PSU::db('cts')->Execute( $sql, $id );
+		
+	}//end function delete reserve subitem
+
 
 	function deleteMessages($reservation_idx){
 		$sql="DELETE FROM cts_reservation_note WHERE reservation_idx = ?";
@@ -262,9 +269,10 @@ class reserveDatabaseAPI{
 
 	}//end function get subitems
 
+
 	function getReserveSubItems($reservation_id){
 		//$sql="SELECT s.* FROM cts_reservation_subitem s INNER JOIN cts_subitem c ON s.subitem_id = c.id WHERE s.reservation_id= ?";
-		$sql="SELECT s.subitem_id,c.name FROM cts_reservation_subitem s,cts_subitem c WHERE s.reservation_id= ? AND c.id=s.subitem_id";
+		$sql="SELECT s.*,c.name FROM cts_reservation_subitem s,cts_subitem c WHERE s.reservation_id= ? AND c.id=s.subitem_id";
 
 		return PSU::db('cts')->GetAssoc( $sql, $reservation_id );
 
