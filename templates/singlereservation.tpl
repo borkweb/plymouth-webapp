@@ -8,7 +8,7 @@ $(function(){
 <ul class="clean">
 {assign var=reserve value=$reservation[$reservation_idx]}
 {if $editable}
-<form class="label-left" name ="event_info" method="POST" action="{$PHP.BASE_URL}/reserve/event">
+<form class="label-left" name ="event_info" method="POST" action="{$PHP.BASE_URL}/admin/reservation/{$reservation_idx}/edit">
           <ul>
 		<li>
           	<h4>Contact Information:</h4>
@@ -105,7 +105,7 @@ $(function(){
 			<li><strong>End Time: </strong>{$reserve.end_time|date_format:$time_format}</li>		
 			<li><strong>Location: </strong>{$locations[$reserve.building_idx]} <strong>in room</strong> {$reserve.room}</li>
 			<li><strong>Title: </strong>{$reserve.title}</li>		
-			<li><strong>Status of Loan: </strong>{$reserve.status}</li>
+			<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/status"<li><strong>&nbsp;&nbsp;&nbsp;Status of Loan: </strong>{html_options name="status" options=$status selected=$reserve.status} <input type="submit" name="Status" value="Change Status"></form></li>
 			<li><strong>Comments: </strong><p>{$reserve.memo}</p></li>
 			<li><strong>Requested Items: </strong><p>{$reserve.request_items}</p></li>
 
@@ -122,7 +122,7 @@ $(function(){
 		<tbody>
 		{foreach from=$equipment item=equipment key=id}
 			<tr>
-				<td>GPLI ID</td>
+				<td>GLPI_ID<!--|substr:-4}--></td>
 				<td>{$equipment.equipment_idx}</td>
 				<td>Type</td>
 				<td>Model</td>
@@ -137,7 +137,7 @@ $(function(){
 			<tr>
 				<th>Subitem ID</th>
 				<th>Subitem</th>
-				<th>Reserve</th>
+				<th>Remove</th>
 			</tr>
 		</thead>
 		<tbody>

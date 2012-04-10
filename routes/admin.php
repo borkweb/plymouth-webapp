@@ -76,13 +76,127 @@ respond('/reservation' , function( $request, $response, $app){
 
 });//end reservation
 
+respond('/reservation/[i:id]/edit',function( $request, $response, $app){
+	//required parameters
+	$reservation_idx=$request->id;
+	$first_name=$request->param('first_name');
+	$last_name=$request->param('last_name');
+	$phone=$request->param('phone');
+	$secondary_phone=$request->param('secondary_phone');
+	$email=$request->param('email');
+	$submit_first_name=$app->user['first_name'];
+	$submit_last_name=$app->user['last_name'];
+
+	$first_name=filter_var($first_name, FILTER_SANITIZE_STRING);
+	$last_name=filter_var($last_name, FILTER_SANITIZE_STRING);
+	$phone=filter_var($phone, FILTER_SANITIZE_STRING);
+	$secondary_phone=filter_var($secondary_phone, FILTER_SANITIZE_STRING);
+	$email=filter_var($email, FILTER_SANITIZE_STRING);
+
+	$reserve_type=$request->param('radio');
+	$start_date=$request->param('start_date');//request a parameter for start_date
+	$end_date=$request->param('end_date');//request a parameter for enddate
+	$title=$request->param('title');//request a parameter for title
+	$location=$request->param('location');//request a parameter for location
+	$room=$request->param('room');
+	
+	$comments=$request->param('comments');
+	$comments=filter_var($comments,FILTER_SANITIZE_STRING);
+
+	$starthour=$request->param('starthour');
+	$startminute=$request->param('startminute');
+	$startminute=sprintf("%02d",$startminute);
+	$startampm=$request->param('startampm');
+	$start_time=$starthour . ':' . $startminute . ' ' . $startampm;
+
+	$endhour=$request->param('endhour');
+	$endminute=$request->param('endminute');
+	$endminute=sprintf("%02d",$endminute);
+	$endampm=$request->param('endampm');
+	$end_time=$endhour . ':' . $endminute . ' ' . $endampm;
+
+	if( ! $first_name ){ //if there is no first name
+		$_SESSION['errors'][]='First name not found'; //throw error
+	}elseif( ! $last_name ){ //if there is no last name
+		$_SESSION['errors'][]='Last name not found'; //throw error
+	}elseif( ! $phone ){ //if there is no phone number
+		$_SESSION['errors'][]='Phone number not found'; //throw error
+	}elseif( !filter_var($phone, FILTER_VALIDATE_INT)){
+	    $_SESSION['errors'][]='Phone number incorrect';	
+	}elseif( $secondary_phone ){
+		if( !filter_var($secondary_phone, FILTER_VALIDATE_INT) ){
+			$_SESSION['errors'][]='Secondary phone incorrect';
+		}
+	}elseif( ! $email ){
+		$_SESSION['errors'][]='Email not found';
+	}elseif( ! $title ){
+		$_SESSION['errors'][]='Event Title not found';
+	}elseif( ! $location){
+		$_SESSION['errors'][]='Location not found';
+	}elseif( $location == "Please select a location" ) {
+		$_SESSION['errors'][]='Location not found';
+	}elseif( ! $room ){
+		$_SESSION['errors'][]='Room not found';
+	}elseif( ! $start_date ){//if there is no start date
+		$_SESSION['errors'][]='Start Date not found';
+	}elseif( ! $end_date ){ //if there is no end date
+		$_SESSION['errors'][]='End Date not found';
+	}
+
+	if( count($_SESSION['errors'])>0 ){//if the number of errors is > 0
+		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx .'/edit');
+	}else{
+		$cts_admin['first_name']=$first_name;
+		$cts_admin['last_name']=$last_name;
+		$cts_admin['username']=$_SESSION['username'];
+		$cts_admin['phone']=$phone;
+		$cts_admin['submit_first_name']=$submit_first_name;
+		$cts_admin['submit_last_name']=$submit_last_name;
+		
+		if( $secondary_phone ){
+			$cts_admin['secondary_phone']=$secondary_phone;
+		}
+		$cts_admin['email']=$email;
+		$cts_admin['title']=$title;
+		$cts_admin['location']=$location;
+		$cts_admin['room']=$room;
+		
+		if( $comments ) {
+			$cts_admin['comments']=$comments;
+		}
+
+		$cts_admin['start_date']=$start_date;
+		$cts_admin['end_date']=$end_date;
+		$cts_admin['start_time']=$start_time;
+		$cts_admin['starthour']=$starthour;
+		$cts_admin['startminute']=$startminute;
+		$cts_admin['startampm']=$startampm;
+		$cts_admin['end_time']=$end_time;
+		$cts_admin['endhour']=$endhour;
+		$cts_admin['endminute']=$endminute;
+		$cts_admin['endampm']=$endampm;
+		$cts_admin['reserve_type']=$reserve_type;
+
+		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx);
+	}//end else
+
+
+});
+
+respond('/reservation/id/[i:id]/status', function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	$status=$request->param('status');
+	reserveDatabaseAPI::changeStatus($reservation_idx, $status);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+});
+
 respond('/reservation/[i:id]/subitem/add', function( $request, $response, $app){
 	$reservation_idx=$request->id;
 	$subitem_id=$request->param('subitems');
 	reserveDatabaseAPI::insertReservationSubitem($reservation_idx,$subitem_id);
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
 
-});
+});//reservation id subitem add
 
 respond('/reservation/subitem/remove/[i:id]/[:key]', function( $request, $response, $app){
 	$id=$request->id;
@@ -90,18 +204,20 @@ respond('/reservation/subitem/remove/[i:id]/[:key]', function( $request, $respon
 	reserveDatabaseAPI::deleteReserveSubitem($id);
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
 
-});
+}); //reservation subitem remove
 
 respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$reservation_idx=$request->id;
 	$query=new \PSU\Population\Query\IDMAttribute('mis','permission');
 	$factory = new \PSU_Population_UserFactory_PSUPerson;
-	$population= new \PSU_Population( $query, $factory );	
+	$population= new \PSU_Population( $query, $factory );
+	$app->tpl->assign('status',array("approved"=>"approved","pending"=>"pending","loaned out"=>"loaned out","returned"=> "returned", "cancelled"=>"cancelled"));	
 	$cts_technicians=$population->query();
 	$app->tpl->assign( 'subitemlist', reserveDatabaseAPI::getSubItems());
 	PSU::dbug($population);
 	PSU::dbug($cts_technicians);
-	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getReserveSubItems($reservation_idx));
+	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getReserveSubItems($reservation_idx)); //reservation search id
+
 	$app->tpl->assign( 'cts_technicians',$cts_technicians );
 	//$app->tpl->assign( 'cts_technicians',array(000256614=>"David Allen",000256615 => "Technician Dave"));//list of CTS technicians
 	$app->tpl->assign( 'messages', reserveDatabaseAPI::getMessages($reservation_idx));

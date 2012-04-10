@@ -114,6 +114,13 @@ class reserveDatabaseAPI{
 
 	}//end function by_id
 
+	function changeStatus($reservation_idx, $status){
+		$sql="UPDATE cts_reservation SET status= ? WHERE reservation_idx= ?";
+		$data=array($status,$reservation_idx);
+		PSU::db('cts')->Execute( $sql, $data);
+
+	}//end change status
+
 	function categories(){
 		
 		$sql="SELECT categoryID, category_name FROM cts_form_options";
