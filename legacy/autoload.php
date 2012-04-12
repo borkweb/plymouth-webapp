@@ -61,6 +61,7 @@ if ( ! defined( 'PSU_LIB_DIR' ) ) {
 
 includes_psu_register( 'PSU', PSU_LIB_DIR );
 includes_psu_register( 'Rave', PSU_LIB_DIR );
+includes_psu_register( 'Zend', dirname( PSU_LIB_DIR ) . '/external' );
 
 if( 'apache2handler' == php_sapi_name() ) {
 	$logger = new PSU\Error\Logger( '/var/log/php/deprecated.log' );
