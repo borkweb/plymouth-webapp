@@ -66,6 +66,11 @@ class PSUSmarty extends Smarty
 	 */
 	function __construct($uid_or_auto=true)
 	{
+		if( defined( 'PSU_LEGACY_DIR' ) ) {
+			self::$GLOBAL_TEMPLATES = PSU_LEGACY_DIR . '/templates';
+		}
+
+
 		parent::__construct();
 
 		static::$js_registry = array(
@@ -139,7 +144,11 @@ class PSUSmarty extends Smarty
 			umask($old_umask);
 		}
 
-		$this->plugins_dir[] = '/web/includes_external/smarty/psu_plugins';
+		if( defined( 'PSU_EXTERNAL_DIR' ) ) {
+			$this->plugins_dir[] = PSU_EXTERNAL_DIR . '/smarty/psu_plugins';
+		} else {
+			$this->plugins_dir[] = '/web/includes_external/smarty/psu_plugins';
+		}
 
 		$this->head = array(
 			'js' => array(),
