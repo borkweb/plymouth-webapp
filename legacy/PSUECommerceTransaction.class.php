@@ -19,6 +19,16 @@ class PSUECommerceTransaction extends PSUECommerce
 	var $prod;
 
 	/**
+	 * format date for oracle insert
+	 * @since      version 2.0.0
+	 * @access     public
+	 */
+	function formatDate($date)
+	{
+		return ($date) ? "to_date('".strtoupper(date('d-M-Y H:i:s',strtotime($date)))."','DD-MON-YYYY HH24:MI:SS')" : '';
+	}//end $this->formatDate
+
+	/**
 	* generateSQL
 	* 
 	* generate oracle insert statements
