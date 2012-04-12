@@ -192,6 +192,9 @@ respond('/reservation/[i:id]/edit',function( $request, $response, $app){
 respond('/reservation/id/[i:id]/status', function( $request, $response, $app){
 	$reservation_idx=$request->id;
 	$status=$request->param('status');
+	if($status=="approved"){
+			CTSemailAPI::emailUserApproved($reservation_idx);
+	}
 	reserveDatabaseAPI::changeStatus($reservation_idx, $status);
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
 });
