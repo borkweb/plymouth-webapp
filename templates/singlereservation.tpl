@@ -58,24 +58,24 @@ $(function(){
             </li>
 		  <li>
 		  	<label class="required">Event Start:<em>*</em></label>
-		  	<input id="startdate" type="text" name="start_date" readonly="true"
-			value="{$reserve.start_date|date_format:'%l/%e/%Y'}"> at 
-			{html_options name=starthour options=$hours selected=$reserve.starthour}
+		  	<input id="startdate" type="text" name="start_date"
+			value="{$reserve.start_date|date_format:'%m/%d/%Y'}"> at 
+			{html_options name=starthour options=$hours selected=$starthour}
 			:
-			{html_options name=startminute options=$minutes|string_format:"%02d" selected=$reserve.startminute}
+			{html_options name=startminute options=$minutes|string_format:"%02d" selected=$startminute}
 			
 			-
-			{html_options name=startampm options=$ampm selected=$reserve.startampm}
+			{html_options name=startampm options=$ampm selected=$startampm}
 		  </li>
 		  <li>
 		  	<label class="required">Event End:<em>*</em></label>
-		  	<input id="enddate" type="text" name="end_date" readonly="true" value="{$reserve.end_date|date_format:'%l/%e/%Y'}"> at
-			{html_options name=endhour options=$hours selected=$reserve.endhour}
+		  	<input id="enddate" type="text" name="end_date" value="{$reserve.end_date|date_format:'%m/%d/%Y'}"> at
+			{html_options name=endhour options=$hours selected=$endhour}
 			
 			:
-			{html_options name=endminute options=$minutes|string_format:"%02d" selected=$reserve.endminute}
+			{html_options name=endminute options=$minutes|string_format:"%02d" selected=$endminute}
 			-
-			{html_options name=endampm options=$ampm selected=$reserve.startampm}
+			{html_options name=endampm options=$ampm selected=$endampm}
 		   </li>
 		   <li>
 		<input type="radio" id="equipment" name="radio" value="equipment" checked="true"/>I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library

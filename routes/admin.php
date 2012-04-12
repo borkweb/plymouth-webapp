@@ -70,6 +70,7 @@ respond('/equipment', function( $request, $response, $app) {
 respond('/reservation' , function( $request, $response, $app){
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
 	$start_date=date('Y-m-d');
+
 	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
 
 	$app->tpl->display( 'reservation.tpl' );
@@ -176,8 +177,13 @@ respond('/reservation/[i:id]/edit',function( $request, $response, $app){
 		$cts_admin['endminute']=$endminute;
 		$cts_admin['endampm']=$endampm;
 		$cts_admin['reserve_type']=$reserve_type;
+		$start_time = date("H:i:s", strtotime($start_time));
+		$end_time = date("H:i:s", strtotime($end_time));
+		$start_date=date("Y-m-d", strtotime($start_date));
+		$end_date=date("Y-m-d" , strtotime($end_date));
 
-		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx);
+		reserveDatabaseAPI::updateReservation($reservation_idx,$last_name, $first_name, $phone, $email, $start_date, $start_time, $end_date, $end_time, $comments, $location, $room, $title, $delivery_type, $requested_items);
+		//$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx);
 	}//end else
 
 
@@ -237,8 +243,32 @@ respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $respon
 		$app->tpl->assign( 'messages', reserveDatabaseAPI::getMessages($reservation_idx));
 		$app->tpl->assign( 'equipment', reserveDatabaseAPI::getEquipment($reservation_idx));
 		$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+		$app->tpl->assign( 'hours' , array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10,11=>11,12=>12));
+	$app->tpl->assign( 'minutes', array(00=>0,05=>5,10=>10,15=>15,20=>20,25=>25,30=>30,35=>35,40=>40,45=>45,50=>50,55=>55));
+		$app->tpl->assign( 'ampm' , array("AM"=>"AM","PM"=>"PM"));
+
 		$app->tpl->assign( 'reservation_idx', $reservation_idx);
-		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_id($reservation_idx));
+		$reservation=reserveDatabaseAPI::by_id($reservation_idx);
+
+		//this section takes the date stored in the reservation and extracts the
+		//hour, minute and Ante meridiem and Post meridiem
+		$starthour=date("g",strtotime($reservation[$reservation_idx]['start_time']));
+		$startminute=date("i",strtotime($reservation[$reservation_idx]['start_time']));
+		$startampm=date("A",strtotime($reservation[$reservation_idx]['start_time']));
+		
+		$endhour=date("g",strtotime($reservation[$reservation_idx]['end_time']));
+		$endminute=date("i",strtotime($reservation[$reservation_idx]['end_time']));
+		$endampm=date("A",strtotime($reservation[$reservation_idx]['end_time']));
+
+		$app->tpl->assign('starthour',$starthour);
+		$app->tpl->assign('startminute',$startminute);
+		$app->tpl->assign('startampm',$startampm);
+		$app->tpl->assign('endhour',$endhour);
+		$app->tpl->assign('endminute',$endminute);
+		$app->tpl->assign('endampm',$endampm);
+
+
+		$app->tpl->assign( 'reservation' , $reservation);
 		PSU::dbug(reserveDatabaseAPI::by_id($reservation_idx));
 		$app->tpl->display( 'singlereservation.tpl' );
 

@@ -291,4 +291,44 @@ class reserveDatabaseAPI{
 		return PSU::db('cts')->GetAssoc( $sql , $reservation_idx);
 	}//end fuction get equipment
 
+	function updateReservation($reservation_idx,$last_name, $first_name, $phone, $email, $start_date, $start_time, $end_date, $end_time, $comments, $building, $room, $title, $delivery_type, $requested_items){
+
+		$sql="
+		UPDATE cts_reservation SET
+			lname=?,
+			fname=?,
+			phone=?,
+			email=?,	
+			start_date=?,
+			end_date=?,
+			start_time=?,
+			end_time=?,
+			memo=?,
+			building_idx=?,
+			room=?,
+			title=?,
+			delivery_type=?,
+			request_items=?
+		WHERE
+		reservation_idx=?";
+			
+		PSU::db('cts')->Execute( $sql, array($last_name, 
+			$first_name, 
+			$phone, 
+			$email, 
+			$start_date, 
+			$end_date, 
+			$start_time, 
+			$end_time, 
+			$comments, 
+			$building, 
+			$room, 
+			$title, 
+			$delivery_type, 
+			$requested_items, 
+			 $reservation_idx));
+
+	}//end function insertReservation
+
+
 }//end class reserveDatabaseAPI
