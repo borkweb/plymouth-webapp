@@ -1,6 +1,5 @@
 <?php
 require_once('PSUTools.class.php');
-define('FPDF_FONTPATH','/web/includes_external/fpdf/font/');
 require('fpdf/fpdf.php');
 set_time_limit(180);
 
