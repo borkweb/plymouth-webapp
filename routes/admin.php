@@ -182,8 +182,8 @@ respond('/reservation/[i:id]/edit',function( $request, $response, $app){
 		$start_date=date("Y-m-d", strtotime($start_date));
 		$end_date=date("Y-m-d" , strtotime($end_date));
 
-		reserveDatabaseAPI::updateReservation($reservation_idx,$last_name, $first_name, $phone, $email, $start_date, $start_time, $end_date, $end_time, $comments, $location, $room, $title, $delivery_type, $requested_items);
-		//$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx);
+		reserveDatabaseAPI::updateReservation($reservation_idx,$last_name, $first_name, $phone, $email, $start_date, $start_time, $end_date, $end_time, $comments, $location, $room, $title, $delivery_type);
+		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx);
 	}//end else
 
 

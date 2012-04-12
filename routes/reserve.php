@@ -71,7 +71,6 @@ respond( '/confirm', function( $request, $response, $app){
 respond ( '/equipment', function( $request, $response, $app){
 	if($_SESSION['cts']['step']>=1){
 
-	PSU::db('cts')->debug=true;
 		$equipment_id=$request->param('equipment_id');
 		if($equipment_id || $equipment_id == "0"){
 			$app->tpl->assign( 'description',reserveDatabaseAPI::itemInfo($equipment_id));

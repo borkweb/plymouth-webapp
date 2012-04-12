@@ -3,7 +3,6 @@ $(function(){
 	$( "#startdate , #enddate" ).datepicker();
 });
 </script>
-{include file='search.tpl'}
 {box title="Reservation ID: $reservation_idx"}
 <ul class="clean">
 {assign var=reserve value=$reservation[$reservation_idx]}

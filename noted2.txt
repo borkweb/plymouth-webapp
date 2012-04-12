@@ -1,0 +1,7 @@
+search on bottom 
+fix equipment disaapearing
+filter for supported events
+add priority for events normal/high
+text is bold for supported event normal/high
+get search working
+
