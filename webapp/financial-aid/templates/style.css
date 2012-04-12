@@ -1,0 +1,87 @@
+#webapp-head form{ 
+	text-align: right;
+}
+
+#webapp-head h1 a{
+	background: url(/images/icons/32x32/cash.png) no-repeat;
+	min-height: 32px;
+	padding-left: 40px;
+}
+
+th {
+	text-align: left;
+}
+
+.total-row{
+	border-top: 2px solid #bbb;
+	border-bottom: 2px solid #ccc;
+}
+
+.total-row td {
+	background-color: #f5f5f5 !important;
+}
+
+.total-overall td {
+	background-color: #eee !important;
+}
+
+.total-row .monetary { color: darkgreen; }
+
+.total-row .label {
+	font-weight: bold;
+}
+
+.total-overall .label {
+}
+
+.monetary {
+	text-align: right;
+}
+
+.award .details .view{ display: none; }
+.message-available .details .view{ display: inline; }
+
+.tooltip {
+	background-color:#000;
+	border:1px solid #fff;
+	padding:10px 15px;
+	width:200px;
+	display:none;
+	color:#fff;
+	text-align:left;
+	z-index: 100;
+
+	/* outline radius for mozilla/firefox only */
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+}
+
+.award-term ul {
+	display: none;
+	list-style: none;
+	margin: 0;
+}
+
+.award-term li {
+	margin: 0;
+	padding: 0;
+}
+
+.award-term .details {
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+	background-image: url(/images/icons/16x16/apps/help-browser.png);
+	float: left;
+	margin-right: 1em;
+	opacity: 0.5;
+}
+
+.award-term:hover .details {
+	opacity: 1;
+}
+
+.grid.myfinaid-coa {
+	width: 100%;
+	margin-top: 1ex;
+}
