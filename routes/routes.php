@@ -1,6 +1,6 @@
 <?php
 
-require_once PSU_WEBAPP_BASE . '/external/klein/klein.php';
+require_once PSU_EXTERNAL_DIR . '/klein/klein.php';
 
 respond( function( $request, $response, $app ){
 	echo "Document Root: ";

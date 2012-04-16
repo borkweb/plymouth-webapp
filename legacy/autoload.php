@@ -49,30 +49,15 @@ function includes_psu_autoload( $class ) {
 }
 spl_autoload_register( 'includes_psu_autoload' );
 
-// Hack to allow for automatic usage of git repo
-if( 0 === strpos( __DIR__, '/web/app/' ) || 0 === strpos( __DIR__ , '/web/dev/' ) ) {
-	// autoload.php will be in /web/app/REPO/legacy
-
-	if( ! defined( 'PSU_LEGACY_DIR' ) ) {
-		define( 'PSU_LEGACY_DIR', __DIR__ );
-	}
-
-	if( ! defined( 'PSU_LIB_DIR' ) ) {
-		define( 'PSU_LIB_DIR', dirname( __DIR__ ) . '/lib' );
-	}
-
-	if( ! defined( 'PSU_EXTERNAL_DIR' ) ) {
-		define( 'PSU_EXTERNAL_DIR', dirname( __DIR__ ) . '/external' );
-	}
-}
-
-if ( ! defined( 'PSU_LIB_DIR' ) ) {
-	define( 'PSU_LIB_DIR', '/web/includes_psu' );
-}
+// new apps will
+define( 'PSU_LEGACY_DIR', __DIR__ );
+define( 'PSU_BASE_DIR', dirname( __DIR__ ) );
+define( 'PSU_LIB_DIR', PSU_BASE_DIR . '/lib' );
+define( 'PSU_EXTERNAL_DIR', PSU_BASE_DIR . '/external' );
 
 includes_psu_register( 'PSU', PSU_LIB_DIR );
 includes_psu_register( 'Rave', PSU_LIB_DIR );
-includes_psu_register( 'Zend', dirname( PSU_LIB_DIR ) . '/external' );
+includes_psu_register( 'Zend', PSU_EXTERNAL_DIR );
 
 if( 'apache2handler' == php_sapi_name() ) {
 	$logger = new PSU\Error\Logger( '/var/log/php/deprecated.log' );
