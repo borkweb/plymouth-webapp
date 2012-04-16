@@ -3,10 +3,28 @@ php_flag register_globals off
 RewriteEngine on
 RewriteBase /app/
 
+# deny template files
+RewriteRule \.tpl$ - [L,F]
+
+# filter non-html/php files through binary.php
+RewriteCond %{REQUEST_URI} /secure/
+RewriteCond %{REQUEST_URI} !\.(htm|html|php)$
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ /webapp/binary.php [L,QSA]
+
+# explicitly forbid secure files in /app/ so that
+# the uranus override does not show the contents of
+# the blacklisted extensions (.php, etc.)
+RewriteCond %{HTTP_HOST} =www.dev.plymouth.edu
 RewriteCond %{REQUEST_URI} /secure/
 RewriteCond %{REQUEST_FILENAME} -f
-RewriteCond %{REQUEST_URI} !\.(htm|html|php)$
-RewriteRule ^(.*) /webapp/binary.php [L,QSA]
+RewriteRule ^ - [L,F]
 
+# on dev, use the front controller always, allowing git-uranus
+# to intercept the request
+RewriteCond %{HTTP_HOST} =www.dev.plymouth.edu
+RewriteRule ^ index.php [L,QSA]
+
+# outside dev.plymouth.edu, we let found files skip the front controller
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L,QSA]

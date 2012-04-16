@@ -1,8 +1,18 @@
 <?php
 
-/**
- * Plymouth webapp bootstrap.
- */
+//
+// uranus directory override. if $_COOKIE['psudevhost'] is
+// set, nothing else in this repository's /app/ will be executed.
+//
+// this override functionality is limited by the conditional
+// logic capabilities of an .htaccess file, so we'll perform
+// this check on the Host: header.
+//
+// See also: /app/.htaccess
+//
+if( 'www.dev.plymouth.edu' === $_SERVER['HTTP_HOST'] ) {
+	require dirname( __DIR__ ) . '/legacy/git-uranus.php';
+}
 
 require dirname( __DIR__ ) . '/legacy/git-bootstrap.php';
 
