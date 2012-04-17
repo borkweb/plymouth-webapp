@@ -3,6 +3,11 @@ ini_set('memory_limit', -1);
 
 class PSUReport{
 	/**
+	 * Max data length of each column
+	 */
+	public $data_length = array();
+
+	/**
 	 * array of drilldown objects and field associations
 	 */
 	public $drill;
@@ -56,6 +61,11 @@ class PSUReport{
 	 * id of the report
 	 */
 	public $id;
+
+	/**
+	 * id of the row
+	 */
+	public $row_id = 0;
 
 	/**
 	 * original $_GET filters
@@ -443,7 +453,12 @@ class PSUReport{
 			if( $field_length > $this->data_length[ $field ] ) { 
 				$this->data_length[ $field ] = $field_length;
 			}
+
 		}
+
+		// Give each row a unique id, essential for slickgrid
+		$row['analytics_grid_row_id'] = $this->row_id++; 
+
 		return $row;
 	}//end parse_row
 
