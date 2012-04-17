@@ -189,7 +189,7 @@ class PSUadLDAP extends adLDAP {
 			//********** END STUDENT ROLE CODE ********
 	
 			//********** CHECK EMPLOYEE ROLES *********
-			if(in_array('employee',$banner_roles)) {
+			if(in_array('employee',$banner_roles) || $person_attributes['role']['usnh'] ) {
 				//they're an employee break it down
 				foreach($lists as $list) {
 					if($person_attributes['role'][$list]) {
