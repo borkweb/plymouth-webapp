@@ -236,7 +236,7 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$app->tpl->assign( 'subitemlist', reserveDatabaseAPI::getSubItems());
 	PSU::dbug($population);
 	PSU::dbug($cts_technicians);
-	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getReserveSubItems($reservation_idx)); //reservation search id
+	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getReserveSubItems($reservation_idx));
 
 	$app->tpl->assign( 'cts_technicians',$cts_technicians );
 	//$app->tpl->assign( 'cts_technicians',array(000256614=>"David Allen",000256615 => "Technician Dave"));//list of CTS technicians

@@ -114,6 +114,28 @@ class reserveDatabaseAPI{
 
 	}//end function by_id
 
+
+	function by_wp_id($wp_id){
+		$sql="
+			SELECT * FROM cts_reservation
+			WHERE wp_id = ? AND NOT status = 'pending'	
+			";
+		return PSU::db('cts')->GetAssoc( $sql, $wp_id);
+
+	}//end function by_wp_id
+
+
+	function by_wp_id_pending($wp_id){
+		$sql="
+			SELECT * FROM cts_reservation
+			WHERE wp_id = ? AND status='pending'	
+			";
+		return PSU::db('cts')->GetAssoc( $sql, $wp_id);
+
+	}//end function by_wp_id
+
+
+
 	function changeStatus($reservation_idx, $status){
 		$sql="UPDATE cts_reservation SET status= ? WHERE reservation_idx= ?";
 		$data=array($status,$reservation_idx);
@@ -203,11 +225,12 @@ class reserveDatabaseAPI{
 	}//end function insertCategory
 
 
-	function insertReservation($last_name, $first_name, $phone, $email, $application_date, $start_date, $start_time, $end_date, $end_time, $comments, $building, $room, $title, $delivery_type, $requested_items, $status){
+	function insertReservation($wp_id,$last_name, $first_name, $phone, $email, $application_date, $start_date, $start_time, $end_date, $end_time, $comments, $building, $room, $title, $delivery_type, $requested_items, $status){
 
 		$sql="
 		INSERT INTO cts_reservation 
-			(lname,
+			(wp_id,
+			lname,
 			fname,
 			phone,
 			email,
@@ -224,7 +247,8 @@ class reserveDatabaseAPI{
 			request_items,
 			status) 
 		VALUES 
-			(?, 
+			(?,
+			?, 
 			?, 
 			?, 
 			?, 
@@ -241,7 +265,7 @@ class reserveDatabaseAPI{
 			?, 
 			?)";
 			
-		PSU::db('cts')->Execute( $sql, array($last_name, 
+		PSU::db('cts')->Execute( $sql, array($wp_id,$last_name, 
 			$first_name, 
 			$phone, 
 			$email, 

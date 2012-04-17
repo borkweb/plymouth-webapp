@@ -252,8 +252,7 @@ respond ('POST','/success', function($request, $response, $app){
 			$equipment .= $name . ", ";
 		}
 		reserveDatabaseAPI::insertReservation(
-			//need to use binding in the SQL
-			//VALUES(?,?)
+			$_SESSION['wp_id'],
 			$_SESSION['cts']['last_name'],
 			$_SESSION['cts']['first_name'],
 			$_SESSION['cts']['phone'],
