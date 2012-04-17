@@ -199,7 +199,15 @@ respond('/reservation/id/[i:id]/status', function( $request, $response, $app){
 	}
 	reserveDatabaseAPI::changeStatus($reservation_idx, $status);
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
-});
+});//chnage status
+
+respond('/reservation/id/[i:id]/priority', function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	$priority=$request->param('priority');
+	reserveDatabaseAPI::changePriority($reservation_idx, $priority);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+});//change priority
+
 
 respond('/reservation/[i:id]/subitem/add', function( $request, $response, $app){
 	$reservation_idx=$request->id;
@@ -223,6 +231,7 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$factory = new \PSU_Population_UserFactory_PSUPerson;
 	$population= new \PSU_Population( $query, $factory );
 	$app->tpl->assign('status',array("approved"=>"approved","pending"=>"pending","loaned out"=>"loaned out","returned"=> "returned", "cancelled"=>"cancelled"));	
+	$app->tpl->assign('priority', array("normal", "high"));
 	$cts_technicians=$population->query();
 	$app->tpl->assign( 'subitemlist', reserveDatabaseAPI::getSubItems());
 	PSU::dbug($population);

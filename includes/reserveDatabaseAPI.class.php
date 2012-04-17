@@ -121,6 +121,14 @@ class reserveDatabaseAPI{
 
 	}//end change status
 
+	function changePriority($reservation_idx, $priority){
+		$sql="UPDATE cts_reservation SET priority= ? WHERE reservation_idx= ?";
+		$data=array($priority,$reservation_idx);
+		PSU::db('cts')->Execute( $sql, $data);
+
+	}//end change status
+
+
 	function categories(){
 		
 		$sql="SELECT categoryID, category_name FROM cts_form_options";

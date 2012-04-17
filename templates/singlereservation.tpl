@@ -105,6 +105,9 @@ $(function(){
 			<li><strong>Location: </strong>{$locations[$reserve.building_idx]} <strong>in room</strong> {$reserve.room}</li>
 			<li><strong>Title: </strong>{$reserve.title}</li>		
 			<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/status"<li><strong>&nbsp;&nbsp;&nbsp;Status of Loan: </strong>{html_options name="status" options=$status selected=$reserve.status} <input type="submit" name="Status" value="Change Status"></form></li>
+
+	<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/priority"<li><strong>&nbsp;&nbsp;&nbsp;Priority of Loan: </strong>{html_options name="priority" options=$priority selected=$reserve.priority} <input type="submit" name="Priority" value="Change Priority"></form></li>
+
 			<li><strong>Comments: </strong><p>{$reserve.memo}</p></li>
 			<li><strong>Requested Items: </strong><p>{$reserve.request_items}</p></li>
 
