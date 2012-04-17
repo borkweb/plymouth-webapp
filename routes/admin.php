@@ -249,6 +249,22 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 
 });//end reservation/search/
 
+respond('/reservation/id/[i:id]/print' , function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	$app->tpl->assign( 'subitemlist', reserveDatabaseAPI::getSubItems());
+	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getReserveSubItems($reservation_idx));
+
+	$app->tpl->assign( 'cts_technicians',$cts_technicians );
+	$app->tpl->assign( 'messages', reserveDatabaseAPI::getMessages($reservation_idx));
+	$app->tpl->assign( 'equipment', reserveDatabaseAPI::getEquipment($reservation_idx));
+	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+	$app->tpl->assign( 'reservation_idx', $reservation_idx);
+	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_id($reservation_idx));
+	$app->tpl->display( 'print.tpl' );
+
+});//end reservation/search/
+
+
 respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $response, $app){
 	if($request->action=="edit"){//if the action is to edit the current reservation
 		$editable=true;

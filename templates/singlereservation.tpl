@@ -174,5 +174,9 @@ $(function(){
 			{/foreach}
 	<li><a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$reservation_idx}/edit" class="button">Edit Reservation</a>
 		<a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$reservation_idx}/delete" class="button">Delete Reservation</a></li>
+		<a href="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/print" class="button">Print Reservation</a></li>
+		<form>
+		<input type="button" value="Print Loan" onClick="window.print()">
+		</form>
 	</ul>
 {/box}
