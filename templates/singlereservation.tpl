@@ -77,10 +77,10 @@ $(function(){
 			{html_options name=endampm options=$ampm selected=$endampm}
 		   </li>
 		   <li>
-		<input type="radio" id="equipment" name="radio" value="equipment" checked="true"/>I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library
+		<input type="radio" id="equipment" name="radio" value="0" checked="true"/>I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library
 		  </li>
 		  <li>
-			<input type="radio" id="sponsored" name="radio" value="sponsored" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
+			<input type="radio" id="sponsored" name="radio" value="1" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
 		  </li>
 		  <li>
               <input type="Submit" name="Edit_event" value="Submit Changes">
@@ -109,6 +109,12 @@ $(function(){
 	<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/priority"<li><strong>&nbsp;&nbsp;&nbsp;Priority of Loan: </strong>{html_options name="priority" options=$priority selected=$reserve.priority} <input type="submit" name="Priority" value="Change Priority"></form></li>
 
 			<li><strong>Comments: </strong><p>{$reserve.memo}</p></li>
+			<li><strong>Event Type: </strong>
+			{if $reserve.delivery_type=='1'}
+				CTS Sponsored Event
+			{else}
+				Equipment Pickup
+			{/if}
 			<li><strong>Requested Items: </strong><p>{$reserve.request_items}</p></li>
 
 		<h2>Equipment Assigned</h2>
