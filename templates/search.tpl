@@ -4,22 +4,22 @@
 	});
 </script>
 {box title="Search"}
-	<form action="{$PHP.BASE_URL}/admin/reservation/search" method="POST">
-		<div>
-			<label>From: </label><input type="text" id="fromdate" name="from_date">
+	<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/search" method="POST">
+		<ul>
+			<li><label>From: </label><input type="text" id="fromdate" name="from_date"></li>
 
-			<label>To: </label><input type="text" id="todate" name="to_date">
+			<li><label>To: </label><input type="text" id="todate" name="to_date"></li>
 
-			<label>First Name:</label><input type="text" name="first_name">
+			<li><label>First Name:</label><input type="text" name="first_name"></li>
 
-			<label>Last Name:</label><input type="text" name="last_name">
+			<li><label>Last Name:</label><input type="text" name="last_name"></li>
 
-			<label>Location: </label>
-				{html_options name=location options=$locations}
+			<li><label>Location: </label>
+				{html_options name=location options=$locations}</li>
 
-			<label>Reservation ID#:</label><input type="text" name="reservation_id">
-			<input type="Submit" name="Search" value="Search">
+			<li><label>Reservation ID#:</label><input type="text" name="reservation_id"></li>
+			<li><input type="Submit" name="Search" value="Search"></li>
 
-		</div>
+		</ul>
 	</form>
 {/box}

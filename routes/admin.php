@@ -334,6 +334,10 @@ respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 		//$end_date=date('Y-m-d', strtotime("+2 week"));
 		$start_date=date('Y-m-d',time()- ($week - 7) * ONE_DAY);
 		$end_date=date('Y-m-d',time()- ($week - 13) * ONE_DAY);
+		$fixed_start_date=reserveDatabaseAPI::fixDate($start_date);
+		$fixed_end_date=reserveDatabaseAPI::fixDate($end_date);
+
+		$app->tpl->assign('title',"Reservations from $fixed_start_date to $fixed_end_date");
 
 		$dates=array($start_date, $end_date, $start_date, $end_date);
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range($dates));
@@ -341,30 +345,56 @@ respond('/reservation/search/[a:action]' , function( $request, $response, $app){
 	}elseif($request->action=="thisweek"){
 		$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
 		$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
+		$app->tpl->assign('title',"Reservations from $fixed_start_date to $fixed_end_date");
 		$dates=array($start_date, $end_date, $start_date, $end_date);
+		$fixed_start_date=reserveDatabaseAPI::fixDate($start_date);
+		$fixed_end_date=reserveDatabaseAPI::fixDate($end_date);
+
+		$app->tpl->assign('title',"Reservations from $fixed_start_date to $fixed_end_date");
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range($dates));
 	}elseif($request->action=="lastweek"){
 		$start_date=date('Y-m-d',time()- ($week + 7) * ONE_DAY);
 		$end_date=date('Y-m-d',time()- ($week + 1) * ONE_DAY);
+		$fixed_start_date=reserveDatabaseAPI::fixDate($start_date);
+		$fixed_end_date=reserveDatabaseAPI::fixDate($end_date);
+
+		$app->tpl->assign('title',"Reservations from $fixed_start_date to $fixed_end_date");
+
 		$dates=array($start_date, $end_date, $start_date, $end_date);
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date_range($dates));
 	}elseif($request->action=="today")
 	{
+		
 		$start_date=date('Y-m-d');
+		$fixed_start_date=reserveDatabaseAPI::fixDate($start_date);
+
+		$app->tpl->assign('title',"Reservations for today, the $fixed_start_date");
+
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
 
 	}elseif($request->action=="yesterday")
 	{
 		$start_date=date('Y-m-d', strtotime("-1 day"));
+		$fixed_start_date=reserveDatabaseAPI::fixDate($start_date);
+
+		$app->tpl->assign('title',"Reservations for yesterday, the $fixed_start_date");
+
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
 
 	}elseif($request->action=="tommorrow")
 	{
 		$start_date=date('Y-m-d', strtotime("+1 day"));
+	$fixed_start_date=reserveDatabaseAPI::fixDate($start_date);
+
+		$app->tpl->assign('title',"Reservations for tomorrow, the $fixed_start_date");
+
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_date($start_date));
 
 	}elseif($request->action=="pending"){
 		$query="pending";
+
+		$app->tpl->assign('title',"Pending Reservations");
+
 		$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_status($query));
 	}
 

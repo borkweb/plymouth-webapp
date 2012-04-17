@@ -204,6 +204,10 @@ class reserveDatabaseAPI{
 	
 	}//end function deleteReservation
 
+	function fixDate($date){
+		return date( 'n-j-Y', strtotime($date));
+	}//end function fix date
+
 	function insertFormOptions($category, $description){
 		$sql="INSERT INTO cts_form_options (category_name, description) VALUES (?,?)";
 		$values=array($category, $description);
