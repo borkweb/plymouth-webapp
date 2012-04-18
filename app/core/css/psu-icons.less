@@ -1,0 +1,268 @@
+/* PSUMobile Font
+*
+* All Assets are owned by Drew Wilson and are protected by Copyright law, and are bound by the laws 
+* in force in the United States of America and California. No title to or intellectual property rights 
+* to the Assets are transferred to you. Drew Wilson retains all rights not expressly granted by this 
+* License Agreement. Trademarks shall be used in accordance with accepted trademark practice, including 
+* identification of trademark owner's name. Trademarks can only be used to identify printed or electronic 
+* output produced by the Assets. Such use of any trademark does not give you any rights of ownership in 
+* that trademark. Except as stated above, this License Agreement does not grant you any intellectual 
+* property rights in the Assets. Unpublished rights are reserved. You must leave all copyright notices 
+* and text intact and unaltered the Assets. This includes Font and CSS files.
+*/
+@font-face {
+  font-family: 'PSUIcons01';
+  src: url('/webapp/style/fonts/psuicons01.eot');
+	src: url('/webapp/style/fonts/psuicons01.eot?#iefix') format('embedded-opentype'),
+	     url('/webapp/style/fonts/psuicons01.woff') format('woff'),
+	     url('/webapp/style/fonts/psuicons01.svg#UntitledRegular') format('svg'),
+  		 url('/webapp/style/fonts/psuicons01.ttf') format('truetype'),
+	     url('/webapp/style/fonts/psuicons01.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.psu-icon {
+	box-sizing: border-box;
+	color: #555;
+	display: inline-block;
+	font-style: normal;
+	overflow: hidden;
+	position: relative;
+	text-align: center;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.9);
+	vertical-align: middle;
+
+	&.boxed:hover,
+	&:hover {
+		color: #000;
+	}
+
+	span {
+		position: relative;
+		z-index: 5;
+		display: block;
+		height: 100%;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	&.boxed {
+		background: rgb(255,255,255); /* Old browsers */
+		background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1))); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* IE10+ */
+		background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		border-radius: 8px;
+
+		box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+		-webkit-transition: all .1s linear;
+		-moz-transition: all .1s linear;
+		-o-transition: all .1s linear;
+
+		span {
+			background-image: url(images/icon-bg.png);
+			background-position: center center;
+			border: 3px solid rgba(100, 100, 100, 0.1);
+		}
+	}
+
+	.sub-value,
+	.sub-icon {
+		line-height: 0.9em;
+		font-size: 60%;
+		position: absolute;
+	}
+
+	.sub-icon {
+		background: rgba( 255, 255, 255, 0.8 );
+		color: #555;
+
+		border-radius: 0.3em;
+		padding: 0 10%;
+
+		text-shadow: 0 1px 1px rgba(255, 255, 255, 0.9);
+		bottom: 2%;
+		right: 10%;
+	}
+
+	.sub-value {
+		background: rgba( 85, 85, 85, 0.8);
+		border: 1px solid rgba( 0, 0, 0, 0.2 );
+		color: #eee;
+
+		background: rgba( 255, 255, 255, 0.8 );
+		color: #555;
+
+		font-family: Helvetica, Arial, sans-serif;
+		font-size: 18%;
+		padding: 5% 12%;
+		border-radius: 0.3em;
+		text-shadow: none;
+		bottom: 10%;
+		right: 10%;
+
+		&.important {
+			background: rgba( 127, 0, 0, 0.9 );
+			border: none;
+			color: #eee;
+		}
+
+		&.info {
+			background: rgba( 49, 59, 160, 0.9 );
+			border: none;
+			color: #eee;
+		}
+	}
+
+	&.tiny {
+		width: 16px;
+		height: 16px;
+		font-size: 16px;
+		border-radius: 3px;
+		line-height: 16px;
+
+		&.boxed {
+			font-size: 12px;
+
+			span {
+				line-height: 12px;
+				border-radius: 3px;
+				border-width: 2px;
+			}
+		}
+	}
+
+	&.small {
+		width: 22px;
+		height: 22px;
+		font-size: 20px;
+		line-height: 16px;
+		border-radius: 5px;
+
+		&.boxed {
+			span {
+				border-radius: 5px;
+				border-width: 2px;
+			}
+		}
+	}
+
+	&.medium {
+		line-height: 26px;
+		width: 32px;
+		height: 32px;
+		font-size: 26px;
+		border-radius: 5px;
+
+		&.boxed {
+			span {
+				border-radius: 5px;
+			}
+		}
+	}
+
+	&.large {
+		line-height: 46px;
+		width: 50px;
+		height: 50px;
+		font-size: 46px;
+		border-radius: 8px;
+
+		&.boxed {
+			span {
+				border-radius: 8px;
+			}
+		}
+	}
+
+	&.beefy {
+		line-height: 60px;
+		width: 64px;
+		height: 64px;
+		font-size: 60px;
+		border-radius: 8px;
+
+		&.boxed {
+			span {
+				border-radius: 8px;
+			}
+		}
+	}
+
+	&.massive {
+		line-height: 76px;
+		width: 80px;
+		height: 80px;
+		font-size: 70px;
+		border-radius: 8px;
+
+		&.boxed {
+			span {
+				border-radius: 8px;
+			}
+		}
+	}
+
+	&.ridiculous {
+		line-height: 96px;
+		width: 100px;
+		height: 100px;
+		font-size: 95px;
+		border-radius: 10px;
+
+		&.boxed {
+			span {
+				border-radius: 10px;
+			}
+		}
+	}
+}
+
+.icon-bus,
+.icon-clock,
+.icon-clusters,
+.icon-dining,
+.icon-directory,
+.icon-dots,
+.icon-facebook-item,
+.icon-feedback,
+.icon-info,
+.icon-map,
+.icon-movies,
+.icon-mymail,
+.icon-news,
+.icon-news-item,
+.icon-parking,
+.icon-phonebook,
+.icon-quota,
+.icon-secure,
+.icon-twitter-item {
+	font-family: 'PSUIcons01';
+	font-weight: normal;
+}
+
+.icon-bus:before { content: "B"; }
+.icon-clock:before { content: "n"; }
+.icon-clusters:before { content: "C"; }
+.icon-dining:before { content: "D"; }
+.icon-directory:before { content: "A"; }
+.icon-dots:before { content: "."; }
+.icon-facebook-item:before { content: "0"; }
+.icon-feedback:before { content: "F"; }
+.icon-info:before { content: "i"; }
+.icon-map:before { content: "M"; }
+.icon-movies:before { content: "T"; }
+.icon-mymail:before { content: "E"; }
+.icon-news:before { content: "N"; }
+.icon-news-item:before { content: "2"; }
+.icon-parking:before { content: "P"; }
+.icon-phonebook:before { content: "A"; }
+.icon-quota:before { content: "Q"; }
+.icon-secure:before { content: "!"; }
+.icon-twitter-item:before { content: "1"; }

@@ -1,0 +1,580 @@
+@import url(../css/icons.css);
+/* PSU specific styling below */
+*{
+	position: relative;
+	zoom: 1;
+}
+
+body{
+	background: #fff;
+	color: #000;
+	padding-top: 0 !important;
+	overflow: auto;
+}
+
+body.webapp-dev{
+	background: #fff;
+}
+
+#webapp-page{
+	/*background: transparent url(../images/fg.png) top center no-repeat;*/
+}
+
+body.webapp-dev #webapp-page{
+	background: transparent;
+}
+
+a{color: #2885CA; text-decoration: none;}
+a:hover{color: #11389B; text-decoration: none;}
+a img{border: none;}
+
+abbr,acronym{border-bottom: 1px dotted #666;}
+acronym{
+	font-variant: small-caps;
+	text-transform: lowercase;
+}
+
+address{padding: 0.5em 1em;}
+address ul,
+address ol{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+address li{margin: 0 0 0.3em 0; padding: 0;}
+
+blockquote{
+	color: #666;
+	font-style: italic;
+	padding: 1.5em;
+}
+
+caption{color: #666; text-align: center;}
+
+dl{margin: 0.5em;}
+dt{margin: 0 0 0.5em 0;}
+dd{color: #666; margin: 0; padding: 0 0 0 1.5em;}
+
+h1,h2,h3,h4,h5{margin: 0.5em 0; padding: 0;}
+
+h1{color: #85360F; font-size: 1.6em;}
+h2{color: #5E6A1A; font-size: 1.4em;}
+h3{color: #8e6f33; font-size: 1.2em;}
+h4{color: #b78118; font-size: 1.1em;}
+h5{font-size: 1.0em;}
+
+iframe{border: none;}
+
+p{margin: 0 0 1.1em;}
+
+small{font-size: 0.8em;}
+
+.extra-tag-styles table{
+	border: 0.5em solid #f5f5f5;
+	border-collapse: separate;
+	empty-cells: show;
+	border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+}
+
+.extra-tag-styles td{
+	background: #fff;
+	border-bottom: 1px solid #fff;
+}
+
+.extra-tag-styles th{
+	background: #eee;
+	border-bottom: 1px solid #eee;
+}
+
+.extra-tag-styles td, .extra-tag-styles th{
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	padding: 0.3em 0.5em;
+	vertical-align: top;
+}
+
+.extra-tag-styles table .alt td{
+	background-color: #f8f8f8;
+	border-bottom: 1px solid #f8f8f8;
+}
+
+.extra-tag-styles table tr.last-row td{
+	border-bottom: 1px solid #ddd;
+}
+
+table.grid {
+	border-collapse: collapse;
+	margin: 1em 0;
+}
+table.grid td, table.grid th {
+	border: 1px solid #ddd;
+	padding: 2px 4px;
+	vertical-align: top;
+}
+table.grid tr:nth-child(2n+1) td {
+	background-color: #f8f8f8;
+}
+table.grid th {
+	background: #eee;
+	color: #000;
+}
+
+ul.clean{list-style-type: none;}
+ul.clean li{
+	clear: left; 
+	margin-bottom: 0.25em;
+	margin-left: 1em;
+}
+
+.right{text-align:right;}
+.center{text-align:center;}
+.left{text-align:left;}
+
+.bulleted{
+	list-style-type: disc;
+}
+
+.obscure{background: #000 !important; color: #000 !important;}
+.print_only{display:none;}
+/* Form Styles */
+
+form{
+	margin: 0;
+}
+
+fieldset{
+	border: 1px solid #ccc;
+	padding: 1em;
+}
+
+legend{
+	color: #999;
+	padding: 0.3em;
+}
+
+form ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+form ul li{
+	clear: left;
+	margin: 0 0 1em 0;
+	padding: 0;
+}
+
+button,
+input,
+select,
+textarea,
+a.button{
+	border: 1px solid #999;
+	color: #000;
+	padding: 0.3em;
+	text-decoration: none;
+}
+
+button,
+a.button{
+	background: #eee;
+}
+
+option{padding: 0 0.3em 0 0;}
+
+label{
+	display: block;
+	margin-bottom: 0.1em;
+	width: auto;
+}
+
+label.required{font-weight: bold;}
+label.required em{color: red; margin-left: 0.3em;}
+
+label span{
+	color: #666;
+	display: block;
+	font-size: 0.9em;
+	font-weight: normal;
+}
+
+.label-left label{
+	float: left;
+	margin-right: 1em;
+	text-align: right;
+	width: 10em;
+}
+
+.label-left label.required em{
+	float:left;
+}
+
+.label-left .buttons{
+	padding-left: 11em;
+}
+
+/* message styles */
+.message-container{}
+.message{
+	border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+}
+
+.message,
+.message-messages{
+	background-color: #edecc0;
+	background-image: url(http://www.plymouth.edu/images/icons/22x22/status/dialog-information.png);
+	background-repeat: no-repeat;
+	background-position: 1em 1.1em;
+	border: 1px solid #dac45b;
+	margin-bottom: 1em;
+	padding: 1em 1em 1em 50px;
+}
+
+.message-compact{
+	margin-bottom: 0;
+	padding: 2px 2px 2px 29px;
+	background-position: 2px 2px;
+}
+
+.message-error,
+.message-errors{
+	background-color: #814040;
+	background-image: url(http://www.plymouth.edu/images/icons/22x22/status/dialog-warning.png);
+	border-color: #7a1818;
+	color: #fff;
+}
+
+.message-success,
+.message-successes{
+	background-color: #83a080;
+	background-image: url(http://www.plymouth.edu/images/icons/22x22/emotes/face-smile.png);
+	border-color: #3f872c;
+	color: #fff;
+}
+
+.message-warning,
+.message-warnings{
+	background-color: #c7905c;
+	background-image: url(http://www.plymouth.edu/images/icons/22x22/emblems/emblem-important.png);
+	border-color: #b27a21;
+	color: #fff;
+}
+
+.message ul{margin: 0;}
+
+.message ul li{
+	list-style: none;
+	margin-left: 0;
+}
+.message ul.bulleted{
+	margin-bottom: 1em;
+}
+.message ul.bulleted li{
+	list-style: disc;
+}
+/* combined styles */
+
+#psu_gobar_42199{
+	display: none !important;
+}
+
+.webapp-head,
+.webapp-nav,
+.webapp-avant-body,
+.webapp-body,
+.webapp-apres-body,
+.webapp-foot,
+.webapp-apres-foot{
+	border-left: 10px solid #ddd;
+	border-right: 10px solid #ddd;
+}
+
+.webapp-dev .webapp-nav,
+.webapp-dev .webapp-avant-body,
+.webapp-dev .webapp-body,
+.webapp-dev .webapp-apres-body,
+.webapp-dev .webapp-foot,
+.webapp-dev .webapp-apres-foot{
+	border-color: #ddd;
+}
+
+.webapp-nav .subnav{
+	background: #333;
+	border-top: 1px solid #666;
+	padding: 0.5em 0;
+}
+
+/* Head styles */
+.webapp-head{
+	background: #f5f5f5;
+	border-top: 10px solid #ddd;
+	height: 100px;
+
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
+	-moz-border-radius-topleft: 1em;
+	-moz-border-radius-topright: 1em;
+	-webkit-border-top-left-radius: 1em;
+	-webkit-border-top-right-radius: 1em;
+}
+
+.webapp-head h1{
+	color: #000;
+	font-size: 2em;
+	margin-top: 30px;
+}
+
+.webapp-head h1 a{
+	color: #000;
+	text-decoration: none;
+}
+
+/* Nav styles */
+
+.webapp-nav{padding-bottom: 1em;}
+
+.webapp-nav .inner .wrap{
+	background: #464646;
+	color: #999;
+
+	padding: 0.5em 1em;
+	border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	-webkit-border: 0.5em;
+}
+
+.webapp-nav .inner{
+}
+
+.webapp-nav a{color: #999;}
+.webapp-nav a.active,
+.webapp-nav a:hover{color: #fff;}
+
+.webapp-nav ul,
+.webapp-nav ol{
+	list-style-type: none;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 0;
+}
+
+.webapp-nav li{
+	float: left;
+	padding: 0;
+	margin: 0 2em 0 0;
+}
+
+.webapp-nav a.menu-expand{
+	background-image: url(../images/menu-expand.png);
+	background-repeat: no-repeat;
+	background-position: center right;
+}
+
+/* drop down nav styles */
+
+.webapp-nav ul > li {
+	float: left;
+}
+
+.webapp-nav ul > li > a {
+	display: block;
+}
+
+.webapp-nav ul > li > .parent-hover {
+	color: #fff;
+}
+
+.webapp-nav ul > li ul {
+	display: none;
+	list-style: none;
+	position: absolute;
+	margin: -1px 0 0 0;
+	z-index: 90;
+	padding: 0;
+}
+
+.webapp-nav ul > li ul a {
+	display: block;
+	width: 152px;
+	padding: 5px;
+	border-bottom: 1px solid #333;
+	border-right: 1px solid #333;
+	border-left: 1px solid #333;
+	background-color: #464646;
+}
+
+.webapp-nav ul > li ul li a.first {
+	border-top: 1px solid #333;
+}
+
+.webapp-nav ul > li ul .child-hover1 {
+	background-color: #333;
+	color: #fff;
+}
+
+.webapp-nav ul > li ul .child-hover2 {
+	background-color: #333;
+	color: #fff;
+}
+
+.webapp-nav ul > li ul .child-hover3 {
+	background-color: #333;
+	color: #fff;
+}
+
+.webapp-nav ul > li ul .child-hover4 {
+	background-color: #333;
+	color: #fff;
+}
+
+.webapp-nav ul > li ul li ul {
+	margin: -29px 0 0 163px;
+	position: absolute;
+}
+
+.webapp-nav ul span {
+	float: right;
+}
+
+
+/* Body styles */
+
+.webapp-avant-body, 
+.webapp-body,
+.webapp-apres-body{
+	background: #fff;
+}
+
+.webapp-body .inner{
+	padding-top: 1em;
+}
+
+.webapp-apres-body .inner{
+	border-bottom: 1px solid #fdfdfb;
+}
+
+/* Foot styles */
+
+.webapp-foot{
+	background: #fff;
+}
+
+.webapp-foot .inner{
+}
+
+.webapp-apres-foot{
+	background: #fff;
+	border-bottom: 10px solid #ddd;
+	margin-bottom: 1em;
+
+	border-bottom-left-radius: 1em;
+	border-bottom-right-radius: 1em;
+	-moz-border-radius-bottomleft: 1em;
+	-moz-border-radius-bottomright: 1em;
+	-webkit-border-bottom-left-radius: 1em;
+	-webkit-border-bottom-right-radius: 1em;
+}
+
+/* box strucure */
+
+.box{
+	margin-bottom: 1em;
+}
+
+.box-inner{padding: 0 10px;}
+.box > .body > .box-inner{padding: 5px 10px;}
+
+.box > .subheader,
+.box > .body,
+.box > .footer{
+	clear: both;
+}
+
+.box > .title{
+	margin-left: 0;
+	margin-right: 0;
+
+}
+
+.box > .title h2{
+	font-family: arial;
+	font-size: 1.6em;
+	margin: 0;
+}
+
+.box > .title .secondary{
+	text-align: right;
+}
+
+.box > .subheader{
+	font-size: 1.2em;
+}
+
+.box > .subheader .box-inner{
+}
+
+.box > .foot{
+	font-size: 1px;
+}
+
+/* border-box style */
+.border-box > .title,
+.border-box > .subheader,
+.border-box > .body,
+.border-box > .foot{
+}
+
+.border-box > .title,
+.border-box > .title h2,
+.border-box > .title a{
+	color: #85360F;
+}
+
+.border-box > .title a:hover{color: #fff;}
+
+.border-box > .title{
+	background: transparent;
+}
+
+.border-box > .subheader{
+	background: #fbfbfb;
+	color: #666;
+}
+
+.border-box > .body,
+.border-box > .foot{
+	background: #fff;
+}
+
+.border-box > .foot{
+	border-bottom: 1px solid #eee;
+}
+
+/* clear-box styling */
+.clear-box > .title h2{
+	color: #6e4d3a;
+}
+
+.clear-box > .title .box-inner{
+	border-bottom: 1px solid #6e4d3a;
+	padding: 0.3em 0;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+}
+
+.clear-box > .subheader{
+	color: #999;
+}
+
+.clear-box > .subheader .box-inner{
+	padding-bottom: 0;
+}
+
+.hidden{
+	display: none;
+}

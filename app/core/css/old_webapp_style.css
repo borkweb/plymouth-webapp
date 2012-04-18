@@ -1,0 +1,155 @@
+body,
+body.webapp-dev{
+	background-color: #e1e0cd;
+	background-image: none;
+}
+
+body.webapp-prod #webapp-page,
+body.webapp-dev #webapp-page{
+	background-image: none;
+}
+
+table.grid {
+	border-collapse: collapse;
+	margin: 1em 0;
+}
+table.grid td, table.grid th {
+	border: 1px solid #ddd;
+	padding: 2px 4px;
+	vertical-align: top;
+}
+table.grid tr:nth-child(2n+1) td {
+	background-color: #f8f8f8;
+}
+table.grid th {
+	background: #eee;
+	color: #000;
+}
+
+#webapp-head{
+	background: #f3f1e6;
+	color: #85360f;
+}
+
+.webapp-head{
+	height: auto;
+}
+
+.webapp-head h1{
+	color: #85360f;
+	margin-top: 5px;
+}
+
+.webapp-head h1 a{
+	color: #85360f;
+}
+
+.webapp-head .specific{
+	margin-top: 5px;
+}
+
+#webapp-nav{
+	background: #f3f1e6;
+	border-bottom: 1px solid #bfbea3;
+	margin-bottom:5px;
+}
+
+.webapp-nav{
+	background: transparent;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+}
+
+.webapp-nav a{
+	color: #2885CA;
+}
+
+.webapp-nav a:active, 
+.webapp-nav a:hover,
+.webapp-nav ul > li > .parent-hover{
+	color: #11389B;
+}
+
+.webapp-nav ul > li ul a{
+	background-color: #F3F1E6;
+	border-color: #BFBEA3;
+}
+
+.webapp-nav ul > li ul a:hover{
+	background-color: #fff;
+	color: #11389B;
+}
+
+.webapp-nav ul > li ul .child-hover1{
+	background-color: #fff;
+	color: #11389B;
+}
+
+.webapp-nav .subnav{
+	background-color: #efede2;
+	border-color: #dad7c4;
+}
+
+.webapp-avant-body,
+.webapp-body,
+.webapp-apres-body{
+	background: transparent;
+	border: none;
+}
+
+.box{
+	background: #F3F1E6;
+}
+
+.box > .title,
+.box > .subheader,
+.box > .body,
+.box > .foot{
+	border-left: 2px solid #BFBEA3;
+	border-right: 2px solid #BFBEA3;
+}
+
+.box > .title{
+	border-top: 2px solid #BFBEA3;
+}
+
+.box > .foot{
+	border-bottom: 2px solid #BFBEA3;
+}
+
+.border-box .title{
+	background: transparent;
+	color: #000;
+	
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+}
+
+.border-box .title h2{
+	color: #5E6A1A;
+}
+
+.border-box .subheader{background: transparent;}
+
+.border-box .body{
+	background: transparent;
+}
+
+.webapp-foot,
+.webapp-apres-foot{
+	background: transparent;
+	border: none;
+}
+
+.webapp-apres-body .inner,
+.webapp-foot .inner{
+	border: none;
+}
+
+.webapp-apres-foot{display: none;}

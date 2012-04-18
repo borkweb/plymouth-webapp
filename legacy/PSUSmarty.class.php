@@ -66,10 +66,8 @@ class PSUSmarty extends Smarty
 	 */
 	function __construct($uid_or_auto=true)
 	{
-		if( defined( 'PSU_LEGACY_DIR' ) ) {
-			self::$GLOBAL_TEMPLATES = PSU_LEGACY_DIR . '/templates';
-		}
-
+		self::$GLOBAL_TEMPLATES = PSU_LEGACY_DIR . '/templates';
+		self::$STYLE_TEMPLATES = PSU_BASE_DIR . '/app/core/templates';
 
 		parent::__construct();
 
@@ -144,11 +142,7 @@ class PSUSmarty extends Smarty
 			umask($old_umask);
 		}
 
-		if( defined( 'PSU_EXTERNAL_DIR' ) ) {
-			$this->plugins_dir[] = PSU_EXTERNAL_DIR . '/smarty/psu_plugins';
-		} else {
-			$this->plugins_dir[] = '/web/includes_external/smarty/psu_plugins';
-		}
+		$this->plugins_dir[] = PSU_EXTERNAL_DIR . '/smarty/psu_plugins';
 
 		$this->head = array(
 			'js' => array(),
@@ -597,10 +591,10 @@ class PSUSmarty extends Smarty
 		// get the template data
 		$tpl->assign('progress_id', $params['id']);
 		$tpl->assign('progress_bars', $params['bars']);
-		$progress_html = $this->fetch('/web/pscpages/webapp/templates/progress_bar.tpl');
+		$progress_html = $this->fetch( self::$STYLE_TEMPLATES . '/progress_bar.tpl');
 
 		// make sure parent template uses the correct CSS and JS files
-		$tpl->addCSS($tpl->psu_server . '/webapp/style-psuprogress.css');
+		$tpl->addCSS( '/app/core/css/style-psuprogress.css' );
 
 		return $progress_html;
 	}//end psu_gobar

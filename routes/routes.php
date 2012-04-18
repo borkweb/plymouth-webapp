@@ -3,6 +3,7 @@
 require_once PSU_EXTERNAL_DIR . '/klein/klein.php';
 
 with( '/festivals', __DIR__ . '/festivals.php' );
+with( '/style', __DIR__ . '/style.php' );
 
 respond( '404', function() {
 	header( 'Content-Type: text/plain' );

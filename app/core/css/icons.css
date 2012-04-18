@@ -1,0 +1,580 @@
+.icon-small,
+.icon-medium,
+.icon-big{
+	background-image: url(../images/icons.png);
+	vertical-align: middle;
+}
+
+.icon-small{height:16px;width:16px;}
+.icon-medium{height:22px;width:22px;}
+.icon-big{height:32px;width:32px;}
+.icon-small-accessories-text-editor,
+.icon-small-edit,
+.icon-small-text-editor{ background-position: 0px 0px; }
+
+.icon-small-applications-internet,
+.icon-small-globe,
+.icon-small-internet{ background-position: -16px 0px; }
+
+.icon-small-applications-system,
+.icon-small-settings,
+.icon-small-system{ background-position: -32px 0px; }
+
+.icon-small-computer{ background-position: -48px 0px; }
+
+.icon-small-dialog-error,
+.icon-small-error{ background-position: -64px 0px; }
+
+.icon-small-dialog-information,
+.icon-small-info,
+.icon-small-information{ background-position: -80px 0px; }
+
+.icon-small-dialog-warning,
+.icon-small-warning,
+.icon-small-warn{ background-position: -96px 0px; }
+
+.icon-small-document-open,
+.icon-small-doc-open{ background-position: -112px 0px; }
+
+.icon-small-document-properties,
+.icon-small-doc-properties{ background-position: -128px 0px; }
+
+.icon-small-edit-cut,
+.icon-small-cut{ background-position: -144px 0px; }
+
+.icon-small-edit-delete,
+.icon-small-delete{ background-position: -160px 0px; }
+
+.icon-small-edit-find,
+.icon-small-find{ background-position: -176px 0px; }
+
+.icon-small-edit-redo,
+.icon-small-redo{ background-position: -192px 0px; }
+
+.icon-small-edit-undo,
+.icon-small-undo{ background-position: -208px 0px; }
+
+.icon-small-emblem-favorite,
+.icon-small-heart,
+.icon-small-favorite{ background-position: -224px 0px; }
+
+.icon-small-emblem-important,
+.icon-small-important{ background-position: -240px 0px; }
+
+.icon-small-emblem-readonly,
+.icon-small-readonly{ background-position: -256px 0px; }
+
+.icon-small-emblem-system{ background-position: -272px 0px; }
+
+.icon-small-emblem-unreadable,
+.icon-small-unreadable{ background-position: -288px 0px; }
+
+.icon-small-face-monkey,
+.icon-small-monkey,
+.icon-small-ape{ background-position: -304px 0px; }
+
+.icon-small-face-smile,
+.icon-small-smile{ background-position: -320px 0px; }
+
+.icon-small-folder{ background-position: -336px 0px; }
+
+.icon-small-format-justify-fill,
+.icon-small-format-justify,
+.icon-small-justify{ background-position: -352px 0px; }
+
+.icon-small-go-bottom,
+.icon-small-bottom{ background-position: -368px 0px; }
+
+.icon-small-go-down,
+.icon-small-down{ background-position: -384px 0px; }
+
+.icon-small-go-first,
+.icon-small-first{ background-position: -400px 0px; }
+
+.icon-small-go-home,
+.icon-small-home{ background-position: -416px 0px; }
+
+.icon-small-go-jump,
+.icon-small-jump{ background-position: -432px 0px; }
+
+.icon-small-go-last,
+.icon-small-last{ background-position: -448px 0px; }
+
+.icon-small-go-next,
+.icon-small-next{ background-position: -464px 0px; }
+
+.icon-small-go-previous,
+.icon-small-previous{ background-position: -480px 0px; }
+
+.icon-small-go-top,
+.icon-small-top{ background-position: 0px -16px; }
+
+.icon-small-go-up,
+.icon-small-up{ background-position: -16px -16px; }
+
+.icon-small-help-browser,
+.icon-small-help{ background-position: -32px -16px; }
+
+.icon-small-internet-group-chat,
+.icon-small-chat{ background-position: -48px -16px; }
+
+.icon-small-internet-mail,
+.icon-small-mail,
+.icon-small-email{ background-position: -64px -16px; }
+
+.icon-small-internet-web-browser,
+.icon-small-browser,
+.icon-small-world{ background-position: -80px -16px; }
+
+.icon-small-list-add,
+.icon-small-add,
+.icon-small-plus{ background-position: -96px -16px; }
+
+.icon-small-list-remove,
+.icon-small-remove,
+.icon-small-minus{ background-position: -112px -16px; }
+
+.icon-small-mail-attachment,
+.icon-small-attachment{ background-position: -128px -16px; }
+
+.icon-small-media-floppy,
+.icon-small-floppy,
+.icon-small-save{ background-position: -144px -16px; }
+
+.icon-small-network-idle,
+.icon-small-computers{ background-position: -160px -16px; }
+
+.icon-small-network-wireless,
+.icon-small-wireless{ background-position: -176px -16px; }
+
+.icon-small-office-calendar,
+.icon-small-calendar{ background-position: -192px -16px; }
+
+.icon-small-package-x-generic,
+.icon-small-package,
+.icon-small-box{ background-position: -208px -16px; }
+
+.icon-small-preferences-desktop-accessibility,
+.icon-small-accessibility{ background-position: -224px -16px; }
+
+.icon-small-preferences-system,
+.icon-small-preferences{ background-position: -240px -16px; }
+
+.icon-small-process-stop,
+.icon-small-stop{ background-position: -256px -16px; }
+
+.icon-small-system-file-manager,
+.icon-small-file-manager{ background-position: -272px -16px; }
+
+.icon-small-system-lock-screen,
+.icon-small-lock{ background-position: -288px -16px; }
+
+.icon-small-system-search,
+.icon-small-search{ background-position: -304px -16px; }
+
+.icon-small-system-software-update,
+.icon-small-update,
+.icon-small-hot-links{ background-position: -320px -16px; }
+
+.icon-small-system-users,
+.icon-small-people,
+.icon-small-users{ background-position: -336px -16px; }
+
+.icon-small-text-x-generic,
+.icon-small-text{ background-position: -352px -16px; }
+
+.icon-small-user-trash,
+.icon-small-trash{ background-position: -368px -16px; }
+
+.icon-small-user-trash-full,
+.icon-small-trash-full{ background-position: -384px -16px; }
+
+.icon-small-utilities-terminal,
+.icon-small-terminal{ background-position: -400px -16px; }
+
+.icon-small-view-refresh,
+.icon-small-refresh{ background-position: -416px -16px; }
+
+.icon-small-x-office-calendar,
+.icon-small-office-calendar{ background-position: -432px -16px; }
+
+.icon-medium-accessories-text-editor,
+.icon-medium-edit,
+.icon-medium-text-editor{ background-position: 0px -66px; }
+
+.icon-medium-applications-internet,
+.icon-medium-globe,
+.icon-medium-internet{ background-position: -22px -66px; }
+
+.icon-medium-applications-system,
+.icon-medium-settings,
+.icon-medium-system{ background-position: -44px -66px; }
+
+.icon-medium-computer{ background-position: -66px -66px; }
+
+.icon-medium-dialog-error,
+.icon-medium-error{ background-position: -88px -66px; }
+
+.icon-medium-dialog-information,
+.icon-medium-info,
+.icon-medium-information{ background-position: -110px -66px; }
+
+.icon-medium-dialog-warning,
+.icon-medium-warning,
+.icon-medium-warn{ background-position: -132px -66px; }
+
+.icon-medium-document-open,
+.icon-medium-doc-open{ background-position: -154px -66px; }
+
+.icon-medium-document-properties,
+.icon-medium-doc-properties{ background-position: -176px -66px; }
+
+.icon-medium-edit-cut,
+.icon-medium-cut{ background-position: -198px -66px; }
+
+.icon-medium-edit-delete,
+.icon-medium-delete{ background-position: -220px -66px; }
+
+.icon-medium-edit-find,
+.icon-medium-find{ background-position: -242px -66px; }
+
+.icon-medium-edit-redo,
+.icon-medium-redo{ background-position: -264px -66px; }
+
+.icon-medium-edit-undo,
+.icon-medium-undo{ background-position: -286px -66px; }
+
+.icon-medium-emblem-favorite,
+.icon-medium-heart,
+.icon-medium-favorite{ background-position: -308px -66px; }
+
+.icon-medium-emblem-important,
+.icon-medium-important{ background-position: -330px -66px; }
+
+.icon-medium-emblem-readonly,
+.icon-medium-readonly{ background-position: -352px -66px; }
+
+.icon-medium-emblem-system{ background-position: -374px -66px; }
+
+.icon-medium-emblem-unreadable,
+.icon-medium-unreadable{ background-position: -396px -66px; }
+
+.icon-medium-face-monkey,
+.icon-medium-monkey,
+.icon-medium-ape{ background-position: -418px -66px; }
+
+.icon-medium-face-smile,
+.icon-medium-smile{ background-position: -440px -66px; }
+
+.icon-medium-folder{ background-position: -462px -66px; }
+
+.icon-medium-format-justify-fill,
+.icon-medium-format-justify,
+.icon-medium-justify{ background-position: -484px -66px; }
+
+.icon-medium-go-bottom,
+.icon-medium-bottom{ background-position: -506px -66px; }
+
+.icon-medium-go-down,
+.icon-medium-down{ background-position: -528px -66px; }
+
+.icon-medium-go-first,
+.icon-medium-first{ background-position: -550px -66px; }
+
+.icon-medium-go-home,
+.icon-medium-home{ background-position: -572px -66px; }
+
+.icon-medium-go-jump,
+.icon-medium-jump{ background-position: -594px -66px; }
+
+.icon-medium-go-last,
+.icon-medium-last{ background-position: -616px -66px; }
+
+.icon-medium-go-next,
+.icon-medium-next{ background-position: -638px -66px; }
+
+.icon-medium-go-previous,
+.icon-medium-previous{ background-position: -660px -66px; }
+
+.icon-medium-go-top,
+.icon-medium-top{ background-position: 0px -88px; }
+
+.icon-medium-go-up,
+.icon-medium-up{ background-position: -22px -88px; }
+
+.icon-medium-help-browser,
+.icon-medium-help{ background-position: -44px -88px; }
+
+.icon-medium-internet-group-chat,
+.icon-medium-chat{ background-position: -66px -88px; }
+
+.icon-medium-internet-mail,
+.icon-medium-mail,
+.icon-medium-email{ background-position: -88px -88px; }
+
+.icon-medium-internet-web-browser,
+.icon-medium-browser,
+.icon-medium-world{ background-position: -110px -88px; }
+
+.icon-medium-list-add,
+.icon-medium-add,
+.icon-medium-plus{ background-position: -132px -88px; }
+
+.icon-medium-list-remove,
+.icon-medium-remove,
+.icon-medium-minus{ background-position: -154px -88px; }
+
+.icon-medium-mail-attachment,
+.icon-medium-attachment{ background-position: -176px -88px; }
+
+.icon-medium-media-floppy,
+.icon-medium-floppy,
+.icon-medium-save{ background-position: -198px -88px; }
+
+.icon-medium-network-idle,
+.icon-medium-computers{ background-position: -220px -88px; }
+
+.icon-medium-network-wireless,
+.icon-medium-wireless{ background-position: -242px -88px; }
+
+.icon-medium-office-calendar,
+.icon-medium-calendar{ background-position: -264px -88px; }
+
+.icon-medium-package-x-generic,
+.icon-medium-package,
+.icon-medium-box{ background-position: -286px -88px; }
+
+.icon-medium-preferences-desktop-accessibility,
+.icon-medium-accessibility{ background-position: -308px -88px; }
+
+.icon-medium-preferences-system,
+.icon-medium-preferences{ background-position: -330px -88px; }
+
+.icon-medium-process-stop,
+.icon-medium-stop{ background-position: -352px -88px; }
+
+.icon-medium-system-file-manager,
+.icon-medium-file-manager{ background-position: -374px -88px; }
+
+.icon-medium-system-lock-screen,
+.icon-medium-lock{ background-position: -396px -88px; }
+
+.icon-medium-system-search,
+.icon-medium-search{ background-position: -418px -88px; }
+
+.icon-medium-system-software-update,
+.icon-medium-update,
+.icon-medium-hot-links{ background-position: -440px -88px; }
+
+.icon-medium-system-users,
+.icon-medium-people,
+.icon-medium-users{ background-position: -462px -88px; }
+
+.icon-medium-text-x-generic,
+.icon-medium-text{ background-position: -484px -88px; }
+
+.icon-medium-user-trash,
+.icon-medium-trash{ background-position: -506px -88px; }
+
+.icon-medium-user-trash-full,
+.icon-medium-trash-full{ background-position: -528px -88px; }
+
+.icon-medium-utilities-terminal,
+.icon-medium-terminal{ background-position: -550px -88px; }
+
+.icon-medium-view-refresh,
+.icon-medium-refresh{ background-position: -572px -88px; }
+
+.icon-medium-x-office-calendar,
+.icon-medium-office-calendar{ background-position: -594px -88px; }
+
+.icon-big-accessories-text-editor,
+.icon-big-edit,
+.icon-big-text-editor{ background-position: 0px -192px; }
+
+.icon-big-applications-internet,
+.icon-big-globe,
+.icon-big-internet{ background-position: -32px -192px; }
+
+.icon-big-applications-system,
+.icon-big-settings,
+.icon-big-system{ background-position: -64px -192px; }
+
+.icon-big-computer{ background-position: -96px -192px; }
+
+.icon-big-dialog-error,
+.icon-big-error{ background-position: -128px -192px; }
+
+.icon-big-dialog-information,
+.icon-big-info,
+.icon-big-information{ background-position: -160px -192px; }
+
+.icon-big-dialog-warning,
+.icon-big-warning,
+.icon-big-warn{ background-position: -192px -192px; }
+
+.icon-big-document-open,
+.icon-big-doc-open{ background-position: -224px -192px; }
+
+.icon-big-document-properties,
+.icon-big-doc-properties{ background-position: -256px -192px; }
+
+.icon-big-edit-cut,
+.icon-big-cut{ background-position: -288px -192px; }
+
+.icon-big-edit-delete,
+.icon-big-delete{ background-position: -320px -192px; }
+
+.icon-big-edit-find,
+.icon-big-find{ background-position: -352px -192px; }
+
+.icon-big-edit-redo,
+.icon-big-redo{ background-position: -384px -192px; }
+
+.icon-big-edit-undo,
+.icon-big-undo{ background-position: -416px -192px; }
+
+.icon-big-emblem-favorite,
+.icon-big-heart,
+.icon-big-favorite{ background-position: -448px -192px; }
+
+.icon-big-emblem-important,
+.icon-big-important{ background-position: -480px -192px; }
+
+.icon-big-emblem-readonly,
+.icon-big-readonly{ background-position: -512px -192px; }
+
+.icon-big-emblem-system{ background-position: -544px -192px; }
+
+.icon-big-emblem-unreadable,
+.icon-big-unreadable{ background-position: -576px -192px; }
+
+.icon-big-face-monkey,
+.icon-big-monkey,
+.icon-big-ape{ background-position: -608px -192px; }
+
+.icon-big-face-smile,
+.icon-big-smile{ background-position: -640px -192px; }
+
+.icon-big-folder{ background-position: -672px -192px; }
+
+.icon-big-format-justify-fill,
+.icon-big-format-justify,
+.icon-big-justify{ background-position: -704px -192px; }
+
+.icon-big-go-bottom,
+.icon-big-bottom{ background-position: -736px -192px; }
+
+.icon-big-go-down,
+.icon-big-down{ background-position: -768px -192px; }
+
+.icon-big-go-first,
+.icon-big-first{ background-position: -800px -192px; }
+
+.icon-big-go-home,
+.icon-big-home{ background-position: -832px -192px; }
+
+.icon-big-go-jump,
+.icon-big-jump{ background-position: -864px -192px; }
+
+.icon-big-go-last,
+.icon-big-last{ background-position: -896px -192px; }
+
+.icon-big-go-next,
+.icon-big-next{ background-position: -928px -192px; }
+
+.icon-big-go-previous,
+.icon-big-previous{ background-position: -960px -192px; }
+
+.icon-big-go-top,
+.icon-big-top{ background-position: 0px -224px; }
+
+.icon-big-go-up,
+.icon-big-up{ background-position: -32px -224px; }
+
+.icon-big-help-browser,
+.icon-big-help{ background-position: -64px -224px; }
+
+.icon-big-internet-group-chat,
+.icon-big-chat{ background-position: -96px -224px; }
+
+.icon-big-internet-mail,
+.icon-big-mail,
+.icon-big-email{ background-position: -128px -224px; }
+
+.icon-big-internet-web-browser,
+.icon-big-browser,
+.icon-big-world{ background-position: -160px -224px; }
+
+.icon-big-list-add,
+.icon-big-add,
+.icon-big-plus{ background-position: -192px -224px; }
+
+.icon-big-list-remove,
+.icon-big-remove,
+.icon-big-minus{ background-position: -224px -224px; }
+
+.icon-big-mail-attachment,
+.icon-big-attachment{ background-position: -256px -224px; }
+
+.icon-big-media-floppy,
+.icon-big-floppy,
+.icon-big-save{ background-position: -288px -224px; }
+
+.icon-big-network-idle,
+.icon-big-computers{ background-position: -320px -224px; }
+
+.icon-big-network-wireless,
+.icon-big-wireless{ background-position: -352px -224px; }
+
+.icon-big-office-calendar,
+.icon-big-calendar{ background-position: -384px -224px; }
+
+.icon-big-package-x-generic,
+.icon-big-package,
+.icon-big-box{ background-position: -416px -224px; }
+
+.icon-big-preferences-desktop-accessibility,
+.icon-big-accessibility{ background-position: -448px -224px; }
+
+.icon-big-preferences-system,
+.icon-big-preferences{ background-position: -480px -224px; }
+
+.icon-big-process-stop,
+.icon-big-stop{ background-position: -512px -224px; }
+
+.icon-big-system-file-manager,
+.icon-big-file-manager{ background-position: -544px -224px; }
+
+.icon-big-system-lock-screen,
+.icon-big-lock{ background-position: -576px -224px; }
+
+.icon-big-system-search,
+.icon-big-search{ background-position: -608px -224px; }
+
+.icon-big-system-software-update,
+.icon-big-update,
+.icon-big-hot-links{ background-position: -640px -224px; }
+
+.icon-big-system-users,
+.icon-big-people,
+.icon-big-users{ background-position: -672px -224px; }
+
+.icon-big-text-x-generic,
+.icon-big-text{ background-position: -704px -224px; }
+
+.icon-big-user-trash,
+.icon-big-trash{ background-position: -736px -224px; }
+
+.icon-big-user-trash-full,
+.icon-big-trash-full{ background-position: -768px -224px; }
+
+.icon-big-utilities-terminal,
+.icon-big-terminal{ background-position: -800px -224px; }
+
+.icon-big-view-refresh,
+.icon-big-refresh{ background-position: -832px -224px; }
+
+.icon-big-x-office-calendar,
+.icon-big-office-calendar{ background-position: -864px -224px; }
+

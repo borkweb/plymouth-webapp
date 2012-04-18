@@ -1,0 +1,89 @@
+/************[ Progress Bar ]*************/
+ul.psuprogress{
+	font-size: 0.9em;
+	margin:0;
+	padding:0;
+}
+
+/* Fix form li span { float: left; } from webapp/style/templates/style.css */
+form .psuprogress li span {
+	float: none;
+}
+
+ul.psuprogress a{text-decoration: none;}
+ul.psuprogress a:hover{text-decoration: none;}
+
+ul.psuprogress, ul.psuprogress li {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin: 0 0 3px 0;
+	padding:0;
+}
+
+ul.psuprogress li {
+	font-family:Trebuchet MS,Arial,sans-serif;
+	overflow:hidden;
+	position:relative;
+	white-space:nowrap;
+	width:200px;
+}
+
+ul.psuprogress li span, ul.psuprogress .bar-inner {
+	color:black;
+	display:block;
+}
+
+ul.psuprogress span .bar-inner span{
+	color: inherit;
+	display: inline;
+}
+
+ul.psuprogress span .bar-inner {
+	background: #fff url(/webapp/templates/images/progress_bar_empty.gif) top left repeat-x;
+	border: 1px solid #999;
+	border-radius: 5px;
+	padding:2px 4px;
+	
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+ul.psuprogress li span.progress .progress-red {
+  background: #96a681 url(/webapp/templates/images/progress_bar_red.gif) top left;
+  border: 1px solid #650000;
+}
+
+ul.psuprogress li:hover span a.bar-inner{
+	background: #fbf9e6 url(/webapp/templates/images/progress_bar_empty_hover.gif) top left repeat-x;
+}
+
+ul.psuprogress li.selected span .bar-inner{
+	font-style: italic;
+	font-weight: bold;
+}
+
+ul.psuprogress li span.progress {
+	left: 0;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	width: 0;
+}
+
+ul.psuprogress li span.progress .bar-inner {
+	background: #b2c599 url(/webapp/templates/images/progress_bar.gif) top left repeat-x;
+	border: 1px solid #697459;
+}
+
+ul.psuprogress li:hover span.progress a.bar-inner {
+	background: #96a681 url(/webapp/templates/images/progress_bar_hover.gif) top left repeat-x;
+}
+
+ul.psuprogress li span.progress a{
+} 
+
+ul.psuprogress span .bar-inner span.indicator{
+	color: #000;
+	margin-right: 0.3em;
+}

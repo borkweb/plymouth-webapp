@@ -67,6 +67,8 @@ class Template extends \PSUSmarty
 	 */
 	function __construct($params = null, $fluid = false, $uid_or_auto = true)
 	{
+		static::$GLOBAL_STYLE = PSU_BASE_DIR . '/app/core/templates';
+
 		parent::__construct($uid_or_auto);
 
 		if( $_SESSION['impersonate'] ) {
@@ -235,7 +237,7 @@ class Template extends \PSUSmarty
 			$tpl->assign('no_qm', true);
 		}//end question mark check
 		
-		return $tpl->fetch('/web/pscpages/webapp/style/templates/myrelationships.permission_grants.tpl');
+		return $tpl->fetch( PSU_BASE_DIR . '/app/core/templates/myrelationships.permission_grants.tpl');
 	}//end myrel_permission_grants
 	
 	/**
@@ -245,7 +247,7 @@ class Template extends \PSUSmarty
 	{
 		$smarty->assign('params', $params);
 
-		$nav = $smarty->fetch('/web/pscpages/webapp/style/templates/nav.tpl');
+		$nav = $smarty->fetch( PSU_BASE_DIR . '/app/core/templates/nav.tpl');
 
 		return $nav;
 	}//end nav
@@ -257,7 +259,7 @@ class Template extends \PSUSmarty
 	{
 		$smarty->assign('params', $params);
 
-		$nav = $smarty->fetch('/web/pscpages/webapp/style/templates/nav-select.tpl');
+		$nav = $smarty->fetch( PSU_BASE_DIR . '/app/core/templates/nav-select.tpl');
 
 		return $nav;
 	}//end navselect
@@ -285,7 +287,7 @@ class Template extends \PSUSmarty
 		if($params['style']) $params['style'] .= '-box';
 
 		$this->assign('box', $params);
-		return $this->fetch('/web/pscpages/webapp/style/templates/box.tpl');
+		return $this->fetch( PSU_BASE_DIR . '/app/core/templates/box.tpl');
 	}//end psu_box
 
 	/**
@@ -302,7 +304,7 @@ class Template extends \PSUSmarty
 
 		$this->assign('col', $params);
 
-		$col = $this->fetch('/web/pscpages/webapp/style/templates/col.tpl');
+		$col = $this->fetch( PSU_BASE_DIR . '/app/core/templates/col.tpl');
 
 //		$this->clear_assign('webapp_max_box_size');
 
@@ -318,7 +320,7 @@ class Template extends \PSUSmarty
 
 		$this->assign('msg_class', $params['type']);
 		$this->assign('content', $content);
-		return $this->fetch('/web/pscpages/webapp/style/templates/message.tpl');
+		return $this->fetch( PSU_BASE_DIR . '/app/core/templates/message.tpl');
 	}//end psu_message
 
 	/**
@@ -373,7 +375,7 @@ class Template extends \PSUSmarty
 				}//end else
 				elseif($location == 'host_js')
 				{
-					$content = $this->fetch('/web/pscpages/webapp/style/templates/_host_js.tpl');
+					$content = $this->fetch( PSU_BASE_DIR . '/app/core/templates/_host_js.tpl');
 				}//end elseif
 			}//end foreach
 		}//end if
@@ -422,22 +424,22 @@ class Template extends \PSUSmarty
 				$this->assign('body_id', $this->body_id);
 			}
 
-			$this->addCSS('/webapp/style/templates/all960.css');
+			$this->addCSS('/app/core/css/all960.css');
 
 			if( $this->fluid ) {
-				$this->addCSS('/webapp/style/templates/fluid960.css');
+				$this->addCSS('/app/core/css/fluid960.css');
 			}//end if
 
-			$this->addCSS('/webapp/style/templates/style.css?v=1.2');
+			$this->addCSS('/app/core/css/style.css?v=1.2');
 			if( \PSU::isDev() && $_SESSION['username'] == 'mtbatchelder' ) {
-				$this->addCSS('/webapp/style/templates/mtbatchelder.css');
+				$this->addCSS('/app/core/css/mtbatchelder.css');
 			}//end if
 
 			if($GLOBALS['BASE_URL'] == 'http://'.$_SERVER['HTTP_HOST'].'/webapp/style')
 			{
 				if($_GET['old'])
 				{
-					$this->addCSS('/webapp/style/templates/old_webapp_style.css');
+					$this->addCSS('/app/core/css/old_webapp_style.css');
 				}//end if
 			}//end if
 			else
@@ -471,7 +473,7 @@ class Template extends \PSUSmarty
 			$this->webapp_content('body', $this->fetch($file, $cache_id, $compile_id, false));
 			$this->webapp_content('apres_body');
 			$this->webapp_content('foot');
-			$this->webapp_content('apres_foot', $this->fetch('/web/pscpages/webapp/style/templates/apres_foot.tpl', $cache_id, $compile_id, false));
+			$this->webapp_content('apres_foot', $this->fetch( PSU_BASE_DIR . '/app/core/templates/apres_foot.tpl', $cache_id, $compile_id, false));
 			$this->webapp_content('apres_foot_center');
 	
 
@@ -480,7 +482,7 @@ class Template extends \PSUSmarty
 				$this->addJS('/webapp/themes/my/js.php');
 			}//end if
 
-			$this->fetch('/web/pscpages/webapp/style/templates/main.tpl', $cache_id, $compile_id, true);
+			$this->fetch( PSU_BASE_DIR . '/app/core/templates/main.tpl', $cache_id, $compile_id, true);
 		}//end if
 		else
 		{
@@ -512,7 +514,7 @@ class Template extends \PSUSmarty
 			$this->addJS('http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js');
 			$this->addJS('/includes/js/jquery-plugins/jquery.multi-ddm.min.js');
 			$this->addJS('/webapp/my/js/combined.js');
-			$this->addJS('/webapp/style/js/behavior.js');
+			$this->addJS('/app/core/js/behavior.js');
 			$this->addJS('/webapp/my/js/behavior.js');
 
 			$this->assign('js_init', $params['js_callback']);
