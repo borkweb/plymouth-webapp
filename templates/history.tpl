@@ -1,5 +1,6 @@
 {box title="History"}
 <h2>These are loans that you have previously completed.</h2>
+<h5>&nbsp;&nbsp;&nbsp;Click the index number in the left column to view the loan.</h5>
 {assign var="fixed_start_date" value=$start_date|date_format:$date_format}
 {assign var="fixed_end_date" value=$end_date|date_format:$date_format}
 <table class="grid">
