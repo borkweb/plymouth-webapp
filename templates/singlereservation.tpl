@@ -165,8 +165,11 @@ $(function(){
 		</form>
 
 		<h2>Technician Assigned</h2>
-		<li><strong>Pickup: </strong></label>{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.delivery_user}</li>
-		<li><strong>Dropoff: </strong>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.retrieval_user}</li>
+		<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/pickup"<li><strong>&nbsp;&nbsp;&nbsp;Pickup: </strong></label>{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.retrieval_user}</li><input type="submit" name="pickup" value="Assign Pickup Technician"></form></li>
+
+	<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/dropoff"<li><strong>&nbsp;&nbsp;&nbsp;Dropoff: </strong>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user}</li>
+<input type="submit" name="dropoff" value="Assign Dropoff Technician"></form></li>
+
 	</ul>
 {/if}
 	<h2>Messages</h2>

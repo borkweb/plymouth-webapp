@@ -43,8 +43,8 @@ respond('/copy/[i:id]' , function( $request, $response, $app){
 	$_SESSION['cts']['phone']=$reserve[$reservation_idx]['phone'];
 	$_SESSION['cts']['email']=$reserve[$reservation_idx]['email'];
 	$_SESSION['cts']['title']=$reserve[$reservation_idx]['title'];
-	$_SESSION['cts']['start_date']=date('m-d-Y', strtotime($reserve[$reservation_idx]['start_date']));
-	$_SESSION['cts']['end_date']=date('m-d-Y', strtotime($reserve[$reservation_idx]['end_date']));
+	$_SESSION['cts']['start_date']=date('m/d/Y', strtotime($reserve[$reservation_idx]['start_date']));
+	$_SESSION['cts']['end_date']=date('m/d/Y', strtotime($reserve[$reservation_idx]['end_date']));
 
 	$_SESSION['cts']['location']=$reserve[$reservation_idx]['building_idx'];
 	$_SESSION['cts']['comment']=$reserve[$reservation_idx]['memo'];

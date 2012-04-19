@@ -20,6 +20,17 @@ class reserveDatabaseAPI{
 
 	}//end function by_date
 
+	function by_user_date($date, $user){
+		$data=array($date,$date,$user,$user);
+		$sql="
+			SELECT * FROM cts_reservation
+			WHERE (start_date = ? OR end_date =?) AND (delivery_user = ? OR retrieval_user = ?)
+			";
+		return PSU::db('cts')->GetAssoc( $sql, $data);
+
+	}//end function by_date
+
+
 	function by_start_date($date){
 		$sql="
 			SELECT * FROM cts_reservation
@@ -133,6 +144,21 @@ class reserveDatabaseAPI{
 		return PSU::db('cts')->GetAssoc( $sql, $wp_id);
 
 	}//end function by_wp_id
+
+	function changePickup($reservation_idx, $user){
+		$sql="UPDATE cts_reservation SET retrieval_user= ? WHERE reservation_idx= ?";
+		$data=array($user,$reservation_idx);
+		PSU::db('cts')->Execute( $sql, $data);
+
+	}//end change pickup
+
+	function changeDropoff($reservation_idx, $user){
+		$sql="UPDATE cts_reservation SET delivery_user = ? WHERE reservation_idx= ?";
+		$data=array($user,$reservation_idx);
+		PSU::db('cts')->Execute( $sql, $data);
+
+
+	}//end change dropoff
 
 
 

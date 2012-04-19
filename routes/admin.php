@@ -60,12 +60,22 @@ respond('/admincp/equipment/[i:id]/remove', function( $request, $response, $app)
 
 respond('/equipment', function( $request, $response, $app) {
 	$app->tpl->assign( 'manufacturers', CTSdatabaseAPI::manufacturers() );
-	
 	$app->tpl->assign( 'types', CTSdatabaseAPI::types() );
 	$app->tpl->assign( 'models', array_keys(CTSdatabaseAPI::models()) );
-	//$app->tpl->display('admincp.tpl');
+	PSU::db('glpi')->debug=true;
+	$app->tpl->display('GLPIequipment.tpl');
 
 });//end equipment
+
+respond('/mypage', function( $request, $response, $app){
+	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
+	$user=$_SESSION['wp_id'];
+	$start_date=date('Y-m-d');
+	$app->tpl->assign( 'reservation' , reserveDatabaseAPI::by_user_date($start_date, $user));
+	$app->tpl->display( 'mypage.tpl' );
+
+});
+
 
 respond('/reservation' , function( $request, $response, $app){
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());
@@ -201,6 +211,23 @@ respond('/reservation/id/[i:id]/status', function( $request, $response, $app){
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
 });//chnage status
 
+respond('/reservation/id/[i:id]/pickup', function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	$user=$request->param('assigned_tech_pickup');
+	reserveDatabaseAPI::changePickup($reservation_idx, $user);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+});//chnage status
+
+respond('/reservation/id/[i:id]/dropoff', function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	$user=$request->param('assigned_tech_dropoff');
+	PSU::db('cts')->debug=true;
+	reserveDatabaseAPI::changeDropoff($reservation_idx, $user);
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+});//chnage status
+
+
+
 respond('/reservation/id/[i:id]/priority', function( $request, $response, $app){
 	$reservation_idx=$request->id;
 	$priority=$request->param('priority');
@@ -234,12 +261,12 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$app->tpl->assign('priority', array("normal", "high"));
 	$cts_technicians=$population->query();
 	$app->tpl->assign( 'subitemlist', reserveDatabaseAPI::getSubItems());
+	$app->tpl->assign( 'cts_technicians', array("p5lydnqia"=>"David Allen", "poasdfe"=>"Todd Kent"));
 	PSU::dbug($population);
 	PSU::dbug($cts_technicians);
 	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getReserveSubItems($reservation_idx));
 
-	$app->tpl->assign( 'cts_technicians',$cts_technicians );
-	//$app->tpl->assign( 'cts_technicians',array(000256614=>"David Allen",000256615 => "Technician Dave"));//list of CTS technicians
+	//$app->tpl->assign( 'cts_technicians',$cts_technicians );
 	$app->tpl->assign( 'messages', reserveDatabaseAPI::getMessages($reservation_idx));
 	$app->tpl->assign( 'equipment', reserveDatabaseAPI::getEquipment($reservation_idx));
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());

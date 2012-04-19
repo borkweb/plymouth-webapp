@@ -1,10 +1,9 @@
-{include file='quickfilter.tpl'}
-
-{box size="16" title="$title"}<!--"Reservations from $fixed_start_date to $fixed_end_date"}-->
+{box title="My Page"}
+<h1> Welcome {$user->first_name}&nbsp;{$user->last_name} </h1>
 {if $reservation == NULL}
-<h2>There are no reservations that match that criteria.</h2>
+<h2>You have no assignments for today.</h2>
 {else}
-
+<h3>Here are your assignments for the day.</h3>
 <table class="grid">
 	<thead>
 		<th class="header">Index</th>	
@@ -49,11 +48,7 @@
 	{/foreach}
 	</tbody>
 </table>
-
 {/if}
-{include file='search.tpl'}
+
 {/box}
-
-
-
 
