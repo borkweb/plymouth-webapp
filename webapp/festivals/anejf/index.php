@@ -10,13 +10,11 @@ $GLOBALS['BASE_URL'] = '/webapp/festivals/anejf';
 $GLOBALS['BASE_DIR'] = __DIR__;
 
 $GLOBALS['ANEJF'] = array(
-	'YEAR' => 2012,
+	'YEAR' => 2013,
 );
 
 $GLOBALS['TITLE'] = $GLOBALS['ANEJF']['YEAR'] . ' All New England Jazz Festival';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
-
-require 'PSUTemplate.class.php';
 
 require $GLOBALS['BASE_DIR'] . '/includes/AnejfAPI.class.php';
 require $GLOBALS['BASE_DIR'] . '/includes/AnejfModels.class.php';
