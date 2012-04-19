@@ -1,7 +1,8 @@
 <?php
 
-require_once 'autoload.php';
+require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
 
+require_once 'autoload.php';
 PSU::session_start();
 
 ?>
