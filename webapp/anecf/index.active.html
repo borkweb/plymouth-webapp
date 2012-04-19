@@ -1,0 +1,363 @@
+<?php
+
+//***All New England Choral Festival
+// August, 2006  Mod text and moved database.
+// August/Sept, 2004
+// Description:	
+//      -Registration Process
+//****
+//*****  Modification History
+// 2003  Modified colors, layout and text.  Allowed for carry forward of some data for multiple entries 
+// from same director 
+// 2004  Send confirmation letter post submit
+//  2007 updated information and fixed POST global value issue.
+
+//********* Define Program Variables******
+$color_one ="E2FFCG";       // These colors are placed here to help with the look of the documents.
+$color_two ="F0FFF2";
+$color_three="000000";
+$email_address="danp@mail.plymouth.edu";
+//$email_address="ambackstrom@plymouth.edu";
+$pagename="index.active.html";
+
+
+$choral_header = '
+<div style="text-align:center;">
+	<h1>34th All New England Choral Festival</h1>
+	<h4>November 3, 2011</h4>
+	<h4><em>Dr. Dan Perkins</em>, Conductor</h4>
+	<h4>For full details on the Festival, view the <a href="brochure.pdf" target="_blank">Brochure</a></h4>
+	<h4>Plymouth State University</h4>
+	<h5>Registration deadline: Friday, September 16th</h5>
+    <h5>$25 participation fee</h5>
+</div>';
+
+//********* Got form data - process it!******************* 
+if(isset($_POST['submit'])) 
+{
+	//********** Attach to  Mysql DB ****************
+	
+	$db = PSU::db('mysql/anecf');
+
+	//****** End Attach ***********
+	
+	if ($_POST['fname'] == "") $_POST['fname'] = "noFname";   //default values should make sense for analysis purposes.
+	if ($_POST['lname'] == "") $_POST['lname'] = "noLname";     //There should be 1 to 1 correspondence between HTML form variable names
+	if ($_POST['vpart'] == "") $_POST['vpart'] = "noVpart";
+	if ($_POST['grade'] == "") $_POST['grade'] = "noGrade";
+	if ($_POST['hsname'] == "") $_POST['hsname'] = "noHSname";
+	if ($_POST['hsstreet'] == "") $_POST['hsstreet'] = "noHSstreet";
+	if ($_POST['City'] == "") $_POST['City'] = "noCity";
+	if ($_POST['st'] == "") $_POST['st'] = "noST";
+	if ($_POST['zip'] == "") $_POST['zip'] = "noZip";
+	if ($_POST['dtitle'] == "") $_POST['dtitle'] = "nodtitle";
+	if ($_POST['dfname'] == "") $_POST['dfname'] = "noDFname";
+	if ($_POST['dlname'] == "") $_POST['dlname'] = "noDLname";
+	if ($_POST['demail'] == "") $_POST['demail'] = "nodemail";
+	if ($_POST['enroll'] == "") $_POST['enroll'] = "noEnroll";
+	if ($_POST['cprogno'] == "") $_POST['cprogno'] = "nocprogno";
+	if ($_POST['rating'] == "") $_POST['rating'] = "noRating";
+	if ($_POST['rank'] == "") $_POST['rank'] = "noRank";
+	if ($_POST['sectionno'] == "") $_POST['sectionno'] = "noSectionno";
+	if ($_POST['dhcYears'] == "") $_POST['dhcYears'] = "nodhcYears";
+	if ($_POST['dhcRecent'] == "") $_POST['dhcRecent'] = "nodhcRecent";
+	if ($_POST['ascYears']== "") $_POST['ascYears'] = "noascYears";
+	if ($_POST['ascRecent'] == "") $_POST['ascRecent'] = "noascRecent";
+	if ($_POST['asjcYears'] == "") $_POST['asjcYears'] = "noasjcYears";
+	if ($_POST['asjcRecent'] == "") $_POST['asjcRecent'] = "noasjcRecent";
+	if ($_POST['soloYears'] == "") $_POST['soloYears'] = "nosoloYears";
+	if ($_POST['soloRecent'] == "") $_POST['soloRecent'] = "nosoloRecent";
+	if ($_POST['anecfYears'] == "") $_POST['anecfYears'] = "noanecfYears";
+	if ($_POST['anecfRecent'] == "") $_POST['anecfRecent'] = "noanecfRecent";
+	if ($_POST['comments'] =="") $_POST['comments'] ="None";
+	else $_POST['comments'] = htmlentities($_POST['comments']);
+
+	$_SESSION['last_post'] = $_POST;
+
+	$args = array(
+		$_POST['fname'], $_POST['lname'], $_POST['vpart'], $_POST['grade'], $_POST['hsname'],
+		$_POST['hsstreet'], $_POST['City'], $_POST['st'], $_POST['zip'], $_POST['dfname'],
+		$_POST['dlname'], $_POST['demail'], $_POST['enroll'], $_POST['cprogno'],
+		$_POST['rating'], $_POST['rank'], $_POST['sectionno'], $_POST['dhcYears'],
+		$_POST['dhcRecent'], $_POST['ascYears'], $_POST['ascRecent'], $_POST['asjcYears'],
+		$_POST['asjcRecent'], $_POST['soloYears'], $_POST['soloRecent'], $_POST['anecfYears'],
+		$_POST['anecfRecent'], $_POST['comments'], $_POST['dtitle']
+	);
+	
+	//******* Put the passed data into the database)
+	$query="INSERT INTO anecf VALUES(0,
+				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+				?, ?, ?, ?, ?, ?, now(), ?)";
+
+	$insert_result = $db->Execute($query, $args);
+
+	if($insert_result) 
+	{
+		$from_address = "ANECF_Registration";
+		$mailTo = $email_address . ','. preg_replace('/[;,]/','',$_POST['demail']);
+		$mailSubject = "ANECF_Registration_System";
+		
+		$mailBody = "All New England Choral Festival application submission confirmation.\n".
+		"FirstName: {$_POST['fname']}\n".
+		"LastName: {$_POST['lname']}\n".
+		"Voice Part: {$_POST['vpart']}\n".
+		"Year in school: {$_POST['grade']}\n".
+		"High School: {$_POST['hsname']}\n".
+		"Street Address: {$_POST['hsstreet']}\n".
+		"City: {$_POST['City']}\n".
+		"State: {$_POST['st']}\n".
+		"Zip: {$_POST['zip']}\n".
+		"Director's First Name: {$_POST['dfname']}\n".
+		"Director's Last Name: {$_POST['dlname']}\n".
+		"Director's Email: {$_POST['demail']}\n".
+		"Approximate Enroll: {$_POST['enroll']}\n".
+		"No.of Students in Choral Program: {$_POSTR['cprogno']}\n".
+		"Directors Rating: {$_POST['rating']}\n".
+		"Student Rank: {$_POST['rank']}\n".
+		"Number of Students in section: {$_POST['sectionno']}\n".
+		"Distric Honor Choir No. Years: {$_POST['dhcYears']}\n".
+		"Distric Honor Choir Recent: {$_POST['dhcRecent']}\n".
+		"All-State Choir No. Years: {$_POST['ascYears']}\n".
+		"All-State Choir Recent: {$_POST['ascRecent']}\n".
+		"All-State Jazz Choir No. Years: {$_POST['asjcYears']}\n".
+		"All-State Jazz Recent: {$_POST['asjcRecent']}\n".
+		"Solo at State Festival Years: {$_POST['soloYears']}\n".
+		"Solo at State Festival Recent: {$_POST['soloRecent']}\n".
+		"All New England Choral Festival Years: {$_POST['anecfYears']}\n".
+		"All New England Choral Festival Recent: {$_POST['anecfRecent']}\n".
+		"Comments: {$_POST['comments']}\n";
+	
+		$mailHeader ="From:{$_POST['from_address']}\nReply-to:{$_POST['from_address']}\nX-Mailer:php3";
+		mail($mailTo,$mailSubject,$mailBody,$mailHeader);
+			
+		?>
+		
+		<p>Thank you. Your application has successfully been submitted and emailed to you if
+		you provided an email address.</p>
+				
+		<ul>
+		<li><a href="index.html">Add another student.</a></li>
+		<li><a href="http://www.plymouth.edu">Return to PSU Homepage.</a></li>
+		</ul>
+
+		<?php
+	}//end if
+	else 
+	{
+		print "\n" . $db->ErrorMsg();
+	}//end else
+}//end if
+else
+{
+	//*******Start Here********
+	echo "<FORM NAME=\"getinfo\" METHOD=\"POST\" ACTION=\"$pagename\">\n"; 
+	echo "<INPUT TYPE=\"HIDDEN\" NAME=\"Aflag\" VALUE=\"gotIt\">\n"; 
+	echo "<INPUT TYPE=\"HIDDEN\" NAME=\"display\" VALUE=\"2\">\n";
+	//
+	echo $choral_header;
+	//
+	
+	echo "<table border=\"0\">\n";
+	//***Row One ***
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD>\n";
+	echo "Student's First Name: <INPUT TYPE=\"TEXT\" NAME=\"fname\" SIZE=\"25\">\n";
+	echo "</td>\n";
+	echo "<TD>\n";
+	echo "Student's Last Name: <INPUT TYPE=\"TEXT\" NAME=\"lname\" SIZE=\"25\">\n";
+	echo "</TD>\n";
+	echo "<TD>\n";
+	echo "Voice Part: <select NAME=\"vpart\" SIZE=\"1\">\n";
+	echo "<option value=\"Soprano I\">Soprano I\n";
+	echo "<option value=\"Soprano II\">Soprano II\n";
+	echo "<option value=\"Alto I\">Alto I\n";
+	echo "<option value=\"Alto II\">Alto II\n";
+	echo "<option value=\"Tenor I\">Tenor I\n";
+	echo "<option value=\"Tenor II\">TenorII\n";
+	echo "<option value=\"Bass I\">Bass I\n";
+	echo "<option value=\"Bass II\">Bass II\n";
+	echo "</select>";
+	echo "</TD>\n";
+	echo "<TD>\n";
+	echo "Year In School: <select NAME=\"grade\" SIZE=\"1\">\n";
+	echo "<option value=\"Fresh\">Freshman\n";
+	echo "<option value=\"Sophomore\">Sophomore\n";
+	echo "<option value=\"Junior\">Junior\n";
+	echo "<option value=\"Senior\">Senior\n";
+	echo "</select>";
+	echo "</TD>\n";
+	
+	echo "</TR>\n";
+	
+	// *****Row Two****
+	echo "<TR bgcolor=\"$color_two\">\n";
+	echo "<TD>\n";
+	echo "High School: <INPUT TYPE=\"TEXT\" NAME=\"hsname\" SIZE=\"25\" VALUE=\"{$_SESSION['last_post']['hsname']}\">\n";
+	echo "</td>\n";
+	echo "<TD>\n";
+	echo "Street Address: <INPUT TYPE=\"TEXT\" NAME=\"hsstreet\" SIZE=\"25\" VALUE=\"{$_SESSION['last_post']['hsstreet']}\">\n";
+	echo "</td>\n";
+	echo "<td colspan=\"2\">\n";
+	echo "City/Town: <INPUT TYPE=\"TEXT\" NAME=\"City\" SIZE=\"25\" VALUE=\"{$_SESSION['last_post']['City']}\">\n";
+	echo "</td>\n";
+	echo "</TR>\n";
+	
+	//*****Row Three****
+	echo "<TR bgcolor=\"$color_two\">\n";
+	echo "<TD>\n";
+	echo "State: <INPUT TYPE=\"TEXT\" NAME=\"st\" SIZE=\"2\" VALUE=\"{$_SESSION['last_post']['st']}\">\n";
+	echo "</td>\n";
+	echo "<TD colspan=\"3\">\n";
+	echo "ZIP: <INPUT TYPE=\"TEXT\" NAME=\"zip\" SIZE=\"6\" VALUE=\"{$_SESSION['last_post']['zip']}\">\n";
+	echo "</td>\n";
+	echo "</TR>\n";
+	
+	//*****Row Four******
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD>\n";
+	echo "Director Title:<input type=\"text\" name=\"dtitle\" size=\"5\" VALUE=\"{$_SESSION['last_post']['dtitle']}\">\n";
+	echo "</td>\n";
+	echo "<TD>\n";
+	echo "Director First Name: <INPUT TYPE=\"TEXT\" NAME=\"dfname\" SIZE=\"30\" VALUE=\"{$_SESSION['last_post']['dfname']}\">\n";
+	echo "</td>\n";
+	echo "<TD>\n";
+	echo "Director Last Name: <INPUT TYPE=\"TEXT\" NAME=\"dlname\" SIZE=\"25\" VALUE=\"{$_SESSION['last_post']['dlname']}\">\n";
+	echo "</TD>\n";
+	echo "<TD>\n";
+	echo "Director Email: <INPUT TYPE=\"TEXT\" NAME=\"demail\" SIZE=\"25\" VALUE=\"{$_SESSION['last_post']['demail']}\">\n";
+	echo "</TD>\n";
+	echo "</TR>\n";
+	
+	//*****Row Five*****
+	echo "<TR bgcolor=\"$color_two\">\n";
+	echo "<TD colspan=\"2\" >\n";
+	echo "Approximate Enrollment of High School: <INPUT TYPE=\"TEXT\" NAME=\"enroll\" SIZE=\"5\" VALUE=\"{$_SESSION['last_post']['enroll']}\">\n";
+	echo "</td>\n";
+	echo "<TD colspan=\"2\">\n";
+	echo "Number of Students In Choral Program:  <INPUT TYPE=\"TEXT\" NAME=\"cprogno\" SIZE=\"5\" VALUE=\"{$_SESSION['last_post']['cprogno']}\">\n";
+	echo "</TD>\n";
+	echo "</TR>\n";
+	
+	//**** Row Six***( BLANK)
+	//echo "<TR bgcolor=\"$color_three\">\n"; //echo "<td> </td>\n"; //echo "</tr>\n";
+	
+	
+	//*****Row Seven****
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD colspan=\"4\" >\n";
+	echo "<b>Director's Rating - <font color=\"#FF0000\">REQUIRED</font> In order to perform an effective selection process please complete the following information. \"Additional Comments\" are also required. Compare your student with students in your state.</b>";
+	echo "</td>\n";
+	echo "</tr>\n";
+	
+	// **** Row Seven.1******
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD>\n";
+	echo "Outstanding<INPUT TYPE=\"radio\" NAME=\"rating\" value=\"out\">\n";
+	echo "</TD>\n";
+	
+	echo "<TD>\n";
+	echo "Excellent<INPUT TYPE=\"radio\" NAME=\"rating\" value=\"excel\">\n";
+	echo "</TD>\n";
+			
+	echo "<TD colspan=\"2\">\n";
+	echo "Good<INPUT TYPE=\"radio\" NAME=\"rating\" value=\"good\">\n";
+	echo "</TD>\n";
+	echo "</TR>\n";
+	
+	//******row eight*****
+	echo "<TR bgcolor=\"$color_two\">\n";
+	echo "<TD colspan=\"4\" >\n";
+	echo "In our school the Student's rank is: <INPUT TYPE=\"TEXT\" NAME=\"rank\" SIZE=\"10\">\n";
+	echo "in a same voice section of (number of students) <INPUT TYPE=\"TEXT\" NAME=\"sectionno\" SIZE=\"10\">\n";
+	echo "</TD>\n";
+	echo "</TR>\n";
+	
+	//**** row nine*****
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD colspan=\"4\" >\n";
+	echo "Complete as appropriate:\n";
+	echo "</td>\n";
+	echo "</tr>\n";
+	
+	//**** row nine.1****
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD colspan=\"2\" >\n";
+	echo "District Honor Choir\n";
+	echo "</td>\n";
+	echo "<td>\n";
+	echo "How many years: <INPUT TYPE=\"TEXT\" NAME=\"dhcYears\" SIZE=\"4\">\n";
+	echo "</td>\n";
+	echo "<TD>\n";
+	echo "Most recent year:<INPUT TYPE=\"TEXT\" NAME=\"dhcRecent\" SIZE=\"4\">\n";
+	echo "</TD>\n";
+	echo "</TR>\n";
+	
+	//**** row ten******
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD colspan=\"2\" >\n";
+	echo "All-State Choir\n";
+	echo "</td>\n";
+	echo "<td>\n";
+	echo "How many years: <INPUT TYPE=\"TEXT\" NAME=\"ascYears\" SIZE=\"4\">\n";  
+	echo "</td>\n";  
+	echo "<TD>\n";  
+	echo "Most recent year:<INPUT TYPE=\"TEXT\" NAME=\"ascRecent\" SIZE=\"4\">\n";  
+	echo "</TD>\n";  
+	echo "</TR>\n";
+	
+	//**** row eleven******
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD colspan=\"2\" >\n";
+	echo "All-State Jazz Choir\n";
+	echo "</td>\n";
+	echo "<td>\n";
+	echo "How many years: <INPUT TYPE=\"TEXT\" NAME=\"asjcYears\" SIZE=\"4\">\n";  
+	echo "</td>\n";  
+	echo "<TD>\n";  
+	echo "Most recent year:<INPUT TYPE=\"TEXT\" NAME=\"asjcRecent\" SIZE=\"4\">\n";  
+	echo "</TD>\n";  
+	echo "</TR>\n";
+	
+	// ***** row twelve******
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD colspan=\"2\" >\n";
+	echo "Solo at State Festival\n";
+	echo "</td>\n";
+	echo "<td>\n";
+	echo "How many years: <INPUT TYPE=\"TEXT\" NAME=\"soloYears\" SIZE=\"4\">\n";  
+	echo "</td>\n";  
+	echo "<TD>\n";  
+	echo "Most recent year:<INPUT TYPE=\"TEXT\" NAME=\"soloRecent\" SIZE=\"4\">\n";  
+	echo "</TD>\n";  
+	echo "</TR>\n";
+	
+	// ****** row thirteen*****
+	echo "<TR bgcolor=\"$color_one\">\n";
+	echo "<TD colspan=\"2\" >\n";
+	echo "All New England Choral Festival\n";  
+	echo "</td>\n";  
+	echo "<td>\n";  
+	echo "How many years: <INPUT TYPE=\"TEXT\" NAME=\"anecfYears\" SIZE=\"4\">\n"; 
+	echo "</td>\n";  
+	echo "<TD>\n";  
+	echo "Most recent year:<INPUT TYPE=\"TEXT\" NAME=\"anecfRecent\" SIZE=\"4\">\n"; 
+	echo "</TD>\n";  
+	echo "</TR>\n";
+	
+	//****** row fourteen*****
+	echo "<tr bgcolor=\"$color_two\">\n";
+	echo "<td colspan=\"2\">\n";
+	echo "Additional comments - <font color=\"#FF0000\">REQUIRED</font> (instruments played, private vocal study, other solo or choral work):\n";
+	echo "</td>\n";
+	echo "<td colspan=\"2\">\n";
+	echo "<textarea name=\"comments\" rows=\"10\" cols=\"30\"></textarea>\n";
+	echo "</td>\n";
+	
+	echo "</table>\n";
+	
+	echo "<INPUT TYPE=\"SUBMIT\" name=\"submit\" VALUE=\"Press to Submit\">\n";
+	echo "</FORM>";
+		
+	require("footer.php");
+}//end else
