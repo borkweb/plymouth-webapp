@@ -11,7 +11,7 @@ class AnejfAPI {
 		$tpl->assign('form', $form);
 		$message = $tpl->fetch( 'email.tpl' );
 
-		$to = 'mastickney@plymouth.edu'
+		$to = 'mastickney@plymouth.edu';
 
 		if( PSU::isdev() ) {
 			$to = 'adam@sixohthree.com';
