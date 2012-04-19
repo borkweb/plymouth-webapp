@@ -261,7 +261,7 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$app->tpl->assign('priority', array("normal", "high"));
 	$cts_technicians=$population->query();
 	$app->tpl->assign( 'subitemlist', reserveDatabaseAPI::getSubItems());
-	$app->tpl->assign( 'cts_technicians', array("p5lydnqia"=>"David Allen", "poasdfe"=>"Todd Kent"));
+	$app->tpl->assign( 'cts_technicians', array("NULL"=>"Select a Technician","p5lydnqia"=>"David Allen", "poasdfe"=>"Todd Kent"));
 	PSU::dbug($population);
 	PSU::dbug($cts_technicians);
 	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getReserveSubItems($reservation_idx));
