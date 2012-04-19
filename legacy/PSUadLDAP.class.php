@@ -140,7 +140,7 @@ class PSUadLDAP extends adLDAP {
 			'lecturer',
 			'hourly',
 			'pa',
-			'usnh',
+			'usnh_employees',
 		);
 		
 		//these are the banner roles we care about for AD
@@ -193,17 +193,15 @@ class PSUadLDAP extends adLDAP {
 			if(in_array('employee',$banner_roles) || $person_attributes['role']['usnh'] ) {
 				//they're an employee break it down
 				foreach($lists as $list) {
-					if($person_attributes['role'][$list]) {
-						if( $list == 'usnh' ) {
-							$list = 'employees';
-						}//end if
+					if( 'usnh_employees' == $list ) {
+						$role = 'usnh';
+					} else {
+						$role = $list;
+					}//end else
 
+					if($person_attributes['role'][$role]) {
 						if(!in_array($list,$groups)) $add_groups[] = $list;
 					} else {
-						if( $list == 'usnh' ) {
-							$list = 'employees';
-						}//end if
-
 						if(in_array($list,$groups)) $remove_groups[] = $list;
 					}//end else
 				}//end foreach
