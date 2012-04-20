@@ -473,32 +473,35 @@ class PSU
 		);
 
 		static $replaces = array(
-			's%x%.plymouth.edu',
-			's%x%.dev.plymouth.edu'
+			's0.plymouth.edu',
+			's0.dev.plymouth.edu'
 		);
-
-		// Randomly generate a number from 0 - 1 (the min and max digits we use for our cdn subdomains)
-		$rand_sub_digit = mt_rand( 0, 1 );
 
 		// full url with protocol + domain
 		if( 'http://' === substr($url, 0, 7) || 'https://' === substr($url, 0, 8) ) {
 			$url = str_replace( $searches, $replaces, $url );
 
-			// Replace %x% in the urls with a random number for a different subdomain
-			$url = str_replace( '%x%', $rand_sub_digit, $url );
+			// Let's serve JavaScript files from a seperate subdomain, so we can utilize multiple parallel HTTP connections
+			if( false !== strpos( $url, ".js" ) ) {
+				// Replace s0. with s1.
+				$url = str_replace( 's0.', 's1.', $url );
+			}
 		}
 
 		// absolute path
 		elseif( '/' === substr($url, 0, 1) ) {
-			$host = PSU::isdev() ? 's%x%.dev.plymouth.edu' : 's%x%.plymouth.edu';
+			$host = PSU::isdev() ? 's0.dev.plymouth.edu' : 's0.plymouth.edu';
 			$proto = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
 
 			$new = $proto . $host;
 
 			$url = $new . $url;
 
-			// Replace %x% in the urls with a random number for a different subdomain
-			$url = str_replace( '%x%', $rand_sub_digit, $url );
+			// Let's serve JavaScript files from a seperate subdomain, so we can utilize multiple parallel HTTP connections
+			if( false !== strpos( $url, ".js" ) ) {
+				// Replace s0. with s1.
+				$url = str_replace( 's0.', 's1.', $url );
+			}
 		}
 
 		// relative path; ignored
