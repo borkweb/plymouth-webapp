@@ -480,12 +480,6 @@ class PSU
 		// full url with protocol + domain
 		if( 'http://' === substr($url, 0, 7) || 'https://' === substr($url, 0, 8) ) {
 			$url = str_replace( $searches, $replaces, $url );
-
-			// Let's serve JavaScript files from a seperate subdomain, so we can utilize multiple parallel HTTP connections
-			if( false !== strpos( $url, ".js" ) ) {
-				// Replace s0. with s1.
-				$url = str_replace( 's0.', 's1.', $url );
-			}
 		}
 
 		// absolute path
@@ -496,12 +490,6 @@ class PSU
 			$new = $proto . $host;
 
 			$url = $new . $url;
-
-			// Let's serve JavaScript files from a seperate subdomain, so we can utilize multiple parallel HTTP connections
-			if( false !== strpos( $url, ".js" ) ) {
-				// Replace s0. with s1.
-				$url = str_replace( 's0.', 's1.', $url );
-			}
 		}
 
 		// relative path; ignored
@@ -522,6 +510,12 @@ class PSU
 		// trim off query string from this resource
 		if( false !== ($pos = strpos($url, "?")) ) {
 			$url = substr($url, 0, $pos);
+		}
+
+		// Let's serve JavaScript files from a seperate subdomain, so we can utilize multiple parallel HTTP connections
+		if( false !== strpos( $url, ".js" ) ) {
+			// Replace s0. with s1.
+			$url = str_replace( '://s0.', '://s1.', $url );
 		}
 
 		//
