@@ -478,7 +478,7 @@ class PSU
 		);
 
 		// Randomly generate a number from 0 - 1 (the min and max digits we use for our cdn subdomains)
-		$rand_sub_digit = rand( 0, 1 );
+		$rand_sub_digit = mt_rand( 0, 1 );
 
 		// full url with protocol + domain
 		if( 'http://' === substr($url, 0, 7) || 'https://' === substr($url, 0, 8) ) {
