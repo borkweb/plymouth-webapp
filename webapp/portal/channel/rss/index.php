@@ -16,11 +16,14 @@
  *           2 = always expanded
  *
  *****************************************/
+
+require dirname( dirname( dirname( dirname( __DIR__ ) ) ) ) . '/legacy/git-bootstrap.php';
+
 /**
  * Register the application specific GLOBALS
  */
 $GLOBALS['BASE_URL'] = '/webapp/portal/channel/rss';
-$GLOBALS['BASE_DIR'] = dirname(__FILE__);
+$GLOBALS['BASE_DIR'] = __DIR__;
 $GLOBALS['TEMPLATES'] = __DIR__ . '/templates';
 
 /**
@@ -29,7 +32,6 @@ $GLOBALS['TEMPLATES'] = __DIR__ . '/templates';
  * Also bring in our own included API
  */
 require_once 'autoload.php';
-require_once 'Zend/Feed.php';
 require_once $GLOBALS['BASE_DIR'] . '/includes/RSSAPI.class.php';
 
 /**
@@ -46,7 +48,7 @@ use PSU\Feed;
 
 $id = $_GET['channel_id'] ?: 'rsschannel';
 
-$tpl = new PSUTemplate;
+$tpl = new PSU\Template;
 $tpl->channel(array(
 	'channel_js_callback' => "$.my.rss.init('".$id."')",
 ));
