@@ -473,23 +473,32 @@ class PSU
 		);
 
 		static $replaces = array(
-			's0.plymouth.edu',
-			's0.dev.plymouth.edu'
+			's%x%.plymouth.edu',
+			's%x%.dev.plymouth.edu'
 		);
+
+		// Randomly generate a number from 0 - 1 (the min and max digits we use for our cdn subdomains)
+		$rand_sub_digit = rand( 0, 1 );
 
 		// full url with protocol + domain
 		if( 'http://' === substr($url, 0, 7) || 'https://' === substr($url, 0, 8) ) {
 			$url = str_replace( $searches, $replaces, $url );
+
+			// Replace %x% in the urls with a random number for a different subdomain
+			$url = str_replace( '%x%', $rand_sub_digit, $url );
 		}
 
 		// absolute path
 		elseif( '/' === substr($url, 0, 1) ) {
-			$host = PSU::isdev() ? 's0.dev.plymouth.edu' : 's0.plymouth.edu';
+			$host = PSU::isdev() ? 's%x%.dev.plymouth.edu' : 's%x%.plymouth.edu';
 			$proto = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
 
 			$new = $proto . $host;
 
 			$url = $new . $url;
+
+			// Replace %x% in the urls with a random number for a different subdomain
+			$url = str_replace( '%x%', $rand_sub_digit, $url );
 		}
 
 		// relative path; ignored
