@@ -57,6 +57,10 @@ class ETransGRApp extends ETrans {
 	 * Process the ecommerce record, and update the Application with a success flag.
 	 */
 	public function process() {
+		ob_start( array( $this, 'ob_log' ) );
+
+		PSU::db('psp')->debug = true;
+
 		$this->loadApplication();
 
 		$args = array( 'psp_user_id' => $this->psp_user_id() );
@@ -64,12 +68,14 @@ class ETransGRApp extends ETrans {
 
 		if( $this->db_has_error(PSU::db('banner')) ) {
 			$this->db_log_error( PSU::db('banner'), "problem getting app_id" );
+			ob_end_clean();
 			return false;
 		}
 
 		// no result from query
 		if( false == $appid ) {
 			$this->log( "failed app_id query, 0 results" );
+			ob_end_clean();
 			return false;
 		}
 
@@ -79,6 +85,7 @@ class ETransGRApp extends ETrans {
 
 		if( $this->psu_status != 'eod' && $this->psu_status != 'receipt' ) {	
 			$this->log( "skipping psu_status of {$this->psu_status}" );
+			ob_end_clean();
 			return false;
 		}
 
@@ -115,14 +122,25 @@ class ETransGRApp extends ETrans {
 				$this->log( "error, result set to " . serialize($result) );
 			}
 
+			ob_end_clean();
 			return $result;
 		}//end else
 
 		$this->log( "error, transaction was marked as failed" );
 
 		PSU::db('banner')->CompleteTrans(false);
+
+		ob_end_clean();
 		return false;
 	}//end process
+
+	/**
+	 * Log output buffer to a file.
+	 */
+	public function ob_log( $buffer ) {
+		file_put_contents( '/web/temp/etransgrapp.log', $buffer, FILE_APPEND );
+		return $buffer;
+	}//end ob_log
 
 	/**
 	 * Handle webapp/ecommerce/receipt.html display. This should happen for everyone, unless the user closes
