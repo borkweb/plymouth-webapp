@@ -512,6 +512,17 @@ class PSU
 			$url = substr($url, 0, $pos);
 		}
 
+		// Let's serve JavaScript files from a seperate subdomain, so we can utilize multiple parallel HTTP connections
+		//
+		// Parse the url
+		$url_fragments = parse_url($url);
+
+		// Check the path and host for safety
+		if( '.js' === substr( $url_fragments['path'], -3 ) && 's0.' === substr( $url_fragments['host'], 0, 3  ) ) {
+			// Replace s0. with s1.
+			$url = str_replace( '://s0.', '://s1.', $url );
+		}
+
 		//
 		// then consult memcache to find out if we have a version number
 		//
