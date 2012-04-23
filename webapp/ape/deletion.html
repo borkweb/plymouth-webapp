@@ -1,0 +1,8 @@
+<?php
+
+$tpl = new APESmarty;
+$tpl->assign('title', 'Pending Deletion');
+
+$tpl->assign_by_ref( 'pending', APE::pending_deletion() );
+
+$tpl->display('deletion.tpl');

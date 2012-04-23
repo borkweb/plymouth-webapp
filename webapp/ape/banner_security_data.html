@@ -1,0 +1,285 @@
+<?php
+ini_set('memory_limit',-1);
+if (!$GLOBALS['BannerIDM']->hasOracleRole($_SESSION['pidm'],'reporting_security')) 
+{
+	exit('You do not have access to this application');
+}//end if
+
+$tpl = new APESmarty();
+
+$key = $_GET['key'];
+$key_type = $_GET['key_type'];
+//$GLOBALS['BANNER']->debug=true;
+$items = array();
+switch($_GET['load'])
+{
+	case 'user':
+		if($key)
+		{
+			if($key_type == 'class') $sql = usersByClass($_GET['item_type']);
+			elseif($key_type == 'role') $sql = usersByRole($_GET['item_type']);
+			elseif($key_type == 'object') $sql = usersByObject($_GET['item_type']);
+			elseif($key_type == 'form') $sql = usersByForm($_GET['item_type']);
+		}//end if
+		else $sql = allUsers();
+	break;
+	case 'class':
+		if($key)
+		{
+			if($key_type == 'user') $sql = classesByUser($_GET['item_type']);
+			elseif($key_type == 'form') $sql = classesByForm($_GET['item_type']);
+		}//end if
+		else $sql = allClasses();
+	break;
+	case 'object':
+		if($key)
+		{
+			if($key_type == 'role') $sql = objectsByRole($_GET['item_type']);
+			elseif($key_type == 'user') $sql = objectsByUser($_GET['item_type']);
+		}//end if
+		else $sql = allObjects();
+	break;
+	case 'form':
+		if($key)
+		{
+			if($key_type == 'class') $sql = formsByClass($_GET['item_type']);
+			elseif($key_type == 'user') $sql = formsByUser($_GET['item_type']);
+		}//end if
+		else $sql = allForms();
+	break;
+	case 'role':
+		if($key)
+		{
+			if($key_type == 'user') $sql = rolesByUser($_GET['item_type']);
+			elseif($key_type == 'object') $sql = rolesByObject($_GET['item_type']);
+		}//end if
+		else $sql = allRoles();
+	break;
+}//end switch
+
+if($results = $GLOBALS['BANNER']->Execute($sql, array('key' => $key)))
+{
+	foreach($results as $row)
+	{	
+		$item = array(
+			'name' => $row['item'], 
+			'type' => strtolower($row['item_type']),
+			'date' => $row['item_date'] ? strtotime($row['item_date']) : ''
+		);
+		
+		if(preg_match('/ban_default_(.)/', $item['type'], $matches))
+		{
+			$item['type'] = strtoupper($matches[1]);
+		}//end if
+		
+		$items[] = $item;
+	}//end foreach
+}//end if
+
+$tpl->assign('items',$items);
+$tpl->display('banner_security_data.tpl', false);
+
+function classesByForm($item_type = false)
+{
+	$sql = "SELECT DISTINCT gurucls_class_code AS item 
+	          FROM bansecr.guruobj,bansecr.gurucls 
+	         WHERE gurucls_class_code = guruobj_userid 
+	           AND guruobj_object  = :key ";
+
+	if($item_type) $sql .= " AND guruobj_role = 'BAN_DEFAULT_".$item_type."' ";
+
+	$sql .= "ORDER BY lower(gurucls_class_code)";
+	return $sql;
+}//end classesByUser
+
+function classesByUser($item_type = false)
+{
+	return "SELECT DISTINCT gurucls_class_code AS item,
+		             gurucls_activity_date as item_date
+	          FROM bansecr.gurucls 
+	         WHERE LOWER(gurucls_userid) = :key 
+	         ORDER BY lower(gurucls_class_code)";
+}//end classesByUser
+
+function formsByClass($item_type = false)
+{
+	$sql = "SELECT DISTINCT guruobj_object AS item,
+	               guruobj_role AS item_type 
+	          FROM bansecr.guruobj,bansecr.gurucls 
+	         WHERE gurucls_class_code = guruobj_userid 
+	           AND gurucls_class_code = :key ";
+	if($item_type) $sql .= " AND guruobj_role = 'BAN_DEFAULT_".$item_type."' ";
+	        
+	$sql .= "ORDER BY lower(guruobj_object)";
+	return $sql;
+}//end formsByClass
+
+function formsByUser($item_type = false)
+{
+	$sql = "SELECT DISTINCT guruobj_object AS item,
+	               guruobj_role AS item_type 
+	          FROM bansecr.guruobj,bansecr.gurucls 
+	         WHERE gurucls_class_code = guruobj_userid 
+	           AND LOWER(gurucls_userid) = :key ";
+	if($item_type) $sql .= " AND guruobj_role = 'BAN_DEFAULT_".$item_type."' ";
+	        
+	$sql .= "ORDER BY lower(guruobj_object)";
+	return $sql;
+}//end formsByClass
+
+function objectsByRole($item_type = false)
+{
+	return "SELECT DISTINCT ao.object_name AS item,
+		             ao.object_type||nvl((SELECT ' - M' FROM dba_tab_privs d2 WHERE d2.grantee = tp.grantee AND ao.object_type = 'TABLE' AND d2.privilege IN('DELETE','UPDATE','INSERT')),DECODE(ao.object_type, 'TABLE', ' - Q', '')) AS item_type
+	          FROM all_objects ao, dba_tab_privs tp
+	         WHERE ao.owner NOT LIKE '%SYS'
+	           AND ao.owner NOT IN ('SYS','SYSMAN','SYSTEM', 'ORDPLUGINS', 'OTGMGR', 'OUTLN', 'POSNCTL', 'VIS', 'PUBLIC')
+	           AND ao.object_type IN ('TABLE', 'VIEW', 'PROCEDURE', 'PACKAGE', 'FUNCTION')
+	           AND ao.object_name NOT LIKE 'BIN$%'
+	           AND ao.object_name = tp.table_name
+	           AND ao.owner = tp.owner
+	           AND tp.grantee = :key
+	         ORDER BY lower(ao.object_name) ASC";
+}//end objectsByRole
+
+function objectsByUser($item_type = false)
+{
+	return "SELECT DISTINCT ao.object_name AS item,
+		             ao.object_type||nvl((SELECT ' - M' FROM dba_tab_privs d2 WHERE d2.grantee = tp.grantee AND ao.object_type = 'TABLE' AND d2.privilege IN('DELETE','UPDATE','INSERT')),DECODE(ao.object_type, 'TABLE', ' - Q', '')) AS item_type
+	          FROM all_objects ao, dba_tab_privs tp
+	         WHERE ao.owner NOT LIKE '%SYS'
+	           AND ao.owner NOT IN ('SYS','SYSMAN','SYSTEM', 'ORDPLUGINS', 'OTGMGR', 'OUTLN', 'POSNCTL', 'VIS', 'PUBLIC')
+	           AND ao.object_type IN ('TABLE', 'VIEW', 'PROCEDURE', 'PACKAGE', 'FUNCTION')
+	           AND ao.object_name NOT LIKE 'BIN$%'
+	           AND ao.object_name = tp.table_name
+	           AND ao.owner = tp.owner
+	           AND lower(tp.grantee) = :key
+	         ORDER BY lower(ao.object_name) ASC";
+}//end objectsByRole
+
+function rolesByObject($item_type = false)
+{
+	return "SELECT DISTINCT lower(tp.grantor) AS item
+	          FROM all_objects ao, dba_tab_privs tp
+	         WHERE ao.owner NOT LIKE '%SYS'
+	           AND ao.owner NOT IN ('SYS','SYSMAN','SYSTEM', 'ORDPLUGINS', 'OTGMGR', 'OUTLN', 'POSNCTL', 'VIS', 'PUBLIC')
+	           AND ao.object_type IN ('TABLE', 'VIEW', 'PROCEDURE', 'PACKAGE', 'FUNCTION')
+	           AND ao.object_name NOT LIKE 'BIN$%'
+	           AND ao.object_name = tp.table_name
+	           AND ao.owner = tp.owner
+	           AND ao.object_name = :key
+	         ORDER BY lower(tp.grantor) ASC";
+}//end usersByObject
+
+function rolesByUser($item_type = false)
+{
+	return "SELECT DISTINCT GRANTED_ROLE AS item 
+	          FROM dba_role_privs 
+	         WHERE LOWER(grantee) = :key 
+	         ORDER BY lower(granted_role)";
+}//end rolesByUser
+
+function usersByClass($item_type = false)
+{
+	return "SELECT DISTINCT LOWER(gurucls_userid) as item,
+					account_status as item_type
+	          FROM bansecr.gurucls,
+	               dba_users 
+	         WHERE LOWER(gurucls_userid) = LOWER(username) 
+	           AND gurucls_class_code = :key
+	         ORDER BY lower(gurucls_userid)";
+}//end usersByClass
+
+function usersByForm($item_type = false)
+{
+	$sql = "SELECT DISTINCT LOWER(gurucls_userid) AS item 
+	          FROM bansecr.guruobj,bansecr.gurucls 
+	         WHERE gurucls_class_code = guruobj_userid 
+	           AND guruobj_object = :key ";
+	if($item_type) $sql .= " AND guruobj_role = 'BAN_DEFAULT_".$item_type."' ";
+	$sql .= "ORDER BY lower(gurucls_userid)";
+	return $sql;
+}//end usersByForm
+
+function usersByObject($item_type = false)
+{
+	return "SELECT DISTINCT lower(tp.grantee) AS item
+	          FROM all_objects ao, dba_tab_privs tp
+	         WHERE ao.owner NOT LIKE '%SYS'
+	           AND ao.owner NOT IN ('SYS','SYSMAN','SYSTEM', 'ORDPLUGINS', 'OTGMGR', 'OUTLN', 'POSNCTL', 'VIS', 'PUBLIC')
+	           AND ao.object_type IN ('TABLE', 'VIEW', 'PROCEDURE', 'PACKAGE', 'FUNCTION')
+	           AND ao.object_name NOT LIKE 'BIN$%'
+	           AND ao.object_name = tp.table_name
+	           AND ao.owner = tp.owner
+	           AND ao.object_name = :key
+	         ORDER BY lower(tp.grantee) ASC";
+}//end usersByObject
+
+function usersByRole($item_type = false)
+{
+	return "SELECT DISTINCT lower(grantee) as item,
+				   account_status as item_type
+	          FROM dba_role_privs,
+	               dba_users 
+	         WHERE LOWER(grantee) = LOWER(username) 
+	           AND granted_role = :key
+	         ORDER BY lower(grantee)";
+}//end usersByRole
+
+function allClasses()
+{
+	return "SELECT DISTINCT gurucls_class_code AS item
+	          FROM bansecr.gurucls
+	         ORDER BY lower(gurucls_class_code) ASC";
+}//end allClasses
+
+function allObjects()
+{
+	return "SELECT DISTINCT ao.object_name AS item,
+	               ao.object_type AS item_type
+	          FROM all_objects ao, dba_tab_privs tp
+	         WHERE ao.owner NOT LIKE '%SYS'
+	           AND ao.owner NOT IN ('SYS','SYSMAN','SYSTEM', 'ORDPLUGINS', 'OTGMGR', 'OUTLN', 'POSNCTL', 'VIS', 'PUBLIC')
+	           AND ao.object_type IN ('TABLE', 'VIEW', 'PROCEDURE', 'PACKAGE', 'FUNCTION')
+	           AND ao.object_name = tp.table_name
+	           AND ao.owner = tp.owner
+	         ORDER BY lower(ao.object_name) ASC";
+}//end allObjects
+
+function allForms()
+{
+	return "SELECT DISTINCT guruobj_object AS item, 
+	               item_type 
+	          FROM bansecr.guruobj,
+	               (
+	                SELECT 'ban_default_m' as item_type FROM dual 
+	                UNION
+	                SELECT 'ban_default_q' as item_type FROM dual
+	               )
+	         ORDER BY lower(guruobj_object) ASC";
+}//end allForms
+
+function allRoles()
+{
+	return "SELECT DISTINCT granted_role AS item 
+	          FROM dba_role_privs 
+	         ORDER BY lower(granted_role) ASC";
+}//end allRoles
+
+function allUsers()
+{
+	return "(SELECT DISTINCT gobtpac_external_user AS item 
+	          FROM dba_role_privs,
+	               gobtpac 
+	         WHERE LOWER(grantee) = gobtpac_external_user)
+	        UNION
+	        (SELECT DISTINCT gobtpac_external_user AS item 
+	          FROM bansecr.gurucls,
+	               gobtpac 
+		       WHERE gobtpac_external_user = LOWER(gurucls_userid))
+					UNION
+					(SELECT DISTINCT grantee AS item 
+	          FROM dba_role_privs
+	         WHERE LOWER(grantee) LIKE 'new_%')";
+}//end allUsers
+

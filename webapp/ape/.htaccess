@@ -1,0 +1,46 @@
+php_value auto_prepend_file ./common.php
+php_value auto_append_file none
+
+Options -MultiViews
+
+RewriteBase /webapp/ape/
+RewriteEngine on
+
+RewriteRule ^banner$ banner/ [R=301,L]
+RewriteRule ^banner/$ banner_security.html [QSA,L]
+
+#checklist rewrite rule
+RewriteRule ^user/([^/]+)/checklist/([^/]+)/?$ checklist.html?identifier=$1&checklist=$2 [QSA,L]
+RewriteRule ^user/([^/]+)/checklist/([^/]+)/([^/]+)/?$ checklist.html?identifier=$1&checklist=$2&pdf=$3 [QSA,L]
+#checklist admin rewrite rule
+RewriteRule ^checklist/([^/]+)/([^/]+)/ checklist-admin.html?checklist=$1&offset=$2 [QSA,L]
+
+RewriteRule ^user/advancement/([a-zA-Z0-9\._]*) advancement.html?username=$1 [QSA,L]
+RewriteRule ^user/advancement/([0-9]+) advancement.html?pidm=$1 [QSA,L]
+RewriteRule ^user/advancement/?$ advancement.html [QSA,L]
+RewriteRule ^user/family/([a-zA-Z0-9\._]+)/([0-9]+) family.html?username=$1&rel_id=$2 [QSA,L]
+RewriteRule ^user/family/([a-zA-Z0-9\._]+) family.html?username=$1 [QSA,L]
+RewriteRule ^user/family/([0-9]+) family.html?pidm=$1 [QSA,L]
+RewriteRule ^user/family/?$ family.html [QSA,L]
+RewriteRule ^user/student/([a-zA-Z0-9\._]*) student.html?username=$1 [QSA,L]
+RewriteRule ^user/student/([0-9]+) student.html?pidm=$1 [QSA,L]
+RewriteRule ^user/student/?$ student.html [QSA,L]
+RewriteRule ^user/([a-zA-Z0-9\._]*) user.html?username=$1 [QSA,L]
+RewriteRule ^user/([0-9]+) user.html?pidm=$1 [QSA,L]
+RewriteRule ^user/?$ /webapp/ape/user.html [R=301,QSA,L]
+
+RewriteRule ^audit/(.*) audit.html?who=$1 [QSA,L]
+
+RewriteRule ^lists$ lists/ [R=301,L]
+
+RewriteRule ^lists/([a-z_]+)$ mailing_list.html?list=$1 [QSA,L]
+RewriteRule ^lists/$ mailing_list.html [QSA,L]
+
+# force trailing slash
+RewriteRule ^hardware/u/([a-zA-Z][a-zA-Z\._]+[0-9]*)$ hardware/u/$1/ [R=301,L]
+RewriteRule ^hardware/d/([a-z0-9_]+)$ hardware/d/$1/ [R=301,L]
+RewriteRule ^hardware$ hardware/ [R=301,L]
+
+RewriteRule ^hardware/u/([a-zA-Z][a-zA-Z\._]+[0-9]*)/$ hardware.html?username=$1 [QSA,L]
+RewriteRule ^hardware/d/([a-z0-9_]+)/$ hardware.html?device=$1 [QSA,L]
+RewriteRule ^hardware/$ hardware.html [QSA,L]

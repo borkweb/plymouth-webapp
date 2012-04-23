@@ -1,0 +1,132 @@
+<?php
+
+$tpl = new APESmarty();
+
+$identifier = stripslashes(trim($_GET['identifier']));
+$type = $_GET['type'];
+
+$_SESSION['ape_search_identifier'] = $identifier;
+$_SESSION['ape_search_type'] = $type;
+
+$tpl->assign('title', htmlentities($identifier) . ' | Search');
+$tpl->assign('search_type', $type);
+
+// search type whitelist
+$valid_types = array('name', 'pidm', 'sourced_id', 'psu_id', 'login_name', 'email', 'device');
+
+if( ! in_array($type, $valid_types) ) {
+	$_SESSION['errors'][] = 'Invalid search type specified.';
+	$tpl->display('search.tpl');
+	die();
+}
+
+if($type == 'name' || $type == 'email' || $type == 'device')
+{
+	if( $type == 'name' || $type == 'email' ) {
+		$search_results = $GLOBALS['BannerGeneral']->search($identifier, $type);
+
+		$wp_user = null;
+
+		if( $type == 'email' ) {
+			$wp_user = get_user_by_email( $_GET['identifier'] );
+		}//end elseif
+	} elseif( $type == 'device' ) {
+		$search_results = array();
+
+		$identifier = str_replace('*', '%', $_GET['identifier']);
+
+		$args = array(
+			$identifier,
+			$identifier,
+			$identifier,
+			strtoupper($identifier)
+		);
+
+		$sql = "SELECT h.*
+							FROM hardware_inventory h
+						 WHERE h.status = 1
+							 AND (h.mac_address like ?
+										OR h.ip_address like ?
+										OR h.net_jack like ?
+										OR h.computer_name like ?
+									)
+						ORDER BY h.computer_name, h.email";
+		if( $results = PSU::db('calllog')->GetAll( $sql, $args ) ) {
+			foreach( $results as $row ) {
+				$p = new PSUPerson( str_replace( array('@plymouth.edu', '@mail.plymouth.edu'), '', $row['email']) );
+
+				$record = array();
+				$record['r_pidm'] = $p->pidm;
+				$record['r_id'] = $p->id;
+				$record['r_first_name'] = $p->formatName('f');
+				$record['r_last_name'] = $p->formatName('l');
+				$record['r_mi'] = $p->formatName('m');
+				$record['r_ldap_user'] = $p->login_name;
+				$record['mac_address'] = $row['mac_address'];
+				$record['ip_address'] = $row['ip_address'];
+				$record['computer_name'] = $row['computer_name'];
+
+				$search_results[] = $record;
+				
+				$p->destroy();
+				unset($p);
+			}//end foreach
+		}//end if
+	}//end else
+
+	$search_results = identity_icons( $search_results );
+
+	$tpl->assign_by_ref('search_results', $search_results);
+
+	if(count($search_results) == 1)
+	{
+		$pidm = $search_results[0]['r_pidm'];
+		$username = $search_results[0]['r_ldap_user'];
+
+		if( ! $wp_user || $wp_user->pidm == $pidm ) {
+			// only one result, show the user's page
+			if( $type == 'device' ) {
+				PSUHTML::redirect($GLOBALS['BASE_URL'] . '/hardware/u/' . $username);
+			} else {
+				PSUHTML::redirect($GLOBALS['BASE_URL'] . '/user/' . $pidm);
+			}//end else
+		}
+
+		// banner search and wp search came up with different users; show both
+		$wp_search = $GLOBALS['BannerGeneral']->search( $wp_user->pidm );
+		$wp_search[0]['r_email_address'] = $_GET['identifier']; // hardcoded is fine
+		$wp_search[0]['r_emal_code'] = 'connect.ply';
+		$wp_search[0]['r_wp_id'] = $wp_user->user_login;
+		$wp_search[0]['icon'] = 'apps/utilities-system-monitor';
+		$search_results[] = $wp_search[0];
+	}//end if
+} else {
+	// pidm, psu id, or username
+	$pidm = null;
+
+	if($type == 'pidm')
+	{
+		$pidm = (int)$_GET['identifier'];
+	}
+	else
+	{
+		$pidm = $GLOBALS['BannerIDM']->getIdentifier($identifier, $type, 'pid');
+	}
+	
+	if(!$pidm)
+	{
+		$pidm = $GLOBALS['BannerIDM']->getIdentifier('app.'.$identifier, $type, 'pid');
+	}//end if
+
+	if($GLOBALS['BannerGeneral']->isValidPidm($pidm))
+	{
+		if($type == 'login_name')
+		{
+			PSUHTML::redirect("{$GLOBALS['BASE_URL']}/user/$identifier");
+		}
+
+		PSUHTML::redirect("{$GLOBALS['BASE_URL']}/user/$pidm");
+	}
+}//end else
+
+$tpl->display('search.tpl');

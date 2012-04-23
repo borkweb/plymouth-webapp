@@ -1,0 +1,133 @@
+<?php
+require_once 'includes/HRChecklist.class.php';
+
+$myuser = new PSUPerson($_SESSION['wp_id']);
+$person = new PSUPerson($_GET['identifier']);
+
+$list = $_GET['checklist'];
+
+$tpl = new APESmarty();
+$tpl->assign( 'person', $person);
+$tpl->assign( 'myuser', $myuser);
+$tpl->assign( 'update_permissions', APEAuthZ::employee_clearance() );
+$tpl->assign( 'checklist', $list );
+
+/*********************************************************************
+ *    does the user have a moodle account provisioned?
+ *********************************************************************/
+$row = PSU::db('moodle')->GetRow('SELECT * FROM mdl_user WHERE username = ?', $person->username);
+$has_moodle_account = (bool)$row['email'];
+$tpl->assign('has_moodle_account', $has_moodle_account);
+
+$row2 = PSU::db('moodle2')->GetRow('SELECT * FROM mdl_user WHERE username = ?', $person->username);
+$has_moodle2_account = (bool)$row2['email'];
+$tpl->assign('has_moodle2_account', $has_moodle2_account);
+
+$url = $GLOBALS['BASE_URL'].'/user/'.$person->pidm.'/checklist/'.$list;
+
+if( isset( $_GET['toggle'] ) && (IDMObject::authZ('permission', 'mis') || IDMObject::authZ('permission', 'ape_checklist_employee_exit_hr') ) ) {
+	$checklist_id = HRChecklist::get( $person->pidm, $list, 'id' );
+	HRChecklist::toggle_checklist( $checklist_id, $person->pidm, $_GET['toggle'] );
+
+	PSU::redirect( $url );
+} elseif( isset( $_POST[ 'end_date' ] ) ) {
+	$response = HRChecklist::start( $_POST['pidm'], $_POST['end_date'], $list, $_POST['position'], $myuser->pidm );
+	$checklist_id = $response->id;
+
+	if( $checklist_id ) {
+		$attribute = 'ape_checklist_employee_exit';
+		$emails = HRChecklist::email( $person, $_POST['end_date'], $attribute, 2, 'employee-exit', $checklist_id, $response);
+
+		$_SESSION['successes'][] = 'The Employee Clearance Checklist for '.$person->formatName('f m l').' has been started.  Notifications have been sent to the following addresses: '.implode( ', ', $emails);
+	}//end if
+	
+	PSU::redirect( $url );
+} elseif( $_SERVER['REQUEST_METHOD'] == 'POST' && APEAuthZ::employee_clearance() ) {
+	$checklist_id = HRChecklist::get( $person->pidm, $list, 'id' );
+	$categories = HRChecklist::categories( $list, 'id' );
+	$items = HRChecklist::checklist_items( $categories );
+
+	foreach($items as $item) {
+		$notes = 'notes_'.$item['id'];
+		$response = 'response'.$item['id']; 
+
+		if( ! HRChecklist::item_response_exists( $checklist_id, $item['id'] ) ) {
+			HRChecklist::add_item_response( $_SESSION['pidm'], $checklist_id, $item['id'] );
+		}//end if
+	}//end foreach
+
+	$closed = HRChecklist::is_closed( $checklist_id );
+	if( IDMObject::authZ('permission', 'ape_checklist_employee_exit_hr') ) {
+		if( $_POST['checklist_closed'] && !$closed ) {	
+			HRChecklist::add_meta( $checklist_id, 'closed', 1 ); 
+			HRChecklist::toggle_checklist( $checklist_id, $_REQUEST[ 'identifier' ], true );
+			HRChecklist::add_meta( $checklist_id, 'closed_marked_by', $_SESSION['pidm'] ); 
+		} elseif( !$_POST[ 'checklist_closed' ] && $closed) {
+			HRChecklist::add_meta( $checklist_id, 'closed', 0 ); 
+			HRChecklist::toggle_checklist( $checklist_id, $_REQUEST[ 'identifier' ], false );
+			HRChecklist::add_meta( $checklist_id, 'closed_marked_by', $_SESSION['pidm'] ); 
+		}//end elseif
+	}//end if
+
+	$notification_sent = HRChecklist::meta_exists( $checklist_id, 'close_notification_sent', 1 );
+	$complete = HRChecklist::is_complete( $list, $checklist_id );
+	if( !$closed && $complete && !$notification_sent ) {
+		$people = HRChecklist::contributors( $subject, $checklist_id, 'ape_checklist_employee_exit_hr', 1 );
+		$emails = HRChecklist::contributor_email( $people );
+
+		if( $emails ) {
+			$email = new PSUSmarty();
+			$email->assign( 'employee', $person);
+			$email->assign( 'link', $GLOBALS['BASE_URL'].'/user/'.$person->pidm.'/checklist/'.$list ); 
+			$email->assign( 'special_text', PSU::madlib('prepared this email for you.', '', 'You should feel honored. ') );
+			$headers = 'Content-type: text/html; charset=UTF-8'."\r\n";
+
+			if( PSU::mail( $emails, '[Checklist Complete] '.$person->formatName('f m l') , $email->fetch( 'email.checklist.'.$list.'.complete.tpl' ), $headers ) ) {
+				HRChecklist::add_meta( $checklist_id, 'close_notification_sent', 1 ); 
+			}//end if
+		}//end if
+		elseif( !$closed && !$complete && $notification_sent ) {
+			HRChecklist::delete_meta( $checklist_id, 'close_notification_sent' ); 
+		}//end elseif
+	}//end if
+
+	$_SESSION['successes'][] = 'Your updates have been saved.';
+	PSU::redirect( $url );
+}//end elseif
+
+if( $checklist = HRChecklist::get($person->pidm, $list) ) {
+	$categories = HRChecklist::categories($checklist['type']);
+	
+	foreach($categories as $category) {
+		$checklist_items[ $category[ 'name' ] ] = HRChecklist::checklist_items( $category[ 'id' ] );
+		$slugs[ $category[ 'name'] ] = $category['slug'];
+
+		foreach($checklist_items[ $category['name'] ] as $key => &$item) {
+			$item[ 'records' ] = HRChecklist::item_responses($person->pidm, $item['id']); 
+			if( $item[ 'records' ] ) { 
+				foreach( $item[ 'records' ] as &$record ) {
+					$responder = new PSUPerson( $record[ 'updated_by' ] );
+					$record[ 'updated_by' ] = $responder->formatName( 'f m l' );
+					$responder->destroy();
+				}//end foreach
+			}//end if
+		}//end foreach
+	}//end foreach
+
+	$closed = HRChecklist::is_closed( $checklist['id'] );
+	$closed_person = HRChecklist::get_meta( $checklist['id'], 'closed_marked_by', 1 );
+	$closed_person = $closed_person['meta_value'];
+
+	if( $closed_person ) {
+		$closed_person = new PSUPerson($closed_person);
+	}//end if
+
+	$tpl->assign( 'complete', HRChecklist::is_complete( $list, $checklist['id'] ) );
+	$tpl->assign( 'closed', $closed );
+	$tpl->assign( 'closed_by', $closed_person );
+	$tpl->assign( 'meta', $closed);
+	$tpl->assign( 'slugs', $slugs);
+	$tpl->assign( 'checklist_items', $checklist_items );
+}//end if
+
+$tpl->display( 'checklist.tpl' );

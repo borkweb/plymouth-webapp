@@ -1,0 +1,72 @@
+<?php
+
+if (!$GLOBALS['BannerIDM']->hasOracleRole($_SESSION['pidm'],'reporting_security')) 
+{
+	exit('You do not have access to this application');
+}//end if
+
+$tpl = new APESmarty();
+$tpl->assign($_GET['outer'].'_sel','selected');
+
+$middle_query['userrole']='select distinct GRANTEE as info from dba_role_privs';
+$middle_query['roleuser']='select distinct GRANTED_ROLE as info from dba_role_privs';
+$middle_query['userclass']='select distinct GURUCLS_USERID as info from bansecr.gurucls';
+$middle_query['classuser']='select distinct GURUCLS_CLASS_CODE as info from bansecr.gurucls';
+$middle_query['classobject']='select distinct GURUOBJ_USERID as info from bansecr.guruobj';
+$middle_query['objectclass']='select distinct GURUOBJ_OBJECT as info from bansecr.guruobj';
+$middle_query['roleobject']='select distinct GRANTED_ROLE as info from dba_role_privs';
+$middle_query['objectrole']='SELECT DISTINCT table_name AS info FROM dba_tab_privs,dba_users WHERE owner = username AND default_tablespace IN (\'TABLES_SMALL\') ORDER BY table_name ASC';
+$inner_opt = array();
+foreach($middle_query as $key => $sql)
+{
+	$inner_opt[$key][] = '';
+	if($results=$GLOBALS['BANNER']->Execute($sql))
+	{
+		while($row = $results->FetchRow())
+		{
+			$inner_opt[$key][$row['info']] = $row['info'];
+		}//end while
+	}//end if
+}//end foreach
+
+$tpl->assign('inner_opt',$inner_opt);
+$tpl->assign('outer_opt',$_GET['outer']);
+$tpl->assign('inner_select',$_GET['middle']);
+
+$inner_query['userrole']   = "select GRANTED_ROLE from dba_role_privs where GRANTEE = '".$_GET['middle']."' ORDER BY GRANTED_ROLE ASC"; 
+$inner_query['roleuser']   = "select GRANTEE from dba_role_privs where GRANTED_ROLE = '".$_GET['middle']."' ORDER BY GRANTEE ASC"; 
+$inner_query['userclass']   = "select GURUCLS_CLASS_CODE from bansecr.gurucls where bansecr.gurucls.GURUCLS_USERID = '".$_GET['middle']."' ORDER BY GURUCLS_CLASS_CODE ASC"; 
+$inner_query['classuser']   = "select GURUCLS_USERID from bansecr.gurucls where bansecr.gurucls.gurucls_class_code = '".$_GET['middle']."' ORDER BY GURUCLS_USERID ASC"; 
+$inner_query['classobject'] = "select GURUOBJ_OBJECT,GURUOBJ_ROLE from bansecr.guruobj where bansecr.guruobj.GURUOBJ_USERID = '".$_GET['middle']."' ORDER BY GURUOBJ_OBJECT ASC, GURUOBJ_ROLE ASC"; 
+$inner_query['objectclass'] = "select GURUOBJ_USERID,GURUOBJ_ROLE from bansecr.guruobj where bansecr.guruobj.guruobj_object = '".$_GET['middle']."' ORDER BY GURUOBJ_USERID ASC, GURUOBJ_ROLE ASC"; 
+$inner_query['roleobject'] = "select TABLE_NAME from dba_tab_privs where grantee = '".$_GET['middle']."' ORDER BY table_name ASC"; 
+$inner_query['objectrole'] = "select GRANTEE,PRIVILEGE from dba_tab_privs where TABLE_NAME = '".$_GET['middle']."' ORDER BY GRANTEE ASC, PRIVILEGE ASC";
+
+if (isset($_GET['middle']))
+{
+	if($results=$GLOBALS['BANNER']->Execute($inner_query[$_GET['outer']]))
+	{
+		while($row=$results->FetchRow())
+		{
+			if ($header_shown == false)
+			{
+				foreach ($row as $key=>$value) 
+				{
+					$header[] = $key;
+				}
+				$header_shown = true;
+			}
+			foreach ($row as $key=>$value) 
+			{
+				$data[] = $value;
+			}
+		}//end while
+	}//end if
+	if(is_array($header))
+	{
+		$colnames = implode(",", $header);
+		$tpl->assign('colnames',$colnames);
+		$tpl->assign('data',$data);
+	}//end if
+}//end if
+$tpl->display('banner_security.tpl');

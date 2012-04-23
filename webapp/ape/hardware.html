@@ -1,0 +1,30 @@
+<?php
+
+if( !IDMObject::authZ('role', 'ape') ) {
+	die('You do not have permission to view hardware.');
+}
+
+$tpl = new APESmarty;
+$tpl->content_classes[] = 'hardware';
+
+$user = isset($_GET['username']) ? $_GET['username'] : null; // username
+$device = isset($_GET['device']) ? $_GET['device'] : null; // mac address or computer name
+
+
+if( !$user && !$device ) {
+	$_SESSION['errors'][] = 'You must specify a user and/or device to use this form.';
+	$tpl->display('error.tpl');
+	die();
+}
+
+if( $user ) {
+	list( $identifier, $person ) = APE::get_identifier();
+
+	APE::validate_person( $identifier, $person );
+
+	$tpl->assign('user', $person);
+}
+
+$tpl->assign('body_class', 'hardware');
+$tpl->assign('title', 'Hardware for ' . $user->username);
+$tpl->display('hardware.tpl');

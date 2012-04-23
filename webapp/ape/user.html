@@ -1,0 +1,101 @@
+<?php
+
+/*********************************************************************
+ *    Handle actions in API...now they can be repeated in other places.
+ *********************************************************************/
+if($_GET['action'] && $_GET['username'])
+{
+	$GLOBALS['ape']->handleUserAction($_GET['action'], $_GET['username']);
+	exit;
+}//end if
+
+/*********************************************************************
+ *    Initialize the person object
+ *********************************************************************/
+list( $identifier, $person ) = APE::get_identifier();
+
+APE::validate_person( $identifier, $person );
+
+$tpl = new APESmarty();
+
+// set the title on the page.
+$tpl->assign('title', $person->login_name ? $person->login_name : $person->formatName('l, f m'));
+
+/*********************************************************************
+ *    Set Demographic Information
+ *********************************************************************/
+$person->inDemographics('student');
+$person->inDemographics('employee');
+
+/*********************************************************************
+ *    Retrieve user attributes
+ *********************************************************************/
+$person->attributes = PSU::get('idmobject')->getPersonAttributes($person->pidm);
+
+$logs = PSU::get('idmobject')->getLogs($person->pidm);
+$title_log = current((array) current((array) $logs['job_title']));
+if($title_log['source'] == 'ape')
+{
+	$log = PSU::get('idmobject')->getLog($title_log['origin_id']);
+	if(IDMObject::authZ('admin', $log['attribute']) || IDMObject::authZ('permission', 'ape_attribute_admin'))
+		$tpl->assign('admin_title', true);
+}//end if
+
+/*********************************************************************
+ *    Set Workflow Permissions
+ *********************************************************************/
+if(IDMObject::authZ('permission', 'ape_workflow'))
+{
+	$person->can_workflow_hire = $GLOBALS['Workflow']->hasHiringRoles($person->username) ? true : false;
+}//end if
+
+/*********************************************************************
+ *    look up quota information if their systems account exists
+ *********************************************************************/
+if($person->system_account_exists)
+{
+	//drive quota is now loaded in via Ajax in order to minimize slow load times	
+	require_once('PrintUser.class.php');
+	$print_user = new PrintUser($person);
+	$tpl->assign('print_balance', number_format($print_user->balance, 2));	
+} // end if
+
+/*********************************************************************
+ *    does the user have a zimbra account provisioned?
+ *********************************************************************/
+
+$tpl->assign('has_zimbra_account', $person->has_zimbra);
+
+/*********************************************************************
+ *    check to see if the user is Porter :)
+ *    CORRECTION - check to see if user is Trevor Suarez
+ *********************************************************************/
+$person->lame = ($person->username == 'tnsuarez') ? true : false;
+
+$tpl->assign('person', $person);
+
+if($person->checkIssue('ping_support_locked'))
+{
+	$tpl->assign('ping_support_locked', true);
+	unset($_SESSION['ping_support_locked']);
+}//end if
+
+$tpl->assign('is_password_expired', $GLOBALS['PWMAN']->isExpired($person->login_name));
+$tpl->assign('can_reset_password', $GLOBALS['ape']->canResetPassword());
+/*********************************************************************
+ *    New IDM Stuff
+ *********************************************************************/
+// form defaults
+$idm_add = array(
+	'start_date' => strftime('%m/%d/%Y')
+);
+$tpl->assign('idm_add', $idm_add);
+/*********************************************************************
+ *    Check to see if user has an active checklist                   *
+ *********************************************************************/
+if( $checklist = PSU::db( 'hr' )->execute( 'SELECT * FROM person_checklists WHERE pidm=? AND type="employee-exit"', $person->pidm ) )
+{
+	$tpl->assign('has_Employee_Exit_Checklist', 'true');  
+}
+
+$tpl->display('user.tpl');

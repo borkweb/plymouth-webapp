@@ -1,0 +1,56 @@
+<?php
+
+if($_GET['identifier'])
+{
+	require_once('PSUScriptUtility.class.php');    //portal functions
+	$script_utility = new PSUScriptUtility($GLOBALS['BANNER'],'ldi_sync');
+	
+	if(preg_match('/[0-9]{9}/',$_GET['identifier']))
+	{
+		$pidm = $GLOBALS['BannerIDM']->getIdentifier($_GET['identifier'],'psu_id','pid');
+		
+		$type = 'PSU ID';
+	}//end if	
+	elseif(is_numeric($_GET['identifier']))
+	{
+		$pidm = $_GET['identifier'];
+		$type = 'Pidm';
+	}//end elseif
+	else
+	{
+		$pidm = $GLOBALS['BannerIDM']->getIdentifier($_GET['identifier'],'login_name','pid');
+		$type = 'Login Name';
+	}//end else
+	
+	if($pidm)
+	{
+		$result = $GLOBALS['BannerIDM']->LDISync($pidm,'all');
+		
+		$pin = $GLOBALS['BANNER']->GetOne("SELECT gobtpac_pin FROM gobtpac WHERE gobtpac_pidm=$pidm");
+		$script_utility->insert('primary_field=pidm&primary_field_data='.$pidm.'&field=pin&field_data='.$pin);
+	}
+}//end if
+
+$tpl = new XTemplate('templates/default/user_sync.tpl');
+
+if($_GET['identifier'] && $pidm)
+{
+	$name = $GLOBALS['BannerIDM']->getName($pidm);
+	
+	$tpl->assign('identifier',$_GET['identifier']);
+	$tpl->assign('type',$type);
+	$tpl->assign('name',$name);
+	
+	if($result)
+	{
+		$tpl->parse('main.success');
+	}//end if
+	else
+	{
+		$tpl->parse('main.error');
+	}//end else
+}//end if
+
+$tpl->parse('main');
+$tpl->out('main');
+?>

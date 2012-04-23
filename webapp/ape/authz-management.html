@@ -1,0 +1,49 @@
+<?php
+
+//
+// Distributed AuthZ Permission and Role  Management
+//
+
+if(IDMObject::authZ( 'role', 'ape_admin' ))
+{
+	require_once( 'includes/APEAuthZManagement.class.php' );
+
+	$GLOBALS[ 'DELETE_IMG' ] = $config->get('app_url') . '/core/images/icons/16x16/actions/process-stop.png';
+
+	if(!$_REQUEST) {
+		$tpl = new APESmarty();
+		$tpl->assign( 'authz', APEAuthZManagement::get_attribute_desc() );  
+		$tpl->display('authz-management.tpl');
+	} else {
+		foreach( $_REQUEST as &$param ) {
+			if(is_array($param)) {
+				foreach($param as &$v) {	
+					$v = stripslashes(trim($v));
+				}//end foreach
+			} else {
+				$param = stripslashes(trim($param));
+			}//end else
+		}//end foreach
+		if($_POST['checkbox']) {
+			APEAuthZManagement::update_child( $_REQUEST['par'], $_REQUEST['child'], $_REQUEST['def'] );
+		} elseif($_POST['add_child']) {
+			APEAuthZManagement::update_children( $_REQUEST['par'], $_REQUEST['child'], $_REQUEST['child_type'] );
+		} elseif($_POST['del']) {
+			APEAuthZManagement::delete_child( $_REQUEST['par_attr'], $_REQUEST['attr'] );
+		} elseif($_GET['attr']) {
+			$info['desc'] = APEAuthZManagement::get_attribute( $_REQUEST['attr'] );
+			$info['meta'] = APEAuthZManagement::get_attribute_meta( $_REQUEST['attr'] ); 
+			$info['children'] = APEAuthZManagement::get_role_children( $_REQUEST['attr'] );
+			$info['possible_adds'] = APEAuthZManagement::possible_adds( $_REQUEST['attr'] );
+			echo json_encode($info);
+		} elseif($_REQUEST['add']) {
+			APEAuthZManagement::update_attribute( $_REQUEST );
+			$info['possible_adds'] = APEAuthZManagement::possible_adds( $_REQUEST['attr'] );
+			echo json_encode($info);
+		} elseif($_REQUEST['is_attr']) {
+			APEAuthZManagement::is_attribute( $_REQUEST['attr'] );
+		} else {
+			return false;
+		}
+	}
+}
