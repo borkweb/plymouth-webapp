@@ -1,0 +1,15 @@
+a{ font-size: 2em;}
+
+.col {
+	width: auto;
+}
+
+.left { float: none;}
+.right { float: none;}
+#header .inner{ width: 700px;}
+#page{ width: 700px;}
+
+h1 a{ font-size:1em;}
+
+label{ font-size:1.5em;}
+table{ font-size:1.3em;}

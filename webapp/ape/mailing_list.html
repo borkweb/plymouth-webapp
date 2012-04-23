@@ -1,0 +1,45 @@
+<?php
+
+$tpl = new APESmarty();
+
+// check for unauthorized access
+if(!IDMObject::authZ('permission','ape_mailing'))
+{
+	$_SESSION['errors'][] = 'You are not authorized to access this page.';
+	header('HTTP/1.1 403');
+	$tpl->display('error.tpl');
+	exit();
+}
+
+$lists = $GLOBALS['BannerIDM']->getAttributesWhere("attribute LIKE '%_list'");
+$tpl->assign('lists', $lists);
+
+if($_GET['list'])
+{
+	list($permission_id, $_) = $GLOBALS['BannerIDM']->any2type('permission');
+
+	$list_name = $_GET['list'];
+	$list = $GLOBALS['BannerIDM']->getAttribute($permission_id, $list_name);
+	$tpl->assign('mailing_list', $list);
+
+	$find_list = array('pa.attribute' => $list_name, 'pa.type_id' => $permission_id, 'l.source' => $GLOBALS['IDM_SOURCE']);
+	$list_members = $GLOBALS['BannerIDM']->getUsersByAttribute($find_list, 'AND', 'i.last_name, i.first_name, i.middle_name, l.attribute, l.id, lorigin.attribute AS origin_attribute, lorigin.id AS origin_id, TO_CHAR(lorigin.start_date, \'DD-MON-YYYY\') AS origin_start, TO_CHAR(lorigin.end_date, \'DD-MON-YYYY\') AS origin_end');
+	$tmp = array();
+	foreach($list_members as &$member)
+	{
+		$pidm = $member['pid'];
+
+		$member['origin_start'] = strtotime($member['origin_start']);
+		$member['origin_end'] = strtotime($member['origin_end']);
+
+		if(!isset($tmp[$pidm]))
+		{
+			$tmp[$pidm] = array();
+		}
+		$tmp[$pidm][] = $member;
+	}
+	$list_members = $tmp;
+	$tpl->assign('list_members', $list_members);
+}//end if
+
+$tpl->display('mailing_list.tpl');

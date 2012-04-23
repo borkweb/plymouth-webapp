@@ -1,0 +1,40 @@
+<?php 
+if( !IDMObject::authz( 'role', 'ape_checklist_employee_exit' ) ) {
+	die( 'You do not have permission to access this application.' );//TODO better
+}//end if
+
+require_once( 'includes/HRChecklist.class.php' );
+require_once( 'includes/HRChecklistAdmin.class.php' );
+
+if( $_GET['hide'] ) {
+	HRChecklist::hide( $_GET['hide'] );
+	PSU::redirect( $GLOBALS['BASE_URL'] . '/checklist-admin.html' );
+} elseif( $_GET['unhide'] ) {
+	HRChecklist::unhide( $_GET['hide'] );
+	PSU::redirect( $GLOBALS['BASE_URL'] . '/checklist-admin.html' );
+} elseif( IDMObject::authZ('permission', 'ape_checklist_employee_exit_hr' ) && $_REQUEST[ 'category' ] && $_REQUEST['subject'] ) {
+	HRChecklist::email( 
+		new PSUPerson( $_REQUEST[ 'subject' ] ), 
+		$_REQUEST[ 'end_date' ], 
+		'ape_checklist_employee_exit_'.$_REQUEST[ 'category' ], 
+		1, 
+		'employee-exit',
+		$_REQUEST['checklist_id']
+	);
+	$time = time();
+	HRChecklist::add_meta( $_REQUEST['checklist_id'], 'reminder_'.$_REQUEST['category'], $time);
+	die(date('M j, Y', $time));
+}//end if
+
+$args = array( 
+	'offset' => $_REQUEST[ 'offset' ] 
+);
+$checklist_manager = new HRChecklistAdmin( $args );
+
+$tpl = new APESmarty();
+
+$checklist_manager->populate_checklists();
+
+$tpl->assign( 'pages', $checklist_manager->pagination );
+$tpl->assign( 'checklist_manager', $checklist_manager );
+$tpl->display( 'checklist-admin.tpl' );

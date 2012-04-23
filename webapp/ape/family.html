@@ -1,0 +1,38 @@
+<?php
+
+/*********************************************************************
+ *    Handle actions in API...now they can be repeated in other places.
+ *********************************************************************/
+if($_GET['action'] && $_GET['username'])
+{
+	$GLOBALS['ape']->handleUserAction($_GET['action'], $_GET['username']);
+	exit;
+}//end if
+
+$tpl = new APESmarty();
+
+/*********************************************************************
+ *    Initialize the person object
+ *********************************************************************/
+
+list( $identifier, $person ) = APE::get_identifier();
+
+APE::validate_person( $identifier, $person );
+
+if(!$person->rel_id && $_GET['rel_id']) {
+	$person->rel_id = (int) $_GET['rel_id'];
+}//end if
+
+// redirect if the user is not allowed to view advancement data.
+// we do this here to ensure that the ape_identifier is set in the session so that
+// the redirect happens nicely
+if( !APEAuthZ::family() ) {
+	PSU::redirect($GLOBALS['BASE_URL'].'/user/'.$_SESSION['ape_identifier']);
+}//end if
+
+// set the title on the page.
+$tpl->assign('title', $person->login_name ? $person->login_name : $person->formatName('l, f m'));
+$tpl->assign('person', $person);
+$tpl->assign('family', true);
+
+$tpl->display('family.tpl');

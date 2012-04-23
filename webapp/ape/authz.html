@@ -1,0 +1,133 @@
+<?php
+
+//
+// Distributed AuthZ Management
+//
+
+if(in_array($_GET['action'], array('grant', 'revoke')) && IDMObject::authZ('permission', 'ape_attribute_admin'))
+{
+	if($_REQUEST['username'] && $_REQUEST['attribute'])
+	{
+		$person = new PSUPerson($_REQUEST['username']);
+		if($person->pidm)
+		{
+			if($GLOBALS['BANNER']->GetOne("SELECT 1 FROM psu_identity.attribute_description WHERE attribute = '{$_REQUEST['attribute']}'"))
+			{
+				$has_attribute = $GLOBALS['BannerIDM']->hasAttribute($person->pidm, 'admin', $_REQUEST['attribute']);
+				if($_REQUEST['action'] == 'grant')
+				{
+					if(!$has_attribute)
+					{
+						$params = array();
+						
+						$day = date('j');
+						$month = date('n');
+						$year = date('Y');
+
+						$today = mktime(0, 0, 0, $month, $day, $year);
+						$start_date = strtotime($_REQUEST['start_date']);
+						$end_date = strtotime($_REQUEST['end_date']);
+						$max_end_date = mktime(0, 0, 0, $month, $day, $year+10);
+
+						if($start_date >= $today)
+						{
+							$params['start_date'] = date('Y-m-d', $start_date);
+						}//end if
+
+						if($end_date >= $today && $end_date >= $start_date)
+						{
+							$params['end_date'] = date('Y-m-d', $end_date);
+						}//end if
+
+						if(!empty($_REQUEST['reason']))
+						{
+							$params['reason'] = urldecode($_REQUEST['reason']);
+						}//end if
+
+						if($GLOBALS['BannerIDM']->addAttribute($person->pidm, 'admin', $_REQUEST['attribute'], 'ape', $params))
+						{
+							$_SESSION['authz_message'] = 'Admin access was granted successfully.';
+						}//end if
+					}//end if
+					else
+					{
+						$_SESSION['authz_message'] = $person->username .' already has permissions to administer ' . $_REQUEST['attribute'];
+					}//end else
+				}//end if
+				elseif($_REQUEST['action'] == 'revoke')
+				{
+					if($has_attribute)
+					{
+						$logs = $GLOBALS['BannerIDM']->getLogs($person->pidm, "source = 'ape' AND type_id = 5 AND attribute = '{$_REQUEST['attribute']}'");
+						
+						foreach($logs['admin'] as $l)
+						{
+							foreach($l as $entry => $data)
+							{
+								if($GLOBALS['BannerIDM']->removeAttribute($person->pidm, $entry))
+								{
+									$_SESSION['authz_message'] = 'Admin access was revoked successfully.';
+								}//end if
+							}//end foreach
+						}//end foreach
+					}//end if
+					else
+					{
+						$_SESSION['authz_message'] = $person->username .' does not have the ability to administer ' . $_REQUEST['attribute'];
+					}//end else
+				}//end else
+			}//end if
+			else
+			{
+				$_SESSION['authz_message'] = 'Ummm...that was not a valid attribute.';
+			}//end else
+		}//end if
+		else
+		{
+			$_SESSION['authz_message'] = 'That was not a valid user.';
+		}//end else
+	}//end if
+	if($_GET['return'] == 'user')
+	{
+		header('Location: '.$GLOBALS['BASE_URL'].'/authz.html?administration=' .$_REQUEST['username']);
+	}//end if
+	else
+	{
+		header('Location: '.$GLOBALS['BASE_URL'].'/authz.html?administer=' .$_REQUEST['attribute']);
+	}//end else
+	exit;
+}//end if
+
+$tpl = new APESmarty();
+
+$tpl->assign('dictionary', PSU::get('idmobject')->adminDataDictionary());
+
+if($_GET['administer'])
+{
+	$administrators = $GLOBALS['BannerIDM']->getUsersByAttribute(array(array('pa.attribute' => $_GET['administer']), array('pa.type_id' => 5)), 'AND');
+	$admins = array();
+	foreach($administrators as $admin)
+	{	
+		$admins[] = $admin['username'];
+	}//end foreac
+	$tpl->assign('administrators', array_unique($admins));
+}//end if
+
+if($_GET['administration'])
+{
+	$person = new PSUPerson($_GET['administration']);
+	$attributes = $GLOBALS['BannerIDM']->getPersonAttributes($person->pidm);
+	$admins = array();
+	foreach($attributes['admin'] as $attr => $attr_data)
+	{	
+		$admins[] = $attr;
+	}//end foreac
+	$tpl->assign('admins', array_unique($admins));
+}//end if
+
+if($_SESSION['authz_message'])
+{
+	$tpl->assign('authz_message', $_SESSION['authz_message']);
+	unset($_SESSION['authz_message']);
+}//end if
+$tpl->display('authz.tpl');

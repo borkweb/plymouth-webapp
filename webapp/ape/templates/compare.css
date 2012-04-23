@@ -1,0 +1,9 @@
+.col {
+	width: auto;
+}
+
+.left { float: none;}
+.right { float: none;}
+#header { display:none;}
+#page { width: 500px;}
+

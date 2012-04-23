@@ -1,0 +1,130 @@
+<?php
+
+$tpl = new APESmarty();
+
+$person = new PSUPerson( $_GET['who'] );
+$tpl->assign( 'person', $person );
+
+$tpl->assign( 'title', 'Audit log for ' . PSU::nvl( $person->login_name, $person->wp_id ) );
+
+$logs = array(
+	'audit' => 'Audit',
+	'expiration' => 'Password Expiration',
+	'change' => 'Password Change',
+	'logins' => 'Recent (WordPress) Portal Login',
+	'lum_logins' => 'Recent (Luminis) Portal Login',
+	'combined' => 'Combined'
+);
+
+$args_pidm = array( $person->pidm );
+
+// setup the array of possible usernames
+$args_username_sql = $args_username = array();
+foreach( array('login_name', 'username', 'wp_id') as $key ) {
+	$value = $person->$key;
+	if( $value && ! in_array( $value, $args_username ) ) {
+		$args_username_sql[] = '?';
+		$args_username[] = $value;
+	}
+}
+
+$args_all = array_merge( $args_pidm, $args_username );
+
+// squash array of ? into a string value
+$args_username_sql = implode( ', ', $args_username_sql );
+
+$tpl->assign('log_name', $_GET['log'] ? $logs[$_GET['log']] : 'Combined');
+
+if($_GET['log'] == 'combined') unset($_GET['log']);
+
+$tables = array();
+if($_GET['log'] == 'expiration' || !$_GET['log'])
+{
+	$sql = "
+		SELECT reason,added,refreshed,seen,changed,
+				UNIX_TIMESTAMP(added) AS combined_key,
+				'Password expiration' AS combined_desc,
+				CONCAT_WS(' ', 'Reason: ', reason) AS combined_longdesc
+		FROM password_expiration WHERE pidm = ?
+	";
+
+	$tables['password_expiration'] = PSU::db('myplymouth')->GetAll( $sql, $args_pidm );
+}//end if
+
+if($_GET['log'] == 'change' || !$_GET['log'])
+{
+	$sql = "
+		SELECT stamp, message,
+			UNIX_TIMESTAMP(stamp) AS combined_key,
+			'Password change' AS combined_desc,
+			message AS combined_longdesc
+		FROM password_log WHERE username IN ($args_username_sql)
+	";
+	$tables['password_log'] = PSU::db('myplymouth')->GetAll( $sql, $args_username );
+}//end if
+
+if($_GET['log'] == 'audit' || !$_GET['log'])
+{
+	$sql = "
+		SELECT 
+			l.username, 
+			l.pidm, 
+			a.name, 
+			l.log, 
+			l.activity_date,
+			UNIX_TIMESTAMP(l.activity_date) AS combined_key,
+			'Audit log' AS combined_desc,
+			l.log AS combined_longdesc, 
+			l.application
+		FROM log AS l, log_apps AS a
+		WHERE a.id = l.application AND l.target_username IN ($args_username_sql)
+	";
+	$tables['audit_log'] = PSU::db('audit')->GetAll( $sql, $args_username );
+}//end if
+
+if($_GET['log'] == 'logins' || !$_GET['log'])
+{
+	$sql = "
+		SELECT activity_date, ip, hostname,
+			UNIX_TIMESTAMP(activity_date) AS combined_key,
+			'Portal (WordPress) login' AS combined_desc,
+			CONCAT_WS(' ', ip, '/', hostname) AS combined_longdesc
+		FROM user_session2
+		WHERE pidm = ? OR username IN ($args_username_sql)
+		ORDER BY activity_date DESC
+		LIMIT 25
+	";
+	$tables['portal_logins'] = PSU::db('myplymouth')->GetAll( $sql, $args_all );
+}//end if
+
+if($_GET['log'] == 'lum_logins' || !$_GET['log'])
+{
+	$sql = "
+		SELECT username, login_ts activity_date, role_string,
+			UNIX_TIMESTAMP(login_ts) AS combined_key,
+			'Portal (Luminis) login' AS combined_desc,
+			CONCAT_WS(' :: With Role String: ', username, role_string) AS combined_longdesc
+		FROM user_session
+		WHERE username IN ($args_username_sql)
+		ORDER BY login_ts DESC LIMIT 25
+	";
+	$tables['luminis_logins'] = PSU::db('mysql/myplymouth_delph')->GetAll( $sql, $args_username );
+}//end if
+
+$combined = array();
+foreach($tables as $table => $rows) {
+	foreach($rows as $row) {
+		$combined[] = $row;
+	}
+}
+function ape_sort_combined_logs($a, $b) {
+	if( $a['combined_key'] === $b['combined_key'] )
+		return 0;
+
+	return ($a['combined_key'] < $b['combined_key']) ? -1 : 1;
+}
+usort($combined, 'ape_sort_combined_logs');
+
+$tpl->assign('tables', $tables);
+$tpl->assign('combined', $combined);
+$tpl->display('audit.tpl');

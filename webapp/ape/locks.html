@@ -1,0 +1,9 @@
+<?php
+
+$tpl = new APESmarty();
+
+$tpl->assign('title', 'Locked Accounts');
+
+$tpl->assign('locks', $GLOBALS['ape']->locks());
+
+$tpl->display('locks.tpl');

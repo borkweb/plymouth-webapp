@@ -1,0 +1,7 @@
+<?php
+
+$tpl = new APESmarty();
+
+$tpl->assign('pending', $GLOBALS['ape']->pending_accounts());
+
+$tpl->display('pending.tpl');
