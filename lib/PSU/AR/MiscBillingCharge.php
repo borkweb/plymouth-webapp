@@ -183,7 +183,7 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 	 */
 	public function meta( $key = null ) {
 		if( $this->meta === null ) {
-			$this->meta = new PSU_AR_MiscBillingCharge_MetaContainer( $this->billing_id );
+			$this->meta = new PSU_AR_MiscBillingCharge_MetaContainer( $this->id );
 			$this->meta->load();
 		}//end if
 
