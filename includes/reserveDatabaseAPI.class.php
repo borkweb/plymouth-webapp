@@ -10,6 +10,28 @@ class reserveDatabaseAPI{
 
 	}//function addMessage
 
+	function removeEquipment($reservation_idx){
+
+		$sql="DELETE FROM  cts_reservation_equipment WHERE reservation_equipment_idx = ?";
+
+		PSU::db('cts')->Execute($sql, $reservation_idx);
+
+	}//function removeEquipment
+
+	function addEquipment($reservation_idx, $GLPI_ID){	
+		if(strlen($GLPI_ID)==4){
+			$GLPI_ID='PSU-0000-' . $GLPI_ID;
+		}
+
+		$sql="INSERT INTO cts_reservation_equipment (reservation_idx, glpi_id) VALUES (?,?)";
+
+		$data=array($reservation_idx, $GLPI_ID);
+
+		PSU::db('cts')->Execute($sql, $data);
+
+	}//function add_equipment
+
+
 	function by_date($date){
 		$sql="
 			SELECT * FROM cts_reservation

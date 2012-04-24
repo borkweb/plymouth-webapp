@@ -235,6 +235,28 @@ respond('/reservation/id/[i:id]/priority', function( $request, $response, $app){
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
 });//change priority
 
+respond('/reservation/id/[i:id]/equipment', function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	$GLPI_ID=$request->param('GLPI_ID');
+	if(strlen($GLPI_ID)!=4 && strlen($GLPI_ID) !=13){
+		$_SESSION['errors'][]="GLPI ID incorrect.";
+	}
+	PSU::dbug($_SESSION['errors']);
+
+	if(count($_SESSION['errors'])<=0){
+		reserveDatabaseAPI::addEquipment($reservation_idx, $GLPI_ID);
+	};	
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+});//add equipment manually
+
+respond('/reservation/equipment/[i:id]/remove/[:key]', function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	$equipment_reservation_idx=$request->key;
+	PSU::dbug($equipment_reservation_idx);
+	reserveDatabaseAPI::removeEquipment($equipment_reservation_idx);	
+	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+});//add equipment manually
+
 
 respond('/reservation/[i:id]/subitem/add', function( $request, $response, $app){
 	$reservation_idx=$request->id;
@@ -264,6 +286,8 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	$app->tpl->assign( 'cts_technicians', array("NULL"=>"Select a Technician","p5lydnqia"=>"David Allen", "poasdfe"=>"Todd Kent"));
 	PSU::dbug($population);
 	PSU::dbug($cts_technicians);
+	//$pop = iterator_to_array($population);
+	//PSU::dbug($pop[0]);
 	$app->tpl->assign( 'subitems', reserveDatabaseAPI::getReserveSubItems($reservation_idx));
 
 	//$app->tpl->assign( 'cts_technicians',$cts_technicians );

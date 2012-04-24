@@ -133,7 +133,7 @@ class CTSdatabaseAPI {
 				ON i.items_id = item.id 
 		 LEFT JOIN glpi_documents d 
 				ON d.name = `mod`.name
-			 WHERE s.name <> 'Surplused'
+			 WHERE s.name = 'Available for Loan'
 			   AND i.itemtype = '".ucfirst( $item_type )."'
 		";
 

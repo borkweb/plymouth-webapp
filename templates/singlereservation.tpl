@@ -97,7 +97,6 @@ $(function(){
 			{/if}
 			<li><strong>Email: </strong>{$reserve.email}</li>
 	<h2>Event Information</h2>
-			<li><strong>Application date: </strong>{$reserve.application_date|date_format:$date_format} <strong> at </strong> {$reserve.application_date|date_format:$time_format}</li>
 			<li><strong>Start Date: </strong>{$reserve.start_date|date_format:$date_format}</li>		
 			<li><strong>Start Time: </strong>{$reserve.start_time|date_format:$time_format}</li>		
 			<li><strong>End Date: </strong>{$reserve.end_date|date_format:$date_format}</li>		
@@ -109,7 +108,9 @@ $(function(){
 				Equipment Pickup
 			{/if}
 			<li><strong>Location: </strong>{$locations[$reserve.building_idx]} <strong>in room</strong> {$reserve.room}</li>
-			<li><strong>Title: </strong>{$reserve.title}</li>		
+			<li><strong>Title: </strong>{$reserve.title}</li>
+			<li><strong>Application date: </strong>{$reserve.application_date|date_format:$date_format} <strong> at </strong> {$reserve.application_date|date_format:$time_format}</li>
+
 			<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/status"<li><strong>&nbsp;&nbsp;&nbsp;Status of Loan: </strong>{html_options name="status" options=$status selected=$reserve.status} <input type="submit" name="Status" value="Change Status"></form></li>
 
 	<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/priority"<li><strong>&nbsp;&nbsp;&nbsp;Priority of Loan: </strong>{html_options name="priority" options=$priority selected=$reserve.priority} <input type="submit" name="Priority" value="Change Priority"></form></li>
@@ -122,28 +123,32 @@ $(function(){
 		<thead>
 			<tr>
 				<th>GLPI ID</th>
-				<th>CTS ID</th>
 				<th>Type</th>
 				<th>Model</th>
+				<th>Remove</th>
 			</tr>
 		</thead>
 		<tbody>
 		{foreach from=$equipment item=equipment key=id}
 			<tr>
-				<td>GLPI_ID<!--|substr:-4}--></td>
-				<td>{$equipment.equipment_idx}</td>
+				<td>{$equipment.glpi_id|substr:-4}</td>
 				<td>Type</td>
 				<td>Model</td>
+				<td><a href="{$PHP.BASE_URL}/admin/reservation/equipment/{$reservation_idx}/remove/{$id}">Remove</a></td>
 			</tr>
 		{/foreach}
 		</tbody>
 		</table>
-		
+		<li><form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/equipment" method="POST">
+			<strong>Add Item by ID:</strong><input type="text" name="GLPI_ID"><input type="submit" name="add_equipment" value="Add Equipment">
+
+		</form>
+		</li>
+
 		<h3>Subitems</h3>
 		<table class="grid" width="300">
 		<thead>
 			<tr>
-				<th>Subitem ID</th>
 				<th>Subitem</th>
 				<th>Remove</th>
 			</tr>
@@ -151,7 +156,6 @@ $(function(){
 		<tbody>
 		{foreach from=$subitems item=subitem key=id}
 			<tr>
-				<td>{$subitem.subitem_id}</td>
 				<td>{$subitem.name}</td>
 				<td><a href="{$PHP.BASE_URL}/admin/reservation/subitem/remove/{$id}/{$reservation_idx}">Remove</a>
 			</tr>
