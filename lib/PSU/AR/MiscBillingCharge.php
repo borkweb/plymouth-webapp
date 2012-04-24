@@ -318,6 +318,14 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 				$sql = "SELECT seq_misc_billing.currval FROM dual";
 				$this->id = PSU::db('banner')->GetOne( $sql );
 			}//end if
+
+			// if meta is already initialized, make sure that the billing_id is set
+			if( $this->meta ) {
+				foreach( $this->meta as &$meta ) {
+					$meta->billing_id = $this->id;
+				}//end foreach
+			}//end if
+
 			return $this->id;
 		}//end if
 		return false;
