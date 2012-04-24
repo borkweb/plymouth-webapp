@@ -58,14 +58,42 @@ respond('/admincp/equipment/[i:id]/remove', function( $request, $response, $app)
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/admincp/equipment');
 });//admin equipment 
 
+respond('/equipment/filter', function( $request, $response, $app) {
+	if( $_get['search_term']){
+		$app->tpl->assign( 'search_term', $_get['search_term'] );
+	}
+	$app->tpl->assign( 'by_model', ctsdatabaseapi::by_model( $_get ));
+	$app->tpl->assign( 'manufacturer', ctsdatabaseapi::manufacturers( $_get ));
+	$app->tpl->assign( 'model', array_keys(ctsdatabaseapi::models( $_get )));
+	$app->tpl->assign( 'type', ctsdatabaseapi::types( $_get ));
+
+	$app->tpl->display('GLPIequipment.tpl');
+
+});//end equipment/filter
+
+respond('/equipment/item/model/[:model]/?', function( $request, $response, $app) {
+	$models=CTSdatabaseAPI::by_model( array('model' =>array( $request->model ), ));
+	$app->tpl->assign('model_info', $models[ $request->model ]);
+	$app->tpl->display('model.tpl');
+
+});//end equipment/filter/model
+
+respond('/equipment/item/model/[:model]/list/?', function( $request, $response, $app) {
+	$items=CTSdatabaseAPI::by_model( array('model' =>array( $request->model ), ));
+	$app->tpl->assign('items', $items[ $request->model]['machines']);
+	$app->tpl->display('item-list.tpl');
+
+});//end equipment/filter/model
+
 respond('/equipment', function( $request, $response, $app) {
-	$app->tpl->assign( 'manufacturers', CTSdatabaseAPI::manufacturers() );
+	//$app->tpl->assign( 'manufacturers', CTSdatabaseAPI::manufacturers() );
 	$app->tpl->assign( 'types', CTSdatabaseAPI::types() );
-	$app->tpl->assign( 'models', array_keys(CTSdatabaseAPI::models()) );
+	//$app->tpl->assign( 'models', array_keys(CTSdatabaseAPI::models()) );
 	PSU::db('glpi')->debug=true;
 	$app->tpl->display('GLPIequipment.tpl');
 
 });//end equipment
+
 
 respond('/mypage', function( $request, $response, $app){
 	$app->tpl->assign( 'locations' , reserveDatabaseAPI::locations());

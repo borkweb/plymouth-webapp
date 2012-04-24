@@ -1,6 +1,6 @@
 {col size="4"}
 	{box title="Refine" subheader="Filter Your Search"}
-		<form id="filter-search" action="{$PHP.BASE_URL}">
+		<form id="filter-search" action="{$PHP.BASE_URL}/admin/equipment/filter">
 			<ul>
 				<li>
 					<label>Machine Type:</label>
