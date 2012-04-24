@@ -34,6 +34,10 @@ class PSU_AR_Sum_Balances implements IteratorAggregate {
 
 		$args = PSU::params($args, $this->params);
 
+		if( ! $this->terms ) {
+			return 0;
+		}//end if
+
 		$sql = "SELECT ";
 		foreach( $this->terms as $term => &$value ) {
 			$alias = 't'.$term;
