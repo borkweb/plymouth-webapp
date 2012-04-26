@@ -36,7 +36,7 @@ class reserveDatabaseAPI{
 		$sql="
 			SELECT * FROM cts_reservation
 			WHERE start_date = ? OR end_date =	?
-			";
+			ORDER BY reservation_idx DESC";
 		$dates=array($date,$date);
 		return PSU::db('cts')->GetAssoc( $sql, $dates);
 
@@ -47,6 +47,7 @@ class reserveDatabaseAPI{
 		$sql="
 			SELECT * FROM cts_reservation
 			WHERE (start_date = ? OR end_date =?) AND (delivery_user = ? OR retrieval_user = ?)
+			ORDER BY reservation_idx DESC
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $data);
 
@@ -56,7 +57,8 @@ class reserveDatabaseAPI{
 	function by_start_date($date){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE start_date = ?	
+			WHERE start_date = ?
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $date);
 
@@ -65,7 +67,8 @@ class reserveDatabaseAPI{
 	function by_end_date($date){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE end_date = ?	
+			WHERE end_date = ?
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $date);
 
@@ -74,7 +77,8 @@ class reserveDatabaseAPI{
 	function by_lname($lname){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE lname = ?	
+			WHERE lname = ?
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $lname);
 
@@ -83,7 +87,8 @@ class reserveDatabaseAPI{
 	function by_fname($fname){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE fname = ?	
+			WHERE fname = ?
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $fname);
 
@@ -92,7 +97,8 @@ class reserveDatabaseAPI{
 	function by_status($status){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE status = ?	
+			WHERE status = ?
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $status);
 
@@ -102,6 +108,7 @@ class reserveDatabaseAPI{
 		$sql="
 			SELECT * FROM cts_reservation
 			WHERE current_status = ?	
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $status);
 
@@ -113,7 +120,8 @@ class reserveDatabaseAPI{
 		
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE building_idx = ?	
+			WHERE building_idx = ?
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $building_idx);
 
@@ -122,7 +130,8 @@ class reserveDatabaseAPI{
 	function by_title($title){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE title = ?	
+			WHERE title = ?
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $title);
 
@@ -131,7 +140,8 @@ class reserveDatabaseAPI{
 	function by_date_range($dates){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE start_date BETWEEN ? AND ? OR end_date BETWEEN ? AND ?	
+			WHERE start_date BETWEEN ? AND ? OR end_date BETWEEN ? AND ?
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $dates);
 
@@ -141,7 +151,8 @@ class reserveDatabaseAPI{
 	function by_id($id){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE reservation_idx = ?	
+			WHERE reservation_idx = ?
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $id);
 
@@ -151,7 +162,8 @@ class reserveDatabaseAPI{
 	function by_wp_id($wp_id){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE wp_id = ? AND NOT status = 'pending'	
+			WHERE wp_id = ? AND NOT status = 'pending'
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $wp_id);
 
@@ -161,7 +173,8 @@ class reserveDatabaseAPI{
 	function by_wp_id_pending($wp_id){
 		$sql="
 			SELECT * FROM cts_reservation
-			WHERE wp_id = ? AND status='pending'	
+			WHERE wp_id = ? AND status='pending'
+			ORDER BY reservation_idx DESC	
 			";
 		return PSU::db('cts')->GetAssoc( $sql, $wp_id);
 
