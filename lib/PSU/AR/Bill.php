@@ -1004,7 +1004,16 @@ class Bill extends \BannerObject
 	public function _load_not_billed(){
 		$this->data['not_billed'] = 0;
 
-		$sql = "SELECT SUM(tbraccd_amount) FROM tbraccd WHERE tbraccd_pidm = :pidm AND tbraccd_term_code <= :term_code AND tbraccd_bill_date IS NULL";
+		$sql = "
+			SELECT SUM(tbraccd_amount) 
+				FROM tbraccd 
+				     JOIN tbbdetc
+						   ON tbbdetc_detail_code = tbraccd_detail_code
+							AND tbbdetc_type_ind = 'C'
+			 WHERE tbraccd_pidm = :pidm 
+				 AND tbraccd_term_code <= :term_code 
+				 AND tbraccd_bill_date IS NULL
+		";
 		$not_billed = \PSU::db('banner')->GetOne( $sql, array('pidm' => $this->pidm, 'term_code' => $this->term_code) );
 		$this->data['not_billed'] = ($not_billed ? $not_billed : 0);
 	}//end _load_not_billed
