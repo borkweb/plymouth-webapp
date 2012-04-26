@@ -1,0 +1,46 @@
+label{
+font-weight:bold;
+
+}
+.message{
+word-wrap:break-word;
+padding: 0px 0px 0px 20px;
+width: 500px;
+}
+.print-information li{
+clear:left;
+}
+.print-information h3{
+font-size:1.2em;
+}
+.center{
+text-align:center;
+}
+.note{
+font-style:italic;
+}
+.print{
+font-size:1.4em;
+text-align:center;
+
+}
+.bullet{
+list-style-type: circle;
+}
+ul{
+list-style-type: none;
+}
+.bold{
+font-weight:bold;
+}
+.good{
+font-size:2em;
+color:green;
+}
+
+select{
+width: auto;
+}
+
+
+
