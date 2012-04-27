@@ -237,7 +237,7 @@ class Bill extends \BannerObject
 
 		$record['expiration_date'] = strtotime( '+5 days', $record['entry_date'] );
 
-		PSU::add_filter( 'transaction_skip', array( &$this, 'payment_plan_ug_skip_term_filter' ), 10, 2 );
+		\PSU::add_filter( 'transaction_skip', array( &$this, 'payment_plan_ug_skip_term_filter' ), 10, 2 );
 
 		$transaction = new \PSU\AR\Transaction\Memo( $record['pidm'], $data['contract_balance'] );
 		$transaction->billable( FALSE );
