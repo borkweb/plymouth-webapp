@@ -1064,6 +1064,7 @@ class IDMObject
 		}
 
 		if($output_type=='all' || $output_type=='*') {
+			unset( $output_id['ssn'] );
 			return $output_id;
 		}//end if
 
