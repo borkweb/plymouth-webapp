@@ -88,6 +88,19 @@ class Config {
 	}//end get_encoded
 
 	/**
+	 * Get a JSON-encoded variable from the config.
+	 */
+	public function get_json( $section, $var = null, $default = null ) {
+		$value = $this->get( $section, $var, $default );
+
+		if( $value ) {
+			$value = json_decode( $value );
+		}
+
+		return $value;
+	}//end get_json
+
+	/**
 	 * Load a config file. If none is specified, parent directories
 	 * will be searched until config.ini is found.
 	 */
