@@ -2,5 +2,11 @@ php_flag register_globals off
 
 RewriteEngine on
 RewriteBase /app/
+
+RewriteCond %{REQUEST_URI} /secure/
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} !\.(htm|html|php)$
+RewriteRule ^(.*) /webapp/binary.php [L,QSA]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L,QSA]
