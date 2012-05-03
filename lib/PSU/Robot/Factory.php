@@ -32,7 +32,13 @@ class Factory {
 	 */
 	public static function robot_from_config( \PSU\Config $config ) {
 		if( $host = $config->get( 'robot', 'host' ) ) {
-			return new \PSU\Robot( $host, $config->get( 'robot', 'port', $config->get( 'robot', 'port', 8888 ) ) );
+			$robot = new \PSU\Robot\JsonRobot( $host, $config->get( 'robot', 'port', 8888 ) );
+
+			if( $target = $config->get( 'robot', 'target' ) ) {
+				$robot->set_data( 'target', $target );
+			}//end if
+
+			return $robot;
 		}
 
 		return new Dummy( null, null );
