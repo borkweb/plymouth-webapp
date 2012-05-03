@@ -2,7 +2,7 @@
 
 namespace PSU\Robot;
 
-class Json extends BaseRobot {
+class JsonRobot extends BaseRobot {
 	public $data = array();
 
 	/**
