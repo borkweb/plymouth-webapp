@@ -1,11 +1,11 @@
 <?php
 
-namespace PSU;
+namespace PSU\Robot;
 
 /**
  * @sa PSU\RobotFactory
  */
-class Robot implements Robot\RobotInterface {
+class BaseRobot implements RobotInterface {
 	/**
 	 * Hostname of the robot listener.
 	 */
