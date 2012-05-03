@@ -20,6 +20,17 @@ class PSU_AR_Receivables extends PSU_AR_TermAggregate {
 	}//end get
 
 	/**
+	 * all receivables that aren't uncollectable parking fines 
+	 */
+	public function exclude_uncollectable_parking_fines( $it = null ) {
+		if( $it === null ) {
+			$it = $this->getIterator();
+		}//end if
+
+		return new \PSU\AR\Receivables\ExcludeUncollectableParkingFineFilterIterator( $it );
+	}//end exclude_uncollectable_parking_fines_memos
+
+	/**
 	 * all receivables that aren't write off memos
 	 */
 	public function exclude_write_offs( $it = null ) {
@@ -29,6 +40,14 @@ class PSU_AR_Receivables extends PSU_AR_TermAggregate {
 
 		return new PSU_AR_Receivables_ExcludeWriteOffFilterIterator( $it );
 	}//end exclude_write_off_memos
+
+	public function exclude_non_bill_entries( $it = null ) {
+		if( $it === null ) {
+			$it = $this->getIterator();
+		}//end if
+
+		return $this->exclude_uncollectable_parking_fines( $this->exclude_write_offs( $it ) );
+	}//end exclude_non_bill_entries
 
 	/**
 	 * all receivables by misc billing data
