@@ -41,6 +41,14 @@ class PSU_AR_Receivables extends PSU_AR_TermAggregate {
 		return new PSU_AR_Receivables_ExcludeWriteOffFilterIterator( $it );
 	}//end exclude_write_off_memos
 
+	public function exclude_non_bill_entries( $it = null ) {
+		if( $it === null ) {
+			$it = $this->getIterator();
+		}//end if
+
+		return $this->exclude_uncollectable_parking_fines( $this->exclude_write_offs( $it ) );
+	}//end exclude_non_bill_entries
+
 	/**
 	 * all receivables by misc billing data
 	 */

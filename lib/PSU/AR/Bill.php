@@ -405,8 +405,8 @@ class Bill extends \BannerObject
 
 		$receivables = $this->receivables->current_term( $term_code );
 
-		if( ! $this->include_write_offs ) {
-			$receivables = $this->receivables->exclude_write_offs( $receivables );
+		if( ! $this->include_non_bill_entries ) {
+			$receivables = $this->receivables->exclude_non_bill_entries( $receivables );
 		}//end else
 
 		return $receivables;
@@ -715,14 +715,14 @@ class Bill extends \BannerObject
 		$this->data['receivable_total']['total'] = 0;
 
 		if( $this->data['receivables']->count() > 0 ) {
-			if( $this->include_write_offs ) {
+			if( $this->include_non_bill_entries ) {
 				$this->data['receivable_total']['previous_term'] = $this->data['receivables']->sum( $this->data['receivables']->previous_terms( $this->term_code ) )->amount();
 				$this->data['receivable_total']['current_term'] = $this->data['receivables']->sum( $this->data['receivables']->current_term( $this->term_code ) )->amount();
 				$this->data['receivable_total']['future_term'] = $this->data['receivables']->sum( $this->data['receivables']->future_terms( $this->term_code ) )->amount();
 			} else {
-				$this->data['receivable_total']['previous_term'] = $this->data['receivables']->sum( $this->data['receivables']->exclude_write_offs( $this->data['receivables']->previous_terms( $this->term_code ) ) )->amount();
-				$this->data['receivable_total']['current_term'] = $this->data['receivables']->sum( $this->data['receivables']->exclude_write_offs( $this->data['receivables']->current_term( $this->term_code ) ) )->amount();
-				$this->data['receivable_total']['future_term'] = $this->data['receivables']->sum( $this->data['receivables']->exclude_write_offs( $this->data['receivables']->future_terms( $this->term_code ) ) )->amount();
+				$this->data['receivable_total']['previous_term'] = $this->data['receivables']->sum( $this->data['receivables']->exclude_non_bill_entries( $this->data['receivables']->previous_terms( $this->term_code ) ) )->amount();
+				$this->data['receivable_total']['current_term'] = $this->data['receivables']->sum( $this->data['receivables']->exclude_non_bill_entries( $this->data['receivables']->current_term( $this->term_code ) ) )->amount();
+				$this->data['receivable_total']['future_term'] = $this->data['receivables']->sum( $this->data['receivables']->exclude_non_bill_entries( $this->data['receivables']->future_terms( $this->term_code ) ) )->amount();
 			}//end else
 		}//end if
 
@@ -1075,8 +1075,8 @@ class Bill extends \BannerObject
 			$this->person = \PSUPerson::get($identifier);
 		}//end else
 
-		if( $this->person->include_write_offs ) {
-			$this->include_write_offs = true;
+		if( $this->person->include_non_bill_entries ) {
+			$this->include_non_bill_entries = true;
 		}//end if
 
 		$this->pidm = $this->person->pidm;
