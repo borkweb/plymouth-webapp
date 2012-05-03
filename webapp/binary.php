@@ -67,11 +67,18 @@ if( '/secure' === substr( $fullpath_dir, -7 ) ) {
 if( file_exists( $htrole = $secure_dir . '/.htrole' ) ) {
 	$roles = file( $htrole );
 
+	$authorized = false;
+
 	foreach( $roles as $role ) {
-		if( ! in_array( trim($role), $_SESSION['AUTHZ']['banner'] ) ) {
-			header('HTTP/1.1 403 Forbidden');
-			exit('You do not have access to the requested file.');
+		if( in_array( trim($role), $_SESSION['AUTHZ']['banner'] ) ) {
+			$authorized = true;
+			break;
 		}
+	}
+
+	if( ! $authorized ) {
+		header('HTTP/1.1 403 Forbidden');
+		exit('You do not have access to the requested file.');
 	}
 }
 
