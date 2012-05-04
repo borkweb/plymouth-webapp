@@ -8,6 +8,9 @@ webapp_url = "https://www.plymouth.edu/webapp"
 tmp_dir = "/web/temp"
 uploads_dir = "/web/uploads"
 
+[psuperson]
+;overrides = "{\"publicname\":\"backendname\",\"othername\":\"unknownname\"}"
+
 [calllog]
 base_url = "https://www.plymouth.edu/webapp/calllog"
 
@@ -15,14 +18,28 @@ base_url = "https://www.plymouth.edu/webapp/calllog"
 base_url = "https://www.plymouth.edu/webapp/teacher-cert"
 
 [google]
-api_key = YOUR_KEY
+api_key = "YOUR_KEY"
+
+[google]
+api_key = "YOUR_KEY"
 
 [smugmug]
-email = YOUR_EMAIL
-password = YOUR_BASE64_PASSWORD
-api_key = YOUR_API_KEY
+email = "YOUR_EMAIL"
+password = "YOUR_BASE64_PASSWORD"
+api_key = "YOUR_API_KEY"
+
+;[robot]
+;host = "ROBOT_IP"
+;port = "ROBOT_PORT"
 
 [statsd]
 host = "statsd.plymouth.edu"
 port = "8125"
 enabled = 0
+
+[session]
+; See PSU::session_start().
+;force_ssl = 1
+
+; Defaults to value from php.ini. See PSU::session_start().
+;cookie_domain = "plymouth.edu"
