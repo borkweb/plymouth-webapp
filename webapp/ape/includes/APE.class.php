@@ -43,8 +43,8 @@ class APE
 	 * close a calllog ticket
 	 */
 	public static function close_ticket( $call_id, $details, $params = null ) {
-		require_once '/web/pscpages/webapp/calllog/includes/functions.php';
-		require_once '/web/pscpages/webapp/calllog/includes/functions/add_update.class.php';
+		require_once PSU_BASE_DIR . '/webapp/calllog/includes/functions.php';
+		require_once PSU_BASE_DIR . '/webapp/calllog/includes/functions/add_update.class.php';
 
 		$new_call = new NewCall( PSU::db('calllog') ); // New Call object
 
@@ -72,8 +72,8 @@ class APE
 	 * generate a calllog ticket
 	 */
 	public static function create_ticket( $user, $title, $details, $params = null ) {
-		require_once '/web/pscpages/webapp/calllog/includes/functions.php';
-		require_once '/web/pscpages/webapp/calllog/includes/functions/add_update.class.php';
+		require_once PSU_BASE_DIR . '/webapp/calllog/includes/functions.php';
+		require_once PSU_BASE_DIR . '/webapp/calllog/includes/functions/add_update.class.php';
 
 		$new_call = new NewCall( PSU::db('calllog') ); // New Call object
 
@@ -508,8 +508,8 @@ class APE
 	 * update a calllog ticket
 	 */
 	public static function update_ticket( $call_id, $details, $params = null ) {
-		require_once '/web/pscpages/webapp/calllog/includes/functions.php';
-		require_once '/web/pscpages/webapp/calllog/includes/functions/add_update.class.php';
+		require_once PSU_BASE_DIR . '/webapp/calllog/includes/functions.php';
+		require_once PSU_BASE_DIR . '/webapp/calllog/includes/functions/add_update.class.php';
 
 		$new_call = new NewCall( PSU::db('calllog') ); // New Call object
 

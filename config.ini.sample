@@ -13,6 +13,8 @@ uploads_dir = "/web/uploads"
 
 [calllog]
 base_url = "https://www.plymouth.edu/webapp/calllog"
+api_appid = "YOUR_APPID"
+api_key = "YOUR_KEY"
 
 [teacher-cert]
 base_url = "https://www.plymouth.edu/webapp/teacher-cert"
