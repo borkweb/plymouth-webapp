@@ -551,49 +551,49 @@ class go
 
 		$found = false;
 
-		$folder_res = PSU::db('go')->Execute("SELECT name, id FROM folder WHERE wp_id=? AND parent_id=?", array( $this->wp_id, $folder_id ));
-		
-		while($folder = $folder_res->FetchRow())
-		{
-			$found = true;
-			$display='';
-			$open = PSU::db('go')->GetOne("SELECT open FROM folder WHERE id=".$folder['id']);
-			$display = ($open)?"-open":"";
-
-			if($type === 'luminis'){
-				$content .= '<li class="bookmark-folder'.$display.' treeItem" id="folder-'.$folder['id'].'"><div class="folder-header"><img src="/psu/images/spacer.gif" class="icon folder" alt="folder"/>'.$folder['name'].'</div>';
-				$content .= $this->generateBookmarkList($folder['id'], $type);
-				$content .= '</li>';
-			}else{
-				$content .= '<li rel="folder" class="bookmark-folder'.$display.' treeItem" id="folder-'.$folder['id'].'"><a href="#">'.$folder['name'].'</a>';
-				$content .= $this->generateBookmarkList($folder['id'], $type);
-				$content .= '</li>';
-			}
-		}//end while
-		
-		$res = PSU::db('go')->Execute("SELECT id,url, title, folder_id, go_destination_id FROM bookmark WHERE wp_id=? AND folder_id=?", array($this->wp_id, $folder_id));
-		while($bookmark = $res->FetchRow())
-		{
-			$style = 'treeItem bookmark';
-
-			if($bookmark['go_destination_id'])
+		if( $folder_res = PSU::db('go')->Execute("SELECT name, id FROM folder WHERE wp_id=? AND parent_id=?", array( $this->wp_id, $folder_id )) ) {
+			while($folder = $folder_res->FetchRow())
 			{
-				$keyword = PSU::db('go')->GetOne("SELECT keyword FROM keyword WHERE destination_id={$bookmark['go_destination_id']} AND deleted=0 ORDER BY is_secondary, is_hidden");
-				if($keyword)
-				{
-					$bookmark['url'] = 'http://go.plymouth.edu/'.$keyword;
-					$style .=  ' go_bookmark';
-				}//end if
-			}//end if
-			$found = true;
+				$found = true;
+				$display='';
+				$open = PSU::db('go')->GetOne("SELECT open FROM folder WHERE id=".$folder['id']);
+				$display = ($open)?"-open":"";
 
+				if($type === 'luminis'){
+					$content .= '<li class="bookmark-folder'.$display.' treeItem" id="folder-'.$folder['id'].'"><div class="folder-header"><img src="/psu/images/spacer.gif" class="icon folder" alt="folder"/>'.$folder['name'].'</div>';
+					$content .= $this->generateBookmarkList($folder['id'], $type);
+					$content .= '</li>';
+				}else{
+					$content .= '<li rel="folder" class="bookmark-folder'.$display.' treeItem" id="folder-'.$folder['id'].'"><a href="#">'.$folder['name'].'</a>';
+					$content .= $this->generateBookmarkList($folder['id'], $type);
+					$content .= '</li>';
+				}
+			}//end while
 			
-			if($type === 'luminis'){
-				$content .= '<li class="'. $style.' treeItem" id="bookmark-'.$bookmark['id'].'"><a href="'.$bookmark['url'].'" target="_blank">'.$bookmark['title'].'</a></li>';
-			}else{
-				$content .= '<li rel="file" class="'. $style.' treeItem" id="bookmark-'.$bookmark['id'].'"><a href="'.$bookmark['url'].'" target="_blank">'.$bookmark['title'].'</a></li>';
-			}
-		}//end while
+			$res = PSU::db('go')->Execute("SELECT id,url, title, folder_id, go_destination_id FROM bookmark WHERE wp_id=? AND folder_id=?", array($this->wp_id, $folder_id));
+			while($bookmark = $res->FetchRow())
+			{
+				$style = 'treeItem bookmark';
+
+				if($bookmark['go_destination_id'])
+				{
+					$keyword = PSU::db('go')->GetOne("SELECT keyword FROM keyword WHERE destination_id={$bookmark['go_destination_id']} AND deleted=0 ORDER BY is_secondary, is_hidden");
+					if($keyword)
+					{
+						$bookmark['url'] = 'http://go.plymouth.edu/'.$keyword;
+						$style .=  ' go_bookmark';
+					}//end if
+				}//end if
+				$found = true;
+
+				
+				if($type === 'luminis'){
+					$content .= '<li class="'. $style.' treeItem" id="bookmark-'.$bookmark['id'].'"><a href="'.$bookmark['url'].'" target="_blank">'.$bookmark['title'].'</a></li>';
+				}else{
+					$content .= '<li rel="file" class="'. $style.' treeItem" id="bookmark-'.$bookmark['id'].'"><a href="'.$bookmark['url'].'" target="_blank">'.$bookmark['title'].'</a></li>';
+				}
+			}//end while
+		}//end if
 		
 		if($found)
 		{
