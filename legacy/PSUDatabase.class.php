@@ -153,7 +153,7 @@ class PSUDatabase
 						$db->autoRollback = true; // must rollback; don't use existing transaction
 						$connect_method = 'PConnect';
 					} else {
-						$connect_method = 'Connect';
+						$connect_method = 'NConnect';
 					}
 
 					if(in_array('debug',$options)) $db->debug = true;
