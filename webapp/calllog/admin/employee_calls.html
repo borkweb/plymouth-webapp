@@ -1,0 +1,25 @@
+<?php
+include("call_log_admin.html");
+if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'])){
+	$page_name = 'employee_calls';
+	$template_file = TEMPLATE_ADMIN_DIR.'/'.$page_name.'.tpl';
+
+	$tpl = new XTemplate($template_file);
+
+	if($_GET['action'] != ""){
+		$tpl->assign('action', $_GET['action']);
+		$tpl->assign('option', $_GET['option']);
+		$tpl->parse('main.js_action');
+	}
+
+	$tpl->assign('call_log_web_home', CALL_LOG_WEB_HOME);
+	$tpl->parse('main');
+	$tpl->out('main');
+
+	echo setUpFooter();
+
+}else{
+	PSUHTML::redirect(CALL_LOG_WEB_HOME.'/index.html');
+}
+
+?>

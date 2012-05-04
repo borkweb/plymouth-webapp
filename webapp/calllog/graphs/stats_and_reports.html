@@ -1,0 +1,114 @@
+<?php
+
+// Call Log statistics and reports functions
+require_once FUNCTIONS_DIR . '/call_log_stats_and_reports_functions.php';
+$page_name = 'stats_and_reports';
+$template_file = $page_name.'.tpl';
+$tpl = new XTemplate(TEMPLATE_DIR.'/'.$template_file);
+$tpl->assign('page_headline', 'Statistics and Reports');
+
+echo setUpHeader($page_name);
+$calllog_username = '';
+
+// number_of_calls_logged
+// number_of_calls_resolved
+
+$tpl->assign('todays_top_call_loggers', TODAYS_TOP_CALL_LOGGERS);
+	
+	if(!empty($_REQUEST['calllog_username'])){
+	   $calllog_username = $_REQUEST['calllog_username'];
+	   $tpl->assign('calllog_username', $calllog_username);
+	}// end if
+	else{
+	   $calllog_username = $_SESSION['username'];
+	   $tpl->assign('calllog_username', $calllog_username);
+	}
+
+	$tpl->assign('my_user_name', $calllog_username);
+	$tpl->assign('user_name_label', $calllog_username);
+	$tpl->assign('call_log_web_home', CALL_LOG_WEB_HOME);
+
+
+	
+	if(!empty($_REQUEST['userreport_form']) || !empty($_REQUEST['userreport'])){
+		$num_calls_logged = returnNumberOfLifeTimeCallsLogged($calllog_username);
+		$num_calls_resolved = returnNumberOfLifeTimeCallsResolved($calllog_username);
+	
+		if($num_calls_resolved['tlc_assigned_to'] > 0){
+		   $tpl->assign('number_of_calls_resolved', $num_calls_resolved['tlc_assigned_to']);
+		   $tpl->assign('call_type', 'TLC');
+		   $tpl->parse('main.user_report.total_calls_resolved');
+		}// end if
+
+		$tpl->assign('number_of_calls_logged', $num_calls_logged);
+		$tpl->assign('number_of_calls_resolved', $num_calls_resolved);
+
+
+		$num_calls_resolved_this_semester = returnNumberOfCallsResolvedThisSemester($calllog_username);
+		$num_calls_logged_this_semester = returnNumberOfCallsLoggedThisSemester($calllog_username);
+
+		if($num_calls_resolved_this_semester['tlc_assigned_to'] > 0){
+		   $tpl->assign('number_of_calls_resolved_this_semester', $num_calls_resolved_this_semester['tlc_assigned_to']);
+		   $tpl->assign('call_type_this_semester', 'TLC');
+		   $tpl->parse('main.user_report.total_calls_resolved_this_semester');
+		}// end if
+
+		$tpl->assign('number_of_calls_logged_this_semester', $num_calls_logged_this_semester);
+		$tpl->assign('number_of_calls_resolved_this_semester', $num_calls_resolved_this_semester);
+		
+		// Parse [entire] user report
+		$tpl->parse('main.user_report');		
+		}// end if
+
+	if(!empty($_REQUEST['calllogreport'])){
+		$total_call_log_calls = returnNumberOfTotalCallLogCalls();
+		$tpl->assign('total_call_log_calls', $total_call_log_calls);
+		$tpl->parse('main.call_log_report');
+	}// end if
+
+	if(!empty($_REQUEST['display']) && !empty($_REQUEST['calllog_username'])){
+	   $display = $_REQUEST['display'];
+	   $calllog_username = $_REQUEST['calllog_username'];
+	   $sort_by = $_REQUEST['sort_by'];
+	   $when = $_REQUEST['when'];
+	   $tpl->assign('display', $display);
+
+		switch($display){
+			case 'log_in_history':
+				$display_name = 'Log in History';
+				$tpl->parse('main.display_user_info.log_in_history_head');
+				$text = displayLoginHistory($calllog_username, $sort_by);
+				foreach($text as $key){
+						$tpl->assign('key', $key);
+						$tpl->parse('main.display_user_info.log_in_history');
+				}// end foreach
+				break;
+			case 'logged_calls':
+				$display_name = 'Logged Calls';
+				$tpl->parse('main.display_user_info.call_info_head');
+				$text = displayLoggedCalls($calllog_username, $sort_by, $when);
+				foreach($text as $key){
+						$tpl->assign('key', $key);
+						$tpl->parse('main.display_user_info.call_info');
+				}// end foreach
+				break;
+			case 'resolved_calls':
+				$display_name = 'Resolved Calls';
+				$text = displayResolvedCalls($calllog_username, $when);
+				break;
+			default:
+
+				break;
+		}// end switch
+		$display_name = $calllog_username.'\'s '.$display_name;
+		$tpl->assign('display_name', $display_name);
+		$tpl->parse('main.display_user_info');
+	}// end if
+	else{
+
+	}
+
+$tpl->parse('main');
+$tpl->out('main');
+echo setUpFooter();
+?>

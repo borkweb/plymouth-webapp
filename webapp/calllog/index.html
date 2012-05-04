@@ -1,0 +1,36 @@
+<?php
+if($_GET['suppressem'] == 'yes'){
+	$suppressem = 'yes';
+}
+echo setUpHeader($page_name, 'return', $suppressem);
+
+$page_name = 'index';
+$template_file = TEMPLATE_DIR."/".$page_name.'.tpl';
+$tpl = new XTemplate($template_file);
+
+$tpl->assign('calllog_user_name', $_SESSION['username']);
+$tpl->assign('call_log_web_home', CALL_LOG_WEB_HOME);
+
+if($_GET['action'] != ""){ // if action is not empty, it will call the javascript function onLoad
+	$tpl->assign('action', $_GET['action']);
+	$tpl->assign('option', $_GET['option']);
+	$tpl->assign('group', $_GET['group']);
+	$tpl->assign('find_type', $_GET['find_type']);
+	$tpl->parse('main.js_action');
+}else{
+	$tpl->parse('main.not_js_action');
+}
+
+$tpl->assign('search_options', PSUHTML::getSelectOptions($search_options, $_GET['find_type']));
+$tpl->assign('getDateTimeMonth', PSUHTML::getSelectOptions($GLOBALS['restore']->getDateTimeOptions('Month')));
+$tpl->assign('getDateTimeDay', PSUHTML::getSelectOptions($GLOBALS['restore']->getDateTimeOptions('Date')));
+$tpl->assign('getDateTimeYear', PSUHTML::getSelectOptions($GLOBALS['restore']->getDateTimeOptions('Year'), date("Y")));
+
+$tpl->assign('displayRecoveryData', displayRecoveryData($template_file));
+$tpl->assign('displayOpenCalls', displayOpenCalls($template_file));
+$tpl->assign('displayNewsFeed', displayNewsFeed($template_file));
+
+$tpl->parse('main');
+$tpl->out('main');
+
+echo setUpFooter('return');

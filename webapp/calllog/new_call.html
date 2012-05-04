@@ -1,0 +1,240 @@
+<?php
+ob_start();
+
+$page_name = "new_call";
+echo setupHeader($page_name, 'return'); // Set up the header
+$template_file = TEMPLATE_DIR.'/'.$page_name.'.tpl';
+$tpl = new XTemplate($template_file);
+
+$go_back['option'] = ($_GET['option'])?$_GET['option']:'';
+$go_back['action'] = ($_GET['action'])?$_GET['action']:(($go_back['option'])?'searchUser':'');
+$go_back['group'] = ($_GET['group'])?$_GET['group']:'none';
+$go_back['find_type'] = ($_GET['find_type'])?$_GET['find_type']:2;
+$go_back['page'] = ($_GET['page'])?$_GET['page']:'index.html';
+
+if($go_back['option'] == 'mygroup')
+{
+	$go_back['name'] = 'the '.$go_back['find_type'].' Group';
+}//end if
+else
+{
+	if($go_back['option'])
+	{
+		$go_back['name'] = $go_back['option'];
+	}//end if
+	else
+	{
+		$go_back['name'] = "Home";
+	}//end else
+}//end else
+
+$tpl->assign('go_back', $go_back);
+
+$tpl->assign('call_log_username', $_SESSION['username']);
+$tpl->assign('call_log_web_home', CALL_LOG_WEB_HOME);
+$tpl->assign('JS_WEB_DIR', JS_WEB_DIR);
+$tpl->assign('page_name', $page_name);
+
+//was a call_id provided?
+if( isset($_GET['call_id']) )
+{
+	$call = $db->GetRow("SELECT * FROM call_log WHERE call_id = ?", (int)$_GET['call_id']);
+
+	$caller = $call['wp_id'] ? $call['wp_id'] : ($call['pidm'] ? $call['pidm'] : $call['caller_username']);
+	$person = $GLOBALS['user']->getCallerData($caller);
+
+	if( $person['pidm'] || $person['username'] || $person['wp_id'] ) {
+		$where = array();
+		$args = array();
+
+		if( $person['pidm'] ) {
+			$where[] = "call_log.pidm = ?";
+			$args[] = $person['pidm'];
+		}//end if
+
+		if( $person['username'] ) {
+			$where[] = "call_log.caller_username = ?";
+			$args[] = $person['username'];
+		}//end if
+
+		if( $person['wp_id'] ) {
+			$where[] = "call_log.wp_id = ?";
+			$args[] = $person['wp_id'];
+		}//end if
+
+		$where = implode(" OR ", $where);
+	}//end if
+
+	$num_open_calls = $db->GetOne("SELECT COUNT(*) FROM call_log, call_history WHERE call_log.call_id = call_history.call_id AND call_history.call_status = 'open' AND ({$where}) AND call_history.current='1'", $args);
+	$open_calls_info = $db->GetAll("SELECT * FROM call_log, call_history WHERE call_log.call_id = call_history.call_id AND call_history.call_status = 'open' AND ({$where}) AND call_history.current='1'", $args);
+	if($num_open_calls > 0)
+	{
+		$tpl->assign('num_open_calls', $num_open_calls);
+		$tpl->parse('main.new_call_user_name.check_open_calls.open_call_info');
+		$tpl->parse('main.new_call_user_name.check_open_calls');
+	}// end if
+}//end if
+else
+{
+	$person = $GLOBALS['user']->getCallerData($_REQUEST['caller']);
+	if( $person == false ) {
+		die( htmlentities($_REQUEST['caller']) . ' is not a known person.' );
+	}
+	$caller = $person['wp_id'] ? $person['wp_id'] : ($person['pidm'] ? $person['pidm'] : $person['username']);
+}//end else
+
+$tpl->assign('person', $person);
+$tpl->assign('caller_user_name', $caller);
+
+// Building Options Array, Consists Of building_id And building_name
+$building_options = Array();
+$building_options = getBuildingOptions();
+
+// Search Building Options Array, Consists Of building_id And building_name
+$Building_Info = Array();
+$Building_Info = searchBuildingRoom($person['phone']);
+
+// TLC Users Options Array
+$tlc_users_options = Array();
+$tlc_users_options = getTLCUsersOptions();
+
+// ITS Groups Options Array
+$its_group_options = Array();
+$its_group_options = getITSGroupOptions();
+
+// If cluster_building_id isSet, get it, select that building
+if(isSet($_REQUEST['cluster_building_id']))
+{
+	$building_id = $_REQUEST['cluster_building_id'];
+	$tpl->assign('building_select_list', PSUHTML::getSelectOptions($building_options, $building_id));
+}
+else
+{
+	$tpl->assign('building_select_list', PSUHTML::getSelectOptions($building_options, getBuildingID($person['address2'])));
+	$tpl->assign('location_building_room_number', $Building_Info[2]);
+}
+
+$tpl->assign('display_none_block', ($_GET['call_id']) ? 'block' : 'none');
+
+if(!$GLOBALS['user']->isFakeUser($person['email']))
+{
+	$tpl->parse('main.new_call_user_name.user_status');
+}//end if
+
+//**********[ Begin Attached Files Logic ]************//
+if($_GET['call_id'])
+{
+	if(file_exists($GLOBALS['uploads'].'/'.$_GET['call_id']))
+	{
+		$files = scandir($GLOBALS['uploads'].'/'.$_GET['call_id']);
+		foreach($files as $file)
+		{
+			if($file != '.' && $file != '..')
+			{
+				$file_data = array('name' => $file, 'url'=>$HOST.'/webapp/calllog/files/'.$_GET['call_id'].'/'.$file);
+				$tpl->assign('file',$file_data);
+				$tpl->parse('main.new_call_user_name.files.file');
+			}//end if	
+		}//end foreach
+		$tpl->parse('main.new_call_user_name.files');
+	}//end if
+}//end if
+//**********[ END Attached Files Logic ]************//
+
+//The following need to be changed to match the generic template.
+if ($_GET['call_id'])
+{
+	$sql = "SELECT * FROM call_log, call_history WHERE call_log.call_id = '{$_GET[call_id]}' AND call_log.call_id = call_history.call_id ORDER BY date_assigned {$GLOBALS['EMPLOYEE_INFO']['update_sort']}, time_assigned {$GLOBALS['EMPLOYEE_INFO']['update_sort']}";
+	if($call_details = $db->GetAll($sql))
+	{
+		foreach ($call_details as $history)
+		{
+			$history['comments'] = preg_replace("/[\*]{114}/", "____________________________________________", $history['comments']);
+			$history['comments'] = nl2br(strip_tags($history['comments']));
+			$tpl->assign('call_history', $history);
+			$tpl->parse('main.new_call_user_name.call_assignment_check.call_assignment_history');
+			$tpl->parse('main.new_call_user_name.call_assignment_history_hidden');
+		}//end foreach
+	}//end if
+	
+	$sql = "SELECT * FROM call_log, call_history WHERE call_log.call_id = '{$_GET[call_id]}' AND call_log.call_id = call_history.call_id ORDER BY date_assigned DESC, time_assigned DESC LIMIT 1";
+	$getOpenCallDetailsValue = $db->GetRow($sql);
+	$tlc_assigned_to = $getOpenCallDetailsValue['tlc_assigned_to'];
+	$its_assigned_to = $getOpenCallDetailsValue['its_assigned_group'];
+	$call_status = $getOpenCallDetailsValue['call_status'];
+	$call_priority = $getOpenCallDetailsValue['call_priority'];
+
+	$tpl->assign('call_history_id', $getOpenCallDetails[0]['id']);
+	$tpl->assign('details_name', "Update Information");
+	$tpl->assign('call_assigned_to', $GLOBALS['user']->callAssignedTo($tlc_users_options, $its_group_options, $tlc_assigned_to, $its_assigned_to));
+
+	if( $call_status == 'closed' ) {
+		$tpl->parse('main.new_call_user_name.call_closed');
+	}
+
+	$tpl->parse('main.new_call_user_name.call_assignment_check');
+}
+else
+{
+	$tpl->assign('call_assigned_to', $GLOBALS['user']->callAssignedTo($tlc_users_options, $its_group_options));
+	$tpl->assign('details_name', "Problem Information");
+	$tpl->assign('problem_details', $_GET['call_details']);
+}
+
+require_once 'PSUTemplate.class.php';
+$psutpl = new PSUTemplate();
+$psutpl->assign('details', $_GET['call_details']);
+$psutpl->assign('title', $_GET['title'] ?: $call['title']);
+$ticket_form = $psutpl->fetch('/web/pscpages/webapp/calllog/templates/ticket_form.tpl');
+$tpl->assign('ticket_form', $ticket_form);
+
+$resnet_call = $open_calls_info[0]['call_type'];
+$db_phone = $open_calls_info[0]['caller_phone_number'];
+$tpl->assign('resnet_call', $resnet_call);
+$tpl->assign('restore_system_list', PSUHTML::getSelectOptions($restore_system_options));
+$tpl->assign('restore_request_func', $GLOBALS['restore']->restoreRequestFunc());
+
+$tpl->assign('call_information', $GLOBALS['user']->callInformation($call_status_options, $call_priority_options, $call_status, $call_priority, $building_options, $building_id, $resnet_call));
+if($person['email'] != 'generic')
+{
+	$tpl->assign('caller_information', $GLOBALS['user']->getCallerInformation($caller, $_REQUEST['call_id'], $person));
+
+	$tpl->assign('caller_email', $GLOBALS['user']->userEmailFunction($person['username'], $_REQUEST['call_id'], $person));
+	
+	$tpl->assign('user_quota', $GLOBALS['user']->userQuota($person['username'], $person));
+
+	try {
+		$sTpl = new PSUSmarty();
+		$person = new PSUPerson($person['wp_id'] ? $person['wp_id'] : $person['pidm']);
+		$sTpl->assign('person', $person);
+		$tpl->assign('hardware_info', $sTpl->fetch('hardware_info.tpl'));
+
+		unset($person);
+	} catch( Exception $e ) {
+		// don't care, no hardware info
+	}
+
+	$tpl->assign('call_history_summary', $GLOBALS['user']->userCallHistory($caller));
+	$tpl->assign('media_loans_summary', $GLOBALS['user']->userMediaLoans($caller));
+}
+else
+{
+	$tpl->assign('caller_information', $GLOBALS['user']->getCallerInformation('generic', $_REQUEST['call_id'], '', '',''));
+	$tpl->assign('call_history_summary', $GLOBALS['user']->userCallHistory('generic'));
+}
+
+if ($_REQUEST['call_id'])
+{
+	$tpl->assign('call_id', $_REQUEST['call_id']);
+	$tpl->parse('main.new_call_user_name.edit_call_form');
+}
+else
+{
+	$tpl->parse('main.new_call_user_name.new_call_form');
+}
+$tpl->parse('main.new_call_user_name');
+
+$tpl->parse('main');
+$tpl->out('main');
+
+echo setUpFooter();

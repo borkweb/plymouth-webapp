@@ -1,0 +1,18 @@
+Options +MultiViews
+
+php_value auto_prepend_file ./common.php
+
+RewriteBase /webapp/calllog/
+RewriteEngine on
+
+RewriteRule ^ticket/([0-9]+)$ ticket/$1/ [R=301,L]
+RewriteRule ^ticket/([0-9]+)/ new_call.html?call_id=$1 [QSA,L]
+
+RewriteRule ^new/([a-zA-Z0-9\_\-\.]+)$ new/$1/ [R=301,L]
+RewriteRule ^new/([a-zA-Z0-9\_\-\.]+)/ new_call.html?caller=$1 [QSA,L]
+RewriteRule ^user/([a-zA-Z0-9\_\-\.]+)$ user/$1/ [R=301,L]
+RewriteRule ^user/([a-zA-Z0-9\_\-\.]+)/ new_call.html?caller=$1 [QSA,L]
+
+RewriteRule ^files/([0-9]+)/(.*) view_file.html?call_id=$1&view=$2 [QSA,L]
+
+RedirectMatch permanent ^/webapp/calllog/new_call_user_name.html(.*) /webapp/calllog/new_call.html$1

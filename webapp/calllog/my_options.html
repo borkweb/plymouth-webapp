@@ -1,0 +1,55 @@
+<?php
+echo setUpHeader($page_name, 'return', $suppressem);
+
+$page_name = 'my_options';
+$template_file = TEMPLATE_DIR."/".$page_name.'.tpl';
+$tpl = new XTemplate($template_file);
+$employee_id = $GLOBALS['EMPLOYEE_INFO']['call_log_user_id'];
+
+if($_GET['action'] == 'search_setting'){
+   $setting = $_POST['search_setting'];
+   $GLOBALS['user']->setSearchSetting($setting);
+   header('Location: my_options.html');
+   exit;
+}// end if
+
+if($_POST){
+	if(function_exists("delete_previous_entries")){
+		delete_previous_entries($employee_id);
+	}
+	if(function_exists("insert_new_entries")){
+		insert_new_entries($employee_id);
+	}
+}
+
+if(function_exists("display_all_groups")){
+	$group_listing = display_all_groups();
+}
+
+if(function_exists("display_my_groups")){
+	$my_groups = display_my_groups();
+}
+
+foreach($group_listing as $group_id=>$group){
+	$tpl->assign('0_is_checked', "");
+	$tpl->assign('1_is_checked', "");
+	$tpl->assign('2_is_checked', "");
+	$tpl->assign($my_groups[$group_id]['option_id'].'_is_checked', "checked");
+	$tpl->assign('group_listing', $group);
+	$tpl->parse('main.group_listing');
+}
+
+$search_setting = $GLOBALS['user']->getSearchSetting();
+if($search_setting == 'full')
+{
+	$tpl->assign('search_setting_full', 'checked="checked"');
+}//end if
+else
+{
+	$tpl->assign('search_setting_split', 'checked="checked"');
+}//end else
+
+$tpl->parse('main');
+$tpl->out('main');
+
+echo setUpFooter('return');

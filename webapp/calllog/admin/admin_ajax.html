@@ -1,0 +1,146 @@
+<?php
+ob_start();
+$page_title = "AJAX";
+$tpl = new XTemplate(TEMPLATE_ADMIN_DIR.'/admin_ajax.tpl');
+
+error_reporting(E_ALL ^ E_NOTICE); 
+$ajax = ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' ? true : false);
+
+switch($_GET['return']){
+
+	case 'editUserProfile':
+		if($ajax){
+			$getUserInfoSQL = "SELECT * FROM call_log_employee, its_employee_groups, itsgroups WHERE call_log_employee.user_name='$_GET[calllog_username]' AND call_log_employee.call_log_user_id = its_employee_groups.employee_id AND itsgroups.itsgroupid = its_employee_groups.group_id ORDER BY subgroupName ASC";
+			$getUserInfoRes = $db->Execute($getUserInfoSQL);
+			$i=0;
+			if ($getUserInfoRes->_numOfRows == '0'){
+				// ITS Groups Options Array
+				$its_group_options = Array();
+				$its_group_options = getITSGroupOptions();   
+				$tpl->assign('its_select_group_list', PSUHTML::getSelectOptions($its_group_options,$getUserInfo['group_id']));
+
+				// loop over the results, parsing main.group for each
+				$tpl->assign('my_group', strtolower($getUserInfo[subgroup]));
+				$tpl->assign('my_group_name', $getUserInfo[subgroupName]);
+				$tpl->parse('main.editaddUserProfile.ManageITSGroups');
+			}else{
+				while($getUserInfo = $getUserInfoRes->FetchRow()){
+					// ITS Groups Options Array
+					$its_group_options = Array();
+					$its_group_options = getITSGroupOptions();
+					$tpl->assign('its_select_group_list', PSUHTML::getSelectOptions($its_group_options,$getUserInfo['group_id']));
+					$tpl->assign('i',$i);
+					// loop over the results, parsing main.group for each
+					$tpl->assign('my_group', strtolower($getUserInfo[subgroup]));
+					$tpl->assign('my_group_name', $getUserInfo[subgroupName]);
+					$tpl->parse('main.editaddUserProfile.ManageITSGroups');
+					$i++;
+				}
+			}
+
+			$query = "SELECT * FROM call_log_employee WHERE user_name = '$_GET[calllog_username]'";
+			$result = $db->Execute($query);
+			while($key = $result->FetchRow()){
+				//print_r($key);
+				$tpl->assign('tlc_employee_positions', PSUHTML::getSelectOptions($tlc_employee_positions,$key['user_privileges']));
+				$tpl->assign('user_status', PSUHTML::getSelectOptions($user_status,$key['status']));
+				$tpl->assign('class_options', PSUHTML::getSelectOptions($user_status,$key['status']));
+				$tpl->assign('signed_ferpa', PSUHTML::getSelectOptions($ferpa_options,$key['ferpa']));
+				$tpl->assign('key', $key);
+			}// end while
+			$tpl->parse('main.editaddUserProfile.update_tlc_user');
+			$tpl->parse('main.editaddUserProfile');
+			$tpl->parse('main');
+			$tpl->out('main');
+		}
+	break;
+
+	case 'updateITSGroup':
+		if($ajax){
+			$getUserInfoRes = $db->Execute("SELECT * FROM its_employee_groups WHERE employee_id = '$_GET[user_id]'");
+			$i=0;
+			$groupDelete = $db->Execute("DELETE FROM its_employee_groups WHERE employee_id='$_GET[user_id]'");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group0]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group1]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group2]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group3]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group4]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group5]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group6]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group7]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group8]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group9]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group10]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group11]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group12]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group13]')");
+			$groupInsert = $db->Execute("INSERT INTO its_employee_groups (employee_id, group_id) VALUES ('$_GET[user_id]', '$_GET[group14]')");
+		}
+	break;
+
+	case 'userProfileAction':
+		if($ajax){
+			if($_GET['action'] == 'update'){
+				$profile_query = "UPDATE call_log_employee SET last_name = '$_GET[last_name]', first_name = '$_GET[first_name]', user_name = '$_GET[calllog_username]', student_class = '$_GET[class_options]', position = '$_GET[position]', comments = '$_GET[comments]', user_privileges = '$_GET[user_privileges]', status = '$_GET[status]', work_phone = '$_GET[work_phone]', cell_phone = '$_GET[cell_phone]', home_phone = '$_GET[home_phone]', ferpa = '$_GET[ferpa]' WHERE call_log_user_id = '$_GET[user_id]'";
+			}else if($_GET['action'] == 'add'){
+				$profile_query = "INSERT INTO call_log_employee (call_log_user_id, last_name, first_name, user_name, position, work_phone, cell_phone, home_phone, student_class, comments, user_privileges, ferpa, status) VALUES ('', '$_GET[last_name]', '$_GET[first_name]', '$_GET[calllog_username]', '$_GET[position]', '$_GET[work_phone]', '$_GET[cell_phone]', '$_GET[home_phone]', '$_GET[class_options]', '$_GET[comments]', '$_GET[user_privileges]', '$_GET[ferpa]', '$_GET[status]')";
+			}
+			if($db->Execute($profile_query)){
+				echo "<div class='update_message'>User Updated Successfully</div>";
+			}else{
+				echo "<div class='update_message'>User Update Failed</div>";
+			}
+		}
+	break;
+
+	case 'getEmployeeCalls':
+		if($ajax){
+			$getCalls = $db->GetAll("SELECT * FROM call_log, call_history WHERE call_log.call_id = call_history.call_id AND call_log.calllog_username = '{$_GET['user_name']}' AND current='1' ORDER BY call_date DESC, call_time DESC LIMIT 150");
+			
+			for($i=0;$i<count($getCalls);$i++){
+				$getCalls[$i]['call_date_time'] = date("F jS, Y", strtotime($getCalls[$i]['call_date'])).' @ '.date("g:i a", strtotime($getCalls[$i]['call_time']));
+				$getCalls[$i]['caller_info'] = $getCalls[$i]['caller_first_name'].' '.$getCalls[$i]['caller_last_name'].' ('.$getCalls[$i]['caller_username'].')';
+				$getCalls[$i]['comments'] = substr($getCalls[$i]['comments'], 0, 75);
+				$group_id = $getCalls[$i]['its_assigned_group'];
+				$group_info = getGroupInfo($group_id);
+				if($group_id != 0){
+					$group_info = $group_info[1].'_group';
+				}else{
+					$group_info = "";
+				}
+				$getCalls[$i]['assigned_to'] = $getCalls[$i]['tlc_assigned_to'].' '.$group_info;
+				$tpl->assign('calls', $getCalls[$i]);
+				$tpl->parse('main.getEmployeeCalls.call');
+			}
+			$tpl->parse('main.getEmployeeCalls');
+			$tpl->parse('main');
+			$tpl->out('main');
+		}
+	break;
+
+	case 'upgradeCallLog':
+		if($ajax){
+			$version_file = $INCLUDES.'/version.txt';
+			if(is_writeable($version_file)){
+				$handle = fopen($version_file, 'r+');
+				$write = fwrite($handle, $_GET['version']);
+			}
+			$functions_version_file = $INCLUDES.'/functions_version.txt';
+			if(is_writeable($functions_version_file)){
+				$functions_handle = fopen($functions_version_file, 'a+');
+				$to_write = "\r\n * ".$_GET['version']."  ".strtolower(date("d-F-Y"))."  [tgh]<br/>";
+				$functions_write = fwrite($functions_handle, $to_write);
+			}
+			$select_pending_calls = $db->GetAll("SELECT DISTINCT(call_id) FROM call_history WHERE its_assigned_group = '20' AND call_priority = 'pending' AND call_status = 'open' AND current = '1'");
+			foreach($select_pending_calls as $call_id){
+				$update_pending_calls = $db->query("UPDATE call_history SET current = '0' WHERE its_assigned_group = '20' AND call_priority = 'pending' AND call_status = 'open' AND current = '1'");
+				$close_pending_calls = $db->query("INSERT INTO call_history (call_id, current, updated_by, comments, date_assigned, time_assigned, call_status, call_priority) VALUES ('{$call_id['call_id']}', '1', '{$_SESSION['username']}', 'Closed with New Release of Call Log', NOW(), NOW(), 'closed', 'normal')");
+			}
+			$tpl->assign('version_number', $_GET['version']);
+			$tpl->parse('main.upgradeCallLog');
+			$tpl->parse('main');
+			$tpl->out('main');
+		}
+	break;
+}
+?>

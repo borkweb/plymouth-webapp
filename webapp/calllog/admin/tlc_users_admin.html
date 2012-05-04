@@ -1,0 +1,54 @@
+<?php
+include("call_log_admin.html");
+
+if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'])){	
+$tpl = new XTemplate(TEMPLATE_ADMIN_DIR.'/tlc_users_admin.tpl');
+
+	if(isSet($_GET['action'])){
+		switch($_GET['action']){	
+			case 'returnnewuserform':
+				$text = returnNewUserForm();
+				break;
+			case 'addtlcuser':
+				$text = addTLCUser($_POST);
+				break;
+			case 'edittlcuser':
+				$text = editTLCUser($_GET['user_name']);
+				break;
+			case 'updatetlcuser':
+				$text = updateTLCUser($_POST);
+				break;
+			case 'deletetlcuser':
+				$text = deleteTLCUser($_GET['user_id']);
+				break;
+			case 'settlcuserstatus':
+				$text = setTLCUserStatus($_GET['user_name'], $_GET['status']);
+				break;
+		}
+	}else if($_GET['display']){
+		switch($_GET['display']){
+			case 'activeusers':
+				$text = displayTLCUsers('active', 'admin');
+				break;
+			case 'disabledusers':
+				$text = displayTLCUsers('disabled', 'admin');
+				break;
+			case 'inactiveusers':
+				$text = displayTLCUsers('inactive', 'admin');
+				break;
+			case 'allusers':
+				$text = displayTLCUsers('all', 'admin');
+				break;	   			
+		}// end switch
+	
+   }else{	
+		$text = displayTLCUsers('active', 'admin');
+   }
+   $tpl->assign('content', $text);	   
+   $tpl->parse('main');
+   $tpl->out('main');
+   echo setUpFooter();
+}else{
+	PSUHTML::redirect(CALL_LOG_WEB_HOME.'/index.html');
+}
+?>

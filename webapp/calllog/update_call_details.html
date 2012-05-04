@@ -1,0 +1,131 @@
+<?php
+// Get Variables from $_POST and assign them to new variables.
+$call_id = $_POST['call_id'];
+$call_history_id = $_POST['call_history_id'];
+$call_log_username = $_POST['call_log_username'];
+$caller_user_name = $_POST['caller_user_name'];
+$caller_first_name = $_POST['caller_first_name'];
+$caller_last_name = $_POST['caller_last_name'];
+$caller_phone_number = $_POST['caller_phone_number'];
+$tlc_assigned_to = $_POST['tlc_assigned_to'];
+$date_assigned = $_POST['date_assigned'];
+$time_assigned = $_POST['time_assigned'];
+$call_priority = $_POST['call_priority'];
+$call_status = $_POST['call_status'];
+$its_assigned_group = $_POST['its_assigned_group'];
+$location_building_id = $_POST['location_building_id'];
+$location_building_room_number = $_POST['location_building_room_number'];
+$comments = $_POST['problem_details'];
+$attach_to = $_POST['attach_to'];
+$_POST['updated_by'] = $call_log_username;
+
+if( $_POST['call_id'] ) {
+	$call = $db->GetRow("SELECT * FROM call_log WHERE call_id = ?", array($_POST['call_id']));
+	$_POST['title'] = $_POST['title'] ? stripslashes($_POST['title']) : $call['title']; // magic_quotes_gpc
+	$_POST['feelings'] = $call['feelings'];
+	$_POST['feelings_face'] = $call['feelings_face'];
+} else {
+	$_POST['title'] = stripslashes( $_POST['title'] ); // magic_quotes_gpc
+}
+
+// assigning this down here, since $_POST['title'] can be modified above
+$title = $_POST['title'];
+
+$call_keywords = $_POST['keywords_list'] ? $_POST['keywords_list'] : generateKeywordList($call_id, $comments);
+
+if( !$prevent_file_upload) {
+	uploadFile($call_id);
+}//end if
+
+if($attach_to) {
+	if(strtolower($attach_to) == 'generic') {
+		$caller_user_name = 'generic';
+		$caller_first_name = 'Generic Caller';
+		$caller_last_name = 'Help Desk';
+	} elseif(strtolower($attach_to) == 'kiosk') {
+		$caller_user_name = 'kiosk';
+		$caller_first_name = 'Kiosk Call';
+		$caller_last_name = 'Help Desk';
+	} elseif(strtolower($attach_to) == 'clusteradm') {
+		$caller_user_name = 'clusteradm';
+		$caller_first_name = 'Cluster Call';
+		$caller_last_name = 'Help Desk';
+	} elseif( $attach_to ) {
+		try{
+			$attach_person = new PSUPerson( $attach_to );
+			$caller_user_name = $attach_person->username;
+			$caller_first_name = $attach_person->formatName('f');
+			$caller_last_name = $attach_person->formatName('l');
+			if( $pidm = $attach_person->pidm ) {
+				$pidm_sql = ", pidm = $pidm";
+			}//end if
+
+			if( $wp_id = $attach_person->wp_id ) {
+				$wp_id_sql = ", wp_id = '$wp_id'";
+			}//end if
+		} catch( Exception $e ) {}
+	}//end else
+}//end if
+
+if($its_assigned_group == ""){
+	$its_assigned_group = "0";
+}
+
+if(($tlc_assigned_to == "none") || ($tlc_assigned_to == "helpdesk")){
+	$tlc_assigned_to = "unassigned";
+}// end if
+
+if(($tlc_assigned_to == "unassigned") && ($its_assigned_group == "")){
+	$its_assigned_group = "unassigned";
+}// end if
+
+if( $tlc_assigned_to == 'caller' ) {
+	$tlc_assigned_to = $caller_user_name;
+}//end if
+
+if($call_status == 'closed'){
+	$tlc_assigned_to = $call_log_username;
+}
+
+// Update old record in call_history table as long as caller_user_name and call_log_username are not empty
+if($call_log_username != "" || $caller_user_name != ""){
+	$query = "
+		UPDATE call_log
+		SET
+			caller_username = ?, caller_first_name = ?,
+			caller_last_name = ?, caller_phone_number = ?, keywords = ?,
+			location_building_id = ?, location_building_room_number = ?,
+			title = ?
+			$pidm_sql $wp_id_sql
+		WHERE call_id = ?
+	";
+
+	$args = array(
+		$caller_user_name, $caller_first_name,
+		$caller_last_name, $caller_phone_number, $call_keywords,
+		$location_building_id, $location_building_room_number,
+		$title,
+		$call_id,
+	);
+
+	if( $db->Execute( $query, $args ) ){
+		$call_info = array('tlc_assigned_to'=>$tlc_assigned_to, 'updated_by'=>$call_log_username, 'comments'=>$comments, 'date_assigned'=>'NOW()', 'time_assigned'=>'NOW()', 'call_priority'=>$call_priority, 'call_status'=>$call_status, 'call_id'=>$call_id, 'current'=>1, 'its_assigned_group'=>$its_assigned_group);
+		$call_info['caller_wp_id'] = $_POST['caller_wp_id'];
+		$_POST['date_assigned'] = date('Y-m-d');
+		$_POST['time_assigned'] = date('H:i:s');
+		$GLOBALS['new_call']->addToCallHistory($call_info); // adds call to the call_history table
+		sendOpenCallMail($_POST, "its_staff"); // send open call Email to specified people or everyone in group
+		$DeleteTempData = $db->Execute("DELETE FROM temp_call WHERE call_log_username = '$_SESSION[username]'"); // deletes saved temp data.
+	}else {
+		$_SESSION['user_message'] = 'Error updating entry, and did not reassign call in call_history table.';
+	}
+}
+
+$_SESSION['user_message'] = "Thank you for Updating Ticket #".$call_id;
+
+if($_POST['option'] != 'caller' || $_POST['group'] != 0) {
+	header('Location: '.($_GET['redirect'] ? $_GET['redirect'] : 'index.html?new_call=passed&action='.$_POST['action'].'&option='.$_POST['option'].'&group='.$_POST['group'].'&find_type='.$_POST['find_type']));
+}
+else {
+	header('Location: '.($_GET['redirect'] ? $_GET['redirect'] : 'index.html?new_call=passed'));
+}

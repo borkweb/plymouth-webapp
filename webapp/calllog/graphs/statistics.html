@@ -1,0 +1,31 @@
+<?php
+	$page_name = 'statistics';
+	$template_file = TEMPLATE_DIR.'/'.$page_name.'.tpl';
+	$page_title = 'Statistics';
+	$tpl = new XTemplate($template_file);
+	echo setUpHeader($page_title, 'return');
+
+	// assign image for graph
+	// parameters ?statistic=top_loggers&time_delimit=today&month=01&day=01&year=1999&month=01&day=01&year=1999
+	if ($_GET['time_delimit']=='date_range'){
+		$start_date = PSUHTML::formatDateSelect($_GET['start_month'],$_GET['start_day'],$_GET['start_year']);
+		$end_date = PSUHTML::formatDateSelect($_GET['end_month'],$_GET['end_day'],$_GET['end_year']);
+		$tpl->assign('graph_img_src', CALL_LOG_WEB_HOME.'/graphs/statistics_image.php?statistic='.$_GET['statistic'].'&time_delimit='.$_GET['time_delimit'].'&start_date='.$start_date.'&end_date='.$end_date);
+	}else{
+		$tpl->assign('graph_img_src', CALL_LOG_WEB_HOME.'/graphs/statistics_image.php?statistic='.$_GET['statistic'].'&time_delimit='.$_GET['time_delimit']);
+	}
+
+	$tpl->assign($_GET['time_delimit'] . "_checked", 'checked="checked"');
+	$tpl->assign($_GET['statistic'] . "_selected", 'selected="selected"');
+
+	// assign date drop down menu
+	$tpl->assign('begin_date_select', PSUHTML::getDateSelect('','start_%s'));
+	$tpl->assign('end_date_select', PSUHTML::getDateSelect('','end_%s'));
+
+	$tpl->assign('week_start', date('Y-m-d', strtotime('last sunday -8 days') ) );
+	$tpl->assign('week_end', date('Y-m-d', strtotime('last sunday') ) );
+
+	$tpl->parse('main');
+	$tpl->out('main');	
+	echo setUpFooter('return'); 
+?>

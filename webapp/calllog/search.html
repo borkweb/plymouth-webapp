@@ -1,0 +1,20 @@
+<?php
+
+require_once('PSUTemplate.class.php');
+
+$tpl = new PSUTemplate('Search');
+
+undo_magic_quotes( $_GET );
+
+$title = 'Search';
+
+if( count($_GET) ) {
+	$tickets = CallLog::search_tickets( $_GET );
+
+	$title .= sprintf(' "%s"', htmlentities($_GET['q']));
+
+	$tpl->assign('tickets', $tickets);
+	$tpl->assign('q', $_GET['q']);
+}
+
+$tpl->display('search.tpl');

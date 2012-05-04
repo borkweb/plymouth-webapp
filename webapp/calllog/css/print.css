@@ -1,0 +1,52 @@
+body{
+	background: #fff;
+}
+
+#outer-header{
+	background: #fff;
+	border-bottom: 1px solid #000;
+}
+
+#new-call-user-right-col, #header-right-side, #caller_media_outer_div, #knowledgebase_outer_div, #caller_history_outer_div, #hardware_info_outer_div, #submit_reset, #call_assignment_history_div,#problem_details_outer_div, #helpdesk_news_div, #main-open-calls-div, .submit_new_call {
+	display: none;
+}
+
+.noprint{display:none;}
+
+.new-call-user-table-main{
+	width: 90%;
+}
+
+#call_assignment_history_hidden_div label,
+#call_assignment_history_hidden_div label em,
+#call_assignment_history_hidden_div .label,
+#call_assignment_history_hidden_div .label em,
+#call_assignment_history_hidden_div legend,
+#call_assignment_history_hidden_div {
+	color: #000 !important;
+}
+
+#call_assignment_history_details_hidden_div{
+	padding-right: 30px;
+}
+
+.new-call-user-table-main, .new-call-user-table-inside{
+	border-color: #000;
+}
+
+#assign_to_div, #call_assignment_history_hidden_div, #call_assignment_history_inner_hidden_div {
+	display: block;
+}
+
+select{
+	border: 1px solid #000;
+}
+
+label{
+	padding-right: 5px;
+}
+
+#call_assignment_history_div{
+	display: none;
+	max-height: auto !important;
+}

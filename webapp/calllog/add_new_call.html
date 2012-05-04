@@ -1,0 +1,51 @@
+<?php
+if(empty($_POST)){
+	PSUHTML::redirect($_GET['redirect'] ? urldecode($_GET['redirect']) : 'index.html');
+}
+//checks to see if the call was assigned to anyone and if so, the call status defaults to open
+if($_POST['tlc_assigned_to'] != 'unassigned' || $_POST['its_assigned_group'] != 0){
+	$_POST['call_status'] = "open";
+}
+
+if($_POST['call_status'] == "closed"){
+	if ($_POST['tlc_assign_to'] != $_SESSION['call_log_username'] && $_POST['its_assigned_group'] == 0){
+		$_POST['its_assigned_group'] = 0;
+	}// end if
+}
+
+if($_POST['resnet_check'] == 'on'){
+	$_POST['resnet_check'] = "resnet";
+}
+
+if( $_POST['tlc_assigned_to'] == 'caller' ) {
+	$_POST['tlc_assigned_to'] = $_POST['caller_user_name'];
+}//end if
+
+$email = $_POST['caller_user_name'].'@mail.plymouth.edu';
+$phone = $_POST['caller_phone_number'];
+
+// Insert into CallLog
+$call_location = $GLOBALS['new_call']->returnCallLoggedFromLocation($_SERVER['REMOTE_ADDR']);
+if($_SESSION['username'] != "" || $_POST['caller_user_name'] != ""){
+	if($call_added == ''){
+		$_POST['call_id'] = $call_id = $GLOBALS['new_call']->addNewCall($_POST, $call_location);
+		$DeleteTempData = $db->Execute("DELETE FROM temp_call WHERE call_log_username = '$_SESSION[username]'");
+
+		if( !$prevent_file_upload ) {
+			uploadFile($call_id);
+		}//end if
+		
+		if($_SESSION['update_attachments'] == 'yes'){
+			// Update attachments and then get rid of session variable
+		}
+	$call_added = "call_added";
+	}// end if
+}
+
+if($_POST['call_status'] != "closed"){
+	sendOpenCallMail($_POST, "its_staff");
+}
+
+$_SESSION['user_message'] = "Thank you for Logging Ticket #".$call_id.' on '.date('m/d/Y @ g:i a');
+
+header('Location: '.($_GET['redirect'] ? urldecode($_GET['redirect']) : 'index.html?new_call=passed'));

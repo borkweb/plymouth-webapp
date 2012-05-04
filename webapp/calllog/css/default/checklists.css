@@ -1,0 +1,39 @@
+#checklists{
+	margin: 0.5em 0;
+}
+
+#checklists ul li{
+	clear: left;
+	list-style-type: none;
+	margin-bottom: 0.5em;
+	margin-left: 0;
+}
+
+#checklists ul{
+	margin-top: 0.5em;
+	padding: 0;
+}
+
+#checklists ul label{
+	display: block;
+}
+
+#checklists input{
+	width: 55%;
+}
+
+#checklists textarea{
+	height: 50px;
+	width: 95%;
+}
+
+#checklists p,
+#checklists ul{
+	display: none;
+}
+
+#checklists ul{
+	display: none;
+	margin: 1em 0;
+	text-align: left;
+}

@@ -1,0 +1,56 @@
+<?php
+
+require 'channel.class.php';
+
+$tpl = new XTemplate('templates/channel.tpl');
+
+$getUserInfoSQL = "SELECT * FROM its_employee_groups, itsgroups WHERE itsgroups.deleted = 0 AND its_employee_groups.employee_id = {$GLOBALS['EMPLOYEE_INFO']['call_log_user_id']} AND itsgroups.itsgroupid = its_employee_groups.group_id AND its_employee_groups.option_id != '0' ORDER BY subgroupName ASC";
+$getUserInfoRes = $db->Execute($getUserInfoSQL);
+
+$queues = array();
+
+if ($getUserInfoRes->RecordCount() != 0){
+	while($getUserInfo = $getUserInfoRes->FetchRow()){
+		$queue = getGroupInfo($getUserInfo['itsgroupid'], $loop=1);
+		$queues[$queue[2]] = array('name'=>$queue[0], 'code'=>$queue[1], 'calls'=>returnOpenCalls('mygroup', $queue[2]));
+	}
+}
+
+foreach($queues as $queue)
+{
+	$tpl->assign('queue', $queue);
+
+	foreach($queue['calls'] as $call)
+	{
+		$tpl->assign('call', $call);
+		$tpl->parse('main.queue.call');
+	}
+	$tpl->parse('main.queue');
+}
+
+$tpl->assign('channel_updated', date('r'));
+$tpl->assign('channel_id', $_GET['channel_id']);
+
+$tpl->parse('main');
+$tpl->out('main');
+
+if($_GET['output_method'] == 'js')
+{
+	$params = array(
+		'callback' => 'jQuery.my.channelLoad',
+		'channel_id' => $_GET['channel_id'],
+		'js_callback' => "jQuery.calllog.onload('" . $_GET['channel_id'] . "');"
+	);
+	Channel::out('callback',$params);
+}//end if
+else
+{
+	//no!  set a page title and javascript init call
+	$params = array(
+		'title' => 'Call Log Watched Buckets'
+	);
+	
+	//render the channel content in html
+	Channel::out('html',$params);
+}//end else
+?>
