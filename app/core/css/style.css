@@ -21,13 +21,13 @@
 #psu_gobar_42199{display: none !important;}
 
 html{
-	background: #f5f5f5 url(../images/bg_gray.png) repeat-x;
+	background: #fff url(../images/bg.jpg) center 80px repeat-x;
 	/* maxvoltar.com/archive/-webkit-font-smoothing */
 	-webkit-font-smoothing: antialiased;
 }
 
 body{
-	background: #f5f5f5 url(../images/bg_gray.png) repeat-x;
+	background: #fff url(../images/bg.jpg) center 80px repeat-x;
 	color: #000;
 	font-family: Helvetica, Arial, Sans-Serif;
 	overflow: auto;
@@ -574,6 +574,12 @@ label span span {
 .message-container h6{ margin: 0 0 0.5em 0; }
 
 /* combined styles */
+#page {
+	background: url(../images/page-bg-2.png);
+	background-repeat: repeat-x;
+	background-position: center -30px;
+}
+
 .webapp-nav .subnav{
 	background: #333;
 	border-top: 1px solid #666;
@@ -583,12 +589,15 @@ label span span {
 /* Head styles */
 #webapp-head{
 	background: #fff;
-	border-bottom: 1px solid #000;
 }
 
 #webapp-head .webapp-head{
 	min-height: 5em;
 	padding-top: 1.5em;
+}
+
+.webapp-head {
+	padding-bottom: 10px;
 }
 
 .webapp-head h1{
@@ -605,26 +614,39 @@ label span span {
 /* Nav styles */
 
 #webapp-nav{
-	background: #666 url(../images/nav_bg.gif) top left repeat-x;
-	border-bottom: 1px solid #333;
-	border-top: 1px solid #666;
+	background: transparent url(../images/nav-bg.png) top center repeat-x;
+	height: 63px;
+}
+
+.fluid #webapp-nav {
+	background: transparent url(../images/nav-bg-fluid.png) top center repeat-x;
 }
 
 #webapp-nav .nav-select { display: none; }
 
 .webapp-nav{
-	background: #666 url(../images/nav_bg.gif) repeat-x;
-
-	border-top-right-radius: 0;
-	border-top-left-radius: 0;
-	-moz-top-radius-bottomright: 0;
-	-moz-top-radius-bottomleft: 0;
-	-webkit-border-top-right-radius: 0;
-	-webkit-border-top-left-radius: 0;
+	padding-top: 1px;
+	background: transparent;
 }
 
 .webapp-nav .inner{
-	padding: 0.5em 0em;
+}
+
+.webapp-nav .inner > ul > li > a {
+	display: block;
+	line-height: 14px;
+	color: white;
+	margin: 0;
+	margin-right: 2px;
+	padding: 16px 10px;
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+	text-decoration: none;
 }
 
 .webapp-nav a{color: #eee;}
@@ -638,6 +660,9 @@ label span span {
 
 .webapp-nav a:hover{
 	font-weight: normal;
+	color: white;
+	background-color: #497168;
+	border-color: #497168;
 }
 
 .webapp-nav form{display: none;}
@@ -658,11 +683,9 @@ label span span {
 .webapp-nav li{
 	float: left;
 	padding: 0;
-	margin: 0 1.5em 0 0;
 }
 
 .webapp-nav .right li {
-	margin: 0 0 0 1.5em;
 }
 
 .webapp-nav a.menu-expand{
@@ -673,8 +696,14 @@ label span span {
 
 /* drop down nav styles */
 
+.webapp-nav .inner > ul {
+	margin: 0;
+	width: 100%;
+}
+
 .webapp-nav ul > li {
 	float: left;
+	margin: 0;
 }
 
 .webapp-nav ul li li{float:none;}
@@ -687,47 +716,67 @@ label span span {
 	color: #fff;
 }
 
+.webapp-nav ul > li {
+	position: relative;
+}
+
 .webapp-nav ul > li ul {
-	display: none;
-	list-style: none;
+	-webkit-border-radius: 0 0 4px 4px;
+	-moz-border-radius: 0 0 4px 4px;
+	border-radius: 0 0 4px 4px;
+
 	position: absolute;
-	margin: -1px 0 0 0;
-	z-index: 90;
-	padding: 0;
+	top: 100%;
+	left: 0;
+	z-index: 1000;
+	float: left;
+	display: none;
+	min-width: 160px;
+	_width: 160px;
+	padding: 4px 0;
+	margin: 0;
+	list-style: none;
+	background-color: white;
+	border-color: #CCC;
+	border-color: rgba(0, 0, 0, 0.2);
+	border-style: solid;
+	border-width: 1px;
+	-webkit-border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding;
+	background-clip: padding-box;
+}
+
+.webapp-nav ul > li {
+	line-height: 18px;
 }
 
 .webapp-nav ul > li ul a {
 	display: block;
-	width: 152px;
-	padding: 5px;
-	border-bottom: 1px solid #333;
-	border-right: 1px solid #333;
-	border-left: 1px solid #333;
-	background-color: #464646;
+	padding: 3px 15px;
+	clear: both;
+	font-weight: normal;
+	line-height: 18px;
+	color: #555;
+	white-space: nowrap;
 }
 
 .webapp-nav ul > li ul li a.first {
 	border-top: 1px solid #333;
 }
 
-.webapp-nav ul > li ul .child-hover1 {
-	background-color: #333;
-	color: #fff;
-}
-
-.webapp-nav ul > li ul .child-hover2 {
-	background-color: #333;
-	color: #fff;
-}
-
-.webapp-nav ul > li ul .child-hover3 {
-	background-color: #333;
-	color: #fff;
-}
-
+.webapp-nav ul > li ul .child-hover1,
+.webapp-nav ul > li ul .child-hover2,
+.webapp-nav ul > li ul .child-hover3,
 .webapp-nav ul > li ul .child-hover4 {
-	background-color: #333;
+	background-color: #0088cc;
 	color: #fff;
+	text-decoration:none;
 }
 
 .webapp-nav ul > li ul li ul {
@@ -741,10 +790,23 @@ label span span {
 
 
 /* Body styles */
+#webapp-avant-body,
+#webapp-body,
+#webapp-apres-body,
+#webapp-foot {
+	background: url(../images/body-bg.png) top center repeat-y;
+}
+
+.fluid #webapp-avant-body,
+.fluid #webapp-body,
+.fluid #webapp-apres-body,
+.fluid #webapp-foot {
+	background: #fff;
+}
+
 .webapp-avant-body, 
 .webapp-body,
-.webapp-apres-body{
-}
+.webapp-apres-body{}
 
 .webapp-body .inner{
 	padding-top: 0.5em;
@@ -753,7 +815,7 @@ label span span {
 .webapp-apres-body .inner{ }
 
 #webapp-avant-body{
-	border-top: 1px solid #e5e5e5;
+	overflow: hidden;
 }
 
 .webapp-avant-body .message-container{
@@ -762,16 +824,7 @@ label span span {
 /* Foot styles */
 
 .webapp-foot{
-/*	background: #ddd;*/
 	padding: 0 0 0.5em 0;
-	
-	border-top-right-radius: 0.5em;
-	border-top-left-radius: 0.5em;
-	-moz-border-radius-topright: 0.5em;
-	-moz-border-radius-topleft: 0.5em;
-	-webkit-border-top-left-radius: 0.5em;
-	-webkit-border-top-right-radius: 0.5em;
-
 	-webkit-background-clip: padding-box;
 }
 
@@ -785,16 +838,31 @@ label span span {
 
 .webapp-foot a:hover{ font-weight: normal; }
 
+
+#webapp-apres-foot,
+#webapp-final {
+	background: #4B4B4C url(../images/foot-bg.png) top center repeat-y;
+	overflow: auto;
+}
+
 .webapp-apres-foot{
-	background: url(../images/apres_foot.png) top left no-repeat;
-	border-top: 1px solid #ddd;
-	color: #555;
+	color: #eee;
 	font-size: 0.9em;
 	height: 180px;
 }
 
+.webapp-apres-foot a {
+	color: #ddd;
+}
+
+.webapp-apres-foot a.active,
+.webapp-apres-foot a:hover {
+	color: #fff;
+}
+
 #webapp-apres-foot h3{
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #999;
+	color: #eee;
 }
 
 #webapp-apres-foot ul{
@@ -814,7 +882,7 @@ label span span {
 #webapp-apres-foot #foot-logo-column .logo{
 	background-position: center top;
 	background-repeat: no-repeat;
-	background-image: url(../images/psulogo_180.png);
+	background-image: url(../images/psulogo_180_white.png);
 	display: block;
 	width: 220px;
 	height: 56px;
@@ -839,16 +907,14 @@ label span span {
 }
 
 #webapp-final{
-	background: url(../images/foot_final.png) top left repeat-x;
 	height: 35px;
 }
 
 #webapp-final .inner{
-	color: #444;
-	font-size: 0.9em;
-	padding-top: 10px;
+	color: #EEE;
+	font-size: 10px;
+	padding: 10px 10px;
 	position: relative;
-	text-align: center;
 }
 
 #webapp-final #foot-address,
@@ -860,18 +926,18 @@ label span span {
 	background: #333;
 	color: #aaa;
 	display: block;
-	top: 4px;
+	bottom: 0px;
 	right: 1em;
 	position: absolute;	
 	height: 20px;
 	width: 8em;
 
-	border-bottom-right-radius: 0.5em;
-	border-bottom-left-radius: 0.5em;
-	-moz-bottom-radius-bottomright: 0.5em;
-	-moz-bottom-radius-bottomleft: 0.5em;
-	-webkit-border-bottom-right-radius: 0.5em;
-	-webkit-border-bottom-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	border-top-left-radius: 0.5em;
+	-moz-top-radius-bottomright: 0.5em;
+	-moz-top-radius-bottomleft: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+	-webkit-border-top-left-radius: 0.5em;
 
 	opacity: 0.5;
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; // first!
@@ -914,7 +980,7 @@ label span span {
 .box > .body,
 .box > .foot{
 	border: none;
-	border-right: 1px solid #e0e0e0;
+	border: 1px solid #f5f5f5;
 }
 
 .box > .subheader,
@@ -925,6 +991,7 @@ label span span {
 
 .box > .title{
 	background: #f9f9f9;
+	border-bottom: 0;
 	margin-left: 0;
 	margin-right: 0;
 
@@ -957,7 +1024,6 @@ label span span {
 
 .box > .body{
 	background: #fff;
-	border-bottom: 1px solid #E0E0E0;
 
 	border-bottom-right-radius: 6px;
 	border-bottom-left-radius: 6px;
@@ -2109,7 +2175,6 @@ blockquote small {
 .carousel-caption p {
   color: #ffffff;
 }
-
 
 /*********[ Orientation ]*************/
 @media all and (orientation:portrait) {}
