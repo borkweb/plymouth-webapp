@@ -39,7 +39,7 @@
 				<li>This user's username is not in Systems (no active/alumni record in USER_DB).</li>
 			{/if}
 			{if $person->issues.pending_ldi_sync}
-				<li><img src="/images/icons/32x32/apps/system-software-update.png" style="vertical-align:middle;"/> <strong>This user is undergoing synchronization with Moodle.</strong>  When this
+				<li>{icon id="ape-sync" size="medium" flat=true} <strong>This user is undergoing synchronization with Moodle.</strong>  When this
 				message goes away, synchronization is complete. Please note: you have to refresh the page to check sync status.
 			{/if}
 			{if $person->issues.pin_disabled}

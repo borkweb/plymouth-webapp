@@ -82,13 +82,7 @@ function identity_icons( &$results ) {
 	{
 		switch($result['r_ldap_user'])
 		{
-			case 'mtbatchelder': $result['icon'] = 'emotes/face-grin'; break;
-			case 'djbramer': $result['icon'] = 'emotes/face-monkey'; break;
-			case 'satirrell': $result['icon'] = 'emotes/face-surprise'; break;
-			case 'zbtirrell': $result['icon'] = 'emotes/face-devil-grin'; break;
-			case 'ambackstrom': $result['icon'] = 'emotes/face-angel'; break;
-			case 'vkhauri': $result['icon'] = 'apps/preferences-desktop-locale'; break;
-			default: $result['icon'] = 'apps/utilities-system-monitor'; break;
+			default: $result['icon'] = 'person'; break;
 		}//end switch
 	}//end foreach
 

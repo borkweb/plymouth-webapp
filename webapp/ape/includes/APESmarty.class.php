@@ -38,47 +38,47 @@ class APESmarty extends PSUTemplate
 
 		/*** set up navigation links ***/
 		$links = array(
-			'nav-home' => $this->createLink('Home', $GLOBALS['BASE_URL'].'/', 'nav-icon nav-home'),
-			'nav-identity' => $this->createLink('Identity/Access', $GLOBALS['BASE_URL'].'/user/'.$_SESSION['ape_identifier'], 'nav-icon nav-identity')
+			'nav-home' => $this->createLink('Home', $GLOBALS['BASE_URL'].'/', 'nav-icon nav-home', 'home'),
+			'nav-identity' => $this->createLink('Identity/Access', $GLOBALS['BASE_URL'].'/user/'.$_SESSION['ape_identifier'], 'nav-identity', 'person')
 		);
 
 		if( APEAuthZ::advancement() ) {
-			$links['nav-advancement'] = $this->createLink('Advancement', $GLOBALS['BASE_URL'].'/user/advancement/'.$_SESSION['ape_identifier'], 'nav-icon nav-advancement');
+			$links['nav-advancement'] = $this->createLink('Advancement', $GLOBALS['BASE_URL'].'/user/advancement/'.$_SESSION['ape_identifier'], 'nav-advancement', 'advancement');
 			$this->assign('advancement_link' , true );
 		}//end if
 
 		if( APEAuthZ::hr() ) {
-			$links['nav-hr'] = $this->createLink('HR', '#', 'nav-icon nav-advancement');
+			$links['nav-hr'] = $this->createLink('HR', '#', 'nav-advancement', 'hr');
 			$this->assign('hr_link' , true );
 		}//end if
 
 		if( APEAuthZ::family() ) {
-			$links['nav-family'] = $this->createLink('Family', $GLOBALS['BASE_URL'].'/user/family/'.$_SESSION['ape_identifier'], 'nav-icon nav-family');
+			$links['nav-family'] = $this->createLink('Family', $GLOBALS['BASE_URL'].'/user/family/'.$_SESSION['ape_identifier'], 'nav-family', 'family');
 			$this->assign('family_link' , true );
 		}//end if
 
 		if( APEAuthZ::student() ) {
-			$links['nav-student'] = $this->createLink('Student', $GLOBALS['BASE_URL'].'/user/student/'.$_SESSION['ape_identifier'], 'nav-icon nav-student');
+			$links['nav-student'] = $this->createLink('Student', $GLOBALS['BASE_URL'].'/user/student/'.$_SESSION['ape_identifier'], 'nav-student', 'student');
 			$this->assign('student_link' , true );
 		}//end if
 
-		if($_SESSION['AUTHZ']['admin'])  $links['nav-identity']['children'][] = $this->createLink('Access Management', $GLOBALS['BASE_URL'].'/authz.html', 'nav-icon nav-access');
-		if(IDMObject::authZ('permission', 'ape_mailing'))  $links['nav-identity']['children'][] = $this->createLink('Mailing Lists', $GLOBALS['BASE_URL'].'/lists/', 'nav-icon nav-mailing');
-		if(IDMObject::authZ('oracle', 'reporting_security'))  $links['nav-identity']['children'][] = $this->createLink('Banner Security', $GLOBALS['BASE_URL'].'/banner/', 'nav-icon nav-banner');
+		if($_SESSION['AUTHZ']['admin'])  $links['nav-identity']['children'][] = $this->createLink('Access Management', $GLOBALS['BASE_URL'].'/authz.html', 'nav-access');
+		if(IDMObject::authZ('permission', 'ape_mailing'))  $links['nav-identity']['children'][] = $this->createLink('Mailing Lists', $GLOBALS['BASE_URL'].'/lists/', 'nav-mailing', 'mail');
+		if(IDMObject::authZ('oracle', 'reporting_security'))  $links['nav-identity']['children'][] = $this->createLink('Banner Security', $GLOBALS['BASE_URL'].'/banner/', 'nav-banner', 'banner-security');
 		if($GLOBALS['ape']->canResetPassword())
 		{
-			$links['nav-identity']['children'][] = $this->createLink('Password Test', $GLOBALS['BASE_URL'].'/password-test.html', 'nav-icon nav-pass');
-			$links['nav-identity']['children'][] = $this->createLink('Locked ('.$GLOBALS['ape']->locks_count().')', $GLOBALS['BASE_URL'].'/locks.html', 'nav-icon nav-locked');
+			$links['nav-identity']['children'][] = $this->createLink('Password Test', $GLOBALS['BASE_URL'].'/password-test.html', 'nav-pass');
+			$links['nav-identity']['children'][] = $this->createLink('Locked ('.$GLOBALS['ape']->locks_count().')', $GLOBALS['BASE_URL'].'/locks.html', 'nav-locked', 'lock');
 		}//end if
-		$links['nav-identity']['children'][] = $this->createLink('Creation ('.$GLOBALS['ape']->pending_accounts_count().')', $GLOBALS['BASE_URL'].'/pending.html', 'nav-icon nav-pend-create');
-		$links['nav-identity']['children'][] = $this->createLink('Deletion ('.$GLOBALS['ape']->pending_deletion_count().')', $GLOBALS['BASE_URL'].'/deletion.html', 'nav-icon nav-pend-delete');
+		$links['nav-identity']['children'][] = $this->createLink('Creation ('.$GLOBALS['ape']->pending_accounts_count().')', $GLOBALS['BASE_URL'].'/pending.html', 'nav-pend-create', 'pending-creation');
+		$links['nav-identity']['children'][] = $this->createLink('Deletion ('.$GLOBALS['ape']->pending_deletion_count().')', $GLOBALS['BASE_URL'].'/deletion.html', 'nav-pend-delete', 'pending-deletion');
 
 		if( IDMObject::authz('permission', 'mis')) {
-			$links['nav-identity']['children'][] = $this->createLink('Provision/Deprovision Docs', 'https://docs.google.com/Doc?docid=0AcDtIeWVN6nGYWNmZ3dxamRqOW5jXzE0N2dndHBqNmZn&hl=en', 'nav-icon nav-identity');
+			$links['nav-identity']['children'][] = $this->createLink('Provision/Deprovision Docs', 'https://docs.google.com/Doc?docid=0AcDtIeWVN6nGYWNmZ3dxamRqOW5jXzE0N2dndHBqNmZn&hl=en', 'nav-identity', 'identity');
 		}//end if
 
 		if( APEAuthZ::hr() ) {
-			$links['nav-hr']['children'][] = $this->createLink('Employee Clearance', $GLOBALS['BASE_URL'].'/checklist-admin.html', 'nav-icon nav-advancement');
+			$links['nav-hr']['children'][] = $this->createLink('Employee Clearance', $GLOBALS['BASE_URL'].'/checklist-admin.html', 'nav-advancement', 'identity');
 		}//end if
 
 		// if there are only 2 root links, replace root link #2 with its children
@@ -91,13 +91,18 @@ class APESmarty extends PSUTemplate
 		$this->assign('nav_links', $links);
 	}
 
-	function createLink($title, $url, $class)
+	function createLink($title, $url, $class, $icon = null)
 	{
 		$link = array();
 		$link['title'] = $title;
 		$link['url'] = $url;
 		$link['class'] = $class;
 		$link['children'] = array();
+
+		if( $icon ) {
+			$link['icon'] = "ape-{$icon}";
+		}//end if
+
 		return $link;
 	}//end createLink
 

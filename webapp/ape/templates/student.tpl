@@ -6,7 +6,8 @@
 {if $AUTHZ.role.faculty || ($AUTHZ.banner.bannerinb && $AUTHZ.role.staff) || $AUTHZ.role.registrar}
 <div id="user_info">
 	{capture name="title"}{$person->formatName('f m l')} ({$person->id}){/capture}
-	{box title="<span class='section-title'>Student:</span> `$smarty.capture.title`" secondary_title='<a href="?print"><img src="/images/icons/16x16/actions/document-print.png" class="icon"/> Print</a>' title_size=12 secondary_title_size=4}
+	{capture name="print}<a href="?print">{icon id="ape-print" boxed=true} Print</a>{/capture}
+	{box title="<span class='section-title'>Student:</span> `$smarty.capture.title`" secondary_title=$smarty.capture.print title_size=12 secondary_title_size=4}
 	<img id="print-confidential" src="/webapp/style/templates/images/confidential_960.png"/>
 	{if $AUTHZ.permission.ape_ssn}
 		<div class="note">Note: all requests for SSNs, Pins, Cert Numbers, etc are logged.</div>
