@@ -185,7 +185,7 @@ require_once 'PSUTemplate.class.php';
 $psutpl = new PSUTemplate();
 $psutpl->assign('details', $_GET['call_details']);
 $psutpl->assign('title', $_GET['title'] ?: $call['title']);
-$ticket_form = $psutpl->fetch('/web/pscpages/webapp/calllog/templates/ticket_form.tpl');
+$ticket_form = $psutpl->fetch( __DIR__ . '/templates/ticket_form.tpl' );
 $tpl->assign('ticket_form', $ticket_form);
 
 $resnet_call = $open_calls_info[0]['call_type'];
