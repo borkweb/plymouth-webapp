@@ -12,13 +12,13 @@
 		Here are some other services in APE that you may find useful:
 	</p>
 	<ul class="front-nav">
-		<li><a href="{$PHP.BASE_URL}/authz.html"><img src="{$PHP.ICONS}/32x32/categories/applications-internet.png"> Access Management</a></li>
+		<li><a href="{$PHP.BASE_URL}/authz.html">{icon id="ape-access" size="medium" boxed=true} Access Management</a></li>
 		{if $AUTHZ.oracle.reporting_security}
-			<li class="{$banner_current}"><a href="{$PHP.BASE_URL}/banner/"><img src="{$PHP.ICONS}/32x32/emblems/emblem-readonly.png"> Banner Security</a></li>
+			<li class="{$banner_current}"><a href="{$PHP.BASE_URL}/banner/">{icon id="ape-banner-security" size="medium" boxed=true} Banner Security</a></li>
 		{/if}
 		{if $ape->canResetPassword()}
-			<li><a href="{$PHP.BASE_URL}/password-test.html"><img src="{$PHP.ICONS}/32x32/actions/edit-find-replace.png"> Password Test</a></li>
-			<li><a href="{$PHP.BASE_URL}/locks.html"><img src="{$PHP.ICONS}/32x32/actions/system-lock-screen.png"> Locked Accounts ({$ape->locks_count()})</a></li>
+			<li><a href="{$PHP.BASE_URL}/password-test.html">{icon id="ape-password" size="medium" boxed=true} Password Test</a></li>
+			<li><a href="{$PHP.BASE_URL}/locks.html">{icon id="ape-lock" size="medium" boxed=true} Locked Accounts ({$ape->locks_count()})</a></li>
 		{/if}
 	</ul>	
 {/box}

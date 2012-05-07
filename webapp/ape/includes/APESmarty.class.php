@@ -62,12 +62,12 @@ class APESmarty extends PSUTemplate
 			$this->assign('student_link' , true );
 		}//end if
 
-		if($_SESSION['AUTHZ']['admin'])  $links['nav-identity']['children'][] = $this->createLink('Access Management', $GLOBALS['BASE_URL'].'/authz.html', 'nav-access');
+		if($_SESSION['AUTHZ']['admin'])  $links['nav-identity']['children'][] = $this->createLink('Access Management', $GLOBALS['BASE_URL'].'/authz.html', 'nav-access', 'access');
 		if(IDMObject::authZ('permission', 'ape_mailing'))  $links['nav-identity']['children'][] = $this->createLink('Mailing Lists', $GLOBALS['BASE_URL'].'/lists/', 'nav-mailing', 'mail');
 		if(IDMObject::authZ('oracle', 'reporting_security'))  $links['nav-identity']['children'][] = $this->createLink('Banner Security', $GLOBALS['BASE_URL'].'/banner/', 'nav-banner', 'banner-security');
 		if($GLOBALS['ape']->canResetPassword())
 		{
-			$links['nav-identity']['children'][] = $this->createLink('Password Test', $GLOBALS['BASE_URL'].'/password-test.html', 'nav-pass');
+			$links['nav-identity']['children'][] = $this->createLink('Password Test', $GLOBALS['BASE_URL'].'/password-test.html', 'nav-pass', 'password');
 			$links['nav-identity']['children'][] = $this->createLink('Locked ('.$GLOBALS['ape']->locks_count().')', $GLOBALS['BASE_URL'].'/locks.html', 'nav-locked', 'lock');
 		}//end if
 		$links['nav-identity']['children'][] = $this->createLink('Creation ('.$GLOBALS['ape']->pending_accounts_count().')', $GLOBALS['BASE_URL'].'/pending.html', 'nav-pend-create', 'pending-creation');
