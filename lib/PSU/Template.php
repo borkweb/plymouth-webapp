@@ -453,7 +453,7 @@ class Template extends \PSUSmarty
 			}//end if
 
 			$this->addJS('http'.($_SERVER['HTTPS'] ? 's':'').'://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.js', array('head'=>true));
-			$this->addJS('/js/standard/psu-standard.min.js');
+			$this->addJS('/app/core/js/standard/psu-standard.min.js');
 			$this->addJS('/app/core/js/bootstrap/bootstrap.min.js');
 
 			if( $this->channel_container ) {
