@@ -12,6 +12,7 @@ respond( function( $request, $response, $app ) {
 
 with( '/festivals', __DIR__ . '/festivals.php' );
 with( '/style', __DIR__ . '/style.php' );
+with( '/teacher-cert', __DIR__ . '/teacher-cert.php' );
 
 respond( '404', function() {
 	header( 'Content-Type: text/plain' );

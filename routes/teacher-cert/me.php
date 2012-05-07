@@ -2,6 +2,15 @@
 
 use PSU\TeacherCert;
 
+respond( function( $request, $response, $app ){
+	if( ! $app->permissions->pidm ) {
+		die( 'Could not find your user identifier.' );
+	}
+
+	$app->populate( new TeacherCert\Student( $app->permissions->pidm ) );
+	$app->populate( 'student_view', true );
+});
+
 respond( '/', function( $request, $response, $app ){
 	$app->tpl->display( 'me-gates.tpl' );
 });

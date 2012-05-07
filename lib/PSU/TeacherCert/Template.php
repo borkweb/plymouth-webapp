@@ -1,9 +1,11 @@
 <?php
 
+namespace PSU\TeacherCert;
+
 /**
- * 
+ *
  */
-class TeacherCertTemplate extends \PSU\Template {
+class Template extends \PSU\Template {
 	function _wrap_method( $method, $args = null ) {
 		// Maintain output buffering level, since an exception
 		// throw in Smarty::fetch() may generate ob_start() that are
@@ -54,4 +56,4 @@ class TeacherCertTemplate extends \PSU\Template {
 
 		return;
 	}//end fetch
-}//end class TeacherCertTemplate
+}//end class Template;

@@ -3,43 +3,31 @@
 use \Guzzle\Service\Client;
 use \PSU\TeacherCert;
 
-require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
-
-require_once 'autoload.php';
-PSU::session_start(); // force ssl + start a session
-
-$GLOBALS['BASE_URL'] = '/webapp/teacher-cert';
-$GLOBALS['BASE_DIR'] = __DIR__;
-
-$GLOBALS['TITLE'] = 'Teacher Certification';
-$GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
-
-$domain = PSU::isdev() ? 'dev.plymouth.edu' : 'plymouth.edu';
-$GLOBALS['PSUAPI'] = "https://api.{$domain}/0.1/?appid={{appid}}&appkey={{appkey}}";
-unset( $domain );
-
-require_once $GLOBALS['BASE_DIR'] . '/includes/TeacherCertAPI.class.php';
-require_once $GLOBALS['BASE_DIR'] . '/includes/TeacherCertTemplate.class.php';
-
-if( file_exists( $GLOBALS['BASE_DIR'] . '/debug.php' ) ) {
-	include $GLOBALS['BASE_DIR'] . '/debug.php';
-}
-
-IDMObject::authN();
-
-require_once 'klein/klein.php';
-require_once 'guzzle.phar';
-
-/**
- * Make some objects available elsewhere.
- */
 respond( function( $request, $response, $app ) {
-	$config = PSU\Config\Factory::get_config();
+	PSU::session_start();
+
+	$GLOBALS['BASE_URL'] = '/app/teacher-cert';
+
+	$GLOBALS['TITLE'] = 'Teacher Certification';
+	$GLOBALS['TEMPLATES'] = PSU_BASE_DIR . '/app/teacher-cert/templates';
+
+	$domain = PSU::isdev() ? 'dev.plymouth.edu' : 'plymouth.edu';
+	$GLOBALS['PSUAPI'] = "https://api.{$domain}/0.1/?appid={{appid}}&appkey={{appkey}}";
+	unset( $domain );
+
+	if( file_exists( PSU_BASE_DIR . '/teacher-cert-debug.php' ) ) {
+		include PSU_BASE_DIR . '/teacher-cert-debug.php';
+	}
+
+	IDMObject::authN();
+
+	require_once 'klein/klein.php';
+	require_once 'guzzle.phar';
 
 	$app->client = new Client( $GLOBALS['PSUAPI'] );
 	$app->client->setConfig( array(
-		'appid' => $config->get( 'teacher-cert', 'api_appid' ),
-		'appkey' => $config->get( 'teacher-cert', 'api_key' ),
+		'appid' => $app->config->get( 'teacher-cert', 'api_appid' ),
+		'appkey' => $app->config->get( 'teacher-cert', 'api_key' ),
 	));
 
 	$app->readonly = false;
@@ -149,7 +137,7 @@ respond( function( $request, $response, $app ) {
 		}
 	};
 
-	$app->tpl = new TeacherCertTemplate;
+	$app->tpl = new TeacherCert\Template;
 	$app->user = PSUPerson::get( $_SESSION['wp_id'] ); 
 
 	$app->populate( 'config', new \PSU\Config );
@@ -162,24 +150,12 @@ respond( function( $request, $response, $app ) {
 
 	$app->tpl->assign( 'user', $app->user );
 	$app->tpl->assign( 'back_url', $_SERVER['HTTP_REFERER'] );
-});
 
-// mocks go after the first responder (above) and below normal routes (below)
-if( defined('TCERT_MOCK') && TCERT_MOCK ) {
-	include $GLOBALS['BASE_DIR'] . '/mock.php';
-}
-
-// TODO: move this into routes/me.php, when the syntax gets cleaner
-respond( '/me/?[*]', function( $request, $response, $app ){
-	if( ! $app->permissions->pidm ) {
-		die( 'Could not find your user identifier.' );
+	// mocks go after the first responder (above) and below normal routes (below)
+	if( defined('TCERT_MOCK') && TCERT_MOCK ) {
+		include $GLOBALS['BASE_DIR'] . '/mock.php';
 	}
 
-	$app->populate( new TeacherCert\Student( $app->permissions->pidm ) );
-	$app->populate( 'student_view', true );
-});
-
-respond( function( $request, $response, $app ) {
 	// Assign this after mock.php has run
 	$app->tpl->assign( 'permissions', $app->permissions );
 
@@ -250,7 +226,5 @@ $app_routes = array(
 );
 
 foreach( $app_routes as $base ) {
-	with( "/{$base}", $GLOBALS['BASE_DIR'] . "/routes/{$base}.php" );
+	with( "/{$base}", __DIR__ . "/teacher-cert/{$base}.php" );
 }
-
-dispatch( $_SERVER['PATH_INFO'] );
