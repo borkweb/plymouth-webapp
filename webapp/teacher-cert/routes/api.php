@@ -8,6 +8,8 @@ use PSU\TeacherCert;
  */
 
 respond( 'GET', '/students', function( $request, $response, $app ) {
+	exit( 'Disabled.' );
+
 	header('Content-type: application/json');
 
 	$gate_system = $request->param( 'qry-students-gs' );
@@ -57,6 +59,8 @@ respond( 'GET', '/students', function( $request, $response, $app ) {
 });
 
 respond( 'GET', '/checklist-items', function( $request, $response, $app ) {
+	exit( 'Disabled.' );
+
 	header('Content-type: application/json');
 
 	$response = $app->client->get('teacher-cert/checklist-items')->send();
