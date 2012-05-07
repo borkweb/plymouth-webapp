@@ -8,7 +8,10 @@ webapp_url = "https://www.plymouth.edu/webapp"
 tmp_dir = "/web/temp"
 uploads_dir = "/web/uploads"
 
-[psuperson]
+;[cdn]
+;enabled = 1
+
+;[psuperson]
 ;overrides = "{\"publicname\":\"backendname\",\"othername\":\"unknownname\"}"
 
 [calllog]
