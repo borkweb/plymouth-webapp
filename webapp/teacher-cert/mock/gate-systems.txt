@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+
+{
+	"status": "OK",
+	"status_code": 200,
+	"data": [
+		{ "name": "JSON Gatesystem", "slug": "json-gatesystem", "id": 1337 }
+	]
+}

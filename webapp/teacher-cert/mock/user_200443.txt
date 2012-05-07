@@ -1,0 +1,19 @@
+HTTP/1.1 200 OK
+
+{
+	"status_code": 200,
+	"status": "OK",
+	"data": {
+		"first_name": "Adam",
+		"middle_name": "Marshall",
+		"last_name": "Backstrom",
+		"name_prefix": null,
+		"name_suffix": null,
+		"wp_id": "p0intless",
+		"email": "ambackstrom@plymouth.edu",
+		"pidm": "200443",
+		"id": "012345678",
+		"usnh_id": "995583664",
+		"login_name": "ambackstrom"
+	}
+}

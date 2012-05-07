@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+
+{
+	"status": "OK",
+	"status_code": 200,
+	"data": {
+		"gate_system": {
+			"name": "JSON Gatesystem",
+			"slug": "json-gatesystem",
+			"id": 1337
+		},
+		"filter": "foo",
+		"students": [
+			{ "last_name": "Backstrom", "first_name": " Adam", "id": "012345678", "pidm": 200443, "sgs_id": 1 },
+			{ "last_name": "Batchelder", "first_name": "Matt", "id": "000000002", "pidm": 50080, "sgs_id": 2 },
+			{ "last_name": "Hopkins", "first_name": "Anthony", "id": "001209318", "pidm": 987236, "sgs_id": 3 },
+			{ "last_name": "Ryan", "first_name": "Meg", "id": "000233001", "pidm": 198723, "sgs_id": 4 }
+		]
+	}
+}

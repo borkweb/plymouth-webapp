@@ -1,0 +1,40 @@
+HTTP/1.1 200 OK
+
+{
+	"status": "OK",
+	"status_code": 200,
+	"data": {
+		"gate_system": "JSON Gatesystem",
+		"gate_system_id": 1337,
+		"student_pidm": 200443,
+		"student_gate_system_id": 1,
+		"gates": [
+			{
+				"gate": "Gate 1",
+				"gate_id": 1,
+				"student_gate_id": 100,
+				"checklist": [
+					{ "id": 36600, "name": "GPA of 2.5", "answer": "Yes", "answer_id": 377, "student_answer_id": 4387 },
+					{ "id": 36601, "name": "Faculty Eval 1", "answer": "Yes", "answer_id": 378, "student_answer_id": 4388 },
+					{ "id": 36602, "name": "Faculty Eval 2", "answer": "No", "answer_id": 379, "student_answer_id": 4389 }
+				]
+			},
+			{
+				"gate": "Gate 2",
+				"gate_id": 2,
+				"student_gate_id": 101,
+				"checklist": [
+					{ "id": 36610, "name": "GPA of 2.5/2.7", "answer": "No", "answer_id": 380, "student_answer_id": 4487 }
+				]
+			},
+			{
+				"gate": "Gate 3",
+				"gate_id": 3,
+				"student_gate_id": 102,
+				"checklist": [
+					{ "id": 36700, "name": "Resume", "answer": "Yes", "answer_id": 381, "student_answer_id": 4688 }
+				]
+			}
+		]
+	}
+}

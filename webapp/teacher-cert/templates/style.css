@@ -1,0 +1,200 @@
+@font-face {
+	font-family: 'IconicStroke';
+	src: url(/webapp/style/fonts/iconic_stroke-webfont.eot);
+	src: local('?'), url(/webapp/style/fonts/iconic_stroke-webfont.woff) format('woff'), url(/webapp/style/fonts/iconic_stroke-webfont.ttf) format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+table.grid td.middle {
+	vertical-align: middle;
+}
+
+.wide {
+	width: 100%;
+}
+
+.show-siblings {
+	cursor: pointer;
+}
+
+.collapse {
+	display: none;
+}
+
+/* boxes get some special collapse behavior */
+.box.collapse {
+	display: block;
+}
+
+.box.collapse .body {
+	display: none;
+}
+
+.student .ape-link {
+	display: none;
+}
+
+.student:hover .ape-link {
+	display: inline-block;
+}
+
+/* qry: student query */
+
+/* hide "please enter query" */
+.qry-please {
+	display: none;
+}
+
+/* No active query: show "please query" */
+.s-noquery .qry-please {
+	display: block;
+}
+
+/* No active query: hide query results */
+.s-noquery .qry-results {
+	display: none;
+}
+
+/* Edit button */
+.item-wrapper, .stu-gate-wrapper, .stu-school-wrapper {
+	position: relative;
+}
+.stu-gate-edit {
+	font-size: 0.8em;
+}
+.stu-school-edit {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.item-warpper, .stu-gate-wrapper {
+	padding-top: 1em;
+}
+
+.stu-gate:hover .stu-gate-edit {
+}
+
+/* checklist items */
+.ckl-default {
+	font-style: italic;
+}
+
+.item, .checklist-item {
+	border-bottom: 1px solid #eee;
+	overflow: hidden;
+	margin: 0;
+	padding: 0.3em 1em;
+}
+
+.item:hover, .checklist-item:hover {
+	background: hsla(59, 56%, 84%, 0.3);
+}
+
+.item .answer, .checklist-item .answer {
+	float: right;
+}
+
+.item.complete .answer, .checklist-item.complete .answer {
+	color: darkgreen;
+}
+
+.item.incomplete .answer, .checklist-item.incomplete .answer {
+	color: red;
+}
+
+.item .options {
+	display: none;
+}
+
+.item:hover .options {
+	display: inline-block;
+}
+
+.item.ui-sortable-helper {
+	background: #fff;
+	border: 2px solid #eee;
+	border-radius: 0.3em;
+	box-shadow: 0 1px 5px 0 #333;
+}
+
+.gate-admin .item {
+	cursor: move;
+}
+
+.btn-good {
+	background: hsl(120, 50%, 90%);
+	border-color: hsl(120, 50%, 30%);
+}
+
+.btn-bad {
+	background: hsl(0, 50%, 90%);
+	border-color: hsl(0, 50%, 30%);
+}
+
+.right {
+	float: right;
+}
+
+div.uneditable-input {
+	border: none;
+}
+
+.required label {
+	font-weight: bold;
+}
+
+.id {
+	color: rgba(0, 0, 0, 0.5);
+	padding: 0.3em 0;
+}
+
+#save-changes {
+	overflow: auto;
+	padding-bottom: .3em;
+}
+
+.box.sticky {
+	position: fixed;
+	top: 0;
+	z-index: 50;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+}
+
+#save-changes button {
+	position: relative;
+}
+
+#save-changes button::before {
+	content: "p";
+	font-family: "IconicStroke";
+	font-size: 1.2em;
+	vertical-align: middle;
+	margin: 0 0.5em 0 0;
+	position: relative;
+	top: -6px;
+}
+
+#save-changes button.primary::before,
+#save-changes button.saved::before {
+	content: "y";
+}
+
+#save-changes button.pending::before {
+	content: "c";
+}
+
+/* Hide blocks from students */
+.tcert-readonly .tcert-search,
+.tcert-readonly .student .ape-link,
+.tcert-readonly .stu-school-add,
+.tcert-readonly .stu-school-edit,
+.tcert-readonly .stu-faculty-add,
+.tcert-readonly .stu-gate-edit,
+.tcert-readonly .stu-term-edit,
+.tcert-readonly .stu-manage {
+	display: none;
+}
+
+/* */
