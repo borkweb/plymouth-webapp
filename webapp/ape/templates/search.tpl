@@ -40,10 +40,10 @@
 					<td><a href="{$PHP.BASE_URL}/hardware/u/{$name.r_ldap_user}">{$name.mac_address}</a></td>
 				{/if}
 				<td>
-					<a href="{$PHP.BASE_URL}/user/{if $name.r_ldap_user}{$name.r_ldap_user}{elseif $name.r_id}{$name.r_id}{else}{$name.r_wp_id}{/if}" title="View Identity/Access Data"><img src="/images/icons/16x16/{$name.icon}.png"/></a>
-					{if $student_link}<a href="{$PHP.BASE_URL}/user/student/{$name.r_ldap_user}" title="View Student Data"><img src="/images/icons/16x16/book.png"/></a>{/if}
-					{if $advancement_link}<a href="{$PHP.BASE_URL}/user/advancement/{$name.r_ldap_user}" title="View Advancment Data"><img src="/images/icons/16x16/actions/contact-new.png"/></a>{/if}
-					{if $family_link}<a href="{$PHP.BASE_URL}/user/family/{$name.r_ldap_user}" title="View Family Data"><img src="/images/icons/16x16/emblems/emblem-favorite.png"/></a>{/if}
+					<a href="{$PHP.BASE_URL}/user/{if $name.r_ldap_user}{$name.r_ldap_user}{elseif $name.r_id}{$name.r_id}{else}{$name.r_wp_id}{/if}" title="View Identity/Access Data">{icon id="ape-person" boxed=true}</a>
+					{if $student_link}<a href="{$PHP.BASE_URL}/user/student/{$name.r_ldap_user}" title="View Student Data">{icon id="ape-student" boxed=true}</a>{/if}
+					{if $advancement_link}<a href="{$PHP.BASE_URL}/user/advancement/{$name.r_ldap_user}" title="View Advancment Data">{icon id="ape-advancement" boxed=true}</a>{/if}
+					{if $family_link}<a href="{$PHP.BASE_URL}/user/family/{$name.r_ldap_user}" title="View Family Data">{icon id="ape-family" boxed=true}</a>{/if}
 				</td>
 			</tr>
 			{/foreach}

@@ -12,12 +12,24 @@
 */
 @font-face {
   font-family: 'PSUIcons01';
-  src: url('/webapp/style/fonts/psuicons01.eot');
-	src: url('/webapp/style/fonts/psuicons01.eot?#iefix') format('embedded-opentype'),
-	     url('/webapp/style/fonts/psuicons01.woff') format('woff'),
-	     url('/webapp/style/fonts/psuicons01.svg#UntitledRegular') format('svg'),
-  		 url('/webapp/style/fonts/psuicons01.ttf') format('truetype'),
-	     url('/webapp/style/fonts/psuicons01.otf') format('opentype');
+  src: url('/assets/fonts/psuicons01.eot');
+	src: url('/assets/fonts/psuicons01.eot?#iefix') format('embedded-opentype'),
+	     url('/assets/fonts/psuicons01.woff') format('woff'),
+	     url('/assets/fonts/psuicons01.svg#UntitledRegular') format('svg'),
+  		 url('/assets/fonts/psuicons01.ttf') format('truetype'),
+	     url('/assets/fonts/psuicons01.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PSUIconsAPE';
+  src: url('/assets/fonts/psuicons-ape.eot');
+	src: url('/assets/fonts/psuicons-ape.eot?#iefix') format('embedded-opentype'),
+	     url('/assets/fonts/psuicons-ape.woff') format('woff'),
+	     url('/assets/fonts/psuicons-ape.svg#UntitledRegular') format('svg'),
+  		 url('/assets/fonts/psuicons-ape.ttf') format('truetype'),
+	     url('/assets/fonts/psuicons-ape.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
@@ -45,6 +57,12 @@
 		height: 100%;
 		width: 100%;
 		box-sizing: border-box;
+	}
+
+	&.flat,
+	&.flat span {
+		color: inherit;
+		text-shadow: none;
 	}
 
 	&.boxed {
@@ -266,3 +284,48 @@
 .icon-quota:before { content: "Q"; }
 .icon-secure:before { content: "!"; }
 .icon-twitter-item:before { content: "1"; }
+
+.icon-ape-access,
+.icon-ape-advancement,
+.icon-ape-banner-security,
+.icon-ape-family,
+.icon-ape-history,
+.icon-ape-home,
+.icon-ape-hr,
+.icon-ape-identity,
+.icon-ape-lock,
+.icon-ape-mail,
+.icon-ape-na,
+.icon-ape-no,
+.icon-ape-password,
+.icon-ape-pending-creation,
+.icon-ape-pending-deletion,
+.icon-ape-person,
+.icon-ape-print,
+.icon-ape-student,
+.icon-ape-sync,
+.icon-ape-yes {
+	font-family: 'PSUIconsAPE';
+	font-weight: normal;
+}
+
+.icon-ape-access:before { content: "a"; }
+.icon-ape-advancement:before { content: "A"; }
+.icon-ape-banner-security:before { content: "b"; }
+.icon-ape-family:before { content: "F"; }
+.icon-ape-history:before { content: "i"; }
+.icon-ape-home:before { content: "h"; }
+.icon-ape-hr:before { content: "H"; }
+.icon-ape-identity:before { content: "I"; }
+.icon-ape-lock:before { content: "l"; }
+.icon-ape-mail:before { content: "m"; }
+.icon-ape-na:before { content: "w"; }
+.icon-ape-no:before { content: "n"; }
+.icon-ape-password:before { content: "p"; }
+.icon-ape-pending-creation:before { content: "c"; }
+.icon-ape-pending-deletion:before { content: "d"; }
+.icon-ape-person:before { content: "P"; }
+.icon-ape-print:before { content: "x"; }
+.icon-ape-student:before { content: "S"; }
+.icon-ape-sync:before { content: "s"; }
+.icon-ape-yes:before { content: "y"; }

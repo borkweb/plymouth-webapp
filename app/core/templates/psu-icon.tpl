@@ -1,4 +1,4 @@
-<i class="psu-icon icon {$psuiconsize|default:'small'} {if $psuiconbox}boxed{/if}">
+<i class="psu-icon icon {$psuiconsize|default:'small'} {if $psuiconbox}boxed{/if} {if $psuiconflat}flat{/if} {if $psuiconclass}{$psuiconclass}{/if}">
 	<span class="icon-{$psuiconcode}">
 		{if $psusubvalue}
 		<sub class="sub-value {$psusubvaluetype}">

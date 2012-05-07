@@ -137,17 +137,17 @@
 							</div>
 							<ul class="checklist-options">
 								<li class="check">
-								<label><img src="{$PHP.BASE_URL}/templates/images/positive.png" style="height:16px;width:16px;" alt="Completed" for="response_{$entry.id}_complete"/></label>
+								<label for="response_{$entry.id}_complete">{icon id="ape-yes" class="response-positive"}</label>
 								<input {if $entry.records.0.response == 'complete'}checked="checked"{/if} type="checkbox" id="response_{$entry.id}_complete" name="response_{$entry.id}" value="complete" />
 								Yes!
 								</li>
 								<li class="check">
-									<label><img src="{$PHP.BASE_URL}/templates/images/na.png" style="height:16px;width:16px;" alt="N/A" for="response_{$entry.id}_na"/></label>
+									<label for="response_{$entry.id}_na">{icon id="ape-na" class="response-middle"}</label>
 									<input {if $entry.records.0.response == 'n/a'}checked="checked"{/if} type="checkbox"  id="response_{$entry.id}_na" name="response_{$entry.id}" value="n/a" />
 									This does not apply to this person.
 								</li>
 								<li class="check">
-									<label><img src="{$PHP.BASE_URL}/templates/images/negative.png" style="height:16px;width:16px;" alt="No" for="response_{$entry.id}_incomplete"/></label>
+									<label for="response_{$entry.id}_incomplete">{icon id="ape-no" class="response-negative"}</label>
 									<input {if $entry.records.0.response == 'incomplete'}checked="checked"{/if} type="checkbox"  id="response_{$entry.id}_incomplete" name="response_{$entry.id}" value="incomplete" />
 									No.  This has not yet happened.
 								</li>
@@ -160,11 +160,11 @@
 								<li class="checklist_record {if $smarty.foreach.history_loop.first}first-record{/if}" title="{$record.notes}">
 										Marked as 
 										{if $record.response == 'incomplete'}
-											<img src="{$PHP.BASE_URL}/templates/images/negative.png" alt="Incomplete" style="height:16px;width:16px;" />
+											{icon id="ape-no" class="response-negative"}
 										{elseif $record.response == 'complete'}
-											<img src="{$PHP.BASE_URL}/templates/images/positive.png" alt="Completed" style="height:16px;width:16px;" />
+											{icon id="ape-yes" class="response-positive"}
 										{elseif $record.response == 'n/a'}
-											<img src="{$PHP.BASE_URL}/templates/images/na.png" alt="N/A" style="height:16px;width:16px;" />
+											{icon id="ape-na" class="response-middle"}
 										{/if} by <a href="{$PHP.BASE_URL}/user/{$record.pidm}">{$record.updated_by}</a> at {$record.item_date|date_format:"%r on %b %e, %Y"} {if $record.notes}: {$record.notes}{/if}
 								</li>
 								{/foreach}

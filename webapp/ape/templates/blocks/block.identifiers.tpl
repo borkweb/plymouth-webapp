@@ -22,10 +22,10 @@
 			<span class="gobtpac_external_user" title="gobtpac_external_user {$smarty.capture.username_history|escape}">
 			{if $person->username == $person->login_name}
 				{$person->username|default:"No Username"}
-				{if $person->username_history}<img src="{$PHP.ICONS}/16x16/actions/appointment-new.png" height="16" width="16" style="vertical-align:middle;">{/if}
+				{if $person->username_history}{icon id="ape-history" boxed=true}{/if}
 			{else}
 				{$person->login_name}
-				{if $person->username_history}<img src="{$PHP.ICONS}/16x16/actions/appointment-new.png" height="16" width="16" style="vertical-align:middle;">{/if}</span>
+				{if $person->username_history}{icon id="ape-history" boxed=true}{/if}</span>
 				<span title="gobtpac_ldap_user" class="fade">({$person->username|default:'<em>no username</em>'})
 			{/if}
 			</span>

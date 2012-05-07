@@ -264,6 +264,8 @@ class PSUSmarty extends Smarty
 		$tpl->assign('psusubvaluetype', $params['type']);
 		$tpl->assign('psuiconbox', $params['boxed']);
 		$tpl->assign('psuiconsize', $params['size']);
+		$tpl->assign('psuiconclass', $params['class']);
+		$tpl->assign('psuiconflat', $params['flat']);
 
 		$output = $tpl->fetch($icon_tpl);
 

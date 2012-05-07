@@ -72,6 +72,24 @@
 	padding: 0.3em;
 }
 
+.response-positive span {
+	color: #006400;
+}
+
+.response-middle span {
+	color: #FFA500;
+}
+
+.response-negative span {
+	color: #800000;
+}
+
+.flat-icon,
+.flat-icon span {
+	color: inherit;
+	text-shadow: none;
+}
+
 #authz-management a { cursor:pointer; }
 #authz-management .filter label { display:inline-block; }
 #authz-management #col2 li div { display:inline-block; width:80%; }
@@ -449,31 +467,6 @@ table.tablesorter tbody td{
 	z-index: 10;
 	font-size: 12px;
 }
-
-.nav-icon{
-	padding-left: 20px !important;
-	min-height: 16px !important;
-	background-position: 0px 5px;
-}
-
-ul li > ul li a.nav-icon{
-	padding-left: 25px !important;
-	background-position: 5px 5px;
-}
-
-.nav-home{ background: url(/images/icons/16x16/actions/go-home.png) no-repeat; }
-.nav-identity{ background: url(/images/icons/16x16/apps/utilities-system-monitor.png) no-repeat; }
-.nav-access{ background: url(/images/icons/16x16/categories/applications-internet.png) no-repeat; }
-.nav-mailing{ background: url(/images/icons/16x16/apps/internet-mail.png) no-repeat; }
-.nav-locked{ background: url(/images/icons/16x16/actions/system-lock-screen.png) no-repeat; }
-.nav-banner{ background: url(/images/icons/16x16/emblems/emblem-readonly.png) no-repeat; }
-.nav-pass{ background: url(/images/icons/16x16/actions/edit-find-replace.png) no-repeat; }
-.nav-pend-create{ background: url(/images/icons/16x16/actions/list-add.png) no-repeat; }
-.nav-pend-delete{ background: url(/images/icons/16x16/actions/list-remove.png) no-repeat; }
-.nav-home{ background: url(/images/icons/16x16/actions/go-home.png) no-repeat; }
-.nav-advancement{ background: url(/images/icons/16x16/actions/contact-new.png) no-repeat; }
-.nav-student{ background: url(/images/icons/16x16/book.png) no-repeat; }
-.nav-family{ background: url(/images/icons/16x16/emblems/emblem-favorite.png) no-repeat; }
 
 .webapp-head #search{
 	margin-top: 1.25em;
