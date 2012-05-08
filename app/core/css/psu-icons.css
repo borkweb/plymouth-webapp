@@ -211,6 +211,7 @@
 .icon-feedback,
 .icon-info,
 .icon-map,
+.icon-events,
 .icon-movies,
 .icon-mymail,
 .icon-news,
@@ -252,6 +253,9 @@
 }
 .icon-map:before {
   content: "M";
+}
+.icon-events:before {
+  content: "e";
 }
 .icon-movies:before {
   content: "T";
