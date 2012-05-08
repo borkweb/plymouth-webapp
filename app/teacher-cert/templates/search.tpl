@@ -31,17 +31,6 @@
 	</table>
 {/box}
 
-{literal}
-<script id="qry-results-tmpl" type="text/x-jquery-tmpl">
-	{{#each students}}
-		<tr data-pidm="{{=pidm}}">
-			<td><a href="{{student_url $data}}">{{=last_name}}, {{=first_name}}</a></td>
-			<td>{{=id}}</td>
-		</tr>
-	{{/each}}
-</script>
-{/literal}
-
 <script type="text/javascript">
 $(function(){
 	teacher_cert.search.ready()

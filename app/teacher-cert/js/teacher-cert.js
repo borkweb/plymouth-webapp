@@ -6,34 +6,6 @@ var ui = {}, ajax = {}, schools = {};
 // Cached templates
 var data = teacher_cert.data;
 
-// jsRender setup
-$.views.registerTags({
-	base_url: function() {
-		return HOST + BASE_URL;
-	},
-	gate_slug: function() {
-		return teachercert.gate_slug;
-	},
-	gate_url: function( slug ) {
-		return [$.views.tags.base_url(), 'gate', slug].join('/');
-	},
-	gate_system_slug: function() {
-		return teachercert.gate_system_slug;
-	},
-	gate_system_url: function( slug ) {
-		return [$.views.tags.base_url(), 'gate-system', slug].join('/');
-	},
-	schools: function() {
-		console.log(schools);
-	},
-	student_url: function( student ) {
-		// TODO: can this be made cleaner?
-		var gate_system = this._view.parent.parent.data.gate_system.slug;
-
-		return [$.views.tags.gate_system_url(gate_system), student.sgs_id].join('/');
-	}
-});
-
 // School display
 ui.school = {
 	cancel: function(e) {
