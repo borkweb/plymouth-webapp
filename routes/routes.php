@@ -2,6 +2,10 @@
 
 require_once PSU_EXTERNAL_DIR . '/klein/klein.php';
 
+respond( function( $request, $response, $app ) {
+	$app->config = PSU\Config\Factory::get_config();
+});
+
 with( '/festivals', __DIR__ . '/festivals.php' );
 with( '/style', __DIR__ . '/style.php' );
 
