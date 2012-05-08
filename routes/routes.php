@@ -4,6 +4,10 @@ require_once PSU_EXTERNAL_DIR . '/klein/klein.php';
 
 respond( function( $request, $response, $app ) {
 	$app->config = PSU\Config\Factory::get_config();
+
+	if( false == $app->config->get( 'cdn', 'enabled', true ) ) {
+		define( 'PSU_CDN', false );
+	}
 });
 
 with( '/festivals', __DIR__ . '/festivals.php' );
