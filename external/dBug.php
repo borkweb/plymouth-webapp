@@ -211,7 +211,7 @@ class dBug {
 	
 	//if variable is an object type
 	function varIsObject($var) {
-		$var_ser = serialize($var);
+		$var_ser = spl_object_hash($var);
 		array_push($this->arrHistory, $var_ser);
 		$this->makeTableHeader("object","object");
 		
@@ -219,12 +219,12 @@ class dBug {
 			$arrObjVars=get_object_vars($var);
 			foreach($arrObjVars as $key=>$value) {
 
-				$value=(!is_object($value) && !is_array($value) && trim($value)=="") ? "[empty string]" : $value;
+				$value=(!is_object($value) && !is_resource($value) && !is_array($value) && trim($value)=="") ? "[empty string]" : $value;
 				$this->makeTDHeader("object",$key);
 				
 				//check for recursion
 				if(is_object($value)||is_array($value)) {
-					$var_ser = serialize($value);
+					$var_ser = is_object( $value ) ? spl_object_hash( $value ) : sha1( serialize( $value ) );
 					if(in_array($var_ser, $this->arrHistory, TRUE)) {
 						$value = (is_object($value)) ? "*RECURSION* -> $".get_class($value) : "*RECURSION*";
 
