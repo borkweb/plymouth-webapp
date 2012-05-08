@@ -1,6 +1,4 @@
-plugins = ../amplify/amplify.core.js \
-	../amplify/amplify.request.js \
-	../amplify/amplify.store.js \
+plugins = ../amplify.js \
 	../jquery-plugins/jquery.multi-ddm.min.js \
 	../behavior.js \
 	../jquery-plugins/jquery.ba-dotimeout.js \
