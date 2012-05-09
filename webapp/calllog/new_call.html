@@ -144,6 +144,7 @@ if($_GET['call_id'])
 //The following need to be changed to match the generic template.
 if ($_GET['call_id'])
 {
+	$tpl->assign('call_id', $_GET['call_id']);
 	$sql = "SELECT * FROM call_log, call_history WHERE call_log.call_id = '{$_GET[call_id]}' AND call_log.call_id = call_history.call_id ORDER BY date_assigned {$GLOBALS['EMPLOYEE_INFO']['update_sort']}, time_assigned {$GLOBALS['EMPLOYEE_INFO']['update_sort']}";
 	if($call_details = $db->GetAll($sql))
 	{
