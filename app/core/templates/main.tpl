@@ -12,7 +12,7 @@
 	 && $PHP.BASE_URL != 'http://www.dev.plymouth.edu/webapp/style' 
 	 && $PHP.USE_APPLICATION_STYLE
 	}{PSU_CSS href="`$PHP.BASE_URL`/templates/style.css?v=1"}{/if}
-	{PSU_JS src="/js/jquery-plugins/jquery.tablesorter.min.js"}
+	{PSU_JS src="/app/core/js/jquery-plugins/jquery.tablesorter.min.js"}
 	{$webapp_content_js}
 	{/strip}
 	{if $smarty.session.username == 'mtbatchelder'}
