@@ -124,15 +124,6 @@
 		</div>
 		<!-- END: webCTCourses -->
 
-		<div id="user_quota_outer_div" class="new-call-user-table-inside noprint">
-			<fieldset>
-				<legend>User Quota</legend>
-				<div id="user_quotas_div">
-					{user_quota}
-				</div>
-			</fieldset>
-		</div>
-
 		<div id="restore_request_outer_div" class="new-call-user-table-inside noprint">
 			<fieldset>
 			<legend onClick="calllog_toggle('restore_request');">
