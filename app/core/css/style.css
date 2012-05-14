@@ -40,7 +40,9 @@ a, span.link{color: #2885CA; text-decoration: none;}
 a:hover, span.link:hover{color: #11389B; text-decoration: none;}
 /* Accessible focus treatment: people.opera.com/patrickl/experiments/keyboard/test */
 a:hover, a:active, span.link:hover, span.link:active { outline: none; }
-a:link, span.link:link { -webkit-tap-highlight-color: #fcffaa; }
+a:link, span.link:link { -webkit-tap-highlight-color: #b3d4fc; }
+::-moz-selection { background: #b3d4fc; text-shadow: none; }
+::selection { background: #b3d4fc; text-shadow: none; }
 a img{border: none;}
 
 abbr,acronym{border-bottom: 1px dotted #666;}
