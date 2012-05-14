@@ -1,0 +1,83 @@
+#webapp-head h1{
+	background-image: url(/images/icons/32x32/apps/utilities-system-monitor.png);
+	background-repeat: no-repeat;
+	background-position: 0 3px;
+	height: 36px;
+	padding-left: 40px;
+}
+.nav-home{
+	background-image: url(/images/icons/22x22/actions/edit-copy.png);
+	background-repeat: no-repeat;
+	height: 22px;
+	padding-left: 26px;
+}
+
+.nav-submit{
+	background-image: url(/images/icons/22x22/apps/accessories-text-editor.png);
+	background-repeat: no-repeat;
+	height: 22px;
+	padding-left: 26px;
+}
+
+.nav-browser{
+	background-image: url(/images/icons/22x22/categories/applications-internet.png);
+	background-repeat: no-repeat;
+	height: 22px;
+	padding-left: 26px;
+}
+
+.action-required a,
+.action-required{
+	color: red;
+	font-weight: bold;
+}
+
+#problem_details{
+	width: 99%;
+	height: 10em;
+}
+
+button{ font-size: 1.3em; float: right;}
+
+.paging{margin-top: 1em;}
+.pager{float:right;text-align:center;}
+
+h2 img{vertical-align: middle;}
+
+#ipdata ul{
+	list-style-type: none;
+}
+
+#ipdata li {
+	margin-bottom: 2em;
+	margin-left: 0;
+}
+
+#ipdata ul ul li{
+	margin-bottom: auto;
+}
+
+#ipdata .ip span{
+	display: block;
+	font-size: 2.5em;
+	font-weight: bold;
+}
+
+#ipdata .browser,
+#ipdata .misc{
+	display:none;
+}
+
+#ipdata .misc label,
+#ipdata .browser label{
+	margin-bottom: 0.5em;
+}
+
+.positive{color: green; font-weight: bold;}
+.negative{color: red; font-weight: bold;}
+
+#sessiondata textarea {
+	font-family: Consolas, Courier New;
+	height: 500px;
+	width: 95%;
+}
