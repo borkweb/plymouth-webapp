@@ -1,5 +1,5 @@
 <?php
-require_once 'PSUController.class.php';
+
 /**
  * SupportController.class.php
  *
@@ -19,15 +19,6 @@ class SupportController extends PSUController
 		parent::__construct();
 		$this->myuser = new PSUPerson( $_SESSION['username'] );
 	}//end __construct
-
-	/**
-	 * delegates page rendering
-	 *
-	 * @param $path \b path stuff
-	 */
-	public static function delegate( $path = null, $class = __CLASS__ ) {
-		parent::delegate($path, $class);
-	}//end delegate
 
 	/**
 	 * Default handler to display index

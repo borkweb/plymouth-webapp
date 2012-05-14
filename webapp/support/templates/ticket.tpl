@@ -33,7 +33,7 @@
 {/if}
 {if $details && $call_status != 'closed'}
 {capture name="redirect"}{$PHP.BASE_URL}/ticket/{$ticket}{/capture}
-<form id="edit_call" action="/webapp/calllog/update_call_details.html?ticket={$ticket}&call_source=support&redirect={$smarty.capture.redirect|@urlencode}" enctype="multipart/form-data" method="post">
+<form id="edit_call" action="/webapp/calllog/update_call_details.html?ticket={$ticket}&amp;call_source=support&amp;redirect={$smarty.capture.redirect|@urlencode}" enctype="multipart/form-data" method="post">
 {$form}
 <br/>
 <button type="submit">Update Ticket</button> <input type="checkbox" name="call_status" value="closed"/> Close this ticket <small>(Marks this ticket as complete and will allow no further action)</small>

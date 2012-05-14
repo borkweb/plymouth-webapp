@@ -1,22 +1,19 @@
 <?php
-session_start();
 
-require_once 'PSUTools.class.php';
+require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
+require 'autoload.php';
+
+PSU::session_start();
+
 $GLOBALS['BASE_DIR'] = dirname(__FILE__);
 PSU::get()->base_url = $GLOBALS['BASE_URL'] = $GLOBALS['RELATIVE_URL'] = '/webapp/support';
-
-PSU::https();
 
 $GLOBALS['TITLE'] = $_SESSION['username'] ? 'Support Tickets' : 'My Browsing Info';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'].'/templates';
 /*******************[End Site Constants]*******************/
     
 /*******************[Common Includes]**********************/
-require_once 'IDMObject.class.php';
-require_once 'PSUDatabase.class.php';
-require_once 'PSUTemplate.class.php';
-require_once 'PSUPerson.class.php';
-require_once 'includes/SupportController.class.php';
+require_once __DIR__ . '/includes/SupportController.class.php';
 /*****************[End Common Includes]********************/
 
 /*****************[End Common Includes]********************/
