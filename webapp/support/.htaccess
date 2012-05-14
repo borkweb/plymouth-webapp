@@ -1,0 +1,12 @@
+php_value auto_prepend_file none
+php_value auto_append_file none
+
+AddDefaultCharset utf-8
+
+RewriteEngine on
+RewriteBase /webapp/support/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) index.html/$1 [L,QSA]
+
+RewriteRule ^$ index.html/ [L,QSA]

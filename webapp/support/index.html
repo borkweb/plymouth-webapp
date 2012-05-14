@@ -1,0 +1,21 @@
+<?php
+
+require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
+require 'autoload.php';
+
+PSU::session_start();
+
+$GLOBALS['BASE_DIR'] = dirname(__FILE__);
+PSU::get()->base_url = $GLOBALS['BASE_URL'] = $GLOBALS['RELATIVE_URL'] = '/webapp/support';
+
+$GLOBALS['TITLE'] = $_SESSION['username'] ? 'Support Tickets' : 'My Browsing Info';
+$GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'].'/templates';
+/*******************[End Site Constants]*******************/
+    
+/*******************[Common Includes]**********************/
+require_once __DIR__ . '/includes/SupportController.class.php';
+/*****************[End Common Includes]********************/
+
+/*****************[End Common Includes]********************/
+
+SupportController::delegate();
