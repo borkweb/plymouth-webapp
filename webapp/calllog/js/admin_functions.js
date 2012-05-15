@@ -20,7 +20,7 @@ function addUserProfile(){
 }
 
 function redirect(){
-	window.location="tlc_users_admin.html?action=edittlcuser&user_name="+$F('calllog_username');
+	window.location="manage_users.html?action=edittlcuser&user_name="+$F('calllog_username');
 }
 
 function updateITSGroup(i, totalGroups){

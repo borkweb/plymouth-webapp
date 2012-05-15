@@ -27,7 +27,7 @@
 	<!-- BEGIN: searchResults -->
 	<div id="main-search-results2">
 		<h2>&#187; {search_num} Search Results For {search_results_text}: <em> <u>{search_string}</u></em></h2>
-		<table align="center" valign="top" cellpadding="5" cellspacing="1" width="90%" id="calllog-search" class="sortable">
+		<table align="center" valign="top" cellpadding="5" cellspacing="1" width="90%" id="calllog-search" class="grid sortable">
 			<thead>
 				<tr>
 					<th>{search_field_1}</th>
@@ -234,45 +234,47 @@
 
 	<!-- BEGIN: open_calls -->
 	<div id="main-section no-border" style="text-align: left;">
-	<div class="submit_new_call" style="float: right;margin-top:0.5em;"><a href="javascript: void(0);" onClick="submit_new_call();"><img src="/images/icons/22x22/actions/list-add.png" class="icon"/>Submit New Call</a></div>
+	<div class="submit_new_call" style="float: right;margin-top:0.5em;"><a href="javascript: void(0);" onClick="submit_new_call();" class="btn">Submit New Call</a></div>
 	<h2>Open Calls &#187; <span style="color: #666;">{open_call_type}</span></h2>
 
-	<!-- BEGIN: open_calls_table -->
+		<!-- BEGIN: open_calls_table -->
 		<div id="open_calls_main_div">
-				<table width="100%" align="center" cellpadding="5" cellspacing="0">
-				<tr>
-					<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'call_date');">Opened</a></th>
-					<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'call_updated');">Updated</a></th>
-					<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'caller_last_name');">Caller</a></th>
-					<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'call_priority');">Priority</a></th>
-					<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'its_assigned_group ASC, tlc_assigned_to');">Assigned To</a></th>
-				</tr>
-				<!-- BEGIN: open_call_details -->
-				<tr class="call">
-					<td class="call-age-status-{row.call_age_status}" style="text-align: center; white-space:nowrap;">{row.call_date}<br/>{row.call_time}</td>
-					<td class="activity-age-status-{row.activity_age_status}" style="text-align: center; white-space:nowrap;">{row.date_assigned}<br/>{row.time_assigned}</td>
-					<td>
-						<div class="call-title">{row.call_title}</div>
-						<div>
-							<a href="{CALL_LOG_WEB_HOME}/ticket/{row.call_id}/?action=view_open_calls&option={open_call_option}&group={group_number}&find_type={open_call_type}" class="view">{row.name_full} <em>({row.caller_username})</em></a> 
-							<span class="fade">[#{row.call_id}]</span>
-						</div>
-						<div class="summary">
-							{row.call_summary}
-						</div>
-					</td>
-					<td class="priority-status status-{row.call_priority}">{row.call_priority}{row.feelings_face}</td>
-					<!-- BEGIN: assigned_open_call -->
-					<td style="text-align: center">{row.assigned_to}</td>
-					<!-- END: assigned_open_call -->
-				</tr>
-				<!-- END: open_call_details -->
-				</table>
-				<small class="average-open-time">Average Open Call Time: {average_open_call_time}</small>
-				</div>
+			<table class="grid">
+				<thead>
+					<tr>
+						<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'call_date');">Opened</a></th>
+						<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'call_updated');">Updated</a></th>
+						<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'caller_last_name');">Caller</a></th>
+						<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'call_priority');">Priority</a></th>
+						<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'its_assigned_group ASC, tlc_assigned_to');">Assigned To</a></th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- BEGIN: open_call_details -->
+					<tr class="call">
+						<td class="call-age-status-{row.call_age_status}" style="text-align: center; white-space:nowrap;">{row.call_date}<br/>{row.call_time}</td>
+						<td class="activity-age-status-{row.activity_age_status}" style="text-align: center; white-space:nowrap;">{row.date_assigned}<br/>{row.time_assigned}</td>
+						<td>
+							<div class="call-title">{row.call_title}</div>
+							<div>
+								<a href="{CALL_LOG_WEB_HOME}/ticket/{row.call_id}/?action=view_open_calls&option={open_call_option}&group={group_number}&find_type={open_call_type}" class="view">{row.name_full} <em>({row.caller_username})</em></a> 
+								<span class="fade">[#{row.call_id}]</span>
+							</div>
+							<div class="summary">{row.call_summary}</div>
+						</td>
+						<td class="priority-status status-{row.call_priority}">{row.call_priority}{row.feelings_face}</td>
+						<!-- BEGIN: assigned_open_call -->
+						<td style="text-align: center">{row.assigned_to}</td>
+						<!-- END: assigned_open_call -->
+					</tr>
+					<!-- END: open_call_details -->
+				</tbody>
+			</table>
+			<small class="average-open-time">Average Open Call Time: {average_open_call_time}</small>
+		</div>
 		<!-- END: open_calls_table -->
 		<!-- BEGIN: no_open_calls -->
-			<h3 align="center">There are currently no <em>{open_call_type}</em> open calls.</h3>
+		<h3 align="center">There are currently no <em>{open_call_type}</em> open calls.</h3>
 		<!-- END: no_open_calls -->
 	</div>
 	<!-- END: open_calls -->
@@ -287,9 +289,9 @@
 	<!-- END: blog_post -->
 
 	<!-- BEGIN: highlight_call_history -->
-			<script>
-			new Effect.Highlight('CallHistoryRow1', {startcolor:'#D19275', endcolor:'#FFEFD5', restorecolor:'#FFEFD5'});
-			</script>
+	<script>
+	new Effect.Highlight('CallHistoryRow1', {startcolor:'#D19275', endcolor:'#FFEFD5', restorecolor:'#FFEFD5'});
+	</script>
 	<!-- END: highlight_call_history -->
 
 	<!-- BEGIN: restore_request -->

@@ -1,9 +1,10 @@
 <!-- BEGIN: main -->
-<hr>
-<li class="nav_link_last"><a href="call_log_keyword_admin.html?action=addkeyword" title="Add New Keyword.">Add Keyword</a></li>
-<li class="nav_link_last"><a href="call_log_keyword_admin.html?display=activekeywords" title="View Active Keywords">Active Keywords</a></li>
-<li class="nav_link_last"><a href="call_log_keyword_admin.html?display=inactivekeywords" title="View Inactive Keywords.">Inactive Keywords</a></li>
-<li class="nav_link_last"><a href="call_log_keyword_admin.html?display=allkeywords" title="View All Keywords.">All Keywords</a></li>
+<ul>
+	<li class="nav_link_last"><a href="?action=addkeyword" title="Add New Keyword." class="btn">Add Keyword</a></li>
+	<li class="nav_link_last"><a href="?display=activekeywords" title="View Active Keywords" class="btn">Active Keywords</a></li>
+	<li class="nav_link_last"><a href="?display=inactivekeywords" title="View Inactive Keywords." class="btn">Inactive Keywords</a></li>
+	<li class="nav_link_last"><a href="?display=allkeywords" title="View All Keywords." class="btn">All Keywords</a></li>
+</ul>
 <br/><br/>
 {content}
 <!-- END: main -->

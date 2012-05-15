@@ -1,7 +1,7 @@
 <?php
-echo setUpHeader($page_name, 'return', $suppressem);
 
 $page_name = 'my_options';
+setUpHeader($page_name, 'return', $suppressem);
 $template_file = TEMPLATE_DIR."/".$page_name.'.tpl';
 $tpl = new XTemplate($template_file);
 $employee_id = $GLOBALS['EMPLOYEE_INFO']['call_log_user_id'];
@@ -50,6 +50,8 @@ else
 }//end else
 
 $tpl->parse('main');
-$tpl->out('main');
+$content = $tpl->text('main');
 
-echo setUpFooter('return');
+$ptpl = new PSUTemplate();
+$ptpl->assign('content', $content);
+$ptpl->display('psu_wrapper.tpl');

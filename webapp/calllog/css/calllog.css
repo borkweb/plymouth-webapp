@@ -1,14 +1,14 @@
 .priority-status {text-align:center;}
-.status-high{background: #cd0000;}
-.status-medium{background: #ffff7e;}
-.status-pending{background: #5da3ff;}
+.status-high{background: #cd0000 !important;}
+.status-medium{background: #ffff7e !important;}
+.status-pending{background: #5da3ff !important;}
 .status-delayed{background: #c0c0c0;}
-.status-inprogress{background: #bd78c2;}
-.status-install{background: #69CF58;}
-.status-upgrade{background: #e88523;}
-.status-collision{background: #208ec1;}
-.status-purchase{background: #a2c1a9;}
-.status-,.status-normal{background: #eeffee;}
+.status-inprogress{background: #bd78c2 !important;}
+.status-install{background: #69CF58 !important;}
+.status-upgrade{background: #e88523 !important;}
+.status-collision{background: #208ec1 !important;}
+.status-purchase{background: #a2c1a9 !important;}
+.status-,.status-normal{background: #eeffee !important;}
 
 a img{border: none;}
 
@@ -106,10 +106,6 @@ tr:hover .fade{
 	float: left;
 }
 
-#main-helpdesk-news, #main-open-calls{
-	border: solid 1px;
-	margin-bottom: 1em;
-}
 
 #main-section{
 	width: 75%;
@@ -139,11 +135,7 @@ tr:hover .fade{
 
 #main-search-results2{
 	width: 100%; 
-	border: hidden; 
-	height: 245px; 
-}
-
-#main-search_results2, #main-section{
+	border: hidden;
 }
 
 #hardwareInnerDiv, #CallHistoryInnerDiv{
@@ -153,10 +145,6 @@ tr:hover .fade{
 	overflow: auto;
 }
 
-th{
-	font: bold 10px verdana;
-	text-align: center;
-}
 
 .top-border{
 	border-top: solid 3px #000000;
@@ -212,14 +200,6 @@ th{
 	background: url(/images/wait.gif) bottom right no-repeat; 
 }
 
-strong{
-	display:block;
-	width:20%;
-	clear:both;
-	float:left;
-	text-align:right;
-	padding-right:1ex;
-}
 .select{
 	width:40%
 }
@@ -237,21 +217,14 @@ strong{
 	border: hidden 1px;
 }
 
-fieldset, .show-border{
+.show-border{
 	border: solid 1px; 
 }
 
-fieldset{
-	
-}
 
 .quotatext{
 	font-size: 11px;
 	font-family: verdana, helvectica, arial, sans-serif;
-}
-
-form{
-	display:inline;
 }
 
 #showgroupusersdiv{
@@ -302,25 +275,10 @@ form{
 	font-weight:bold; 
 }
 
-label{
-	font: 10px verdana; 
-}
-
 .keyword{
 	border: dashed; 
 	width: 2em; 
 	height: 2em;
-}
-
-legend{
-	font: bold 10px verdana; 
-}
-
-input, select, textarea{
-	border: 1px solid; 
-	font-size: 10px;
-	font-family: verdana, arial, helvetica, sans-serif;
-	font-weight: normal;
 }
 
 .nav_link_last{
@@ -431,11 +389,6 @@ input, select, textarea{
 	display: inline;
 	width: 50%;
 }
-body{
-	font: 11px verdana;
-	width: 960px;
-	margin: 0 auto;
-}
 
 #tlc_nav_list{
 	height: 20px;
@@ -502,15 +455,6 @@ a.action:hover {
 	border: 1px solid;
 }
 
-td{
-	font: 11px verdana;
-}
-
-h1{
-	font-size: 25px;
-	text-align: center;
-}
-
 .radio{
 	height: 15px;
 }
@@ -534,7 +478,6 @@ td.aa_label{
 }
 
 div#user_status_div #user_info{
-	background: #F3F1E6;
 	border: 1px solid #000;
 	padding: 3px;
 	position:relative;
@@ -597,14 +540,12 @@ div#user_status_div table.roles{
 }
 
 div#user_status_div table.roles th{
-	background: #E1E0CD;
 	border: 1px solid #ccc;
 	color: #000;
 	padding: 5px;
 }
 
 div#user_status_div table.roles td{
-	background: #F3F1E6;
 	border: 1px dotted #ccc;
 	padding: 5px;
 }
@@ -617,8 +558,6 @@ div#user_status_div table.roles li{
 div#user_status_div .alerts{
 	margin: 10px;
 	border: 1px solid #6C2727;
-	background:#C2A7A7;
-	color:#6C2727;
 	padding: 10px;
 }
 

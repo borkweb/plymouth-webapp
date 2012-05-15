@@ -105,22 +105,12 @@ function phonebookSearch($search_string, $search_type = 'all')
 		return $GLOBALS['PHONEBOOK']->GetAll($sql);
 	}//end else
 }//end phonebookSearch
-	
-function prePrint($printIt){
-	echo "<pre>"; print_r($printIt); echo "</pre>";
-}
 
-function pp($printIt){
-	prePrint($printIt);
-}
 
 function setUpHeader($page_title='', $parse_option='', $suppressem=''){
 	global $db;
 
-	$tpl = new XTemplate(TEMPLATE_DIR.'/header.tpl');
-
 	$tlc_user = $_SESSION['username'];
-	$tpl->assign('tlc_user', $tlc_user);
 
 	// If new login, insert new entry in employee_login_history table.
 	if(empty($_SESSION['user_session_logged'])){
@@ -135,17 +125,11 @@ function setUpHeader($page_title='', $parse_option='', $suppressem=''){
 		}
 	}// end if
 
-	$tpl->parse('main.body');
-
 	// Generic user message, use for errors, or other notifications.
 	if(isset($_SESSION['user_message'])){
-		$tpl->assign('user_message', $_SESSION['user_message']);	
-		$tpl->parse('main.header.user_message');	
+		// TODO: map this into PSU Templates	
 		unset($_SESSION['user_message']);
 	}// end if
-
-	// Set application information
-	$tpl->assign('application_name', APPLICATION_NAME);
 
 	$tlc_positions = $GLOBALS['tlc_employee_positions'];
 
@@ -155,46 +139,9 @@ function setUpHeader($page_title='', $parse_option='', $suppressem=''){
 	$_SESSION['tlc_position_name'] = $tlc_positions[$user_privileges]; 
 	$_SESSION['tlc_position'] = $user_privileges;
 
-	$tpl->assign('tlc_username', $_SESSION['username']);
-	$tpl->assign('tlc_position', ucwords($_SESSION['tlc_position_name']));
-	$tpl->assign('tlc_full_name', $_SESSION['tlc_full_name']);
-
-	$tpl->assign('page_title', $page_title);
-
-	// Set up page header, return the top navigation links
-	$tpl->assign('top_nav', returnTopNav($page_title, CALL_LOG_WEB_HOME));
-
-	// Parse the standard menu, available to all users.
-	if ($suppressem != 'yes'){
-		$tpl->parse('main.header');
-	}
-
-	$tpl->parse('main');
-
-	return $tpl->text('main');	
+	return '';
 }// end funtion setUpHeader
 
-function setUpFooter($unused=''){
-	$tpl = new XTemplate(TEMPLATE_DIR.'/footer.tpl');
-	$tpl->parse('main');
-	return $tpl->text('main');	
-}// end function setUpFooter
-
-function returnTopNav($page_name, $call_log_web_home){
-	$topNav = '<li><a href="'.$call_log_web_home.'/index.html">Home</a></li>';
-	$topNav .= '<li><a href="'.$call_log_web_home.'/search/">Detail Search</a></li>';
-	$topNav .= '<li><a href="http://www.plymouth.edu/webapp/cts/" target="_blank">Media Loans</a></li>';
-	$topNav .= '<li><a href="'.$call_log_web_home.'/tools.html">Tools</a></li>';
-	$topNav .= '<li><a href="'.$call_log_web_home.'/graphs/statistics.html">Statistics</a></li>';
-	$topNav .= '<li><a href="'.$call_log_web_home.'/my_options.html">Options</a></li>';
-	if(in_array($_SESSION['tlc_position'], $_SESSION['priv_users'])){
-		$topNav .= '<li><a href="'.$call_log_web_home.'/admin/call_log_admin.html">Admin</a></li>';
-		if($_SESSION['tlc_position'] == 'webguru'){
-			$topNav .= '<li><a href="'.$call_log_web_home.'/call_log_tools.html">Tools</a></li>';
-		}
-	}
-	return $topNav;
-}//end returnTabNav
 
 function searchBuildingRoom($extension=''){
 	global $db;
@@ -606,5 +553,3 @@ function undo_magic_quotes( &$array ) {
 		}
 	}
 }
-
-?>

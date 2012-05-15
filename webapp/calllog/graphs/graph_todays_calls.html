@@ -1,9 +1,0 @@
-<?php
-// Call Log graph functions
-require_once FUNCTIONS_DIR . '/call_log_graph_functions.php';
-
-$call_results = Array();
-$call_results = returnTodaysTopCallLoggers();
-print_r($_GET);
-//PSUHTML::redirect("http://ender.plymouth.edu/calllog/graphs/todays_top_call_loggers.html?call_results=$call_results");
-?>

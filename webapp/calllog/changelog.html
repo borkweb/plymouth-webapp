@@ -1,8 +1,5 @@
 <?php
 
-$tpl = new PSUSmarty;
+$tpl = new PSUTemplate();
 
-$tpl->assign('title', 'Changelog');
-$tpl->assign('content', 'changelog');
-
-$tpl->display('_wrapper.tpl');
+$tpl->display('changelog.tpl');

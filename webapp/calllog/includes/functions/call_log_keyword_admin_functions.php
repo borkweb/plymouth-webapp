@@ -27,7 +27,7 @@
 		$form_action = '';
 		$submit_button = '';
 
-		$tpl = new XTemplate(TEMPLATE_ADMIN_DIR.$template_file);
+		$tpl = new XTemplate(TEMPLATE_ADMIN_DIR.'/'.$template_file);
 		$tpl->assign('father_page', $father_page);
 		
 		// If keyword results are empty, add a new keyword.

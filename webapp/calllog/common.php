@@ -3,7 +3,10 @@
 require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
 
 require_once 'autoload.php';
-PSU::session_start();
+PSU::session_start( PSU::FORCE_SSL );
+
+$GLOBALS['TITLE'] = 'Call Log';
+define ('PSU_CDN', false);
 
 $config = \PSU\Config\Factory::get_config();
 define( 'PSU_API_APPID', $config->get( 'calllog', 'api_appid' ) );
@@ -242,3 +245,7 @@ $time = date("H:i:s");
 if(empty($_SESSION['priv_users'])){
   $_SESSION['priv_users'] = Array('manager', 'webguru', 'shift_leader','supervisor');
 }// end if
+
+if(in_array($_SESSION['tlc_position'], $_SESSION['priv_users'])){
+	$GLOBALS['calllog_admin'] = true;
+}

@@ -1,11 +1,6 @@
 <?php
-echo setUpHeader($page_name, 'return', $suppressem);
 
-$page_name = 'tools';
-$template_file = TEMPLATE_DIR."/".$page_name.'.tpl';
-$tpl = new XTemplate($template_file);
+setUpHeader($page_name, 'return', $suppressem);
 
-$tpl->parse('main');
-$tpl->out('main');
-
-echo setUpFooter('return');
+$tpl = new PSUTemplate();
+$tpl->display('tools.tpl');

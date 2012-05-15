@@ -5,7 +5,7 @@ function returnNewUserForm(){
 
 	$template_name = TEMPLATE_ADMIN_DIR.'/new_user_form.tpl';
 	$tpl = new XTemplate($template_name);
-	$tpl->assign('form_action', 'tlc_users_admin.html?action=addtlcuser');
+	$tpl->assign('form_action', 'manage_users.html?action=addtlcuser');
 	$tpl->parse('main.new_privileges_list');
 
 	// ITS Groups Options Array
@@ -122,7 +122,7 @@ function editTLCUser($user_name){
 
 	$template_name = TEMPLATE_ADMIN_DIR.'/new_user_form.tpl';
 	$tpl = new XTemplate($template_name);
-	$tpl->assign('form_action', 'tlc_users_admin.html?action=updatetlcuser');
+	$tpl->assign('form_action', 'manage_users.html?action=updatetlcuser');
 	
 	$getTotalGroupsQuery = $db->Execute("SELECT * from itsgroups WHERE itsgroups.deleted = 0");
 	$k=0;
@@ -215,7 +215,6 @@ function updateTLCUser($tlc_user){
 		echo "<div class='update_message'>User Update Failed</div>";
 	}
 	$tpl->parse('main');
-	//header("Location: tlc_users_admin.html?message=update_success");
 	return $tpl->text('main');
 }// end function updateTLCUserDetails
 
