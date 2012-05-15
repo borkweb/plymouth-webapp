@@ -668,7 +668,6 @@ table.sortable thead tr .headerSortDown, table.sortable thead tr .headerSortUp {
 .focused-block #call_history_assignment_loop {
 	height: 250px !important;
 }
-@import url("checklists.css");
 /* Default */
 
 .icon{vertical-align: middle;}
