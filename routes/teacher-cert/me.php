@@ -8,7 +8,6 @@ respond( function( $request, $response, $app ){
 	}
 
 	$app->populate( new TeacherCert\Student( $app->permissions->pidm ) );
-	$app->populate( 'student_view', true );
 });
 
 respond( '/', function( $request, $response, $app ){

@@ -3,6 +3,12 @@
 use \Guzzle\Service\Client;
 use \PSU\TeacherCert;
 
+require_once 'guzzle.phar';
+
+respond( '/me/?[*]?', function( $request, $response, $app ) {
+	PSU::add_filter( 'student_view', 'PSU\TeacherCert::__return_true' );
+});
+
 respond( function( $request, $response, $app ) {
 	PSU::session_start();
 
@@ -15,14 +21,11 @@ respond( function( $request, $response, $app ) {
 	$GLOBALS['PSUAPI'] = "https://api.{$domain}/0.1/?appid={{appid}}&appkey={{appkey}}";
 	unset( $domain );
 
-	if( file_exists( PSU_BASE_DIR . '/teacher-cert-debug.php' ) ) {
-		include PSU_BASE_DIR . '/teacher-cert-debug.php';
+	if( file_exists( PSU_BASE_DIR . '/debug/teacher-cert-debug.php' ) ) {
+		include PSU_BASE_DIR . '/debug/teacher-cert-debug.php';
 	}
 
 	IDMObject::authN();
-
-	require_once 'klein/klein.php';
-	require_once 'guzzle.phar';
 
 	$app->client = new Client( $GLOBALS['PSUAPI'] );
 	$app->client->setConfig( array(
@@ -31,6 +34,7 @@ respond( function( $request, $response, $app ) {
 	));
 
 	$app->readonly = false;
+	$app->student_view = false;
 
 	$app->parse_model_results = function( $results ) use ( $app ) {
 		foreach( (array) $results->messages as $category => $messages) {
@@ -153,11 +157,13 @@ respond( function( $request, $response, $app ) {
 
 	// mocks go after the first responder (above) and below normal routes (below)
 	if( defined('TCERT_MOCK') && TCERT_MOCK ) {
-		include $GLOBALS['BASE_DIR'] . '/mock.php';
+		include PSU_BASE_DIR . '/debug/teacher-cert-mock.php';
 	}
 
 	// Assign this after mock.php has run
 	$app->tpl->assign( 'permissions', $app->permissions );
+
+	$app->student_view = PSU::apply_filters( 'student_view', $app->student_view );
 
 	// User does not have tcert permission; is it a student
 	// trying to access his student gates?
@@ -194,12 +200,6 @@ respond( 'GET', '/', function( $request, $response, $app ) {
 	$app->tpl->display( 'index.tpl' );
 });
 
-respond( '/verify/?', function( $request, $response, $app ){
-	include __DIR__ . '/check/verification.php';
-	$app->tpl->assign('tables', $tables);
-	$app->tpl->display('verification.tpl');
-});
-
 respond( 'POST', '/search', function( $request, $response, $app ) {
 	$gs_id = $request->param( 'gatesystem_id' );
 	$q = $request->param( 'q' );
@@ -214,17 +214,11 @@ respond( 'POST', '/search', function( $request, $response, $app ) {
 	$response->redirect( $url );
 });
 
-$app_routes = array(
-	'admin',
-	'api',
-	'student-gate',
-	'student-clinical-faculty',
-	'student-school',
-	'gate-system',
-	'gate-systems',
-	'me',
-);
-
-foreach( $app_routes as $base ) {
-	with( "/{$base}", __DIR__ . "/teacher-cert/{$base}.php" );
-}
+with( "/admin", __DIR__ . "/teacher-cert/admin.php" );
+with( "/api", __DIR__ . "/teacher-cert/api.php" );
+with( "/student-gate", __DIR__ . "/teacher-cert/student-gate.php" );
+with( "/student-clinical-faculty", __DIR__ . "/teacher-cert/student-clinical-faculty.php" );
+with( "/student-school", __DIR__ . "/teacher-cert/student-school.php" );
+with( "/gate-system", __DIR__ . "/teacher-cert/gate-system.php" );
+with( "/gate-systems", __DIR__ . "/teacher-cert/gate-systems.php" );
+with( "/me", __DIR__ . "/teacher-cert/me.php" );
