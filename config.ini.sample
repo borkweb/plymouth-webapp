@@ -26,6 +26,8 @@ api_key = "YOUR_KEY"
 
 [teacher-cert]
 base_url = "https://www.plymouth.edu/webapp/teacher-cert"
+api_appid = "YOUR_KEY"
+api_key = "YOUR_KEY"
 
 [google]
 api_key = "YOUR_KEY"

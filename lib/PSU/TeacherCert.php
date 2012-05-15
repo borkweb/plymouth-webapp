@@ -3,7 +3,6 @@
 namespace PSU;
 
 class TeacherCert {
-
 	/**
 	 * generates error messages for incomplete required fields in the given model. This method should be
 	 * called after "$model->complete()" has been executed.
@@ -70,4 +69,11 @@ class TeacherCert {
 
 		return $results;
 	}//end save_model
+
+	/**
+	 * Filter function to return true.
+	 */
+	public static function __return_true() {
+		return true;
+	}
 }//end PSU\TeacherCert
