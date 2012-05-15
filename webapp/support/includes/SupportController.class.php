@@ -25,6 +25,12 @@ class SupportController extends PSUController
 	 */
 	public function index(){
 		IDMObject::authN();
+
+		if( isset( $_GET['go'] ) ) {
+			$ticket_id = (int) $_GET['go'];
+			PSU::redirect( $GLOBALS['BASE_URL'] . '/ticket/' . $ticket_id );
+		}
+
 		$this->tpl->assign('open_calls', $this->_get_calls('open', $_GET['open_page'] ? $_GET['open_page'] : 1));
 		$this->tpl->assign('closed_calls', $this->_get_calls('closed', $_GET['closed_page'] ? $_GET['closed_page'] : 1));
 		$this->tpl->display('index.tpl');
