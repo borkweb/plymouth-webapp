@@ -1201,7 +1201,21 @@ class PSU
 			case 'uranus':
 			case 'uranus.dev.plymouth.edu':
 			case 'uranus.plymouth.edu': $isdev = true; break;
-			default: trigger_error( 'HOSTNAME is set to an unknown value: ' . $hostname, E_USER_ERROR );
+		}
+
+		// Fallback to a value set in config.ini
+		if( null === $isdev ) {
+			$config = PSU\Config\Factory::get_config();
+			$isdev = $config->get( 'environment', 'dev' );
+
+			if( null !== $isdev ) {
+				$isdev = (bool) $isdev;
+			}
+		}
+
+		// Cannot identify by hostname or config.ini; that's a paddlin'
+		if( null === $isdev ) {
+			trigger_error( 'HOSTNAME is set to an unknown value: ' . $hostname, E_USER_ERROR );
 		}
 
 		return $isdev;
