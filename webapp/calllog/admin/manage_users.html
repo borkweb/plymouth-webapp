@@ -1,0 +1,51 @@
+<?php
+
+if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'])){	
+
+	if( isset( $_GET['action'] ) ) {
+		switch( $_GET['action'] ) {	
+			case 'returnnewuserform':
+				$text = returnNewUserForm();
+				break;
+			case 'addtlcuser':
+				$text = addTLCUser($_POST);
+				break;
+			case 'edittlcuser':
+				$text = editTLCUser($_GET['user_name']);
+				break;
+			case 'updatetlcuser':
+				$text = updateTLCUser($_POST);
+				break;
+			case 'deletetlcuser':
+				$text = deleteTLCUser($_GET['user_id']);
+				break;
+			case 'settlcuserstatus':
+				$text = setTLCUserStatus($_GET['user_name'], $_GET['status']);
+				break;
+		}
+	}elseif( $_GET['display'] ) {
+		switch( $_GET['display'] ){
+			case 'activeusers':
+				$text = displayTLCUsers('active', 'admin');
+				break;
+			case 'disabledusers':
+				$text = displayTLCUsers('disabled', 'admin');
+				break;
+			case 'inactiveusers':
+				$text = displayTLCUsers('inactive', 'admin');
+				break;
+			case 'allusers':
+				$text = displayTLCUsers('all', 'admin');
+				break;	   			
+		}// end switch
+	
+	} else{	
+		$text = displayTLCUsers('active', 'admin');
+	}
+
+	$ptpl = new PSUTemplate();
+	$ptpl->assign('content', $text);
+	$ptpl->display('admin/manage_users.tpl');
+}else{
+	PSUHTML::redirect(CALL_LOG_WEB_HOME.'/');
+}
