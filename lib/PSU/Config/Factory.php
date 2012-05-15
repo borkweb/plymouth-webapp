@@ -8,16 +8,16 @@ namespace PSU\Config;
 class Factory {
 	static $instance = null;
 
-	public function set_config( \PSU\Config $config ) {
+	public static function set_config( \PSU\Config $config ) {
 		self::$instance = $config;
-	}
+	}//end set_config
 
-	public function get_config() {
+	public static function get_config() {
 		if( null === self::$instance ) {
 			self::$instance = new \PSU\Config;
 			self::$instance->load();
 		}
 
 		return self::$instance;
-	}
+	}//end get_config
 }//end class Factory
