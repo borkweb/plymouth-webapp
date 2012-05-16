@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<a href="{PHP.BASE_URL}/{go_back.page}?action={go_back.action}&option={go_back.option}&group={go_back.group}&find_type={go_back.find_type}" class="noprint btn danger">Back to {go_back.name}</a>
+<a href="{PHP.BASE_URL}/{go_back.page}?action={go_back.action}&option={go_back.option}&group={go_back.group}&find_type={go_back.find_type}" class="noprint btn danger">&laquo; Back to {go_back.name}</a>
 <!-- BEGIN: new_call_user_name -->
 
 <!-- BEGIN: new_call_form -->
@@ -83,7 +83,7 @@
 		<div class="message message-warnings">This call has been closed.</div>
 		<!-- END: call_closed -->
 
-		<fieldset>
+		<fieldset class="noprint">
 			<legend>{details_name}</legend>
 			{ticket_form}
 			<label class="label">Keywords:</label>
