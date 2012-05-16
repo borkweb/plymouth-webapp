@@ -1,28 +1,4 @@
 <!-- BEGIN: main -->
-	<!-- BEGIN: kb -->
-		<table width="100%" height="100" cellpadding="3" cellspacing="1">
-		<!-- BEGIN: sent -->
-		<tr style="font-size:11px;" class="content_highlight">
-			<td id="knowledgebaseTD1_{link.id}" width="75%"><a href="{link.url}" target="_blank" title="{link.title}">{link.title}</a></td>
-			<td id="knowledgebaseTD2_{link.id}"><div id="sendKBEmailDiv_{link.id}"><a href="javascript:void(sendKBEmail({link.id},{count_sent},{i}));">Sent ({count_sent})</a></div></td>
-		</tr>
-		<!-- END: sent -->
-
-		<!-- BEGIN: none -->
-		<tr class="content_light" style="font-size:11px;">
-			<td id="knowledgebaseTD1_{link.id}" width="75%"><a href="{link.url}" target="_blank" title="{link.title}">{link.title}</a></td>
-			<td id="knowledgebaseTD2_{link.id}"><div id="sendKBEmailDiv_{link.id}"><a href="javascript:void(sendKBEmail({link.id},{count_sent},{i}));">Send (0)</a></div></td>
-		</tr>
-		<!-- END: none -->
-		</table>
-
-		<!-- BEGIN: no_results -->
-		<div align="center" style="font-size:12px;">No related knowledgebase articles found</div>
-		<!-- END: no_results -->
-		<!-- BEGIN: view -->
-		<div align="center" style="font-size:12px;">Type text into Problem Details to<br/> Search the Knowledgebase</div>
-		<!-- END: view -->
-	<!-- END: kb -->
 
 	<!-- BEGIN: searchResults -->
 	<div id="main-search-results2">
@@ -132,24 +108,6 @@
 					</td>
 				</tr>
 				<!-- END: no_results_message -->
-				<tr class="top-border">
-					<td><a href="{call_log_web_home}/new_call.html?caller=generic" class="nav_link">Generic Caller</a></td>
-					<td>generic</td>
-					<td>N/A</td>
-					<td>N/A</td>
-				</tr>
-				<tr>
-					<td><a href="{call_log_web_home}/new_call.html?caller=kiosk" class="nav_link">Kiosk Caller</a></td>
-					<td>kiosk</td>
-					<td>N/A</td>
-					<td>N/A</td>
-				</tr>
-				<tr>
-					<td><a href="{call_log_web_home}/new_call.html?caller=cluster" class="nav_link">Cluster Caller</a></td>
-					<td>kiosk</td>
-					<td>N/A</td>
-					<td>N/A</td>
-				</tr>
 			</tbody>
 		</table>
 		</div>
@@ -160,7 +118,7 @@
 	<div id="call_history_detail_div">
 	<div style="text-align:left; font-size: 10px; float: left;"><a href="{CALL_LOG_WEB_HOME}/ticket/{this_call_id}/">Edit This Call</a></div>
 	<div style="text-align:right; font-size: 10px;"><a href="javascript: void(0);" onClick="viewCallHistorySummary('{caller}', false);">&#171; Back</a></div>
-		<table width="95%" valign="top" cellpadding="3" cellspacing="1">
+		<table class="grid">
 			<tr><th align="center" colspan="2">Call Details</th></tr>
 				<!-- BEGIN: call_log_details -->
 					<tr><td>Call ID</td><td>{call_id}</td></tr>
@@ -198,30 +156,6 @@
 		</div>
 	</div>
 	<!-- END: call_history -->
-
-	<!-- BEGIN: media_history -->
-	<div id="media_history_detail_div">
-	<div style="text-align:right;"><a href="javascript: void(0);" onClick="viewMediaHistorySummary();">&#171; Back</a></div>
-	<table width="95%" cellpadding="3" cellspacing="1">
-		<tr><th colspan="2">Media Loan #{media_id}</th></tr>
-		<tr><th>Memo</th><td>{memo}</td></tr>
-		<tr><th>Requested</th><td>{request_items}</td></tr>
-		<tr><th>Location</th><td>{location}</td></tr>
-		<tr><th>Start Date</th><td>{start_date}</td></tr>
-		<tr><th>End Date</th><td>{end_date}</td></tr>
-	</table>
-	<table width="95%" cellpadding="3" cellspacing="1">
-		<tr><th colspan="2">Equipment Items</th></tr>
-			<!-- BEGIN: media_items -->
-				<!-- BEGIN: last_media_item -->
-				<th width="95%" colspan="2"><hr/></th>
-				<!-- END: last_media_item -->
-			<tr><td>Item ID</td><td>{item_id}</td></tr>
-			<tr><td>Category</td><td>{category}</td></tr>
-			<!-- END: media_items -->
-	</table>
-	</div>
-	<!-- END: media_history -->
 
 	<!-- BEGIN: displayOpenCalls -->
 		<h2>&#187; Open Calls</h2>
@@ -289,31 +223,31 @@
 	<!-- END: blog_post -->
 
 	<!-- BEGIN: highlight_call_history -->
-	<script>
+	<script type="text/javascript">
 	new Effect.Highlight('CallHistoryRow1', {startcolor:'#D19275', endcolor:'#FFEFD5', restorecolor:'#FFEFD5'});
 	</script>
 	<!-- END: highlight_call_history -->
 
 	<!-- BEGIN: restore_request -->
 		<!-- BEGIN: restore_request_error -->
-			<script>
+		<script type="text/javascript">
 			restoreRequestError();
-			</script>
-			<div id="restore_request_error" style="text-align: center; font-weight:bold;">
-			Please Complete All Fields
-			</div>
+		</script>
+		<div id="restore_request_error" style="text-align: center; font-weight:bold;">
+		Please Complete All Fields
+		</div>
 		<!-- END: restore_request_error -->
 
 		<!-- BEGIN: restore_request_complete -->
-			Thank You For Submitting a Restore Request<br/>
-			<a href='javascript: newRestoreRequest();'>File Another Restore Request</a>
+		Thank You For Submitting a Restore Request<br/>
+		<a href='javascript: newRestoreRequest();'>File Another Restore Request</a>
 		<!-- END: restore_request_complete -->
 	<!-- END: restore_request -->
 
 
 	<!-- BEGIN: queueEmailMessage -->
-		Your message has been sent<br/>
-		<a href="javascript: sendHelpDeskMail('{caller_user_name}@{caller_class}plymouth.edu',0,'reset');">Back to Caller Information</a>
+	Your message has been sent<br/>
+	<a href="javascript: sendHelpDeskMail('{caller_user_name}@{caller_class}plymouth.edu',0,'reset');">Back to Caller Information</a>
 	<!-- END: queueEmailMessage -->
 
 	<!-- BEGIN: group_names -->
@@ -321,23 +255,16 @@
 	<!-- END: group_names -->
 
 	<!-- BEGIN: assign_reorder -->
-		<div id="re-order-div" style="padding-bottom:10px;">
-		Re-order: <a href="javascript: reorder_assign_history('old', '{caller_user_name}', {call_id});" class="current_link">Old-New</a> | <a href="javascript: reorder_assign_history('new', '{caller_user_name}', {call_id});" class="current_link">New-Old</a></div>
-		<div id="assign-order-div" class="new-call-user-table-inside" style="border:0px; display:inline;">
 		<!-- BEGIN: call_assignment_history -->
-			<div id="call_assignment_history_inner_div" class="new-call-user-table-inside" style="border:0px; display:inline;">
-				<fieldset>
-				<legend>Assignment History</legend>
-					<label class="label"><em>Updated by:</em> {call_assignment_history_updated} on {call_assignment_history_date} @ {call_assignment_history_time}</label><br/><br/>
-					<label class="label"><em>Details:</em> {call_assignment_history_comments}</label><br/>
-					<hr style="width: 75%;" align="left">
-					<label class="label"><em>Call Priority:</em></label> {call_assignment_history_priority}<br/>
-					<label class="label"><em>Call Status:</em></label> {call_assignment_history_status}<br/>
-					<label class="label"><em>Assigned To:</em></label> {call_assignment_history_assigned_to}<br/>
-				</fieldset>
-			</div>
+		<ul>
+			<li><span class="label">Updated by:</span> {call_history.updated_by} on {call_history.date_assigned} @ {call_history.time_assigned}</li>
+			<li><span class="label">Call Status:</span> {call_history.call_status}</li>
+			<li><span class="label">Call Priority:</span> {call_history.call_priority}</li>
+			<li><span class="label">Assigned To:</span> {call_history.tlc_assigned_to}</li>
+			<li><span class="label">Details:</span> {call_history.comments}</li>
+		</ul>
+		<hr style="width: 75%;" align="left">
 		<!-- END: call_assignment_history -->
-		</div>
 	<!-- END: assign_reorder -->
 
 <!-- END: main -->

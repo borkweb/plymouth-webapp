@@ -41,5 +41,3 @@ function insert_new_entries($employee_id){
 
 	return $insert_new_entries;
 }
-
-?>

@@ -233,4 +233,3 @@ function setTLCUserStatus($user_name, $status){
 	}
 
 }// end function setTLCUserStatus
-?>

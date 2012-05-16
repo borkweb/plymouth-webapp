@@ -231,4 +231,3 @@
 		return $mysql_delimit;
 
 	} // end function processTimeDelimit
-?>

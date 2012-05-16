@@ -49,7 +49,7 @@
 					{search_options}
 					</select>
 					<br /><br />
-					<input type="text" size="19" id="search_string" name="search_string" onKeyDown="javascript: KeyCheck(event);" value="{PHP._GET.search_string}{option}"/>
+					<input type="text" size="19" id="search_string" name="search_string" onKeyDown="javascript: keyCheck(event);" value="{PHP._GET.search_string}{option}"/>
 					<br />
 					<br/>
 					<a href="javascript: void(0);" class="btn primary" onclick="searchUser()">Search >></a>
@@ -63,7 +63,7 @@
 				</div>
 			</fieldset>
 			<div id="search_results_loading" style="display: none;" align="center"><img src="{call_log_web_home}/images/loading-anim.gif" alt="Loading..."/>Loading Content Please Wait...</div>
-			<div id="main-search-results"></div>
+			<div id="main-search-results" style=""></div>
 		</div>
 	</div>
 </div>

@@ -139,10 +139,14 @@ tr:hover .fade{
 }
 
 #hardwareInnerDiv, #CallHistoryInnerDiv{
-	height: 100px;
-	max-height: 100px;
+	height: 150px;
+	max-height: 150px;
 	width: 98%;
 	overflow: auto;
+}
+
+.history_comments{
+	overflow: hidden;
 }
 
 
@@ -250,9 +254,6 @@ tr:hover .fade{
 	font-weight: bold;
 }
 
-#outer-header{
-}
-
 .header-div{
 	border: hidden 1px;
 }
@@ -288,21 +289,6 @@ tr:hover .fade{
 	list-style-type: none;
 }
 
-.new-call-user-table-main{
-	border: solid 1px;
-	padding: 5px;
-	float: left;
-}
-
-.new-call-user-table-left{
-	text-align: left;
-	width: 320px;
-}
-
-.new-call-user-table-center{
-	text-align: center;
-	width: 600px;
-}
 
 .new-call-user-table-inside{
 	border: solid 1px;
@@ -424,21 +410,8 @@ tr:hover .fade{
 	padding-left: 1.5em;	
 }
 
-#media_loans_div, #dashboard_div, #main-table-right-inside, #assign_to_div, #call_assignment_history_hidden_div, #cluster_printers_div, #restore_request_div, #keywordsList {
+#media_loans_div, #dashboard_div, #main-table-right-inside, #assign_to_div, #call_assignment_history_hidden_div, #cluster_printers_div, #restore_request_div, #keywordsList, .hidden {
 	display: none;
-}
-
-.no-border{
-	border: solid 1px;
-}
-
-a.action, input.action {
-	font-weight:normal;
-	padding:1px 3px;
-	margin:10px 0px;
-	text-decoration:none;
-	vertical-align:middle;
-	line-height:16px !important;
 }
 
 a.action:link, a.action:visited, a.action:active, input.action {
@@ -617,29 +590,6 @@ div#user_status_div .fade{color:#666;}
 
 .call-title{font-weight: bold;}
 
-/*********[ Tablesorter theme ]*************/
-table.sortable thead tr th { 
-	padding-right: 1.5em;
-}
-table.sortable thead tr .header {
-	background-image: url(/webapp/style/templates/images/tablesorter-bg.gif);
-	background-repeat: no-repeat;
-	background-position: center right;
-	cursor: pointer;
-}
-table.sortable tbody tr:nth-child(2n) td { background-color: #f0f7f9; }
-table.sortable tbody tr:nth-child(2n+1) td { background-color: transparent; }
-table.sortable thead tr .headerSortUp {
-	background-image: url(/webapp/style/templates/images/tablesorter-asc.gif);
-}
-table.sortable thead tr .headerSortDown {
-	background-image: url(/webapp/style/templates/images/tablesorter-desc.gif);
-}
-table.sortable thead tr .headerSortDown, table.sortable thead tr .headerSortUp {
-	background-color: #eee;
-	color: #000;
-}
-
 .warning-call-closed {
 	border: 1px solid #800;
 	background-color: #e00;
@@ -653,6 +603,7 @@ table.sortable thead tr .headerSortDown, table.sortable thead tr .headerSortUp {
 }
 
 .focused-block {
+	background-color: white;
 	border: 2px solid #000 !important;
 	height: 500px;
 	width: 900px;
@@ -746,20 +697,6 @@ table.sortable thead tr .headerSortDown, table.sortable thead tr .headerSortUp {
 	text-decoration: none;
 }
 
-#new-call-user-left-col{
-	background: none;
-	border: none;
-}
-
-#new-call-user-middle-col{
-	background: none;
-	border: none;
-}
-
-#new-call-user-right-col{
-	background: none;
-	border: none;
-}
 
 #caller_information_outer_div,
 #hardware_info_outer_div,
@@ -793,10 +730,6 @@ table.sortable thead tr .headerSortDown, table.sortable thead tr .headerSortUp {
 	margin: 0 5px 5px 5px;
 }
 
-.new-call-user-table-inside{
-	background:none;
-}
-
 #submit_reset{
 	border: 1px solid #BFBEA3;
 }
@@ -815,6 +748,7 @@ td.activity-age-status-old{
 #re-order-div{color:#85360F;}
 
 .label{color: #77825A;}
+label{color: #77825A;}
 .label em{color:#A66240;}
 
 #submit_reset{

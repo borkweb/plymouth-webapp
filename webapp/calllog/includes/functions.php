@@ -502,31 +502,6 @@ function getFiles($dir, $ext){
 }// end function getFiles
 
 
-
-function fixMemorySize($SizeToFix){
-	if ($SizeToFix != ""){
-		$TotalSize = ($SizeToFix/(1024*1024))+1.1;
-		$MBSize = intval($TotalSize).' MB';
-	}
-	return $MBSize;
-}
-
-function fixQuotaSize($SizeToFix){
-	if ($SizeToFix != ""){
-		$TotalSize = ($SizeToFix/(1000));
-		$MBSize = intval($TotalSize).' MB';
-	}
-	return $MBSize;
-}
-
-function fixHDSize($SizeToFix){
-	if ($SizeToFix != ""){
-		$TotalSize = ($SizeToFix/(1024))+1+.05;
-		$GBSize = intval($TotalSize).' GB';
-	}
-	return $GBSize;
-}
-
 /**
  * Returns the number 
  */

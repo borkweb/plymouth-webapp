@@ -168,5 +168,3 @@
 
 	}// end function setKeywordStatus
 
-
-?>
