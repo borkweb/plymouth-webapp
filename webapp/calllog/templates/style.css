@@ -774,3 +774,10 @@ a.action:link, a.action:visited, a.action:active, input.action {
 	color: #999;
 }
 
+#generic-call-list>li{
+	margin: 10px;
+}
+
+.inline{
+	display:inline;
+}

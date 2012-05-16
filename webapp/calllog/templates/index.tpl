@@ -49,16 +49,16 @@
 					{search_options}
 					</select>
 					<br /><br />
-					<input type="text" size="19" id="search_string" name="search_string" onKeyDown="javascript: keyCheck(event);" value="{PHP._GET.search_string}{option}"/>
+					<input type="search" size="19" id="search_string" name="search_string" onKeyDown="javascript: keyCheck(event);" value="{PHP._GET.search_string}{option}"/>
 					<br />
 					<br/>
-					<a href="javascript: void(0);" class="btn primary" onclick="searchUser()">Search >></a>
+					<a href="javascript: void(0);" class="btn primary" onclick="searchUser()">Search &raquo;</a>
 				</div>
 				<div class="grid_4 omega">
-					<ul>
-						<li style="margin:10px;"><a href="{PHP.BASE_URL}/user/generic/" class="btn info">Generic Caller</a></li>
-						<li style="margin:10px;"><a href="{PHP.BASE_URL}/user/kiosk/" class="btn">Kiosk Call</a></li>
-						<li style="margin:10px;"><a href="{PHP.BASE_URL}/user/clusteradm/" class="btn">Cluster Call</a></li>
+					<ul id="generic-call-list">
+						<li><a href="{PHP.BASE_URL}/user/generic/" class="btn info">Generic Caller</a></li>
+						<li><a href="{PHP.BASE_URL}/user/kiosk/" class="btn">Kiosk Call</a></li>
+						<li><a href="{PHP.BASE_URL}/user/clusteradm/" class="btn">Cluster Call</a></li>
 					</ul>
 				</div>
 			</fieldset>

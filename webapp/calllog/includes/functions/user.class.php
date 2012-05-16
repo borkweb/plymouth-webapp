@@ -360,12 +360,7 @@ class User
 			foreach ($result as $row){
 				$i++;
 				$tpl->assign('i',$i);
-				if(strlen($row['comments']) > 25)
-				{
-					//$row['comments'] = substr(strip_tags($row['comments']),0,25).'&hellip;';
-				}
-				if(empty($row['comments']))
-				{
+				if(empty($row['comments'])) {
 					$row['comments'] = '<em>no update details</em>';
 				}
 				$tpl->assign('call',$row);
@@ -395,3 +390,4 @@ class User
 		return $tpl->text('main');
 	}
 }
+

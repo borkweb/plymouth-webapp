@@ -5,6 +5,8 @@ function redirect(url){
 }
 
 $jQuery(document).ready(function($){
+	$jQuery('#its-group-help').colorbox();
+
 	$jQuery('.print-balance a').live('click',function(){
 		$jQuery('.print-funds .error').hide();
 		$jQuery('.print-funds .add-funds').slideDown('fast');
