@@ -11,12 +11,10 @@ respond( function( $request, $response, $app ) {
 	$GLOBALS['WEBAPP_URL'] = 'http://'.$_SERVER['HTTP_HOST'].'/webapp';
 
 	// Templates
-	$GLOBALS['TEMPLATES'] = PSU_BASE_DIR . '/app/core/templates';
+	$GLOBALS['TEMPLATES'] = PSU_BASE_DIR . '/app/style/templates';
 });
 
 respond( '/', function( $request, $response, $app ) {
-	define( 'PSU_CDN', ! PSU::isdev() );
-
 	$tpl = new \PSU\Template('Example Styling');
 
 	if(isset($_GET['message'])) $_SESSION['messages'][] = 'This is an example message';
