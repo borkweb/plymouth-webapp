@@ -34,6 +34,17 @@
 		All this text is not in a paragraph.All this text is not in a paragraph.All this text is not in a paragraph.All this text is not in a paragraph.All this text is not in a paragraph.
 	{/box}
 
+	{box title='Person Data' subheader="Lazy-loaded person data"}
+		<ul class="psu-lazyload" data-object=person data-id=200443>
+			<li class="lazy-field" data-type="login_name"></li>
+			<li class="lazy-field" data-type="email"></li>
+			<li class="lazy-field" data-type="id"></li>
+			<li class="lazy-field" data-type="wp_id"></li>
+			<li class="lazy-field" data-type="first_name"></li>
+			<li class="lazy-field" data-type="last_name"></li>
+		</ul>
+	{/box}
+
 	{box title='List Example' subheader="Example HTML Elements"}
 		Bulletted List
 		<ul>

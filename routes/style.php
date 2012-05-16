@@ -5,10 +5,10 @@ respond( function( $request, $response, $app ) {
 	$GLOBALS['BASE_DIR'] = dirname(__FILE__);
 
 	// Base URL
-	$GLOBALS['BASE_URL'] = 'http://'.$_SERVER['HTTP_HOST'].'/app/style';
+	$GLOBALS['BASE_URL'] = 'https://'.$_SERVER['HTTP_HOST'].'/app/style';
 
 	// Base URL
-	$GLOBALS['WEBAPP_URL'] = 'http://'.$_SERVER['HTTP_HOST'].'/webapp';
+	$GLOBALS['WEBAPP_URL'] = 'https://'.$_SERVER['HTTP_HOST'].'/webapp';
 
 	// Templates
 	$GLOBALS['TEMPLATES'] = PSU_BASE_DIR . '/app/style/templates';
@@ -27,4 +27,16 @@ respond( '/', function( $request, $response, $app ) {
 	}
 
 	$tpl->display('index.tpl');
+});
+
+respond( '/api/person-data', function( $request, $response, $app ) {
+	$ids = $request->param( 'id' );
+
+	// This endpoint is limited to just one person, to prevent abuse
+	if( count($ids) !== 1 || $ids[0] != 200443 ) {
+		trigger_error( 'bad request through api/person-data', E_USER_ERROR );
+		die;
+	}
+
+	$response->psu_lazyload( $ids );
 });
