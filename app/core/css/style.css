@@ -2182,6 +2182,11 @@ blockquote small {
   color: #ffffff;
 }
 
+/* force lazy fields to have content (and height) */
+.psuperson-lazy-field:after {
+	content: "\0000a0";
+}
+
 /*********[ Orientation ]*************/
 @media all and (orientation:portrait) {}
 @media all and (orientation:landscape) {}
