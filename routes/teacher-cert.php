@@ -232,5 +232,4 @@ with( "/student-clinical-faculty", __DIR__ . "/teacher-cert/student-clinical-fac
 with( "/student-school", __DIR__ . "/teacher-cert/student-school.php" );
 with( "/gate-system", __DIR__ . "/teacher-cert/gate-system.php" );
 with( "/gate-systems", __DIR__ . "/teacher-cert/gate-systems.php" );
-with( "/me", __DIR__ . "/teacher-cert/me.php" );
 with( "/student", __DIR__ . "/teacher-cert/student.php" );
