@@ -55,21 +55,41 @@ respond('POST', '/spraddr', function( $request, $response, $app ) {
 	if ($_POST['fv_address_type_val'] != null) $_POST['fv_address_type'] = $_POST['fv_address_type_val'];
 	if ($_POST['fn_days_back_val'] != null) $_POST['fn_days_back'] = $_POST['fn_days_back_val'];
 
+	$errorFlag=false;
 	if (($_POST['fd_from_date'] == null && $_POST['fd_to_date'] == null) || ((strtotime($_POST['fd_to_date']) > strtotime($_POST['fd_from_date'])) && strtotime($_POST['fd_from_date']) != null)) {
 		$_SESSION['errors'] = array();
-		$errorFlag=false;
 	} else {
 		$_POST['fd_from_date'] = null;
 		$_POST['fd_to_date'] = null;
 		$_SESSION['errors'][] = 'Error: Either you typed in one date, and not the other, or your to date was a date before your from date. Please correct and try again.';
 		$errorFlag=true;
 	}
-	unset($_POST['fv_address_type_val']);
-	unset($_POST['fn_days_back_val']);
-	foreach( $_POST as $key => $val ) {
-		$parms .= "--{$key}={$val} ";
+	if (!$errorFlag) {
+		unset($_POST['fv_address_type_val']);
+		unset($_POST['fn_days_back_val']);
+		foreach( $_POST as $key => $val ) {
+			if ($key == 'fv_address_type' && !is_null($val)) {
+				if (strlen($val) !=2) {
+					$_SESSION['errors'][] = 'Error: Invalid Address Type';
+					$errorFlag=true;
+				}
+			}
+			if ($key == 'fn_days_back' && !is_null($val)) {
+				if(!is_numeric($val)) {
+					$_SESSION['errors'][] = 'Error: Non-numeric number of days specified';
+						$errorFlag=true;
+				}
+			}
+			if (($key == 'fd_from_date' || $key == 'fd_to_date') && !is_null($val)) {
+				if (!strtotime($val)){
+					$_SESSION['errors'][] = 'Error: One of the date entries can not be validated as a date';
+					$errorFlag=true;
+				}
+			}
+			$parms .= "--{$key}={$val} ";
+		}
+		$cmd = PSU_BASE_DIR.'/scripts/runner-verify-spraddr.php '.$parms.' &> /dev/null &';
 	}
-	$cmd = PSU_BASE_DIR.'/scripts/runner-verify-spraddr.php '.$parms.' &> /dev/null &';
 	if (!$errorFlag) {
 		exec( $cmd );
 	}
