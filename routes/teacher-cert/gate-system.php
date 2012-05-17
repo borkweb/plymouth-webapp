@@ -81,14 +81,21 @@ respond( '/[:gate_system]/[search:action]', function( $request, $response, $app 
 	$action = $request->param('action');
 
 	if( 'search' === $action ) {
+		$app->breadcrumbs->push( 'Search' );
+
+		$q = $request->param('q');
+
+		// Is $q a PSU ID?
+		if( strlen($q) && ctype_digit($q) ) {
+			$response->redirect( $GLOBALS['BASE_URL'] . '/student/' . $q );
+		}
+
 		$query = new TeacherCert\Population\GateSystemStudents( $app->gate_system->id );
 		$factory = new TeacherCert\Population\StudentFactory;
 		$population = new PSU_Population( $query, $factory );
 
-		$population->query( array( 'filter' => $request->param('q') ) );
+		$population->query( array( 'filter' => $q ) );
 		$app->tpl->assign( 'population', $population );
-
-		$app->breadcrumbs->push( 'Search' );
 
 		$app->tpl->display( 'results.tpl' );
 	}

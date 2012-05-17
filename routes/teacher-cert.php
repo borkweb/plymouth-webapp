@@ -5,14 +5,22 @@ use \PSU\TeacherCert;
 
 require_once 'guzzle.phar';
 
+/**
+ * Old /me/ path redirects to /student/
+ */
 respond( '/me/?[*]?', function( $request, $response, $app ) {
+	$base_url = $app->config->get( 'teacher-cert', 'base_url' );
+	$response->redirect( $base_url . '/student/' );
+});
+
+respond( '/student/?[*]?', function( $request, $response, $app ) {
 	PSU::add_filter( 'student_view', 'PSU\TeacherCert::__return_true' );
 });
 
 respond( function( $request, $response, $app ) {
 	PSU::session_start();
 
-	$GLOBALS['BASE_URL'] = '/app/teacher-cert';
+	$GLOBALS['BASE_URL'] = $app->config->get( 'teacher-cert', 'base_url' );
 
 	$GLOBALS['TITLE'] = 'Teacher Certification';
 	$GLOBALS['TEMPLATES'] = PSU_BASE_DIR . '/app/teacher-cert/templates';
@@ -64,7 +72,10 @@ respond( function( $request, $response, $app ) {
 
 	$response->denied = function() use ( $app ) {
 		$app->tpl->display( 'access-denied.tpl' );
-		// Is it ok to die here, or do we need a way to skip future routes?
+
+		// Is it ok to die here, or do we need a way to skip
+		// future routes? (For example, if there is a final cleanup
+		// routine.)
 		die();
 	};
 
@@ -150,7 +161,7 @@ respond( function( $request, $response, $app ) {
 	$app->populate( 'resolver', new TeacherCert\Template\Resolver( $app->config ) );
 	$app->populate( 'breadcrumbs', new \PSU\Template\Breadcrumbs );
 
-	$app->breadcrumbs->push( new \PSU\Template\Breadcrumb( 'Home', $app->config->get( 'teacher-cert', 'base_url' ) ) );
+	$app->breadcrumbs->push( new \PSU\Template\Breadcrumb( 'Home', $app->config->get( 'teacher-cert', 'base_url' ) . '/' ) );
 
 	$app->tpl->assign( 'user', $app->user );
 	$app->tpl->assign( 'back_url', $_SERVER['HTTP_REFERER'] );
@@ -221,4 +232,4 @@ with( "/student-clinical-faculty", __DIR__ . "/teacher-cert/student-clinical-fac
 with( "/student-school", __DIR__ . "/teacher-cert/student-school.php" );
 with( "/gate-system", __DIR__ . "/teacher-cert/gate-system.php" );
 with( "/gate-systems", __DIR__ . "/teacher-cert/gate-systems.php" );
-with( "/me", __DIR__ . "/teacher-cert/me.php" );
+with( "/student", __DIR__ . "/teacher-cert/student.php" );
