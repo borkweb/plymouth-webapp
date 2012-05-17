@@ -86,7 +86,7 @@ respond( '/[:gate_system]/[search:action]', function( $request, $response, $app 
 		$q = $request->param('q');
 
 		// Is $q a PSU ID?
-		if( strlen($q) && ctype_digit($q) ) {
+		if( strlen($q) === 9 && ctype_digit($q) ) {
 			$response->redirect( $GLOBALS['BASE_URL'] . '/student/' . $q );
 		}
 
