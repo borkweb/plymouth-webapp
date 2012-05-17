@@ -64,7 +64,6 @@ if( isset($_GET['go']) ) {
 }
 
 require_once (INCLUDES_DIR."/functions.php");
-require_once (INCLUDES_DIR."/CallLog.class.php");
 
 include(FUNCTIONS_DIR . "/add_update.class.php");
 include(FUNCTIONS_DIR . "/call_log_graph_functions.php");

@@ -1,8 +1,9 @@
 <?php
-$tpl = new PSUTemplate;
+
+$tpl = new PSU\Template;
 
 if( $_GET['search_string'] ) {
-	$results = CallLog::simple_search( $_GET['search_string'], $_GET['search_type'] );
+	$results = Calllog::simple_search( $_GET['search_string'], $_GET['search_type'] );
 	$tpl->assign('search', $results);
 }//end if
 

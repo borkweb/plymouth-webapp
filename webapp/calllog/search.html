@@ -9,7 +9,7 @@ undo_magic_quotes( $_GET );
 $title = 'Search';
 
 if( count($_GET) ) {
-	$tickets = CallLog::search_tickets( $_GET );
+	$tickets = Calllog::search_tickets( $_GET );
 
 	$title .= sprintf(' "%s"', htmlentities($_GET['q']));
 
