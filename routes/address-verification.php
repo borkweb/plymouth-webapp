@@ -67,7 +67,6 @@ respond('POST', '/spraddr', function( $request, $response, $app ) {
 		$parms .= "--{$key}={$val} ";
 	}
 	$cmd = PSU_BASE_DIR.'/scripts/runner-verify-spraddr.php '.$parms.' &> /dev/null &';
-	echo $cmd;
 	if (!$errorFlag) {
 		exec( $cmd );
 	}
