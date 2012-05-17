@@ -36,6 +36,9 @@ respond('/', function( $request, $response, $app ) {
 
 respond('GET', '/[:table]', function( $request, $response, $app ) {
 	$table = strtolower($request->param('table'));
+	if( 'spraddr' != $table ) {
+		  $response->abort( 400, 'UNEXPECTED_VALUE' );
+	}//end if
 	$is_running = shell_exec('ps -ef | grep -i runner-verify-'.$request->param('table').'.php | grep -v grep');
 	if( $is_running ) {
 		$_SESSION['messages'][] = 'The '.$table.' script is running. Please click reload to check status again. If this message no longer appears, the script has completed you can view the analytics report.';

@@ -12,6 +12,4 @@ foreach ($argv as $a) {
 	}
 	$params[$items[0]] = $items[1];
 }
-//PSU::get()->banner = PSU::db($params['db']);
-//unset($params['db']);
 PSU\Runner\AddressVerification::Batch_Verify_SPRADDR($params);
