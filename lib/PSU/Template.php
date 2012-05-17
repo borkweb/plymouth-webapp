@@ -453,7 +453,18 @@ class Template extends \PSUSmarty
 			}//end if
 
 			$this->addJS('http'.($_SERVER['HTTPS'] ? 's':'').'://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.js', array('head'=>true));
-			$this->addJS('/app/core/js/standard/psu-standard.min.js');
+
+			// psu-standard scripts
+			if( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) {
+				$this->addJS('/app/core/js/amplify.js');
+				$this->addJS('/app/core/js/jquery-plugins/jquery.multi-ddm.min.js');
+				$this->addJS('/app/core/js/behavior.js');
+				$this->addJS('/app/core/js/jquery-plugins/jquery.ba-dotimeout.js');
+				$this->addJS('/app/core/js/jquery-plugins/waypoints.js');
+			} else {
+				$this->addJS('/app/core/js/standard/psu-standard.min.js');
+			}
+
 			$this->addJS('/app/core/js/bootstrap/bootstrap.min.js');
 
 			if( $this->channel_container ) {
