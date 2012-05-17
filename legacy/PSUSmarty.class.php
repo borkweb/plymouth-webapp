@@ -298,7 +298,7 @@ class PSUSmarty extends Smarty
 	function psu_js($params, &$tpl)
 	{
 		if( ! $params['src'] && ! $params['href'] ) {
-			$key = static::$js_registry[ $params['id'] ];
+			$key = 'id';
 		} else {
 			$key = isset($params['src']) ? 'src' : 'href';
 		}//end else
