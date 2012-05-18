@@ -87,21 +87,26 @@ respond('POST', '/spraddr', function( $request, $response, $app ) {
 			if (is_null($val)) {
 				continue;	
 			}
-			if ($key == 'fv_address_type' && !is_null($val)) {
+			if ($key == 'fv_address_type') {
 				if( ! preg_match( '/[a-zA-Z0-9]{2}/', $val ) ) {
 					$_SESSION['errors'][] = 'Error: Invalid Address Type';
 					$errorFlag=true;
 				}
-			}
-			if ($key == 'fn_days_back' && !is_null($val)) {
+			} elseif ($key == 'fn_days_back') {
 				if(!is_numeric($val)) {
 					$_SESSION['errors'][] = 'Error: Non-numeric number of days specified';
 						$errorFlag=true;
 				}
-			}
-			if (($key == 'fd_from_date' || $key == 'fd_to_date') && !is_null($val)) {
-				if (!strtotime($val)){
+			} elseif ($key == 'fd_from_date' || $key == 'fd_to_date') {
+				if (!strtotime($val)) {
 					$_SESSION['errors'][] = 'Error: One of the date entries can not be validated as a date';
+					$errorFlag=true;
+				}
+			} elseif ($key == 'fn_max_verify' || $key == 'fb_set_activity_user' || $key == 'fv_set_source_code') { // these one can not be set here ... just continue on by
+				continue;
+			} else { // the rest are booleans...just make sure they are
+				if (!is_bool($val)) {
+					$_SESSION['errors'][] = 'Error: A true/false variable has been incorrectly set';
 					$errorFlag=true;
 				}
 			}
