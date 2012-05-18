@@ -77,7 +77,7 @@ class AddressVerification
 				continue;
 			}
 			if ( is_bool($val) || "false" == strtolower($val) || "true" == strtolower($val)) {
-				$val = "true" == strtolower($val) || true == $val ? "true" : "false";
+				$val = "true" == strtolower($val) || TRUE === $val ? "true" : "false";
 				$sql .= "{$key} => {$val},";
 			} else {
 				$sql .= "{$key} => :{$key},";
