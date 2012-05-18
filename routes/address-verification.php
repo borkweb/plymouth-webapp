@@ -88,7 +88,7 @@ respond('POST', '/spraddr', function( $request, $response, $app ) {
 				continue;	
 			}
 			if ($key == 'fv_address_type' && !is_null($val)) {
-				if (strlen($val) !=2) {
+				if( ! preg_match( '/[a-zA-Z0-9]{2}/', $val ) ) {
 					$_SESSION['errors'][] = 'Error: Invalid Address Type';
 					$errorFlag=true;
 				}
