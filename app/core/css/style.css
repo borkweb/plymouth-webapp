@@ -2183,7 +2183,7 @@ blockquote small {
 }
 
 /* force lazy fields to have content (and height) */
-.psuperson-lazy-field:after {
+.lazy-field:after {
 	content: "\0000a0";
 }
 
