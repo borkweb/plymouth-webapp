@@ -52,8 +52,8 @@ respond('POST', '/spraddr', function( $request, $response, $app ) {
 		if ($val == 'null') $_POST[$key] = null;
 		if ($val == '') $_POST[$key] = null;
 	}
-	if ($_POST['fv_address_type_val'] != null) $_POST['fv_address_type'] = $_POST['fv_address_type_val'];
-	if ($_POST['fn_days_back_val'] != null) $_POST['fn_days_back'] = $_POST['fn_days_back_val'];
+	if ($_POST['fv_address_type_val'] != null && $_POST['fv_address_type'] == 'true') $_POST['fv_address_type'] = $_POST['fv_address_type_val'];
+	if ($_POST['fn_days_back_val'] != null && $_POST['fn_days_back'] == 'true') $_POST['fn_days_back'] = $_POST['fn_days_back_val'];
 
 	$errorFlag=false;
 	if (($_POST['fd_from_date'] == null && $_POST['fd_to_date'] == null) || ((strtotime($_POST['fd_to_date']) > strtotime($_POST['fd_from_date'])) && strtotime($_POST['fd_from_date']) != null)) {
@@ -112,7 +112,7 @@ respond('POST', '/spraddr', function( $request, $response, $app ) {
 		$cmd = PSU_BASE_DIR.'/scripts/runner-verify-spraddr.php '.$parms.' &> /dev/null &';
 	}
 	if (!$errorFlag) {
-		exec( $cmd );
+		die( $cmd );
 	}
 	$response->redirect( $GLOBALS['BASE_URL'].'/spraddr' );
 });
