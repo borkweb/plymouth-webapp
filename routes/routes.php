@@ -8,6 +8,25 @@ respond( function( $request, $response, $app ) {
 	if( false == $app->config->get( 'cdn', 'enabled', true ) ) {
 		define( 'PSU_CDN', false );
 	}
+
+	$response->psu_lazyload = function( $ids ) use ( $request, $response, $app ) {
+		if( ! is_array($ids) ) {
+			$ids = array( $ids );
+		}
+
+		$qs = http_build_query( array( 'id' => $ids ) );
+
+		try {
+			$json = \PSU::api('backend')->get( "user/?$qs" );
+			$people = $json;
+		} catch( Exception $e ) {
+			// nothing...?
+			throw $e;
+		}
+
+		$response->header( 'Content-Type', 'application/json' );
+		$response->json( $people );
+	};
 });
 
 with( '/festivals', __DIR__ . '/festivals.php' );

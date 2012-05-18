@@ -857,6 +857,90 @@ if( typeof(HOST) == "string" ) {
 
 })();
 
+/**
+ * PSU data lazy loading.
+ */
+(function($){
+	var queue = [],
+		job_id = 0;
+
+	$.fn.psu_lazyload = function() {
+		if( false == $.fn.psu_lazyload.settings.endpoint ) {
+			return this;
+		}
+
+		var ret = this.each(function(){
+			if( $(this).hasClass( 'psu-lazyload-complete' ) ) {
+				return;
+			}
+
+			queue.push(this);
+
+			if( 0 === job_id ) {
+				job_id = setTimeout( lazy_initiate, 500 );
+			}
+		});
+
+		return ret;
+	};
+
+	$.fn.psu_lazyload.settings = {
+		batch_count: 20,
+		endpoint: false
+	};
+
+	function lazy_initiate() {
+		var nodes = {},
+			ids = [],
+			$node;
+
+		while( node = queue.shift() ) {
+			$node = $(node);
+			var id = $node.data('id');
+
+			if( typeof nodes[id] === 'undefined' ) {
+				nodes[id] = $node;
+			} else {
+				nodes[id] = nodes[id].add( $node );
+			}
+
+			ids.push(id);
+
+			if( ids.length >= $.fn.psu_lazyload.settings.batch_count ) {
+				break;
+			}
+		}
+
+		if( ids.length > 0 ) {
+			$.getJSON( $.fn.psu_lazyload.settings.endpoint, {id:ids}, lazy_populate.bind(nodes) );
+		}
+	}
+
+	function lazy_populate( data, ts, xhr ) {
+		var nodes_by_id = this;
+
+		// immediately start a new job
+		job_id = setTimeout( lazy_initiate, 0 );
+		
+		$.each(data, function(id, person_data){
+			var $nodes = nodes_by_id[id];
+
+			$nodes.addClass( 'psu-lazyload-complete' );
+
+			$nodes.find('.lazy-field').each(function(){
+				var field = $(this),
+					type = field.data('type');
+
+				field.text( person_data[type] );
+			});
+		});
+	}
+
+	$(function(){
+		$('.psu-lazyload').psu_lazyload()
+	});
+})(jQuery);
+
 // Add a message to the messages block.
 //
 //     $.psu.addMessage('Hey, something bad happened.', 'error');
