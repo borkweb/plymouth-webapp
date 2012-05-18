@@ -12,21 +12,14 @@ respond( function( $request, $response, $app ) {
 
 	// Templates
 	$GLOBALS['TEMPLATES'] = PSU_BASE_DIR . '/app/style/templates';
+
+	$GLOBALS['TITLE'] = 'Web Application Styling';
+
+	$app->tpl = new \PSU\Template;
 });
 
 respond( '/', function( $request, $response, $app ) {
-	$tpl = new \PSU\Template('Example Styling');
-
-	if(isset($_GET['message'])) $_SESSION['messages'][] = 'This is an example message';
-	if(isset($_GET['error'])) $_SESSION['errors'][] = 'This is an example error message';
-	if(isset($_GET['warning'])) $_SESSION['warnings'][] = 'This is an example warning message';
-	if(isset($_GET['success'])) $_SESSION['successes'][] = 'This is an example success message';
-	if(isset($_GET['multimessage'])) {
-		$_SESSION['messages'][] = 'This is the first message.';
-		$_SESSION['messages'][] = 'This is the second message.';
-	}
-
-	$tpl->display('index.tpl');
+	$app->tpl->display('index.tpl');
 });
 
 respond( '/api/person-data', function( $request, $response, $app ) {
@@ -39,4 +32,21 @@ respond( '/api/person-data', function( $request, $response, $app ) {
 	}
 
 	$response->psu_lazyload( $ids );
+});
+
+respond( '/icons/?', function( $request, $response, $app ) {
+	$filename = PSU_BASE_DIR . '/app/core/css/psu-icons.css';
+	$file = file_get_contents( $filename );
+
+	$search = '/\.icon-([a-z0-9\-_]+):before/';
+	preg_match_all( $search, $file, $matches );
+
+	sort( $matches[1] );
+
+	$app->tpl->assign('icons', $matches[1]);
+});
+
+respond( '/[base|boxes|components|icons:page]/?', function( $request, $response, $app ) {
+	$page = $request->param( 'page' );
+	$app->tpl->display("{$page}.tpl");
 });
