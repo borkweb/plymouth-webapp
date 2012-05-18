@@ -67,7 +67,26 @@ respond('POST', '/spraddr', function( $request, $response, $app ) {
 	if (!$errorFlag) {
 		unset($_POST['fv_address_type_val']);
 		unset($_POST['fn_days_back_val']);
-		foreach( $_POST as $key => $val ) {
+
+		$keys = array(
+			'fn_max_verify'
+			,'fb_update'
+			,'fb_only_unverified'
+			,'fv_address_type'
+			,'fn_days_back'
+			,'fb_skip_international'
+			,'fb_verify_inactive'
+			,'fd_from_date'
+			,'fd_to_date'
+			,'fb_set_activity_date_user'
+			,'fv_set_source_code'
+		);
+
+		foreach ($keys as $key) {
+			$val = $_POST[$key];
+			if (is_null($val)) {
+				continue;	
+			}
 			if ($key == 'fv_address_type' && !is_null($val)) {
 				if (strlen($val) !=2) {
 					$_SESSION['errors'][] = 'Error: Invalid Address Type';
