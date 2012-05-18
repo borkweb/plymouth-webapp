@@ -2186,6 +2186,9 @@ blockquote small {
 .lazy-field:after {
 	content: "\0000a0";
 }
+.psu-lazyload-complete .lazy-field:after {
+	content: "";
+}
 
 /*********[ Orientation ]*************/
 @media all and (orientation:portrait) {}
