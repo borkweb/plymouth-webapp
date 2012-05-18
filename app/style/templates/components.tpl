@@ -37,7 +37,7 @@
 	<div class="grid_11 alpha">
 		<h3>Code for lazy loading PSU Person data</h3>
 		<pre class="prettyprint">
-&lt;ul class="psu-lazyload grid_7 omega" data-object=person data-id=200443&gt;
+&lt;ul class="psu-lazyload" data-object=person data-id=200443&gt;
 	&lt;li class="lazy-field" data-type="login_name"&gt;&lt;/li&gt;
 	&lt;li class="lazy-field" data-type="email"&gt;&lt;/li&gt;
 	&lt;li class="lazy-field" data-type="id"&gt;&lt;/li&gt;
