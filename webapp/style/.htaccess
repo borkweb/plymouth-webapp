@@ -1,0 +1,7 @@
+php_value auto_prepend_file none
+php_value auto_append_file none
+
+RewriteBase /webapp/style/
+
+RewriteEngine on
+RewriteRule (.*) /app/style/$1 [R=301]
