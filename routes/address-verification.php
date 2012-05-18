@@ -104,11 +104,8 @@ respond('POST', '/spraddr', function( $request, $response, $app ) {
 				}
 			} elseif ($key == 'fn_max_verify' || $key == 'fb_set_activity_user' || $key == 'fv_set_source_code') { // these one can not be set here ... just continue on by
 				continue;
-			} else { // the rest are booleans...just make sure they are
-				if (!is_bool($val)) {
-					$_SESSION['errors'][] = 'Error: A true/false variable has been incorrectly set';
-					$errorFlag=true;
-				}
+			} else { // the rest are booleans so force it
+				  $val = $val ? "true" : "false";
 			}
 			$parms .= "--{$key}={$val} ";
 		}

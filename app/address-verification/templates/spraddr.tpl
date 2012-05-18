@@ -6,8 +6,8 @@
 	<li>
 		<label>Do you want this run to update records that it can update?</label>
 		<ul>
-			<li><input type="radio" name="fb_update" value="true" id="fb_update_true" /> <label class="control-label" for="fb_update_true">Yes, update records</label></li>
-			<li><input type="radio" name="fb_update" value="false" id="fb_update_false" checked /> <label class="control-label" for="fb_update_false">No, leave records alone</label></li>
+			<li><input type="radio" name="fb_update" value="1" id="fb_update_true" /> <label class="control-label" for="fb_update_true">Yes, update records</label></li>
+			<li><input type="radio" name="fb_update" value="0" id="fb_update_false" checked /> <label class="control-label" for="fb_update_false">No, leave records alone</label></li>
 		</ul>
 	</li>
 	<li>
@@ -36,22 +36,22 @@
 	<li>
 	<label>Do you want scan only unverified records?</label>
 		<ul>
-			<li><input type="radio" name="fb_only_unverified" id="fb_only_unverified_true" value="true" /> <label class="control-label" for="fb_only_unverified_true">Yes, scan only unverified records</label></li>
-			<li><input type="radio" name="fb_only_unverified" id="fb_only_unverified_false" value="false" checked /> <label class="control-label" for="fb_only_unverified_false">No, scan all records</label></li>
+			<li><input type="radio" name="fb_only_unverified" id="fb_only_unverified_true" value="1" /> <label class="control-label" for="fb_only_unverified_true">Yes, scan only unverified records</label></li>
+			<li><input type="radio" name="fb_only_unverified" id="fb_only_unverified_false" value="0" checked /> <label class="control-label" for="fb_only_unverified_false">No, scan all records</label></li>
 		</ul>
 	</li>
 	<li>
 	<label>Do you want to skip international addresses?</label>
 		<ul>
-			<li><input type="radio" name="fb_skip_international" id="fb_skip_international_true" value="true" checked /> <label class="control-label" for="fb_skip_international_true">Yes, skip international records in this scan</label></li>
-			<li><input type="radio" name="fb_skip_international" id="fb_skip_international_false" value="false" /> <label class="control-label" for="fb_skip_international_false">No, include international records</label></li>
+			<li><input type="radio" name="fb_skip_international" id="fb_skip_international_true" value="1" checked /> <label class="control-label" for="fb_skip_international_true">Yes, skip international records in this scan</label></li>
+			<li><input type="radio" name="fb_skip_international" id="fb_skip_international_false" value="0" /> <label class="control-label" for="fb_skip_international_false">No, include international records</label></li>
 		</ul>
 	</li>
 	<li>
 	<label>Do you want to scan inactive addresses?</label>
 		<ul>
-			<li><input type="radio" name="fb_verify_inactive" id="fb_verify_inactive_true" value="true" /> <label class="control-label" for="fb_verify_inactive_true">Yes, scan inactive records</label></li>
-			<li><input type="radio" name="fb_verify_inactive" id="fb_verify_inactive_false" value="false" checked /> <label class="control-label" for="fb_verify_inactive_false">No, scan only active records</label></li>
+			<li><input type="radio" name="fb_verify_inactive" id="fb_verify_inactive_true" value="1" /> <label class="control-label" for="fb_verify_inactive_true">Yes, scan inactive records</label></li>
+			<li><input type="radio" name="fb_verify_inactive" id="fb_verify_inactive_false" value="0" checked /> <label class="control-label" for="fb_verify_inactive_false">No, scan only active records</label></li>
 		</ul>
 	</li>
 	<li>
