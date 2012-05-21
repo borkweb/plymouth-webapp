@@ -57,5 +57,9 @@
 			<li class="lazy-field" data-type="first_name"></li>
 			<li class="lazy-field" data-type="last_name"></li>
 		</ul>
+		<h3>Inline example</h3>
+		<div class="psu-lazyload" data-object=person data-id=50080>
+			My username is <span class="lazy-field inline-field" data-type="login_name"></span>!
+		</div>
 	</div>
 {/box}

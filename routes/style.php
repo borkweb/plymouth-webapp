@@ -26,7 +26,12 @@ respond( '/api/person-data', function( $request, $response, $app ) {
 	$ids = $request->param( 'id' );
 
 	// This endpoint is limited to just one person, to prevent abuse
-	if( count($ids) !== 1 || $ids[0] != 200443 ) {
+	$valid_pidms = array(
+		50080,
+		200443,
+	);
+
+	if( count($ids) > count( $valid_pidms ) || ! ( in_array( $ids[0], $valid_pidms ) && in_array( $ids[1], $valid_pidms ) ) ) {
 		trigger_error( 'bad request through api/person-data', E_USER_ERROR );
 		die;
 	}

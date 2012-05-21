@@ -2832,6 +2832,33 @@ cite {
 	content: "\0000a0";
 }
 
+.psu-lazyload .lazy-field {
+	background-image: url(../images/lazy-loading.png);
+	background-repeat: no-repeat;
+	min-height: 16px;
+	min-width: 66px;
+}
+
+.psu-lazyload .lazy-field.inline-field {
+	display: inline-block;
+	height: 16px;
+	width: 66px;
+}
+
+.psu-lazyload-complete .lazy-field {
+	background-image: none;
+	min-height: 0;
+	min-width: 0;
+}
+
+.psu-lazyload-complete .lazy-field.inline-field {
+	display: inline;
+}
+
+.psu-lazyload-complete .lazy-field:after {
+	content: "";
+}
+
 /*********[ Orientation ]*************/
 @media all and (orientation:portrait) {}
 @media all and (orientation:landscape) {}
