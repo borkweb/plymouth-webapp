@@ -24,6 +24,7 @@ class PSUPerson extends BannerObject
 		'no_ssn',
 		'no_wpid',
 		'no_system_username',
+		'pending_creation',
 		'pending_ldi_sync',
 		'pin_disabled',
 		'ping_support_locked',
@@ -80,6 +81,9 @@ class PSUPerson extends BannerObject
 
 					$problem = $ssn_count > 1;
 				}//end if
+			break;
+			case 'pending_creation':
+				$problem = $this->pendingCreation();
 			break;
 			case 'pending_ldi_sync':
 				$problem = $this->pendingLDISync();

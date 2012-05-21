@@ -299,6 +299,21 @@ class PSUPerson_Loader_SIS extends PSUPerson_Loader implements PSUPerson_Loader_
 	}//end loader_preflight
 
 	/**
+	 *
+	 */
+	public function pendingCreation() {
+		$sql = "SELECT 1 FROM USER_TEMP WHERE pidm = ?";
+		$result = (bool) \PSU::db('userinfo')->GetOne( $sql, $this->person->pidm );
+
+		if( \PSU::db('userinfo')->ErrorMsg() > 0 ) {
+			trigger_error( \PSU::db('userinfo')->ErrorMsg(), E_USER_WARNING );
+			return null;
+		}
+
+		return $result;
+	}//end pendingCreation
+
+	/**
 	 * returns whether or not the person is pending in an LDI sync
 	 */
 	public function pendingLDISync() {

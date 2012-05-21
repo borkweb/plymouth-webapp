@@ -182,6 +182,10 @@ table.roles li{
 
 .alerts strong{ color:#3B0D0D;}
 
+.alerts > ol {
+	margin-bottom: 0;
+}
+
 .fade{ color:#666;}
 
 .classifications span{
