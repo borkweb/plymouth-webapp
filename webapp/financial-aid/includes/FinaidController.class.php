@@ -27,12 +27,6 @@ class FinaidController extends PSUController {
 	 */
 	public $testing;
 
-	// redefine delegate so parent knows which controller to use as default.
-	// placeholder until php 5.3 "static" keyword.
-	public static function delegate( $path = null, $controller_class = __CLASS__ ) {
-		parent::delegate( $path, $controller_class );
-	}
-
 	public function __construct( $title = null ) {
 		parent::__construct( $title );
 

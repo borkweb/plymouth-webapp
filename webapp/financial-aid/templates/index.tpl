@@ -7,8 +7,14 @@
 {/foreach}
 </div>
 
-{assign var=fullname value=$target->formatName('f l')}
-{box size="16" title="Financial Aid Award for `$fullname`"}
+{capture name=title}
+	Financial Aid Award for {$target->formatName('f l')}
+	{if $params.admin}
+		<a href="http://go.plymouth.edu/ape/{$target->id}" class="ape-link" target="_blank"><img src="{"/images/icons/16x16/emotes/face-monkey.png"|cdn}"/></a>
+	{/if}
+{/capture}
+
+{box size="16" title=$smarty.capture.title}
 	{if $finaid->fafsa_received()}
 		<p>Your {$aid_year->year_range()} FAFSA was received on {$finaid->fafsa_receive_date|date_format}.</p>
 	{/if}
