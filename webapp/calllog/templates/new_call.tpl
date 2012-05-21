@@ -18,7 +18,7 @@
 <input type="hidden" name="page" id="page" value="{go_back.page}" />
 <!-- END: edit_call_form -->
 
-	<div class="grid_6 alpha">
+	<div class="grid_6 alpha" id="call-information">
 
 		<fieldset>
 			<legend id="caller_email_legend">Caller Information</legend>
@@ -62,12 +62,12 @@
 			</div>
 		</fieldset>
 
+		<div id="call-history">
 		<fieldset class="noprint">
 			<legend>Call History</legend>
-			<div id="CallHistoryDiv">
 				{call_history_summary}
-			</div>
 		</fieldset>
+		</div>
 
 		<fieldset class="noprint">
 			<legend onClick="calllog_toggle('restore_request');">

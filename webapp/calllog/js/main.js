@@ -7,13 +7,13 @@ function redirect(url){
 $jQuery(document).ready(function($){
 	$jQuery('#its-group-help').colorbox();
 
-	$jQuery('.print-balance a').live('click',function(){
+	$jQuery(document).delegate('.print-balance a', 'click',function(){
 		$jQuery('.print-funds .error').hide();
 		$jQuery('.print-funds .add-funds').slideDown('fast');
 		return false;
 	});
 	
-	$jQuery('.add-funds button').live('click',function(){
+	$jQuery(document).delegate('.add-funds button', 'click',function(){
 		$jQuery('.add-funds').hide();
 		$jQuery('.add-funds-throbber').show();
 		
@@ -38,8 +38,10 @@ $jQuery(document).ready(function($){
 	});
 
 	// make the Open Call tables clickable
-	$jQuery('#open_calls_main_div .call').live('click', function(){
+	$jQuery(document).delegate('#open_calls_main_div .call', 'click', function(){
 		var $link = $jQuery('.view', this).attr('href');
+		$jQuery(this).closest('table').find('.highlight').removeClass('highlight');
+		$jQuery(this).addClass('highlight');
 		document.location = $link;
 	});
 
@@ -142,23 +144,23 @@ $jQuery(document).ready(function($){
 	});
 	/////// end handle ticket checklists
 
-	$jQuery('body').delegate('#caller_history_outer_div', 'hover', function() {
-		setTimeout( add_focused_history, 100 );
+	$jQuery('body').delegate('#call-history', 'hover', function() {
+		setTimeout( add_focused_history, 250 );
 	});
 
-	$jQuery('body').delegate('#caller_history_outer_div', 'mouseleave', function() {
+	$jQuery('body').delegate('#call-history', 'mouseleave', function() {
 		setTimeout( remove_focused_history, 500 );
 	});
 });
 
 function add_focused_history() {
-	if( $jQuery('#caller_history_outer_div').is(':hover') ) {
-		$jQuery('#caller_history_outer_div').addClass('focused-block');
+	if( $jQuery('#call-history').is(':hover') ) {
+		$jQuery('#call-history').addClass('focused-block');
 	}//end if
 }//end add_focused_history
 
 function remove_focused_history() {
-	if( ! $jQuery('#caller_history_outer_div').is(':hover') ) {
-		$jQuery('#caller_history_outer_div').removeClass('focused-block');
+	if( ! $jQuery('#call-history').is(':hover') ) {
+		$jQuery('#call-history').removeClass('focused-block');
 	}//end if
 }//end add_focused_history

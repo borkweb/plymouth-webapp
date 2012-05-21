@@ -82,6 +82,10 @@ include(FUNCTIONS_DIR . "/user.class.php");
 
 require_once 'portal.class.php';
 
+if( file_exists('debug.php') ) {
+	include 'debug.php';
+}
+
 /*******************[Database Connections]*****************/
 $db = PSU::db('calllog');
 $GLOBALS['BANNER'] = PSU::db('banner');

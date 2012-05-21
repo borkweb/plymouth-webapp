@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div id="CallHistoryInnerDiv">
-	<table class="grid" style="width:100%;">
+	<table class="table table-bordered table-striped">
 		<thead>
 			<tr>
 				<th>Date</th>

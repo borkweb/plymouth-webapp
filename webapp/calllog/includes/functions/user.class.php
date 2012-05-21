@@ -362,6 +362,8 @@ class User
 				$tpl->assign('i',$i);
 				if(empty($row['comments'])) {
 					$row['comments'] = '<em>no update details</em>';
+				} else {
+					$row['comments'] = strip_tags( $row['comments'] );
 				}
 				$tpl->assign('call',$row);
 				$tpl->parse('main.user_call_history.call');

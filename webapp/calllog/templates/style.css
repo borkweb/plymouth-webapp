@@ -75,6 +75,14 @@ tr:hover .fade{
 	width: 99.4%;
 }
 
+#call-information fieldset {
+	width: 100%;
+}
+
+.call-history {
+	overflow: auto;
+}
+
 .content-info{
 	padding: 1.5px;
 	display: inline;
@@ -604,16 +612,20 @@ div#user_status_div .fade{color:#666;}
 
 .focused-block {
 	background-color: white;
-	border: 2px solid #000 !important;
+	border: 2px solid #ccc;
 	height: 500px;
 	width: 900px;
+	padding: 0.5em;
 	position: relative;
 	z-index: 100;
+	overflow: hidden;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .focused-block #CallHistoryInnerDiv {
 	height: 480px;
 	max-height: 500px;
+	padding-bottom: 10em;
 }
 
 .focused-block #call_history_assignment_loop {

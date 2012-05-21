@@ -173,7 +173,7 @@
 
 		<!-- BEGIN: open_calls_table -->
 		<div id="open_calls_main_div">
-			<table class="grid">
+			<table class="table table-bordered table-striped table-condensed">
 				<thead>
 					<tr>
 						<th><a href="javascript: void(0);" onClick="sortField('{GET.option}', {GET.group}, '{GET.open_call_type}', 'call_date');">Opened</a></th>

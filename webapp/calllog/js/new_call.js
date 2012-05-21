@@ -311,14 +311,14 @@ function view_open_calls(option, group, type){
 }
 
 function viewCallHistoryDetails(call_id){
-	new Ajax.Updater('CallHistoryDiv', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=callHistoryDetails&caller_user_name='+$F('caller_user_name')+'&call_id='+call_id);
+	new Ajax.Updater('call-history', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=callHistoryDetails&caller_user_name='+$F('caller_user_name')+'&call_id='+call_id);
 	Element.toggle('CallHistoryInnerDiv');
 }
 
 function viewCallHistorySummary(caller, highlight){
 	if(highlight){
-		new Ajax.Updater('CallHistoryDiv', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=callHistorySummary&caller='+caller, {onComplete: highlightHistory});
+		new Ajax.Updater('call-history', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=callHistorySummary&caller='+caller, {onComplete: highlightHistory});
 	}else{
-		new Ajax.Updater('CallHistoryDiv', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=callHistorySummary&caller='+caller);
+		new Ajax.Updater('call-history', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=callHistorySummary&caller='+caller);
 	}
 }
