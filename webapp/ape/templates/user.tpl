@@ -38,6 +38,12 @@
 			{if $person->issues.no_system_username}
 				<li>This user's username is not in Systems (no active/alumni record in USER_DB).</li>
 			{/if}
+			{if $person->issues.pending_creation}
+				<li>This user is in the Systems account creation queue. Access to email, clusters, and
+				other Active Directory-driven services will not be granted until account creation has
+				completed. Please open a Call Log ticket for Systems if you believe this user's account
+				should have already been created or expedited creation is needed.</li>
+			{/if}
 			{if $person->issues.pending_ldi_sync}
 				<li>{icon id="ape-sync" size="medium" flat=true} <strong>This user is undergoing synchronization with Moodle.</strong>  When this
 				message goes away, synchronization is complete. Please note: you have to refresh the page to check sync status.
@@ -87,8 +93,8 @@
 							this applicant is not currently in the invite pool. <em><strong>Do not tell the applicant he is not in the invite pool.</strong></em>
 						{/if}
 					{else}
-						this account will be provisioned automatically during the user's next myPlymouth login. No
-						intervention from support is necessary.
+						this account will be provisioned automatically during the user's next myPlymouth login. (No
+						intervention from support is necessary.)
 					{/if}
 				</li>
 			{/if}
