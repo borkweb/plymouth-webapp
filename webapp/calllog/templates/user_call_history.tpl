@@ -1,17 +1,26 @@
 <!-- BEGIN: main -->
 <div id="CallHistoryInnerDiv">
-	<div class="content-info-top content-info" style="width:30%;">Date</div>
-	<div class="content-info-top content-info" style="width:65%;">Subject</div>
-	<!-- BEGIN: user_call_history -->
-		<!-- BEGIN: call -->
-		<div id="CallHistoryRow{i}" style="cursor:pointer;" onclick="viewCallHistoryDetails({call.call_id})">
-			<div id="CallHistoryTD1_{i}" class="content-info-main content-info" style="width:30%;">{call.date_assigned}</div>
-			<div id="CallHistoryTD2_{i}" class="content-info-main content-info" style="width:65%;">{call.comments}</div>
-		</div>
-		<!-- END: call -->
-	<!-- END: user_call_history -->
-	<!-- BEGIN: no_results_message -->
-	<div id="CallHistoryRow1" class="content-info-none content-info" align="center">This user has no Call History</div>
-	<!-- END: no_results_message -->
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Subject</th>
+			</tr>
+		</thead>
+		<tbody>	
+			<!-- BEGIN: user_call_history -->
+			<!-- BEGIN: call -->
+			<tr id="CallHistoryRow{i}" style="cursor:pointer;" onclick="viewCallHistoryDetails({call.call_id})">
+				<td id="CallHistoryTD1_{i}">{call.date_assigned}</td>
+				<td id="CallHistoryTD2_{i}" class="history_comments">{call.comments}</td>
+			</tr>
+			<!-- END: call -->
+			<!-- END: user_call_history -->
+
+			<!-- BEGIN: no_results_message -->
+			<tr><td>This user has no Call History</td></tr>
+			<!-- END: no_results_message -->
+		</tbody>
+	</table>
 </div>
 <!-- END: main -->

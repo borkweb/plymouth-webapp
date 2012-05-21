@@ -27,7 +27,7 @@
 				  $login_history[] = $row;
 			}// end while
 
-	return $login_history;
+		return $login_history;
 	}// end function displayLoginHistory
 
 	function displayLoggedCalls($calllog_username, $sort_by='', $when=''){
@@ -52,7 +52,7 @@
 			  $logged_calls[] = $info;
 		}// end while
 	
-	return $logged_calls;
+		return $logged_calls;
 	}// end function displayLoggedCalls
 
 	function displayResolvedCalls($calllog_username, $when=''){
@@ -92,7 +92,7 @@
 		$query = "SELECT COUNT(id) FROM call_history WHERE tlc_assigned_to = '$calllog_username' AND call_status = 'closed'";
 		$calls_resolved['tlc_assigned_to'] = $db->GetOne($query);
 
-	return $calls_resolved;
+		return $calls_resolved;
 	}// end function returnNumberOfCallsResolved
 
 
@@ -107,7 +107,7 @@
 		
 		$num_calls_this_semester = $db->GetOne($query);
 		
-	return $num_calls_this_semester;
+		return $num_calls_this_semester;
 	}// end function returnNumberOfCallsLoggedThisSemester
 
 	function returnNumberOfCallsResolvedThisSemester($calllog_username){
@@ -121,7 +121,7 @@
 		$query = "SELECT COUNT(id) FROM call_history WHERE tlc_assigned_to = '$calllog_username' AND call_status = 'closed' AND date_assigned >= '$start_date' AND date_assigned <= '$end_date'";
 		$calls_resolved_this_semester['tlc_assigned_to'] = $db->GetOne($query);
 
-	return $calls_resolved_this_semester;
+		return $calls_resolved_this_semester;
 	}// end function returnNumberOfCallsResolvedThisSemester
 
 
@@ -138,50 +138,49 @@
 		
 		$todays_semester = Array();
 
-			/*
-				Get current year and month, the semesters are divided as follows:
-				1 - Fall:	  September (9), October (10), November (11), December (12)
-				2 - Winterim: January (1)
-				3 - Spring:   February (2), March (3), April (4), May (5)
-				3 - Summer:   June (6), July (7), August (8)
+		/*
+			Get current year and month, the semesters are divided as follows:
+			1 - Fall:	  September (9), October (10), November (11), December (12)
+			2 - Winterim: January (1)
+			3 - Spring:   February (2), March (3), April (4), May (5)
+			3 - Summer:   June (6), July (7), August (8)
 
-				In call_log table, call_date looks like 2003-11-29
-			*/
-			$start_date = '';
-			$end_date = '';
-			
-			$todays_year = date('Y');		  // 2003
-			$todays_month = date('m');		  // 11
-			$todays_end_date = date('Y-m-d'); // 2003-11-29	
+			In call_log table, call_date looks like 2003-11-29
+		*/
+		$start_date = '';
+		$end_date = '';
+		
+		$todays_year = date('Y');		  // 2003
+		$todays_month = date('m');		  // 11
+		$todays_end_date = date('Y-m-d'); // 2003-11-29	
 
-			$summer_semester = Array('06', '07', '08');
-			$fall_semester = Array('09', '10', '11', '12');
-			$winterim_semester = Array('01');
-			$spring_semester = Array('02', '03', '04', '05');
+		$summer_semester = Array('06', '07', '08');
+		$fall_semester = Array('09', '10', '11', '12');
+		$winterim_semester = Array('01');
+		$spring_semester = Array('02', '03', '04', '05');
 
-			if(in_array($todays_month, $spring_semester)){
-			   $start_date = $todays_year.'-02-01';
-			   $end_date = $todays_year.'-06-01';
-			}// end if
-			else
-			if(in_array($todays_month, $summer_semester)){
-			   $start_date = $todays_year.'-06-01';
-			   $end_date = $todays_year.'-09-01';
-			}// end if
-			else
-			if(in_array($todays_month, $fall_semester)){
-			   $start_date = $todays_year.'-09-01';
-			   $end_date = $todays_year.'-12-31';
-			}// end if
-			else
-			if(in_array($todays_month, $winterim_semester)){
-			   $start_date = $todays_year.'-01-01';
-			   $end_date = $todays_year.'01-31';
-			}// end if
+		if(in_array($todays_month, $spring_semester)){
+		   $start_date = $todays_year.'-02-01';
+		   $end_date = $todays_year.'-06-01';
+		}// end if
+		else
+		if(in_array($todays_month, $summer_semester)){
+		   $start_date = $todays_year.'-06-01';
+		   $end_date = $todays_year.'-09-01';
+		}// end if
+		else
+		if(in_array($todays_month, $fall_semester)){
+		   $start_date = $todays_year.'-09-01';
+		   $end_date = $todays_year.'-12-31';
+		}// end if
+		else
+		if(in_array($todays_month, $winterim_semester)){
+		   $start_date = $todays_year.'-01-01';
+		   $end_date = $todays_year.'01-31';
+		}// end if
 
-			$todays_semester['start_date'] = $start_date;
-			$todays_semester['end_date'] = $end_date;
+		$todays_semester['start_date'] = $start_date;
+		$todays_semester['end_date'] = $end_date;
 
-	return $todays_semester;
+		return $todays_semester;
 	}// end function getTodaysSemester
-?>

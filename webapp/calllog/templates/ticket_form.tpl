@@ -9,7 +9,7 @@
 		<option value="desktop">Desktop Application/Operating System (Installation, Problem, etc)</option>
 		<option value="repair">Device Repair</option>
 		{if $PHP.is_employee}<option value="purchase">Hardware Purchase</option>{/if}
-		<option value="ltoe">Learning Management System (Moodle/Blackboard)</option>
+		<option value="ltoe">Learning Management System (Moodle/Mahara)</option>
 		<option value="network">Network (Bradford, Connectivity, etc)</option>
 		<option value="printing">Printing</option>
 		<option value="surplus">Surplus Pickup Request</option>
@@ -501,17 +501,9 @@
 			<label rel="Which LMS:">What type of Learning Management System (LMS) is being used?</label>
 			<select name="checklist_ltoe_lms">
 				<option value=""></option>
-				<option value="blackboard">Blackboard</option>
-				<option value="moodle">Moodle</option>
+				<option value="moodle1">Moodle 1</option>
+				<option value="moodle2">Moodle 2</option>
 			</select>
-			<ul class="sub" rel="blackboard">
-				<label>Is Java installed?</label>
-				<select name="checklist_ltoe_java">
-					<option value="Yes">Yes</option>
-					<option value="No">No</option>
-					<option value="I Don't Know">I Don't Know</option>
-				</select>
-			</ul><!-- end rel=blackboard -->
 		</li>
 		<li><label>Browser:</label> <input type="text" name="checklist_ltoe_browser"/></li>
 		<li><label>Browser Version:</label> <input type="text" name="checklist_ltoe_browser_version"/></li>
@@ -615,9 +607,8 @@
 	</ul>
 </div>
 {/if}
-<div id="full-problem">
-	<h4>Ticket Title:</h4>
-	<input type="text" name="title" id="title" maxlength="100" size="50" placeholder="Short problem description (title)" value="{$title|escape}">
-	<h4>{$details_title|default:'Problem Description'}:</h4>
-	<textarea name="problem_details" id="problem_details">{$details}</textarea>
-</div>
+
+<label>Ticket Title:</label>
+<input type="text" name="title" id="title" maxlength="100" size="50" placeholder="Short problem description (title)" value="{$title|escape}">
+<label>{$details_title|default:'Problem Description'}:</label>
+<textarea name="problem_details" id="problem_details">{$details}</textarea>

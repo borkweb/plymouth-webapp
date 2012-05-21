@@ -1,6 +1,4 @@
-<!-- BEGIN: main -->
-<h1 align="center">Help Desk Tools</h1>
-<div class="block">
+{box title="Help Desk Tools"}
 <ul>
 	<li><a href="http://go.plymouth.edu/ape" target="_blank">Account Provisioning Engine (APE)</a></li>
 	<li><a href="http://go.plymouth.edu/bradford" target="_blank">Bradford Campus Manager</a></li>
@@ -14,5 +12,4 @@
 	<li><a href="http://go.plymouth.edu/support" target="_blank">Support Tickets (End User Tickets)</a></li>
 	<li><a href="http://go.plymouth.edu/whentowork" target="_blank">When To Work</a></li>
 </ul>
-</div>
-<!-- END: main -->
+{/box}

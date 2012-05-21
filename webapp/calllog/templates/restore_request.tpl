@@ -40,5 +40,5 @@
 	Additional Details: 
 	<textarea name='restore_details' id='restore_details' cols='40' rows='2'>{restore_details}</textarea>
 	<br/>
-	<a href="javascript: void(0);" onClick="restoreRequest();" name="restore_submit" class="action">Submit Restore</a>
+	<a href="javascript: void(0);" onClick="restoreRequest();" name="restore_submit" class="action btn">Submit Restore</a>
 <!-- END: main -->

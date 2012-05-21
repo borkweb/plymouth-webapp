@@ -1,8 +1,7 @@
 <?php
-include("call_log_admin.html");
 if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'])){
-	$page_name = 'employee_calls';
-	$template_file = TEMPLATE_ADMIN_DIR.'/'.$page_name.'.tpl';
+	$page_name = 'admin/employee_calls';
+	$template_file = TEMPLATE_DIR.'/'.$page_name.'.tpl';
 
 	$tpl = new XTemplate($template_file);
 
@@ -14,12 +13,11 @@ if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'
 
 	$tpl->assign('call_log_web_home', CALL_LOG_WEB_HOME);
 	$tpl->parse('main');
-	$tpl->out('main');
+	$content = $tpl->text('main');
 
-	echo setUpFooter();
-
+	$ptpl = new PSUTemplate();
+	$ptpl->assign('content', $content);
+	$ptpl->display('psu_wrapper.tpl');
 }else{
 	PSUHTML::redirect(CALL_LOG_WEB_HOME.'/index.html');
 }
-
-?>

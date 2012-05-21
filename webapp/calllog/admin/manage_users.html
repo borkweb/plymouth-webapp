@@ -1,11 +1,9 @@
 <?php
-include("call_log_admin.html");
 
 if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'])){	
-$tpl = new XTemplate(TEMPLATE_ADMIN_DIR.'/tlc_users_admin.tpl');
 
-	if(isSet($_GET['action'])){
-		switch($_GET['action']){	
+	if( isset( $_GET['action'] ) ) {
+		switch( $_GET['action'] ) {	
 			case 'returnnewuserform':
 				$text = returnNewUserForm();
 				break;
@@ -25,8 +23,8 @@ $tpl = new XTemplate(TEMPLATE_ADMIN_DIR.'/tlc_users_admin.tpl');
 				$text = setTLCUserStatus($_GET['user_name'], $_GET['status']);
 				break;
 		}
-	}else if($_GET['display']){
-		switch($_GET['display']){
+	}elseif( $_GET['display'] ) {
+		switch( $_GET['display'] ){
 			case 'activeusers':
 				$text = displayTLCUsers('active', 'admin');
 				break;
@@ -41,14 +39,13 @@ $tpl = new XTemplate(TEMPLATE_ADMIN_DIR.'/tlc_users_admin.tpl');
 				break;	   			
 		}// end switch
 	
-   }else{	
+	} else{	
 		$text = displayTLCUsers('active', 'admin');
-   }
-   $tpl->assign('content', $text);	   
-   $tpl->parse('main');
-   $tpl->out('main');
-   echo setUpFooter();
+	}
+
+	$ptpl = new PSUTemplate();
+	$ptpl->assign('content', $text);
+	$ptpl->display('admin/manage_users.tpl');
 }else{
-	PSUHTML::redirect(CALL_LOG_WEB_HOME.'/index.html');
+	PSUHTML::redirect(CALL_LOG_WEB_HOME.'/');
 }
-?>

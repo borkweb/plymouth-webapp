@@ -1,7 +1,8 @@
 <!-- BEGIN: main -->
 
 	<!-- BEGIN: getEmployeeCalls -->
-		<table align='center' valign='top' cellpadding='5' cellspacing='1' width='90%'>
+	<table class="grid">
+	<thead>
 		<tr>
 			<th>Call ID</th>
 			<th>Caller Info</th>
@@ -10,8 +11,10 @@
 			<th>Call Assigned To</th>
 			<th>Call Status</th>
 		</tr>
+	</thead>
+	<tbody>
 		<!-- BEGIN: call -->
-		<tr style="cursor:pointer;"  onClick="document.location='{CALL_LOG_WEB_HOME}/new_call.html?caller_user_name={calls.caller_username}&call_id={calls.call_id}&action=getEmployeeCalls&option={calls.calllog_username}&group={group_number}&find_type={open_call_type}&page=admin/employee_calls.html'">
+		<tr style="cursor:pointer;"  onClick="document.location='{CALL_LOG_WEB_HOME}/ticket/{calls.call_id}'">
 			<td>{calls.call_id}</td>
 			<td>{calls.caller_info}</td>
 			<td>{calls.call_date_time}</td>
@@ -20,7 +23,8 @@
 			<td>{calls.call_status}</td>
 		</tr>
 		<!-- END: call -->
-		</table>		
+	</tbody>
+	</table>		
 	<!-- END: getEmployeeCalls -->
 
 	<!-- BEGIN: upgradeCallLog -->

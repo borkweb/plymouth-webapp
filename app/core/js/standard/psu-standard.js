@@ -797,7 +797,7 @@ amplify.subscribe( "request.before.ajax", function( resource, settings, ajaxSett
  *
  * Copyright 2010 Plymouth State University
  */
-
+(function($){
 // Cached jQuery object, mostly for use with delegate:
 //     $.root.delegate('a', 'click', callback);
 $.root = $(document);
@@ -966,6 +966,7 @@ window.log = function(){
     console.log( Array.prototype.slice.call(arguments) );
   }
 };
+})(jQuery);
 /*!
  * jQuery doTimeout: Like setTimeout, but better! - v1.0 - 3/3/2010
  * http://benalman.com/projects/jquery-dotimeout-plugin/

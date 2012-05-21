@@ -1,14 +1,14 @@
 .priority-status {text-align:center;}
-.status-high{background: #cd0000;}
-.status-medium{background: #ffff7e;}
-.status-pending{background: #5da3ff;}
+.status-high{background: #cd0000 !important;}
+.status-medium{background: #ffff7e !important;}
+.status-pending{background: #5da3ff !important;}
 .status-delayed{background: #c0c0c0;}
-.status-inprogress{background: #bd78c2;}
-.status-install{background: #69CF58;}
-.status-upgrade{background: #e88523;}
-.status-collision{background: #208ec1;}
-.status-purchase{background: #a2c1a9;}
-.status-,.status-normal{background: #eeffee;}
+.status-inprogress{background: #bd78c2 !important;}
+.status-install{background: #69CF58 !important;}
+.status-upgrade{background: #e88523 !important;}
+.status-collision{background: #208ec1 !important;}
+.status-purchase{background: #a2c1a9 !important;}
+.status-,.status-normal{background: #eeffee !important;}
 
 a img{border: none;}
 
@@ -75,6 +75,14 @@ tr:hover .fade{
 	width: 99.4%;
 }
 
+#call-information fieldset {
+	width: 100%;
+}
+
+.call-history {
+	overflow: auto;
+}
+
 .content-info{
 	padding: 1.5px;
 	display: inline;
@@ -106,10 +114,6 @@ tr:hover .fade{
 	float: left;
 }
 
-#main-helpdesk-news, #main-open-calls{
-	border: solid 1px;
-	margin-bottom: 1em;
-}
 
 #main-section{
 	width: 75%;
@@ -139,24 +143,20 @@ tr:hover .fade{
 
 #main-search-results2{
 	width: 100%; 
-	border: hidden; 
-	height: 245px; 
-}
-
-#main-search_results2, #main-section{
+	border: hidden;
 }
 
 #hardwareInnerDiv, #CallHistoryInnerDiv{
-	height: 100px;
-	max-height: 100px;
+	height: 150px;
+	max-height: 150px;
 	width: 98%;
 	overflow: auto;
 }
 
-th{
-	font: bold 10px verdana;
-	text-align: center;
+.history_comments{
+	overflow: hidden;
 }
+
 
 .top-border{
 	border-top: solid 3px #000000;
@@ -212,14 +212,6 @@ th{
 	background: url(/images/wait.gif) bottom right no-repeat; 
 }
 
-strong{
-	display:block;
-	width:20%;
-	clear:both;
-	float:left;
-	text-align:right;
-	padding-right:1ex;
-}
 .select{
 	width:40%
 }
@@ -237,21 +229,14 @@ strong{
 	border: hidden 1px;
 }
 
-fieldset, .show-border{
+.show-border{
 	border: solid 1px; 
 }
 
-fieldset{
-	
-}
 
 .quotatext{
 	font-size: 11px;
 	font-family: verdana, helvectica, arial, sans-serif;
-}
-
-form{
-	display:inline;
 }
 
 #showgroupusersdiv{
@@ -277,9 +262,6 @@ form{
 	font-weight: bold;
 }
 
-#outer-header{
-}
-
 .header-div{
 	border: hidden 1px;
 }
@@ -302,25 +284,10 @@ form{
 	font-weight:bold; 
 }
 
-label{
-	font: 10px verdana; 
-}
-
 .keyword{
 	border: dashed; 
 	width: 2em; 
 	height: 2em;
-}
-
-legend{
-	font: bold 10px verdana; 
-}
-
-input, select, textarea{
-	border: 1px solid; 
-	font-size: 10px;
-	font-family: verdana, arial, helvetica, sans-serif;
-	font-weight: normal;
 }
 
 .nav_link_last{
@@ -330,21 +297,6 @@ input, select, textarea{
 	list-style-type: none;
 }
 
-.new-call-user-table-main{
-	border: solid 1px;
-	padding: 5px;
-	float: left;
-}
-
-.new-call-user-table-left{
-	text-align: left;
-	width: 320px;
-}
-
-.new-call-user-table-center{
-	text-align: center;
-	width: 600px;
-}
 
 .new-call-user-table-inside{
 	border: solid 1px;
@@ -431,11 +383,6 @@ input, select, textarea{
 	display: inline;
 	width: 50%;
 }
-body{
-	font: 11px verdana;
-	width: 960px;
-	margin: 0 auto;
-}
 
 #tlc_nav_list{
 	height: 20px;
@@ -471,21 +418,8 @@ body{
 	padding-left: 1.5em;	
 }
 
-#media_loans_div, #dashboard_div, #main-table-right-inside, #assign_to_div, #call_assignment_history_hidden_div, #cluster_printers_div, #restore_request_div, #keywordsList {
+#media_loans_div, #dashboard_div, #main-table-right-inside, #assign_to_div, #call_assignment_history_hidden_div, #cluster_printers_div, #restore_request_div, #keywordsList, .hidden {
 	display: none;
-}
-
-.no-border{
-	border: solid 1px;
-}
-
-a.action, input.action {
-	font-weight:normal;
-	padding:1px 3px;
-	margin:10px 0px;
-	text-decoration:none;
-	vertical-align:middle;
-	line-height:16px !important;
 }
 
 a.action:link, a.action:visited, a.action:active, input.action {
@@ -500,15 +434,6 @@ a.action:hover {
 	text-decoration: none;
 	font-weight: normal;
 	border: 1px solid;
-}
-
-td{
-	font: 11px verdana;
-}
-
-h1{
-	font-size: 25px;
-	text-align: center;
 }
 
 .radio{
@@ -534,7 +459,6 @@ td.aa_label{
 }
 
 div#user_status_div #user_info{
-	background: #F3F1E6;
 	border: 1px solid #000;
 	padding: 3px;
 	position:relative;
@@ -597,14 +521,12 @@ div#user_status_div table.roles{
 }
 
 div#user_status_div table.roles th{
-	background: #E1E0CD;
 	border: 1px solid #ccc;
 	color: #000;
 	padding: 5px;
 }
 
 div#user_status_div table.roles td{
-	background: #F3F1E6;
 	border: 1px dotted #ccc;
 	padding: 5px;
 }
@@ -617,8 +539,6 @@ div#user_status_div table.roles li{
 div#user_status_div .alerts{
 	margin: 10px;
 	border: 1px solid #6C2727;
-	background:#C2A7A7;
-	color:#6C2727;
 	padding: 10px;
 }
 
@@ -678,29 +598,6 @@ div#user_status_div .fade{color:#666;}
 
 .call-title{font-weight: bold;}
 
-/*********[ Tablesorter theme ]*************/
-table.sortable thead tr th { 
-	padding-right: 1.5em;
-}
-table.sortable thead tr .header {
-	background-image: url(/webapp/style/templates/images/tablesorter-bg.gif);
-	background-repeat: no-repeat;
-	background-position: center right;
-	cursor: pointer;
-}
-table.sortable tbody tr:nth-child(2n) td { background-color: #f0f7f9; }
-table.sortable tbody tr:nth-child(2n+1) td { background-color: transparent; }
-table.sortable thead tr .headerSortUp {
-	background-image: url(/webapp/style/templates/images/tablesorter-asc.gif);
-}
-table.sortable thead tr .headerSortDown {
-	background-image: url(/webapp/style/templates/images/tablesorter-desc.gif);
-}
-table.sortable thead tr .headerSortDown, table.sortable thead tr .headerSortUp {
-	background-color: #eee;
-	color: #000;
-}
-
 .warning-call-closed {
 	border: 1px solid #800;
 	background-color: #e00;
@@ -714,18 +611,185 @@ table.sortable thead tr .headerSortDown, table.sortable thead tr .headerSortUp {
 }
 
 .focused-block {
-	border: 2px solid #000 !important;
+	background-color: white;
+	border: 2px solid #ccc;
 	height: 500px;
 	width: 900px;
+	padding: 0.5em;
 	position: relative;
 	z-index: 100;
+	overflow: hidden;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .focused-block #CallHistoryInnerDiv {
 	height: 480px;
 	max-height: 500px;
+	padding-bottom: 10em;
 }
 
 .focused-block #call_history_assignment_loop {
 	height: 250px !important;
+}
+/* Default */
+
+.icon{vertical-align: middle;}
+/******************* Header **************************/
+#outer-header{
+	border-bottom: 1px solid #BFBEA3;
+	height:75px;
+	position:relative;
+}
+#header-left-side{
+	background: none;
+	min-width:450px;
+}
+.header-div{color:#85360f;font-size:1.0em;}
+.header-left{
+	float: none;
+	font-size: 1.9em;
+}
+.header-right{
+	float: none;
+}
+#tlc_nav_list{
+	margin: 0;
+	padding: 0;
+	position:relative;
+	bottom: 0px;
+	right: 0px;
+	text-align: left;
+}
+#tlc_nav_list li a,#tlc_nav_list li a:link,#tlc_nav_list li a:visited{
+	background: none;
+	border: none;
+	color: #2893D5;
+	font-size: 1.0em;
+}
+
+#tlc_nav_list a:hover{
+	background: none;
+}
+
+/******************* Body **************************/
+#new-call-table{
+	border: none;
+}
+#main-open-calls{
+	padding:3px;
+	position:relative;
+}
+#main-section{
+	position:relative;
+}
+#main-helpdesk-news{
+	position:relative;
+}
+
+#main-table-right, .no-border, #my_options_table{
+	border:1px solid #BFBEA3;
+}
+
+.helpdesk_news{
+	color: #89936F;
+}
+.helpdesk_news a{color:#A66240;}
+
+.nav_link{
+	margin:1px;
+}
+.open_calls{
+	display: block;
+	padding-bottom: 0.2em;
+	padding-top: 0.2em;
+	border-bottom: 1px solid #ddd;
+}
+.page_nav_link_last a,a{
+	color:#2893D5;
+	text-decoration: none;
+}
+
+
+#caller_information_outer_div,
+#hardware_info_outer_div,
+#caller_history_outer_div,
+#caller_media_outer_div,
+#problem_details_outer_div,
+#knowledgebase_outer_div,
+#call_assignment_history_div,
+#call_information_outer_div,
+#assigned_to_outer_div,
+#user_quota_outer_div,
+#user_status_outer_div,
+#dashboard_outer_div,
+#restore_request_outer_div,
+#cluster_printers_outer_div,
+#call_assignment_history_reorder,
+.content-info-main .content-info,
+.content-info,
+.main-table-properties,
+.block{
+	border:1px solid #BFBEA3;
+	margin-bottom: 5px;
+}
+
+#call_assignment_history_div {
+	text-align: left;
+}
+
+.block{
+	padding: 5px;
+	margin: 0 5px 5px 5px;
+}
+
+#submit_reset{
+	border: 1px solid #BFBEA3;
+}
+td.call-age-status-old{
+	background-color: #f3cccc !important;
+	border-color: #bfa3a3;
+}
+td.activity-age-status-old{
+	background-color: #f3cccc !important;
+	border-color: #bfa3a3;
+}
+
+.content-info-top, .content_highlight{
+	border: 1px solid #4a5236;
+}
+#re-order-div{color:#85360F;}
+
+.label{color: #77825A;}
+label{color: #77825A;}
+.label em{color:#A66240;}
+
+#submit_reset{
+	padding:3px;
+}	
+
+a.action:link, a.action:visited, a.action:active, input.action {
+	background:#fff;
+	border:1px solid #BFBEA3;
+}
+
+#call_assignment_history_inner_div label{
+	color: #000;
+}	
+
+#call_assignment_history_inner_div label em{
+	font-weight: bold;
+	font-style: normal;
+	margin-right: 5px;
+}
+
+.average-open-time{
+	color: #999;
+}
+
+#generic-call-list>li{
+	margin: 10px;
+}
+
+.inline{
+	display:inline;
 }

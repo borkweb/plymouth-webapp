@@ -13,10 +13,6 @@ body{
 
 .noprint{display:none;}
 
-.new-call-user-table-main{
-	width: 90%;
-}
-
 #call_assignment_history_hidden_div label,
 #call_assignment_history_hidden_div label em,
 #call_assignment_history_hidden_div .label,
@@ -28,10 +24,6 @@ body{
 
 #call_assignment_history_details_hidden_div{
 	padding-right: 30px;
-}
-
-.new-call-user-table-main, .new-call-user-table-inside{
-	border-color: #000;
 }
 
 #assign_to_div, #call_assignment_history_hidden_div, #call_assignment_history_inner_hidden_div {

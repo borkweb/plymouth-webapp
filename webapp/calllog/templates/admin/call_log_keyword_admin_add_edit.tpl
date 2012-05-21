@@ -32,13 +32,13 @@
 <tr>
 	<td width="100%" align="center" valign="middle" colspan="2">
 		<!-- BEGIN: add_keyword -->
-		<a href="javascript:document.add_edit_keyword.submit()" title="Add Keyword." class="action">Add Item</a>
+		<a href="javascript:document.add_edit_keyword.submit()" title="Add Keyword." class="btn">Add Item</a>
 		<!-- END: add_keyword -->
 		<!-- BEGIN: update_keyword -->
-		<a href="javascript:document.add_edit_keyword.submit()" title="Update Keyword." class="action">Update Keyword</a>
+		<a href="javascript:document.add_edit_keyword.submit()" title="Update Keyword." class="btn">Update Keyword</a>
 		<!-- END: update_keyword -->		
 		&nbsp;&nbsp;
-		<a href="{father_page}" title="Cancel Changes." class="action">Cancel</a>	
+		<a href="{father_page}" title="Cancel Changes." class="action button">Cancel</a>	
 	</td>
 </tr>
 </table>

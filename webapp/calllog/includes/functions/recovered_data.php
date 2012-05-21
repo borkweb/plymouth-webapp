@@ -16,4 +16,3 @@ function displayRecoveryData($template_file){
 	}
 	return $tpl->text('main.recovered');
 }
-?>

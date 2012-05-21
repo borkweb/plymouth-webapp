@@ -5,6 +5,8 @@ require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
 require_once 'autoload.php';
 PSU::session_start();
 
+$GLOBALS['TITLE'] = 'Call Log';
+
 $config = \PSU\Config\Factory::get_config();
 define( 'PSU_API_APPID', $config->get( 'calllog', 'api_appid' ) );
 define( 'PSU_API_APPKEY', $config->get( 'calllog', 'api_key' ) );
@@ -65,7 +67,6 @@ require_once (INCLUDES_DIR."/functions.php");
 require_once (INCLUDES_DIR."/CallLog.class.php");
 
 include(FUNCTIONS_DIR . "/add_update.class.php");
-include(FUNCTIONS_DIR . "/admin_functions.php");
 include(FUNCTIONS_DIR . "/call_log_graph_functions.php");
 include(FUNCTIONS_DIR . "/call_log_keyword_admin_functions.php");
 include(FUNCTIONS_DIR . "/call_log_search.php");
@@ -80,6 +81,10 @@ include(FUNCTIONS_DIR . "/tlc_users_functions.php");
 include(FUNCTIONS_DIR . "/user.class.php");
 
 require_once 'portal.class.php';
+
+if( file_exists('debug.php') ) {
+	include 'debug.php';
+}
 
 /*******************[Database Connections]*****************/
 $db = PSU::db('calllog');
@@ -242,3 +247,7 @@ $time = date("H:i:s");
 if(empty($_SESSION['priv_users'])){
   $_SESSION['priv_users'] = Array('manager', 'webguru', 'shift_leader','supervisor');
 }// end if
+
+if(in_array($_SESSION['tlc_position'], $_SESSION['priv_users'])){
+	$GLOBALS['calllog_admin'] = true;
+}

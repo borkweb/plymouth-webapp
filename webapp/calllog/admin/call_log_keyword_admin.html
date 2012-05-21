@@ -1,5 +1,4 @@
 <?php
-include("call_log_admin.html");
 
 if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'])){
 	require_once(FUNCTIONS_DIR . '/call_log_keyword_admin_functions.php');
@@ -15,28 +14,28 @@ if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'
 	   // the switch statement in the displayKeywords() function.
 	   $text = displayKeywords($display);
 	}else if(isSet($_REQUEST['action'])){
-	   $action = $_REQUEST['action'];
+		$action = $_REQUEST['action'];
 	   
-			switch($action){
-				case 'addkeyword':
-					$text = addKeyword();
-					break;
-				case 'editkeyword':
-					$keyword_id = $_REQUEST['keyword_id'];
-					$text = editKeyword($keyword_id);
-					break;
-				case 'set_keyword_status':
-					$keyword_id = $_REQUEST['keyword_id'];
-					$status = $_REQUEST['status'];
-					$text = setKeywordStatus($keyword_id, $status);
-					break;
-				case 'add_keyword_form':
-					$text = insertKeywordIntoDB($_REQUEST);
-					break;
-				case 'update_keyword_form':
-					$text = updateKeywordInDB($_REQUEST);
-					break;
-			}// end switch
+		switch($action){
+			case 'addkeyword':
+				$text = addKeyword();
+				break;
+			case 'editkeyword':
+				$keyword_id = $_REQUEST['keyword_id'];
+				$text = editKeyword($keyword_id);
+				break;
+			case 'set_keyword_status':
+				$keyword_id = $_REQUEST['keyword_id'];
+				$status = $_REQUEST['status'];
+				$text = setKeywordStatus($keyword_id, $status);
+				break;
+			case 'add_keyword_form':
+				$text = insertKeywordIntoDB($_REQUEST);
+				break;
+			case 'update_keyword_form':
+				$text = updateKeywordInDB($_REQUEST);
+				break;
+		}// end switch
 
 	}else{
 		$text = displayKeywords('activekeywords');
@@ -44,10 +43,12 @@ if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'
 	$tpl->assign('content', $text);
 
 	$tpl->parse('main');
-	$tpl->out('main');
+	$content = $tpl->text('main');
 
-	echo setUpFooter();
+	$ptpl = new PSUTemplate();
+	$ptpl->assign('content', $content);
+	$ptpl->display('psu_wrapper.tpl');
+
 }else{
 	PSUHTML::redirect(CALL_LOG_WEB_HOME.'/index.html');
 }
-?>

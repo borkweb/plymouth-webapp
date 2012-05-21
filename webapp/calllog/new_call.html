@@ -2,7 +2,7 @@
 ob_start();
 
 $page_name = "new_call";
-echo setupHeader($page_name, 'return'); // Set up the header
+setupHeader($page_name, 'return'); // Set up the header
 $template_file = TEMPLATE_DIR.'/'.$page_name.'.tpl';
 $tpl = new XTemplate($template_file);
 
@@ -202,8 +202,6 @@ if($person['email'] != 'generic')
 
 	$tpl->assign('caller_email', $GLOBALS['user']->userEmailFunction($person['username'], $_REQUEST['call_id'], $person));
 	
-	$tpl->assign('user_quota', $GLOBALS['user']->userQuota($person['username'], $person));
-
 	try {
 		$sTpl = new PSUSmarty();
 		$person = new PSUPerson($person['wp_id'] ? $person['wp_id'] : $person['pidm']);
@@ -216,7 +214,6 @@ if($person['email'] != 'generic')
 	}
 
 	$tpl->assign('call_history_summary', $GLOBALS['user']->userCallHistory($caller));
-	$tpl->assign('media_loans_summary', $GLOBALS['user']->userMediaLoans($caller));
 }
 else
 {
@@ -236,6 +233,8 @@ else
 $tpl->parse('main.new_call_user_name');
 
 $tpl->parse('main');
-$tpl->out('main');
+$content = $tpl->text('main');
 
-echo setUpFooter();
+$ptpl = new PSUTemplate();
+$ptpl->assign('content', $content);
+$ptpl->display('psu_wrapper.tpl');

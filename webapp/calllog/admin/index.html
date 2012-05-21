@@ -1,0 +1,7 @@
+<?php
+if(in_array($GLOBALS['EMPLOYEE_INFO']['user_privileges'], $_SESSION['priv_users'])){
+	$tpl = new PSUTemplate();
+	$tpl->display('admin/index.tpl');
+}else{
+	PSUHTML::redirect(CALL_LOG_WEB_HOME.'/');
+}

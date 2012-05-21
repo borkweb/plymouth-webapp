@@ -11,7 +11,7 @@
 <!-- BEGIN: edit_call_id -->
 <input type="hidden" name="call_id" value="{call_id}"/>
 <div class="ticket_num">
-	<span>Ticket:</span> {call_id}<br>
+	<span>Ticket:</span> {call_id}<br/>
 	<a href="http://go.plymouth.edu/log/{call_id}">http://go.plymouth.edu/log/{call_id}</a>
 </div>
 <!-- END: edit_call_id -->
