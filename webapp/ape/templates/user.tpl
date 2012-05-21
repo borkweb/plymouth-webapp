@@ -209,6 +209,12 @@
 		<div id="ape_id_misc" class="ape-section {if $myuser->go_states.ape_id_misc === '0'}ape-section-hidden{/if}">
 			<h3>Misc. Information</h3>
 			<ul class="apedata">
+			{if $person->department && $person->department != 'Student Distribution'}
+				<li>
+					<label>Department:</label>
+					{$person->department}
+				</li>
+			{/if}
 			<li>
 				<label>Demographics:</label>
 				In 
