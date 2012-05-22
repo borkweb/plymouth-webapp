@@ -91,64 +91,93 @@ function returnCalls($call_type){
 }// end function returnCalls
 
 function displayOpenCalls($template_file, $level=""){
-	global $db;
-	
 	$tpl = new XTemplate($template_file);
-	// gets information about the user and what groups they are in, also parsing out unassigned and all calls
-	$getUserInfoSQL = "SELECT * FROM its_employee_groups, itsgroups WHERE itsgroups.deleted = 0 AND its_employee_groups.employee_id = {$GLOBALS['EMPLOYEE_INFO']['call_log_user_id']} AND itsgroups.itsgroupid = its_employee_groups.group_id AND its_employee_groups.option_id != '0' ORDER BY subgroupName ASC";
-	$getUserInfoRes = $db->Execute($getUserInfoSQL);
-	//end group membership query
-
-	//$getUserInfo = $getUserInfoRes->FetchRow();
-	$my_calls = returnOpenCalls('my');
-	$tpl->assign('my_group', 0);
-	$tpl->assign('numberOfRows', count($my_calls));
-	$tpl->assign('type','my');
-	$tpl->assign('open_call_type', urlencode($_SESSION['username']));
-	$tpl->assign('title','View Open Calls Assigned To You.');
-	$tpl->assign('my_group_name','My Calls');
-	$tpl->parse('main'.$level.'.group');
-
-	$my_calls = returnOpenCalls('my_opened');
-	$tpl->assign('my_group', 0);
-	$tpl->assign('numberOfRows', count($my_calls));
-	$tpl->assign('type','my_opened');
-	$tpl->assign('open_call_type', urlencode($_SESSION['username']));
-	$tpl->assign('title','View Open Calls By You.');
-	$tpl->assign('my_group_name','Active Calls I Opened');	
-	$tpl->parse('main'.$level.'.group');
-
-	if ($getUserInfoRes->RecordCount() != 0){
-		while($getUserInfo = $getUserInfoRes->FetchRow()){
-			$tpl->assign('my_group', urlencode($getUserInfo['itsgroupid']));
-			$groupArray = getGroupInfo($getUserInfo['itsgroupid'], $loop=1);
-			$group_calls = returnOpenCalls('mygroup', $groupArray[2]);
-			$tpl->assign('numberOfRows', count($group_calls));
-			$tpl->assign('open_call_type', urlencode($getUserInfo['subgroupName']));
-			$tpl->assign('type','mygroup');
-			$tpl->assign('title','View Open Calls Assigned To Your Group.');
-			$tpl->assign('my_group_name', $getUserInfo['subgroupName']);
-			$tpl->parse('main'.$level.'.group');
-		}
-	}
-
-	$unassigned_calls = returnOpenCalls('unassigned');
-	$tpl->assign('unassigned', 0);
-	$tpl->assign('numberOfRows', count($unassigned_calls));
-	$tpl->assign('type','unassigned');
-	$tpl->assign('open_call_type', 'unassigned');
-	$tpl->assign('title','View Unassigned Open Calls');
-	$tpl->assign('my_group_name','Unassigned Calls');
-	$tpl->parse('main'.$level.'.group');
-
-	$open_calls = returnOpenCalls('all');
-	$tpl->assign('my_group', 0);
-	$tpl->assign('numberOfRows', count($open_calls));
-	$tpl->assign('type','all');
-	$tpl->assign('open_call_type', 'all');
-	$tpl->assign('title','View All Open Calls');
-	$tpl->assign('my_group_name','All Calls');
-	$tpl->parse('main'.$level.'.group');
+	$open_calls = getOpenCallGroups();
+	foreach( $open_calls as $group ) {
+		$tpl->assign('my_group', $group['id'] );
+		$tpl->assign('numberOfRows', $group['num'] );
+		$tpl->assign('open_call_type', $group['open_call_type'] );
+		$tpl->assign('type', $group['type'] );
+		$tpl->assign('title', $group['title'] );
+		$tpl->assign('my_group_name', $group['my_group_name'] );
+		$tpl->parse('main'.$level.'.group');
+	}//end foreach
 
 	return $tpl->text('main'.$level.'.group');
 }
+
+function getOpenCallGroups() {
+	global $db;
+	
+	$groups = array();
+
+	$my_calls = returnOpenCalls('my');
+	$groups['my'] = array(
+		'id' => 0,
+		'num' => count( $my_calls ),
+		'type' => 'my',
+		'open_call_type' => urlencode( $_SESSION['username'] ),
+		'title' => 'View Open Calls Assigned To You.',
+		'my_group_name' => 'My Calls',
+	);
+
+	$my_calls = returnOpenCalls('my_opened');
+	$groups['my_opened'] = array(
+		'id' => 0,
+		'num' => count( $my_calls ),
+		'type' => 'my_opened',
+		'open_call_type' => urlencode( $_SESSION['username'] ),
+		'title' => 'View Open Calls By You.',
+		'my_group_name' => 'Active Calls I Opened',
+	);
+
+	// gets information about the user and what groups they are in, also parsing out unassigned and all calls
+	$sql = "
+		SELECT * 
+			FROM its_employee_groups, 
+			itsgroups 
+		 WHERE itsgroups.deleted = 0 
+			 AND its_employee_groups.employee_id = {$GLOBALS['EMPLOYEE_INFO']['call_log_user_id']} 
+			 AND itsgroups.itsgroupid = its_employee_groups.group_id 
+			 AND its_employee_groups.option_id != '0' 
+		 ORDER BY subgroupName ASC
+	";
+
+	if ($results = $db->Execute( $sql ) ) {
+		foreach( $results as $row ) {
+			$groupArray = getGroupInfo($row['itsgroupid'], $loop=1);
+			$group_calls = returnOpenCalls('mygroup', $groupArray[2]);
+
+			$groups[ $row['itsgroupid'] ] = array(
+				'id' => urlencode( $row['itsgroupid'] ),
+				'num' => count( $group_calls ),
+				'type' => 'mygroup',
+				'open_call_type' => urlencode( $row['subgroupName'] ),
+				'title' => 'View Open Calls Assigned To Your Group.',
+				'my_group_name' => $row['subgroupName'],
+			);
+		}//end foreach
+	}//end if
+
+	$unassigned_calls = returnOpenCalls('unassigned');
+	$groups['unassigned'] = array(
+		'id' => 0,
+		'num' => count( $unassigned_calls ),
+		'type' => 'unassigned',
+		'open_call_type' => 'unassigned',
+		'title' => 'View Unassigned Open Calls',
+		'my_group_name' => 'Unassigned Calls',
+	);
+
+	$open_calls = returnOpenCalls('all');
+	$groups['all'] = array(
+		'id' => 0,
+		'num' => count( $open_calls ),
+		'type' => 'all',
+		'open_call_type' => 'all',
+		'title' => 'View All Open Calls',
+		'my_group_name' => 'All Calls',
+	);
+
+	return $groups;
+}//end getOpenCallGroups

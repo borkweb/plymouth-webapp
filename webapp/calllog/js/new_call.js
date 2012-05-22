@@ -165,10 +165,6 @@ function searchUser(){ //If you change this change the function name above it
 	}
 }
 
-function selectNewUser(caller, search_string, search_type){
-	new Ajax.Updater('main-new-call', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=selectNewUser&caller='+caller+'&search_string='+search_string+'&search_type='+search_type);
-}
-
 function sendHelpDeskMail(call_id, its_group, action){
 	if(action == 'send' || action == 'queue'){
 		var string = "";
@@ -201,11 +197,6 @@ function sendHelpDeskMail(call_id, its_group, action){
 function showGroupUsers(){
 	var group_number = $F('its_group_assigned_to');
 	new Ajax.Updater('showGroupUsersDiv', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=showGroupUsers&group_number='+group_number);
-}
-
-function sortField(option, group, type, sort_by){
-	new Ajax.Updater('open_calls_loading', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=openCalls&option='+option+'&group='+group+'&open_call_type='+type+
-	'&sort_by='+sort_by);
 }
 
 function submit_new_call(){

@@ -69,7 +69,6 @@ class NewCall{
 		return $new_call_id;
 	}// end function addNewCall
 
-
 	function addToCallLog($call_log){
 		
 		$query = "INSERT INTO call_log (
@@ -123,7 +122,6 @@ class NewCall{
 		}
 	}// end function addToCallLog
 
-
 	function addToCallHistory($call_info){		
 		// mark all previous history entries as not being the current one
 		$this->db->Execute("UPDATE call_history SET current='0' WHERE call_id='{$call_info['call_id']}'");
@@ -156,6 +154,35 @@ class NewCall{
 		}
 
 	}// end function addToCallHistory
+
+	public static function history( $call_id, $sort = null ) {
+		global $db;
+
+		$history = array();
+
+		if( ! $sort ) {
+			$sort = $GLOBALS['EMPLOYEE_INFO']['update_sort'];
+		}//end if
+
+		$sql = "
+			SELECT * 
+				FROM call_log, 
+				     call_history 
+			 WHERE call_log.call_id = ?
+				 AND call_log.call_id = call_history.call_id 
+			 ORDER BY date_assigned {$sort}, 
+				 time_assigned {$sort}
+		";
+		if($call_details = $db->GetAll($sql, array( $call_id ))) {
+			foreach ($call_details as $details) {
+				$details['comments'] = preg_replace("/[\*]{114}/", "____________________________________________", $details['comments']);
+				$details['comments'] = nl2br(strip_tags($details['comments']));
+				$history[] = $details;
+			}//end foreach
+		}//end if
+
+		return $history;
+	}//end history
 
 	function returnCallLoggedFromLocation($ip_address=''){
 		$call_logged_from = '';
