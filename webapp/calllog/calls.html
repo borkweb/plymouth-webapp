@@ -1,0 +1,102 @@
+<?php
+
+$tpl = new PSUTemplate;
+$tpl->assign('groups', getOpenCallGroups());
+$tpl->assign('blog', getNewsFeed());
+
+$calls = array();
+
+$result = returnOpenCalls($_GET['option'], $_GET['group'], $_GET['sort_by']);
+$i = 0;
+if(!empty($result) && is_array($result)){
+	$call_open_time = array();
+
+	foreach($result as $key => $row){
+		$groupArray = getGroupInfo($row['its_assigned_group']);
+		$row['building_name'] = getBuildingName($row['location_building_id']);
+		if (($row['its_assigned_group'] != 0) || ($groupArray[1] != "")){
+			if($row['tlc_assigned_to'] != 'unassigned'){
+				$row['assigned_to'] = $groupArray[1]."_group, ".$row['tlc_assigned_to'];
+			}else{
+				$row['assigned_to'] = $groupArray[1]."_group";
+			}
+		}else if($row['tlc_assigned_to'] != ""){
+			$row['assigned_to'] = $row['tlc_assigned_to'];
+		}else{
+			$row['assigned_to'] = "None";
+		}
+		$row['call_title'] = $row['title'];
+		$row['call_summary'] = substr($row['comments'],0,100).((strlen($row['comments'])>100)?'...':'').' -'.$row['updated_by'].' @'.date('M j, y g:ia',strtotime($row['date_assigned'].' '.$row['time_assigned']));
+		$row['show_comments'] = str_replace("\"", "&#34",addslashes(substr(strip_tags(str_replace(array("\n","\t","\r"),'',$row['comments'])),0,30)));
+
+		$call_datetime = $row['call_date'].' '.$row['call_time'];
+		$call_open_time[$row['call_id']] = time() - strtotime($call_datetime);
+		$row['call_date'] = date('M j, Y', strtotime($call_datetime));
+		$row['call_time'] = date('g:i a', strtotime($call_datetime));
+		if( $row['feelings_face'] ) {
+			$row['feelings_face'] = '<br/><img src="/webapp/feedback/templates/images/feedback-'.$row['feelings_face'].'.png" class="feedback-face" title="'.$row['feelings'].'"/>';
+		}//end if
+
+		if($row['date_assigned'])
+		{
+			$assign_datetime = $row['date_assigned'].' '.$row['time_assigned'];
+			$row['activity_datetime'] = time() - strtotime($assign_datetime);
+			$row['date_assigned'] = date('M j, Y', strtotime($assign_datetime));
+			$row['time_assigned'] = date('g:i a', strtotime($assign_datetime));
+		}//end if
+
+		// If the time that the call has been open (call_open_time) is greater than one week (604800 seconds)
+		if ($call_open_time[$row['call_id']] > 604800) {
+			// Set a call age status variable and mark it as old
+			$row['call_age_status'] = 'old';
+		}
+		else {
+			// Otherwise, mark it as normal
+			$row['call_age_status'] = 'normal';
+		}
+
+		// If the time since the call has been updated (activity_datetime) is greater than one week (604800 seconds)
+		if ($row['activity_datetime'] > 604800) {
+			// Set an activity  age status variable and mark it as old
+			$row['activity_age_status'] = 'old';
+		}
+		else {
+			// Otherwise, mark it as normal
+			$row['activity_age_status'] = 'normal';
+		}
+
+		$identifier = PSU::nvl($row['caller_username'], $row['wp_id'], $row['pidm']);
+
+		$row = array_merge($row, (array) $GLOBALS['user']->getCallerData( $identifier ));
+		//$row['priority'] = $call_details['call_history'][$i]['call_priority'];
+		$calls[] = $row;
+	}// end foreach
+
+	if(count($call_open_time)) {
+		$average = array_sum($call_open_time)/count($call_open_time);
+	} else {
+		$average = 0;
+	}//end else
+
+	$average = PSU::seconds_to_time($average);
+	$average_string = '';
+
+	if($average['years']) $average_string .= $average['years'].' years ';
+	if($average['days']) $average_string .= $average['days'].' days ';
+	if($average['hours']) $average_string .= $average['hours'].' hours ';
+	if($average['minutes']) $average_string .= $average['minutes'].' minutes ';
+	if($average['seconds']) $average_string .= $average['seconds'].' seconds ';
+
+	$tpl->assign('average_open_call_time', $average_string);
+}else{
+	$tpl->assign('open_call_type', $_GET['open_call_type']);
+}
+
+$tpl->assign('open_call_type', $_GET['open_call_type']);
+$tpl->assign('find_type', $_GET['find_type']);
+$tpl->assign('group_number', $_GET['group']);
+$tpl->assign('open_call_option', $_GET['option']);
+
+$tpl->assign('calls', $calls);
+
+$tpl->display( 'calls.tpl' );

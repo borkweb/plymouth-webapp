@@ -5,6 +5,12 @@ function redirect(url){
 }
 
 $jQuery(document).ready(function($){
+	$jQuery('.box .replace-toggle').on('click', function(e) {
+		e.preventDefault();
+		$jQuery(this).next().show();
+		$jQuery(this).remove();
+	});
+	$jQuery('#search_string').focus();
 	$jQuery('#its-group-help').colorbox();
 
 	$jQuery(document).delegate('.print-balance a', 'click',function(){
@@ -46,11 +52,6 @@ $jQuery(document).ready(function($){
 	});
 
 	////// BEGIN handle Ticket Checklists
-	$('#new_call_submit_button').bind('click', function(){
-		$('#new_call,#edit_call').submit();
-		return false;
-	});
-
 	function getValue( $el, depth ) {
 		var val = $el.val();
 		var append_text = '';

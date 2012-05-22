@@ -209,36 +209,6 @@ $ferpa_options = Array('1'=>'Yes', '0'=>'No');
 $group_option_id = Array('0'=>'not_subscribed','1'=>'show', '2'=>'show_email');
 
 $phonebook_search = array('all','name_first','name_last','email','phone');
-if($GLOBALS['search_setting'] == 'full')
-{
-	//$search_options = Array('1'=>'Everybody', '9'=>'Ticket Number', '6'=>'Computer Name', '7'=>'MAC Address', '8'=>'IP Address', '11'=>'Closed Calls', '10'=>'Call Log User');
-	$search_options = Array(
-		'all'=>'Everybody', 
-		'wp_id' => 'WordPress/Family Portal',
-		'ticket'=>'Ticket Number', 
-		'computer'=>'Computer Name', 
-		'mac'=>'MAC Address', 
-		'ip'=>'IP Address', 
-		'closed'=>'Closed Calls', 
-		'user'=>'Call Log User'
-	);
-}//end if
-else
-{
-	$search_options = Array(
-		'name_last' => 'Last Name', 
-		'email' => 'Username',
-		'name_first'=>'First Name', 
-		'wp_id' => 'WordPress/Family Portal',
-		'ticket'=>'Ticket Number', 
-		'phone' => 'Phone', 
-		'computer'=>'Computer Name', 
-		'mac'=>'MAC Address', 
-		'ip'=>'IP Address', 
-		'closed'=>'Closed Calls', 
-		'user'=>'Call Log User'
-	);
-}//end else
 // ------------------------------------------------------------------
 
 $today = date("Y-m-d");

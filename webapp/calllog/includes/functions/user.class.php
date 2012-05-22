@@ -13,25 +13,6 @@ class User
 		$this->db = $db;
 	}//end constructor
 
-	function callAssignedTo($tlc_users_options, $its_group_options, $tlc_assigned_to="", $its_assigned_to="")
-	{
-		$tpl = new XTemplate(TEMPLATE_DIR."/call_assigned_to.tpl");
-
-		if ($_GET['call_id'] == "")
-		{
-			$tpl->assign('tlc_select_list', PSUHTML::getSelectOptions($tlc_users_options));
-			$tpl->assign('its_select_group_list', PSUHTML::getSelectOptions($its_group_options));
-		}
-		else
-		{
-			$tpl->assign('tlc_select_list', PSUHTML::getSelectOptions($tlc_users_options, $tlc_assigned_to));
-			$tpl->assign('its_select_group_list', PSUHTML::getSelectOptions($its_group_options, $its_assigned_to));
-		}
-
-		$tpl->parse('main');
-		return $tpl->text('main');
-	}
-
 	function callInformation($call_status_options, $call_priority_options, $call_status, $call_priority, $building_options, $building_id, $resnet_call)
 	{
 		$tpl = new XTemplate(TEMPLATE_DIR.'/call_information.tpl');

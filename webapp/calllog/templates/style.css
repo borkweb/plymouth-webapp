@@ -10,6 +10,19 @@
 .status-purchase{background: #a2c1a9 !important;}
 .status-,.status-normal{background: #eeffee !important;}
 
+.search_type {
+	width: 150px;
+}
+
+.search ul .search_type,
+.search ul .search_string {
+	width: 90%;
+}
+
+.search ul .search_string {
+	font-size: 1.2em;
+}
+
 a img{border: none;}
 
 .fade {
@@ -30,7 +43,6 @@ tr:hover .fade{
 }
 
 .user-info{
-	border: 1px solid #ccc;
 	padding: 10px;
 	list-style-type:none;
 }
@@ -70,6 +82,10 @@ tr:hover .fade{
 	width: auto;
 	padding: 5px;
 	float: left;
+}
+
+.call-information select {
+	width: 170px;
 }
 
 .call-information-building{
@@ -423,6 +439,9 @@ tr:hover .fade{
 	display: none;
 }
 
+#assign-to {
+}
+
 a.action:link, a.action:visited, a.action:active, input.action {
 	font-family: verdana, helvectica, arial, sans-serif;
 	font-weight: normal;
@@ -691,11 +710,6 @@ div#user_status_div .fade{color:#666;}
 	border:1px solid #BFBEA3;
 }
 
-.helpdesk_news{
-	color: #89936F;
-}
-.helpdesk_news a{color:#A66240;}
-
 .nav_link{
 	margin:1px;
 }
@@ -759,10 +773,6 @@ td.activity-age-status-old{
 	border: 1px solid #4a5236;
 }
 #re-order-div{color:#85360F;}
-
-.label{color: #77825A;}
-label{color: #77825A;}
-.label em{color:#A66240;}
 
 #submit_reset{
 	padding:3px;

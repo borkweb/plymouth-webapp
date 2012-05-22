@@ -1,137 +1,118 @@
-<!-- BEGIN: main -->
-<a href="{PHP.BASE_URL}/{go_back.page}?action={go_back.action}&option={go_back.option}&group={go_back.group}&find_type={go_back.find_type}" class="noprint btn danger">&laquo; Back to {go_back.name}</a>
-<!-- BEGIN: new_call_user_name -->
+{box class="noprint"}
+	{if 'searchUser' == $go_back.action }
+	<a href="{$PHP.BASE_URL}/index.html?search_type={$go_back.find_type}&amp;search_string={$go_back.option}" class="btn btn-danger">&laquo; Back to {$go_back.name}</a>
+	{else}
+	<a href="{$PHP.BASE_URL}/calls.html?action={$go_back.action}&option={$go_back.option}&group={$go_back.group}&find_type={$go_back.find_type}" class="btn btn-danger">&laquo; Back to {$go_back.name}</a>
+	{/if}
+{/box}
 
-<!-- BEGIN: new_call_form -->
-<form name="new_call" method="post" action="{PHP.BASE_URL}/add_new_call.html" id="new_call" enctype="multipart/form-data">
-<!-- END: new_call_form -->
+{if $call_id}
+	<form name="new_call" method="post" action="{$PHP.BASE_URL}/update_call_details.html" id="edit_call" enctype="multipart/form-data">
+	<input type="hidden" name="call_history_id" value="{$call_history_id}" />
+	<input type="hidden" name="call_id" id="call_id" value="{$call_id}" />
+	<input type="hidden" name="action" id="action" value="{$go_back.action}" />
+	<input type="hidden" name="option" id="option" value="{$go_back.option}" />
+	<input type="hidden" name="group" id="group" value="{$go_back.group}" />
+	<input type="hidden" name="find_type" id="find_type" value="{$go_back.find_type}" />
+	<input type="hidden" name="page" id="page" value="{$go_back.page}" />
+{else}
+	<form name="new_call" method="post" action="{$PHP.BASE_URL}/add_new_call.html" id="new_call" enctype="multipart/form-data">
+{/if}
 
-<!-- BEGIN: edit_call_form -->
-<form name="new_call" method="post" action="{PHP.BASE_URL}/update_call_details.html" id="edit_call" enctype="multipart/form-data">
-<input type="hidden" name="call_history_id" value="{call_history_id}" />
-<input type="hidden" name="call_id" id="call_id" value="{call_id}" />
-
-<input type="hidden" name="action" id="action" value="{go_back.action}" />
-<input type="hidden" name="option" id="option" value="{go_back.option}" />
-<input type="hidden" name="group" id="group" value="{go_back.group}" />
-<input type="hidden" name="find_type" id="find_type" value="{go_back.find_type}" />
-<input type="hidden" name="page" id="page" value="{go_back.page}" />
-<!-- END: edit_call_form -->
-
-	<div class="grid_6 alpha" id="call-information">
-
-		<fieldset>
-			<legend id="caller_email_legend">Caller Information</legend>
-				<div id="caller_information_div">
-					{caller_information}
-				</div>
-				<div id="caller_email_div" style="display:none;">
-					{caller_email}
-				</div>
-			</fieldset>
-			<fieldset class="noprint">
-			<legend id="caller_email_legend" onclick="document.getElementById('change_caller').style.display = 'block';">+ Re-Attach Call</legend>
-				<div id="change_caller" style="display:none;">
-					Change Caller To: <input type="text" name="attach_to"/><br/>
-					<small><em>Enter username to re-attach this call</em></small>
-				</div>
-		</fieldset>
-
-		<fieldset class="noprint">
-			<legend>Files</legend>
-			<input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
-			Attach File: <input type="file" name="attachment"/><br/>
-			<small><em>Supports: .doc, .docx, .gif, .jpg, .pdf, .png,<br/>.txt, .xls., .xlsx (3MB maximum)</em></small>
-		</fieldset>
-
-		<!-- BEGIN: files -->
-		<fieldset class="noprint">
-			<legend>Attached Files</legend>
-			<ul>
-				<!-- BEGIN: file -->
-				<li><a href="{file.url}" target="_blank">{file.name}</a>
-				<!-- END: file -->
-			</ul>
-		</fieldset>
-		<!-- END: files -->
-
-		<fieldset class="noprint">
-			<legend>Hardware Info</legend>
-			<div id='hardwareInfoDiv'>
-				{hardware_info}
-			</div>
-		</fieldset>
-
-		<div id="call-history">
-		<fieldset class="noprint">
-			<legend>Call History</legend>
-				{call_history_summary}
-		</fieldset>
+{col size=6 id="call-information"}
+	{box title="Caller Information"}
+		<div id="caller_information_div">
+			{$caller_information}
 		</div>
-
-		<fieldset class="noprint">
-			<legend onClick="calllog_toggle('restore_request');">
-			<span id="restore_request_symbol">+</span> Restore Request</legend>
-			<div id="restore_request_div">
-				{restore_request_func}
+		<div class="center">
+			<a href=#" id="change-caller-toggle" class="replace-toggle">Re-attach Call</a>
+			<div id="change_caller" style="display:none;">
+				Change Caller To: <input type="text" name="attach_to"/><br/>
+				<small><em>Enter username to re-attach this call</em></small>
 			</div>
-		</fieldset>
-	</div>
+		</div>
+	{/box}
 
-	<div class="grid_10 omega">
-		<!-- BEGIN: call_closed -->
-		<div class="message message-warnings">This call has been closed.</div>
-		<!-- END: call_closed -->
+	{box title="Files" class="noprint"}
+		<input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+		Attach File: <input type="file" name="attachment"/><br/>
+		<small><em>Supports: .doc, .docx, .gif, .jpg, .pdf, .png,<br/>.txt, .xls., .xlsx (3MB maximum)</em></small>
+		{if $files}
+		<h3>Attached Files</h3>
+		<ul>
+			{foreach from=$files item=file}
+				<li><a href="{$file.url}" target="_blank">{$file.name}</a>
+			{/foreach}
+		</ul>
+		{/if}
+	{/box}
 
-		<fieldset class="noprint">
-			<legend>{details_name}</legend>
-			{ticket_form}
-			<label class="label">Keywords:</label>
-			<input type="text" name="keywords_list" id="keywords_list" size="51" value="{call_assignment_history_keywords}"/>
-			<div id="keywordsList"></div>
-		</fieldset>
-		
-		<!-- BEGIN: call_assignment_check -->
-		<fieldset>
-			<legend>Assignment History</legend>
-			Re-order: <a href="javascript: reorder_assign_history('old', '{person.username}', {call_id});" class="btn">Old-New</a> | <a href="javascript: reorder_assign_history('new', '{person.username}', {call_id});" class="btn">New-Old</a><br /><br />
+	{box title="Hardware Info" class="noprint"}
+		<div id='hardwareInfoDiv'>
+			{$hardware_info}
+		</div>
+	{/box}
+
+	{box title="Call History" id="call-history" class="noprint"}
+		{$call_history_summary}
+	{/box}
+
+	{box title="Restore Request" class="noprint"}
+		<a href="#" class="replace-toggle">Enter Restore Request</a>
+		<div id="restore_request_div">
+			{$restore_request_func}
+		</div>
+	{/box}
+{/col}
+
+{col size=10}
+	{box title=$details_name}
+		{include file="ticket_form.tpl"}
+		<label class="label">Keywords:</label>
+		<input type="text" name="keywords_list" id="keywords_list" size="51" value="{$call_assignment_history_keywords}"/>
+		<div id="keywordsList"></div>
+	{/box}
+
+	{if $history}
+		{box title="Assignment History"}
+			Re-order: 
+				<a href="javascript: reorder_assign_history('old', '{$person.username}', {$call_id});" class="btn">Old-New</a> | 
+				<a href="javascript: reorder_assign_history('new', '{$person.username}', {$call_id});" class="btn">New-Old</a>
+			<br /><br />
 			<div id="call_assignment_history">
-			<!-- BEGIN: call_assignment_history -->
-			<ul>
-				<li><label class="inline">Updated by:</label> {call_history.updated_by} on {call_history.date_assigned} @ {call_history.time_assigned}</li>
-				<li><label class="inline">Call Status:</label> {call_history.call_status}</li>
-				<li><label class="inline">Call Priority:</label> {call_history.call_priority}</li>
-				<li><label class="inline">Assigned To:</label> {call_history.tlc_assigned_to}</li>
-				<li><label class="inline">Details:</label> {call_history.comments}</li>
-			</ul>
-			<hr style="width: 75%;" align="left">
-			<!-- END: call_assignment_history -->
+			{include file="ticket-history.tpl"}
 			</div>
-		</fieldset>
-		<!-- END: call_assignment_check -->
-
-		<fieldset class="noprint">
-			<legend>Call Information</legend>
-			<div id="call_information_div">
-				{call_information}
-			</div>
-		</fieldset>
-
-		<fieldset class="noprint">
-			<legend>Assign Call To</legend>
-			<div id="assign_to_div" style="display: block;">
-				{call_assigned_to}
-			</div>
-		</fieldset>
-
-		<div id="submit_reset" class="well noprint">
-			<a href="#" class="btn primary" id="new_call_submit_button" name="new_call_submit_button">Submit Call</a>
+		{/box}
+	{/if}
+		
+	{box title="Call Information" class="noprint"}
+		<div id="call_information_div">
+			{$call_information}
 		</div>
+	{/box}
 
-	</div>
-
+	{box title="Assign Call To" class="noprint"}
+		<ul>
+			<li class="center">
+				<label for="tlc_assigned_to" class="inline">Assign To</label>
+				<select name="tlc_assigned_to" id="tlc_assigned_to" onChange="change_status('tlc_assigned_to');">
+					<option value="unassigned">Unassigned</option>
+					<option value="caller">The Caller</option>
+					{$tlc_select_list}
+				</select>
+			</li>
+			<li class="center">
+				<label for="its_assigned_group" class="inline">ITS Group</label>
+				<select name="its_assigned_group" id="its_assigned_group" onChange="change_status('its_assigned_group');" >
+					<option value="0">Unassigned</option>
+					{$its_select_group_list}
+				</select>
+				<small>(<a href="{$PHP.BASE_URL}/images/help-desk-small.png" id="its-group-help" title="ITS Group Responsibilities">?</a>)</small>
+			</li>
+			<li class="form-actions center">
+			<button type="submit" class="btn primary">Update Call</button>
+			</li>
+		</ul>
+	{/box}
+{/col}
 </form>
-</body>
-<!-- END: new_call_user_name -->
-
-<!-- END: main -->

@@ -57,13 +57,6 @@
 	<!-- END: role -->
 	<li style="clear:both;"></li>
 </ul>
-<!-- BEGIN: send_mail -->
-<div class="send-mail noprint">
-	<img src="{PHP.BASE_URL}/images/email.jpg" alt="Email Image" style="border:0; margin-top:4px; margin:0; height:15px;"/> Send email via
-	<a href="javascript: void(0);" onClick="sendHelpDeskMail('{email_call_id}', '');">Call Log</a>,
-	<a href="mailto:{caller.username}@plymouth.edu">Mail Client</a>
-</div>
-<!-- END: send_mail -->
 <input type="hidden" name="caller_phone_number" value="{caller.phone_number}"/>
 <input type="hidden" name="caller_location" value="{caller.location}"/>
 <input type="hidden" name="caller_title" value="{caller.title}"/>
