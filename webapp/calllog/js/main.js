@@ -26,15 +26,13 @@ $jQuery(document).ready(function($){
 		var amount = $jQuery('.add-funds select').val();
 		var pidm = $jQuery('#caller_pidm').val();
 		
-		$jQuery.get('https://'+document.domain+'/webapp/calllog/print_balance.html?pidm=' + pidm + '&fund_increase=' + amount + '&action=update',function(data){
+		$jQuery.get( BASE_URL + '/print_balance.php?pidm=' + pidm + '&fund_increase=' + amount + '&action=update', `function(data){
 			data = $jQuery.trim(data);
 			$jQuery('.add-funds-throbber').slideUp('fast');
-			if(data == 'no_record' || data == 'invalid_privs' || data == 'too_small')
-			{
+			if(data == 'no_record' || data == 'invalid_privs' || data == 'too_small') {
 				$jQuery('.add-funds-' + data).slideDown('fast');
 			}//end if
-			else
-			{
+			else {
 				var updated_value = '$' + amount + '.00';
 				$jQuery('.add-funds-success span').html(updated_value.replace(/\$\-/,'-$'));
 				$jQuery('.add-funds-success').slideDown('fast');
