@@ -28,7 +28,7 @@
 			<a href=#" id="change-caller-toggle" class="replace-toggle">Re-attach Call</a>
 			<div id="change_caller" style="display:none;">
 				Change Caller To: <input type="text" name="attach_to"/><br/>
-				<small><em>Enter username to re-attach this call</em></small>
+				<small><em>Enter username to re-attach this ticket</em></small>
 			</div>
 		</div>
 	{/box}
@@ -53,7 +53,7 @@
 		</div>
 	{/box}
 
-	{box title="Call History" id="call-history" class="noprint"}
+	{box title="Ticket History" id="call-history" class="noprint"}
 		{$call_history_summary}
 	{/box}
 
@@ -85,13 +85,13 @@
 		{/box}
 	{/if}
 		
-	{box title="Call Information" class="noprint"}
+	{box title="Ticket Information" class="noprint"}
 		<div id="call_information_div">
 			{$call_information}
 		</div>
 	{/box}
 
-	{box title="Assign Call To" class="noprint"}
+	{box title="Assign Ticket To" class="noprint"}
 		<ul>
 			<li class="center">
 				<label for="tlc_assigned_to" class="inline">Assign To</label>
@@ -107,10 +107,10 @@
 					<option value="0">Unassigned</option>
 					{$its_select_group_list}
 				</select>
-				<small>(<a href="{$PHP.BASE_URL}/images/help-desk-small.png" id="its-group-help" title="ITS Group Responsibilities">?</a>)</small>
+				(<a href="{$PHP.BASE_URL}/images/help-desk-small.png" id="its-group-help" title="ITS Group Responsibilities">?</a>)
 			</li>
 			<li class="form-actions center">
-			<button type="submit" class="btn primary">Update Call</button>
+			<button type="submit" class="btn primary">{if $call_id}Update{else}Submit{/if} Ticket</button>
 			</li>
 		</ul>
 	{/box}
