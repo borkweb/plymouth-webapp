@@ -1,1 +1,1 @@
-{PSU_CSS href="/webapp/calllog/css/default/checklists.css"}
+{PSU_CSS href="/webapp/calllog/css/checklists.css"}

@@ -67,7 +67,8 @@ tr:hover .fade{
 
 .call-information{
 	border: hidden 1px;
-	width: 33%;
+	width: auto;
+	padding: 5px;
 	float: left;
 }
 
