@@ -1,0 +1,91 @@
+<?php
+/**
+ * index.php
+ *
+ * Repair Shop Workorder System - display all workorders currently open, to be displayed in iframe
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2007, Plymouth State University, ITS
+ */ 
+if(!checkAuthorization($_SESSION['username']))
+{
+	exit("Authorization Required");
+}
+$GLOBALS['tpl']=new XTemplate('active_workorders.tpl',$GLOBALS['TEMPLATES']);
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+if(isset($_GET['o']))
+{
+	$order = $_GET['o'];
+}
+else
+{
+	$order = "id";
+}
+$query = "SELECT * FROM shop_workorder,shop_patrons WHERE shop_workorder.username=shop_patrons.username AND closed=0 AND current_status NOT LIKE '%pickup%' AND current_status NOT LIKE 'Transferred to LLC' ORDER BY $order";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+	$num = $res->RecordCount();
+    for($i=0; $i<$num; $i++)
+    {
+    	if($i%2==0)
+        {
+    		$rowclass = "class=\"alternaterow\"";
+    	}
+        else
+        {
+    		$rowclass = "class=\"row\"";
+        }
+        $GLOBALS['tpl']->assign('rowclass', $rowclass);
+    	$array = $res->FetchRow();
+		$GLOBALS['tpl']->assign('wo',$array['id']);
+        $GLOBALS['tpl']->assign('username',$array['username']);
+        $user_info = $GLOBALS['AD']->user_info($array['username']);
+		$GLOBALS['tpl']->assign('name',$user_info[0]['displayname'][0]);
+		$GLOBALS['tpl']->assign('type',$array['device_type']);
+        $GLOBALS['tpl']->assign('manufacturer',$array['device_manufacturer']);
+        $GLOBALS['tpl']->assign('model',$array['device_model']);
+        $GLOBALS['tpl']->assign('serial',strtoupper($array['device_serial']));
+        if($array['university_owned']==1)
+        {
+        	$psu_owned = "Yes";
+        }
+        else
+        {
+        	$psu_owned = "No";
+        }
+        $GLOBALS['tpl']->assign('psu_owned',$psu_owned);
+        $GLOBALS['tpl']->assign('date',$array['time_entered']);
+        $GLOBALS['tpl']->assign('status',$array['current_status']);
+        $GLOBALS['tpl']->assign('status_class',"");
+        if(stripos($array['current_status'],"LLC")!=false)
+        {
+        	$GLOBALS['tpl']->assign('status_class',"class=\"blue\"");
+        }
+        if($array['current_status']=="Delayed: waiting for parts")
+        {
+        	$status_query = "SELECT COUNT(id) AS total FROM shop_workorder_items WHERE part=1 AND received=0 AND workorder_id=?";
+            $args = array(
+            			'id'=>$array['id']
+                        );
+        	$status_res = $GLOBALS['SYSTEMS_DB']->Execute($status_query,$args);
+        	$status_array = $status_res->FetchRow();
+        	$num_waiting = $status_array['total'];
+        	if($num_waiting>0)
+            {
+            	$GLOBALS['tpl']->assign('status_class',"class=\"red\"");	
+            }
+            else
+            {
+            	$GLOBALS['tpl']->assign('status_class',"class=\"green\"");
+            }
+        }
+        $GLOBALS['tpl']->assign('tech',$array['tech_assigned']);
+        $GLOBALS['tpl']->parse('main.workorderrow');
+	}
+
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

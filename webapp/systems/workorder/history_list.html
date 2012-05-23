@@ -1,0 +1,116 @@
+<?php
+/**
+ * history_list.php
+ *
+ * Repair Shop Workorder System - display previous workorders based on search criteria
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2008, Plymouth State University, ITS
+ */ 
+ 
+if(!checkAuthorization($_SESSION['username']))
+	exit("Authorization Required");
+$GLOBALS['tpl']=new XTemplate('history_list.tpl',$GLOBALS['TEMPLATES']);
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+/*
+
+SELECT shop_workorder.id FROM shop_workorder, shop_user_notes WHERE shop_workorder.id IN (SELECT workorder_id FROM shop_user_notes WHERE 1) AND shop_workorder.id = shop_user_notes.workorder_id
+
+*/
+
+$query = "SELECT * FROM shop_workorder,shop_patrons WHERE shop_workorder.username=shop_patrons.username ";
+$where = "";
+$args = array();
+if($_POST['wo']!="")
+{	
+	$where .= "AND id=? ";
+    $args['id']=$_POST['wo'];
+}
+if($_POST['username']!="" || $_GET['u']!="")
+{
+	if($_GET['u']!="")
+    	$uname = $_GET['u'];
+    else
+    	$uname = $_POST['username'];
+	$where .= "AND shop_workorder.username =? ";
+    $args['username']=strip_tags($uname);
+}
+if($_POST['keyword']!="")
+{
+	$keyword = "%".mysql_real_escape_string($_POST['keyword'])."%";
+	$where .= "AND (device_manufacturer LIKE ? OR ";
+    $where .= "device_model LIKE ? OR ";
+    $where .= "name LIKE ? OR ";
+    $where .= "device_serial LIKE ? OR ";
+    $where .= "problem LIKE ? OR ";
+    $where .= "id IN (SELECT DISTINCT workorder_id as id FROM shop_user_notes WHERE note LIKE ?) OR";
+    $where .= " id IN (SELECT DISTINCT workorder_id as id FROM shop_tech_notes WHERE note LIKE ?)) ";
+    $args['keyword1']=$keyword;
+    $args['keyword2']=$keyword;
+    $args['keyword3']=$keyword;
+    $args['keyword4']=$keyword;
+    $args['keyword5']=$keyword;
+    $args['keyword6']=$keyword;
+    $args['keyword7']=$keyword;
+}
+if($_POST['month']!="")
+{
+	if($_POST['year']!="")
+    	$year = $_POST['year'];
+    else
+    	$year = date("Y");
+	
+	$where .= "AND ( MONTH(time_entered)=? AND YEAR(time_entered)=?) ";
+    $args['month']=$_POST['month'];
+    $args['year']=$year;
+}
+
+$query.= $where."ORDER BY id";
+//echo $query;
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query, $args);
+	$num = $res->RecordCount();
+    if($num==0)
+    	$GLOBALS['tpl']->parse('main.nodata');
+    for($i=0; $i<$num; $i++)
+    {
+    	if($i%2==0)
+    		$rowclass = "class=\"alternaterow\"";
+    	else
+    		$rowclass = "class=\"row\"";
+        $GLOBALS['tpl']->assign('rowclass', $rowclass);
+    	$array = $res->FetchRow();
+		$GLOBALS['tpl']->assign('wo',$array['id']);
+        $GLOBALS['tpl']->assign('username',$array['username']);
+        $user_info = $GLOBALS['AD']->user_info($array['username']);
+		$GLOBALS['tpl']->assign('name',$user_info[0]['displayname'][0]);
+		$GLOBALS['tpl']->assign('type',$array['device_type']);
+        $GLOBALS['tpl']->assign('manufacturer',$array['device_manufacturer']);
+        $GLOBALS['tpl']->assign('model',$array['device_model']);
+        if($array['university_owned']==1)
+        	$psu_owned = "Yes";
+        else
+        	$psu_owned = "No";
+        $GLOBALS['tpl']->assign('psu_owned',$psu_owned);
+        $GLOBALS['tpl']->assign('opened',$array['time_entered']);
+        if($array['closed']==1)
+        {
+        	$GLOBALS['tpl']->assign('closed',$array['time_closed']);
+            if($_SESSION['privileged']==1)
+        		$GLOBALS['tpl']->parse('main.workorderrow.reopen');
+        }
+        else
+        {
+        	$GLOBALS['tpl']->assign('closed','Still Open');
+            $GLOBALS['tpl']->parse('main.workorderrow.edit');
+        }
+   		
+        $GLOBALS['tpl']->parse('main.workorderrow');
+	}
+
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

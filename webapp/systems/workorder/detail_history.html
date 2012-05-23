@@ -1,0 +1,245 @@
+<?php
+/**
+ * admin_display.html
+ *
+ * Repair Shop Workorder System - print & edit workorders
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2008, Plymouth State University, ITS
+ */ 
+if(!checkAuthorization($_SESSION['username']))
+	exit("Authorization Required");
+$GLOBALS['tpl']=new XTemplate('detail_history.tpl',$GLOBALS['TEMPLATES']);
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+
+
+/******** Populate Variables *********************/
+$query = "select * from shop_workorder,shop_patrons where shop_workorder.username=shop_patrons.username and shop_workorder.id=".$_GET['id'];
+$workorder_res = $GLOBALS['SYSTEMS_DB']->Execute($query) or die("DB error getting workorder information");
+$array=$workorder_res->FetchRow();
+
+	/******** User Information *********/
+$user_info = $GLOBALS['AD']->user_info($array['username']);
+$GLOBALS['tpl']->assign('name',$user_info[0]['displayname'][0]);
+$GLOBALS['tpl']->assign('username',$array['username']);
+$GLOBALS['tpl']->assign('phone_primary',$array['phone_primary']);
+$GLOBALS['tpl']->assign('phone_other',$array['phone_other']);
+$is_employee =  $GLOBALS['AD']->user_ingroup($array['username'],'employees', true);
+$is_student =  $GLOBALS['AD']->user_ingroup($array['username'],'students', true);
+$is_friend =  $GLOBALS['AD']->user_ingroup($array['username'],'friends', true);
+if($is_employee)
+	$role = "Employee";
+else if($is_student)
+	$role = "Student";
+else if($is_friend)
+	$role = "Student";
+else
+	$role = "Unknown";
+$GLOBALS['tpl']->assign('role',$role);
+if($array['student_housing']=1)
+	$oncampus="Yes";
+else
+	$oncampus="No";
+$GLOBALS['tpl']->assign('oncampus',$oncampus);
+if($role=="Student")
+	$GLOBALS['tpl']->parse('main.studenthousing');
+
+	/******** Device Section *************/    
+$GLOBALS['tpl']->assign('wo',$array['id']);
+$GLOBALS['tpl']->assign('device',ucfirst($array['device_type']));
+$GLOBALS['tpl']->assign('manufacturer',$array['device_manufacturer']);
+$GLOBALS['tpl']->assign('model',$array['device_model']);
+$serial = strtoupper($array['device_serial']);
+if(strcasecmp($array['device_manufacturer'],"dell")==0)
+	$serial_display = "<a href=\"http://support.dell.com/support/topics/global.aspx/support/my_systems_info/details?c=us&l=en&s=gen&servicetag=$serial&keepThis=true&TB_iframe=true&height=600&width=950\" class=\"thickbox\">$serial</a>";
+else
+	$serial_display = $serial;
+$GLOBALS['tpl']->assign('serial',$serial_display);
+if($array['university_owned']==1)
+	$psu_property="Yes";
+else
+	$psu_property="No";
+$GLOBALS['tpl']->assign('psu_property',$psu_property);
+
+	/******** Peripherals Section ********/
+$periphs = "";
+if($array['periph_monitor']==1)
+	$periphs.="Monitor";
+if($array['periph_keyboard']==1)
+{
+	if($periphs!="")
+    	$periphs.=", ";
+    $periphs.="Keyboard";
+}
+if($array['periph_mouse']==1)
+{
+	if($periphs!="")
+    	$periphs.=", ";
+    $periphs.="Mouse";
+}
+if($array['periph_ac_adapter']==1)
+{
+	if($periphs!="")
+    	$periphs.=", ";
+    $periphs.="AC Adapter";
+}
+if($array['periph_printer']==1)
+{
+	if($periphs!="")
+    	$periphs.=", ";
+    $periphs.="Printer";
+}
+if($array['periph_printer_cable']==1)
+{
+	if($periphs!="")
+    	$periphs.=", ";
+    $periphs.="Printer/Scanner Cable";
+}
+if($array['periph_scanner']==1)
+{
+	if($periphs!="")
+    	$periphs.=", ";
+    $periphs.="Scanner";
+}
+if($array['software']==1)
+{
+	if($periphs!="")
+    	$periphs.=", ";
+    $periphs.="Software";
+}
+if($periphs=="")
+	$periphs = "None";
+$GLOBALS['tpl']->assign('periphs',$periphs);
+if($array['other']!="")
+{
+	$GLOBALS['tpl']->assign('other_periphs',stripslashes($array['other']));  
+   	$GLOBALS['tpl']->parse('main.other_periphs');
+}
+if($array['pw_system']!="")
+{
+	$GLOBALS['tpl']->assign('bios_pw',stripslashes(base64_decode($array['pw_system'])));  
+   	$GLOBALS['tpl']->parse('main.passwords.bios');
+}
+if($array['pw_windows']!="")
+{
+	$GLOBALS['tpl']->assign('windows_pw',stripslashes(base64_decode($array['pw_windows'])));  
+   	$GLOBALS['tpl']->parse('main.passwords.windows');
+}
+if($array['pw_screensaver']!="")
+{
+	$GLOBALS['tpl']->assign('screen_pw',stripslashes(base64_decode($array['pw_screensaver'])));  
+   	$GLOBALS['tpl']->parse('main.passwords.screen');
+}
+
+	/******* End Peripherals *********/
+
+$GLOBALS['tpl']->assign('status',$array['current_status']);
+$GLOBALS['tpl']->assign('payment',"$".number_format($array['amount_charged'],2,'.',',')." ".ucfirst($array['payment_method']));
+$GLOBALS['tpl']->assign('problem',stripslashes($array['problem']));
+
+	/*********** get latest notes to user and tech notes ***********/
+$comments_query = "select * from shop_user_notes where workorder_id=".$array['id']." order by id";
+$comments_res = $GLOBALS['SYSTEMS_DB']->Execute($comments_query);
+$num = $comments_res->RecordCount();
+for($i=0; $i<$num; $i++)
+{
+	if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+	$comments = $comments_res->FetchRow();
+	$GLOBALS['tpl']->assign('comments',stripslashes($comments['note']));
+    $GLOBALS['tpl']->assign('commentusername',stripslashes($comments['username']));
+    $GLOBALS['tpl']->assign('entered',stripslashes($comments['time_entry']));
+    $GLOBALS['tpl']->parse('main.usernotes.usernoterow');
+}
+if($num>0)
+	$GLOBALS['tpl']->parse('main.usernotes');
+$technotes_query = "select * from shop_tech_notes where workorder_id=".$array['id']." order by id";
+$technotes_res = $GLOBALS['SYSTEMS_DB']->Execute($technotes_query);
+$num = $technotes_res->RecordCount();
+for($i=0; $i<$num; $i++)
+{
+	if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+	$tech_notes = $technotes_res->FetchRow();
+	$GLOBALS['tpl']->assign('note',stripslashes($tech_notes['note']));
+    $GLOBALS['tpl']->assign('noteusername',stripslashes($tech_notes['username']));
+    $GLOBALS['tpl']->assign('entered',stripslashes($tech_notes['time_entry']));
+    $GLOBALS['tpl']->parse('main.technotes.technoterow');
+}
+if($num>0)
+	$GLOBALS['tpl']->parse('main.technotes');
+$status_query = "select * from shop_status_history where workorder_id=".$array['id']." order by id";
+$status_res = $GLOBALS['SYSTEMS_DB']->Execute($status_query);
+$num = $status_res->RecordCount();
+for($i=0; $i<$num; $i++)
+{
+	if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+	$status = $status_res->FetchRow();
+	$GLOBALS['tpl']->assign('status',stripslashes($status['status']));
+    $GLOBALS['tpl']->assign('statususername',stripslashes($status['username']));
+    $GLOBALS['tpl']->assign('changed',stripslashes($status['time']));
+    $GLOBALS['tpl']->parse('main.statusrow');
+}
+
+	/******* code to handle work performed & tally total ******/
+$items_query = "Select * from shop_workorder_items where workorder_id = ".$array['id']." order by id";
+$item_res = $GLOBALS['SYSTEMS_DB']->Execute($items_query);
+$num_items = $item_res->RecordCount();
+
+for($i=0; $i<$num_items; $i++)
+{
+	if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+	$item_array=$item_res->FetchRow();
+    $GLOBALS['tpl']->assign('item',stripslashes($item_array['item']));
+    $GLOBALS['tpl']->assign('vendor',$item_array['vendor']);
+    $GLOBALS['tpl']->assign('labor',$item_array['billable_hours']);
+    $GLOBALS['tpl']->assign('ourcost',number_format($item_array['part_cost'],2,'.',','));
+    $GLOBALS['tpl']->assign('shipping',number_format($item_array['part_shipping'],2,'.',','));
+    $GLOBALS['tpl']->assign('custcost',number_format($item_array['part_charged'],2,'.',','));
+	$GLOBALS['tpl']->assign('cost',number_format($item_array['cost'],2,'.',','));
+    $GLOBALS['tpl']->assign('itemusername',$item_array['username']);
+    $GLOBALS['tpl']->assign('entered',$item_array['time_entered']);
+    if($item_array['removed']==1)
+    {
+   		$GLOBALS['tpl']->assign('removed',$item_array['removed_time']);
+    	$GLOBALS['tpl']->assign('remusername',$item_array['removed_username']);
+    }
+    else
+    {
+    	$GLOBALS['tpl']->assign('removed',"");
+    	$GLOBALS['tpl']->assign('remusername',"");
+    }
+    if($item_array['part']=="0")
+    	$GLOBALS['tpl']->parse('main.workperformed.itemrow');
+    else
+    	$GLOBALS['tpl']->parse('main.workperformed.partrow');
+}
+if($num_items>0)
+	$GLOBALS['tpl']->parse('main.workperformed');
+$GLOBALS['tpl']->assign('totaldue',number_format($total,2,'.',','));
+
+
+if($_SESSION['privileged']==1) //don't show passwords for old calls unless it's an admin user
+   	$GLOBALS['tpl']->parse('main.passwords');
+    
+    
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

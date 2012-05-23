@@ -1,0 +1,26 @@
+<?php
+/**
+ * index.php
+ *
+ * Repair Shop Workorder System - Disclaimer
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2007, Plymouth State University, ITS
+ */ 
+
+$GLOBALS['tpl']=new XTemplate('index.tpl',$GLOBALS['TEMPLATES']);
+if(checkAuthorization($_SESSION['username'])) //is a shop user, redirect to admin page
+	header("Location: admin.html");
+
+
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+//$GLOBALS['tpl']->assign('timestamp', $res_array['logon_timestamp']);
+//$GLOBALS['tpl']->parse('main.servers');
+
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

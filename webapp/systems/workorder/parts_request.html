@@ -1,0 +1,41 @@
+<?php
+/**
+ * parts_request.html
+ *
+ * Repair Shop Workorder System - Request a part for order, to be thickboxed.
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2007, Plymouth State University, ITS
+ */ 
+if(!checkAuthorization($_SESSION['username']))
+	exit("Authorization Required");
+$GLOBALS['tpl']=new XTemplate('parts_request.tpl',$GLOBALS['TEMPLATES']);
+if($_GET['s']==1)
+	$GLOBALS['tpl']->parse('main.successmessage');
+$id = $_GET['id'];    
+$GLOBALS['tpl']->assign('id',$id);
+if($_GET['psu']==0)
+	$GLOBALS['tpl']->assign('markup',$GLOBALS['PARTS_MARKUP']); //if it's not psu property, charge markup
+else
+	$GLOBALS['tpl']->assign('markup',0); //is psu property so don't charge markup.
+$GLOBALS['tpl']->assign('markup_max',$GLOBALS['PARTS_MARKUP_MAX']);
+    
+for($i=0; $i<5; $i++)
+{
+	if($i%2==0)
+  		$rowclass = "class=\"row\"";
+   	else
+   		$rowclass = "";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+	$GLOBALS['tpl']->assign('num',$i);
+    $GLOBALS['tpl']->parse('main.itemrow');
+    $GLOBALS['tpl']->parse('main.validationcheck');
+}
+
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

@@ -1,0 +1,40 @@
+<?php
+/**
+ * index.php
+ *
+ * Repair Shop Workorder System
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2007, Plymouth State University, ITS
+ */ 
+
+$GLOBALS['tpl']=new XTemplate('rates.tpl',$GLOBALS['TEMPLATES']);
+
+
+
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+$query = "select * from shop_rates where 1 order by id asc";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$num_rates = $res->RecordCount();
+for($i=0; $i<$num_rates; $i++)
+{
+	if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+	$array=$res->FetchRow();
+    $GLOBALS['tpl']->assign('item', $array['item']);
+    $GLOBALS['tpl']->assign('rate', $array['rate']);
+    $GLOBALS['tpl']->parse('main.raterow');
+}
+//$GLOBALS['tpl']->assign('timestamp', $res_array['logon_timestamp']);
+//$GLOBALS['tpl']->parse('main.servers');
+
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

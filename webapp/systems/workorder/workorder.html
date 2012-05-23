@@ -1,0 +1,75 @@
+<?php
+/**
+ * index.php
+ *
+ * Repair Shop Workorder System
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2007, Plymouth State University, ITS
+ */ 
+if($_POST['accept_terms'] != 1  && !isset($_SESSION['privileged']) )
+{
+	header("location: index.html");
+}
+
+$GLOBALS['tpl']=new XTemplate('workorder.tpl',$GLOBALS['TEMPLATES']);
+
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+
+if(isset($_SESSION['privileged'])&& $_GET['u']!="")
+{
+	$user = $_GET['u'];
+	$GLOBALS['tpl']->parse('main.psu');
+}
+else
+{
+	$user = $_SESSION['username'];
+    $GLOBALS['tpl']->parse('main.personal');
+}
+$GLOBALS['tpl']->assign('user', $user);
+
+
+$user_info = $GLOBALS['AD']->user_info($user);
+$GLOBALS['tpl']->assign('name',$user_info[0]['displayname'][0]);
+
+$is_employee =  $GLOBALS['AD']->user_ingroup($user,'employees', true);
+$is_student =  $GLOBALS['AD']->user_ingroup($user,'students', true);
+$is_friend =  $GLOBALS['AD']->user_ingroup($user,'friends', true);
+if($is_employee)
+{
+	$role = "Employee";
+}
+else if($is_student)
+{
+	$role = "Student";
+    $GLOBALS['tpl']->parse('main.student');
+}
+else if($is_friend)
+{
+	$role = "PSU Friend";
+}
+else
+	$role = "Unknown";
+$GLOBALS['tpl']->assign('role',$role);
+
+/**********Get data to prepopulate form if user is in the system *********/
+$query = "select * from shop_patrons where username='".$user."'";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+if($res)
+{
+	$array=$res->FetchRow();
+	$GLOBALS['tpl']->assign('phone_primary', $array['phone_primary']);
+	$GLOBALS['tpl']->assign('phone_other', $array['phone_other']);
+}
+
+
+//$GLOBALS['tpl']->assign('timestamp', $res_array['logon_timestamp']);
+//$GLOBALS['tpl']->parse('main.servers');
+
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

@@ -1,0 +1,248 @@
+<?php
+/**
+ * financial_report.html
+ *
+ * Repair Shop Workorder System - financial reporting for a date range
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2008, Plymouth State University, ITS
+ */ 
+if(!checkAuthorization($_SESSION['username']) || $_SESSION['financial']!=1)
+	exit("Authorization Required");
+$GLOBALS['tpl']=new XTemplate('financial_report.tpl',$GLOBALS['TEMPLATES']);
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+
+$start_month = $_POST['month'];
+$start_day = $_POST['day'];
+$start_year = $_POST['year'];
+
+if($start_month!="" && start_day!="" && $start_year!="")
+	$bad_date = !checkdate($start_month, $start_day, $start_year);
+else
+	$bad_date=true;
+    
+if(!$bad_date)
+{
+	if($_POST['endmonth']!="" && $_POST['endday']!="" && $_POST['endyear']!="")
+    {
+		$end_month = $_POST['endmonth'];
+		$end_day = $_POST['endday'];
+		$end_year = $_POST['endyear'];
+        $bad_date = !checkdate($end_month, $end_day, $end_year);
+    }
+    else
+    {
+    	if($_POST['endmonth']=="" && $_POST['endday']=="" && $_POST['endyear']=="")
+    	{
+        	$end_month = $start_month;
+			$end_day = $start_day;
+			$end_year = $start_year;
+        }
+        else
+        	$bad_date=true;
+    }
+}
+
+if($bad_date)
+	header("location: admin.html?errdate=1");
+
+$start_timestamp = mktime(0,0,0, $start_month, $start_day, $start_year);
+$end_timestamp = mktime(23,59,59,$end_month, $end_day, $end_year);
+
+if($start_timestamp>$end_timestamp) // dates were put in in the wrong order
+	header("location: admin.html?errdate=1");
+
+$difference = 7 * 24 * 60 * 60; // 7 days worth of seconds
+if($end_timestamp-$start_timestamp <= $difference) //if the date range was 7 days or less, show details
+	$detail = true; 
+else
+	$detail = false;
+
+$query = "select * from shop_workorder,shop_patrons where shop_workorder.username=shop_patrons.username and closed=1 and payment_method='check' and UNIX_TIMESTAMP(time_closed)>=$start_timestamp and UNIX_TIMESTAMP(time_closed)<=$end_timestamp ";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$check_total = 0;
+$check_num = $res->RecordCount();
+for($i=0; $i<$check_num; $i++)
+{
+	$array = $res->FetchRow();
+    if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+    $GLOBALS['tpl']->assign('wo',$array['id']);
+    $GLOBALS['tpl']->assign('amount',number_format($array['amount_charged'],2,'.',','));
+    $check_total+=$array['amount_charged'];
+    $user_info = $GLOBALS['AD']->user_info($array['username']);
+	$GLOBALS['tpl']->assign('name',$user_info[0]['displayname'][0]);
+	if($detail)
+    	$GLOBALS['tpl']->parse('main.checks.row');
+}
+$GLOBALS['tpl']->assign('num_checks', $check_num);
+$GLOBALS['tpl']->assign('check_total', number_format($check_total,2,'.',','));
+if($check_num==0 && $detail)
+	$GLOBALS['tpl']->parse('main.checks.none');
+$GLOBALS['tpl']->parse('main.checks');
+
+$query = "select * from shop_workorder,shop_patrons where shop_workorder.username=shop_patrons.username and closed=1 and payment_method='credit' and UNIX_TIMESTAMP(time_closed)>=$start_timestamp and UNIX_TIMESTAMP(time_closed)<=$end_timestamp ";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$credit_total = 0;
+$credit_num = $res->RecordCount();
+for($i=0; $i<$credit_num; $i++)
+{
+	$array = $res->FetchRow();
+    if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+    $GLOBALS['tpl']->assign('wo',$array['id']);
+    $GLOBALS['tpl']->assign('amount',number_format($array['amount_charged'],2,'.',','));
+    $credit_total+=$array['amount_charged'];
+    $user_info = $GLOBALS['AD']->user_info($array['username']);
+	$GLOBALS['tpl']->assign('name',$user_info[0]['displayname'][0]);
+	if($detail)
+    	$GLOBALS['tpl']->parse('main.credit.row');
+}
+$GLOBALS['tpl']->assign('num_credit', $credit_num);
+$GLOBALS['tpl']->assign('credit_total', number_format($credit_total,2,'.',','));
+if($credit_num ==0 && $detail)
+	$GLOBALS['tpl']->parse('main.credit.none');
+$GLOBALS['tpl']->parse('main.credit');
+
+$query = "select * from shop_workorder,shop_patrons where shop_workorder.username=shop_patrons.username and closed=1 and payment_method='foapal' and UNIX_TIMESTAMP(time_closed)>=$start_timestamp and UNIX_TIMESTAMP(time_closed)<=$end_timestamp ";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$foapal_total = 0;
+$foapal_num = $res->RecordCount();
+for($i=0; $i<$foapal_num ; $i++)
+{
+	$array = $res->FetchRow();
+    if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+    $GLOBALS['tpl']->assign('wo',$array['id']);
+    $GLOBALS['tpl']->assign('amount',number_format($array['amount_charged'],2,'.',','));
+    $foapal_total+=$array['amount_charged'];
+    $user_info = $GLOBALS['AD']->user_info($array['username']);
+	$GLOBALS['tpl']->assign('name',$user_info[0]['displayname'][0]);
+	if($detail)
+    	$GLOBALS['tpl']->parse('main.foapal.row');
+}
+$GLOBALS['tpl']->assign('foapal_total', number_format($foapal_total,2,'.',','));
+$GLOBALS['tpl']->assign('num_foapal', $foapal_num);
+if($foapal_num ==0 && $detail)
+	$GLOBALS['tpl']->parse('main.foapal.none');
+$GLOBALS['tpl']->parse('main.foapal');
+
+$query = "select * from shop_reimbursement where UNIX_TIMESTAMP(applied)>=$start_timestamp and UNIX_TIMESTAMP(applied)<=$end_timestamp ";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$reimbursement_total = 0;
+$reimbursement_num = $res->RecordCount();
+for($i=0; $i<$reimbursement_num ; $i++)
+{
+	$array = $res->FetchRow();
+    if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+    $GLOBALS['tpl']->assign('description',$array['description']);
+    $GLOBALS['tpl']->assign('amount',number_format($array['value'],2,'.',','));
+    $reimbursement_total+=$array['value'];
+    $GLOBALS['tpl']->parse('main.reimbursement.row');
+}
+$GLOBALS['tpl']->assign('reimbursement_total', number_format($reimbursement_total,2,'.',','));
+$GLOBALS['tpl']->assign('num_reimbursement', $reimbursement_num);
+if($reimbursement_num ==0 )
+	$GLOBALS['tpl']->parse('main.reimbursement.none');
+$GLOBALS['tpl']->parse('main.reimbursement');
+
+/****** Do Profit Calculations *******/
+$num_parts = 0;
+$cost_parts = 0;
+$charged_parts =0;
+$labor_charged =0;
+$labor_hours = 0;
+$gross =0;
+$net = 0;
+$num_warranty = 0;
+
+//Get total number of calls closed during the time period
+$query = "SELECT count(id) AS total FROM shop_workorder WHERE closed=1 AND UNIX_TIMESTAMP(time_closed)>=$start_timestamp AND UNIX_TIMESTAMP(time_closed)<=$end_timestamp"; 
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query) or die("Error getting total number of calls closed during time period");
+$array = $res->FetchRow();
+$GLOBALS['tpl']->assign('wo_closed', $array['total']);
+
+
+$query = "select * from shop_workorder_items where workorder_id in (select id as workorder_id from shop_workorder where closed=1 and current_status not like \"Close%surplus%\" and UNIX_TIMESTAMP(time_closed)>=$start_timestamp and UNIX_TIMESTAMP(time_closed)<=$end_timestamp) and removed=0"; 
+
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$num_items = $res->RecordCount();
+for($i = 0; $i<$num_items; $i++)
+{
+	$array = $res->FetchRow();
+    if($array['part']==1)
+    {
+    	$num_parts+=$array['quantity'];
+        $cost_parts += (($array['quantity']*$array['part_cost'])+$array['part_shipping']);
+    	$charged_parts += $array['cost'];
+        if($array['warranty']==1)
+        	$num_warranty+=$array['quantity'];
+    }
+    else
+    {
+    	$labor_hours += $array['billable_hours'];
+        $labor_charged += $array['cost'];
+    }
+}
+
+//find entries where the item worked on was transferred to surplus, add the cost of parts to the amount spent, but don't add anything to the gross.  Ignore labor.
+$query = "select * from shop_workorder_items where workorder_id in (select id as workorder_id from shop_workorder where closed=1 and current_status like \"Close%surplus%\" and UNIX_TIMESTAMP(time_closed)>=$start_timestamp and UNIX_TIMESTAMP(time_closed)<=$end_timestamp) and removed=0"; 
+
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$num_items = $res->RecordCount();
+for($i = 0; $i<$num_items; $i++)
+{
+	$array = $res->FetchRow();
+    if($array['part']==1)
+    {
+    	$num_parts+=$array['quantity'];
+        $cost_parts += (($array['quantity']*$array['part_cost'])+$array['part_shipping']);
+    	//do not add the amount charged to the total because the part was not paid for
+        if($array['warranty']==1)
+        	$num_warranty+=$array['quantity'];
+    }
+    
+}
+$gross = $labor_charged + $charged_parts + $reimbursement_total;
+$net = $gross - $cost_parts;
+$GLOBALS['tpl']->assign('gross', number_format($gross,2,'.',','));
+$GLOBALS['tpl']->assign('net', number_format($net,2,'.',','));
+$GLOBALS['tpl']->assign('num_parts', $num_parts);
+$GLOBALS['tpl']->assign('num_warranty', $num_warranty);
+$GLOBALS['tpl']->assign('parts_cost', number_format($cost_parts,2,'.',','));
+$GLOBALS['tpl']->assign('parts_charged', number_format($charged_parts,2,'.',','));
+$GLOBALS['tpl']->assign('profit_parts', number_format($charged_parts-$cost_parts,2,'.',','));
+$GLOBALS['tpl']->assign('labor_hours', number_format($labor_hours,2,'.',','));
+$GLOBALS['tpl']->assign('labor_charged', number_format($labor_charged,2,'.',','));
+
+$query = "select COUNT(DISTINCT workorder_id) as total from shop_workorder_items where workorder_id in (select id as workorder_id from shop_workorder where closed=1 and university_owned=1 and UNIX_TIMESTAMP(time_closed)>=$start_timestamp and UNIX_TIMESTAMP(time_closed)<=$end_timestamp) and removed=0 and warranty=1"; 
+
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$array = $res->FetchRow();
+$GLOBALS['tpl']->assign('num_warranty_university', $array['total']);
+
+$query = "select COUNT(DISTINCT workorder_id) as total from shop_workorder_items where workorder_id in (select id as workorder_id from shop_workorder where closed=1 and university_owned=0 and UNIX_TIMESTAMP(time_closed)>=$start_timestamp and UNIX_TIMESTAMP(time_closed)<=$end_timestamp) and removed=0 and warranty=1"; 
+
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$array = $res->FetchRow();
+$GLOBALS['tpl']->assign('num_warranty_personal', $array['total']);
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

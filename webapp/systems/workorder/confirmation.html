@@ -1,0 +1,27 @@
+<?php
+/**
+ * index.php
+ *
+ * Repair Shop Workorder System - Confirmation of workorder submission 
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2008, Plymouth State University, ITS
+ */ 
+
+
+$GLOBALS['tpl']=new XTemplate('confirmation.tpl',$GLOBALS['TEMPLATES']);
+
+$GLOBALS['tpl']->assign('workorder',$_GET['wo']); 
+$GLOBALS['tpl']->assign('email',$_SESSION['username']."@plymouth.edu"); 
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout=");
+if($_GET['l']!=0)
+{
+	$GLOBALS['tpl']->assign('onload',"onload=\"setTimeout('delayedRedirect()', 15000)\"");
+	$GLOBALS['tpl']->parse('main.logoutmessage');
+ }
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

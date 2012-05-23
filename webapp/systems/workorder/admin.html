@@ -1,0 +1,85 @@
+<?php
+/**
+ * index.php
+ *
+ * Repair Shop Workorder System - main administration display page
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2007, Plymouth State University, ITS
+ */ 
+if(!checkAuthorization($_SESSION['username']))
+	exit("Authorization Required");
+$GLOBALS['tpl']=new XTemplate('admin.tpl',$GLOBALS['TEMPLATES']);
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+$month = date("n");
+$day = date("j");
+$year = date("Y");
+for($i=1; $i<=12; $i++)
+{	
+	$GLOBALS['tpl']->assign('month',$i);
+    $GLOBALS['tpl']->assign('monthname',date("M",mktime(10,0,0,$i,1)));
+    if($i == $month)
+    	$GLOBALS['tpl']->assign('monthselected',"selected=\"selected\"");
+    else
+    	$GLOBALS['tpl']->assign('monthselected',"");
+    $GLOBALS['tpl']->parse('main.financial.beginmonthoption');
+    $GLOBALS['tpl']->parse('main.financial.endmonthoption');
+    $GLOBALS['tpl']->parse('main.reimbursement.monthoption');
+}
+for($i=1; $i<=31; $i++)
+{	
+	$GLOBALS['tpl']->assign('day',$i);
+    if($i == $day)
+    	$GLOBALS['tpl']->assign('dayselected',"selected=\"selected\"");
+    else
+    	$GLOBALS['tpl']->assign('dayselected',"");
+    $GLOBALS['tpl']->parse('main.financial.begindayoption');
+    $GLOBALS['tpl']->parse('main.financial.enddayoption');
+}
+for($i=2008; $i<=$year; $i++)
+{	
+	$GLOBALS['tpl']->assign('year',$i);
+    if($i == $year)
+    	$GLOBALS['tpl']->assign('yearselected',"selected=\"selected\"");
+    else
+    	$GLOBALS['tpl']->assign('yearselected',"");
+    $GLOBALS['tpl']->parse('main.year');
+    $GLOBALS['tpl']->parse('main.financial.year');
+    $GLOBALS['tpl']->parse('main.financial.endyear');
+    $GLOBALS['tpl']->parse('main.reimbursement.year');
+}
+if($_GET['errdate']==1)
+	$GLOBALS['tpl']->parse('main.financial.dateerror');
+
+if($_SESSION['financial']==1)
+{
+	$GLOBALS['tpl']->parse('main.financial');
+    $GLOBALS['tpl']->parse('main.reimbursement');
+}
+	
+/***************Stats Calculation****************************/
+$query = "Select count(id) as total from shop_workorder where closed=0";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$array =$res->FetchRow();
+$GLOBALS['tpl']->assign('open',$array['total']);
+$query = "Select count(id) as total from shop_workorder where closed=1 and DATE(time_closed)=CURDATE()";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$array =$res->FetchRow();
+$GLOBALS['tpl']->assign('closed_today',$array['total']);
+$query = "Select count(id) as total from shop_workorder where closed=1 and YEAR(time_closed)=YEAR(CURDATE()) and WEEK(time_closed)=WEEK(CURDATE())";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$array =$res->FetchRow();
+$GLOBALS['tpl']->assign('closed_week',$array['total']);
+$query = "Select count(id) as total from shop_workorder where closed=1 and YEAR(time_closed)=YEAR(CURDATE())";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+$array =$res->FetchRow();
+$GLOBALS['tpl']->assign('closed_year',$array['total']);
+
+
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>
