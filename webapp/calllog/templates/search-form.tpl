@@ -17,7 +17,7 @@
 				{$smarty.capture.search_type}
 			</li>
 			<li>
-				<input type="search" size="19" class="search_string" name="search_string" value="{$smarty.get.search_string}{$option}"/>
+				<input type="search" size="19" class="search_string" name="search_string" results="5" name="search_string" autosave="calllog_search_autosave" value="{$smarty.get.search_string}{$option}"/>
 			</li>
 			<li class="form-actions">
 				<button class="btn {$button_class}">Search &raquo;</button>
@@ -25,7 +25,7 @@
 		</ul>
 	{else}
 		{$smarty.capture.search_type}
-		<input type="search" size="19" id="search_string" name="search_string" onKeyDown="javascript: keyCheck(event);" value="{$smarty.get.search_string}{$option}"/>
+		<input type="search" size="19" id="search_string" name="search_string" results="5" autosave="calllog_search_autosave" onKeyDown="javascript: keyCheck(event);" value="{$smarty.get.search_string}{$option}"/>
 		<button class="btn {$button_class}">Search &raquo;</button>
 	{/if}
 </form>
