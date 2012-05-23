@@ -134,7 +134,7 @@ class User
 
 			if( $caller_person->is_valid() ) {
 				$person = array();
-				$person['name_full'] = $caller_person->formatName('f m l');
+				$person['name_full'] = $caller_person->formatName('f l');
 				$person['wp_id'] = $caller_person->wp_id;
 				$person['email'] = $caller_person->username ? $caller_person->username : $caller_person->wp_id;
 				$person['pidm'] = $caller_person->pidm ? $caller_person->pidm : null;
