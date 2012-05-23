@@ -1,4 +1,3 @@
-var $jQuery = jQuery.noConflict();
 
 function redirect(url){
 	document.location = url;
