@@ -372,5 +372,37 @@ class User
 		$tpl->parse('main');
 		return $tpl->text('main');
 	}
+
+	function userQuota($caller, $person)
+	{
+		if( ! $caller ) {
+			return false;
+		}
+		
+		require_once('PrintUser.class.php');
+
+		$person = $this->getCallerData($caller);
+		
+		$tpl = new XTemplate(TEMPLATE_DIR."/user_quota.tpl");
+		$tpl->assign('call_log_username', $_SESSION['username']);
+		$tpl->assign('call_log_web_home', CALL_LOG_WEB_HOME);
+		
+		if(!$this->isFakeUser($person['username'])) {
+			$print_user = new PrintUser($person['pidm']);
+		}//end if
+
+		if( $print_user->balance ) {
+			$tpl->assign('print_balance', number_format($print_user->balance, 2));
+
+			if(in_array($_SESSION['tlc_position'], $_SESSION['priv_users']) || $_SESSION['tlc_position'] == 'shift_leader' || $_SESSION['tlc_position'] == 'supervisor') {
+				$tpl->parse('main.quotas.PrintQuota.print_balance_adjust');
+			}//end if
+			$tpl->parse('main.quotas.PrintQuota');
+
+			$tpl->parse('main.quotas');
+		}
+		$tpl->parse('main');
+		return $tpl->text('main');
+	}
 }
 

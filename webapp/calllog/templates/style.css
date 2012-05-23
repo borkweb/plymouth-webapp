@@ -59,6 +59,10 @@ tr:hover .fade{
 	margin-bottom: 10px;
 }
 
+.balance{ 
+	float: none;
+}
+
 .user-info li label{
 	display: block;
 	float: left;

@@ -24,6 +24,7 @@
 		<div id="caller_information_div">
 			{$caller_information}
 		</div>
+
 		<div class="center">
 			<a href=#" id="change-caller-toggle" class="replace-toggle">Re-attach Call</a>
 			<div id="change_caller" style="display:none;">
@@ -55,6 +56,12 @@
 
 	{box title="Ticket History" id="call-history" class="noprint"}
 		{$call_history_summary}
+	{/box}
+
+	{box title="Print Quota" class="noprint"}
+		<div id="user_quotas_div">
+			{$user_quota}
+		</div>
 	{/box}
 
 	{box title="Restore Request" class="noprint"}
