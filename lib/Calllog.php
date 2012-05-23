@@ -1,12 +1,9 @@
 <?php
 
-require_once('PSUTools.class.php');
-
 /**
  * CallLog API.
  */
-class CallLog
-{
+class Calllog {
 	/**
 	 * Filter the ticket list.
 	 *
