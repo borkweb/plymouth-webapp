@@ -4,5 +4,6 @@
 // Global app namespace
 {literal}
 teacher_cert = {data:{}};
+$.fn.psu_lazyload.settings.endpoint = BASE_URL + '/api/person-data';
 {/literal}
 </script>

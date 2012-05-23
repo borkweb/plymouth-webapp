@@ -13,10 +13,11 @@
 		</thead>
 		<tbody>
 		{foreach from=$gate->students() item=student}
-			<tr>
+			<tr class="psu-lazyload" data-object="person" data-id="{$student->pidm|escape}">
 				<td>
-					<a href="{$PHP.BASE_URL}/gate-system/{$gate_system->slug}/{$student->student_gate_system_id}">{$student->person()->formatName('l, f m')}</a>
-					<div class="id">ID: {$student->person()->id}</div>
+				<a href="{$PHP.BASE_URL}/gate-system/{$gate_system->slug}/{$student->student_gate_system_id}"/>
+					<span class="lazy-field" data-type="last_name"></span>, <span class="lazy-field" data-type="first_name"></span></a>
+					<div class="id">ID: <span class="lazy-field" data-type="id"></span></div>
 				</td>
 				<td class="center middle">{$gate->name}</td>
 				<td class="center middle">{$student->teaching_term}</td>

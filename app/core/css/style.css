@@ -2831,6 +2831,9 @@ cite {
 .lazy-field:after {
 	content: "\0000a0";
 }
+.psu-lazyload-complete .lazy-field:after {
+	content: "";
+}
 
 .psu-lazyload .lazy-field {
 	background-image: url(../images/lazy-loading.png);
