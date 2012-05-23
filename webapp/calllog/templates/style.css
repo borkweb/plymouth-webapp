@@ -10,6 +10,10 @@
 .status-purchase{background: #a2c1a9 !important;}
 .status-,.status-normal{background: #eeffee !important;}
 
+input[type=search] {
+	font-size: 16px;
+}
+
 .search_type {
 	width: 150px;
 }
