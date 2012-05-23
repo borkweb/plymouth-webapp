@@ -1,8 +1,4 @@
-<script type="text/javascript">
-// this is a temprary stopgap until prototype/scriptaculous can be removed
-var $jQuery = jQuery.noConflict();
-</script>	
-
+	{PSU_JS src="`$PHP.BASE_URL`/js/conflict.js"}
 	{PSU_JS src="/app/core/js/prototype.js"}
 	{PSU_JS src="/app/core/js/scriptaculous/scriptaculous.js"}
 
