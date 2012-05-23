@@ -6,7 +6,7 @@ Ticket #{$call.call_id}
 
 {if !$is_caller}
 Original Ticket Date: {$call.call_date|date_format:"%b %e, %Y %r"}
-Caller: {$pcache[$caller_id]->formatName('f m l')} ({$pcache[$caller_id]->username|default:"`$pcache[$caller_id]->wp_id`"})
+Caller: {$pcache[$caller_id]->formatName('f l')} ({$pcache[$caller_id]->username|default:"`$pcache[$caller_id]->wp_id`"})
 {if $caller.dept}
 Caller Department: {$caller.dept}{/if}
 {if $caller.location}
@@ -17,7 +17,7 @@ Caller Phone Number: {$caller.phone_number}{/if}
 
 {if !$is_caller}
 
-{if $current.logger}Updated by: {$pcache[$current.logger]->formatName('f m l')} ({$pcache[$current.logger]->username|default:"`$pcache[$current.logger]->wp_id`"}){/if}
+{if $current.logger}Updated by: {$pcache[$current.logger]->formatName('f l')} ({$pcache[$current.logger]->username|default:"`$pcache[$current.logger]->wp_id`"}){/if}
 {else}
 
 {if $current.logger}Updated by: {$pcache[$current.logger]->formatName('f')}{/if}
@@ -26,7 +26,7 @@ Caller Phone Number: {$caller.phone_number}{/if}
 {if $current.update_date}Updated: {$current.update_date|date_format:"%b %e, %Y %r"}{/if}
 {if !$is_caller}
 
-{if $current.assigned_to}Assigned to: {$pcache[$current.assigned_to]->formatName('f m l')} ({$pcache[$current.assigned_to]->username|default:"`$pcache[$current.assigned_to]->wp_id`"}){/if}
+{if $current.assigned_to}Assigned to: {$pcache[$current.assigned_to]->formatName('f l')} ({$pcache[$current.assigned_to]->username|default:"`$pcache[$current.assigned_to]->wp_id`"}){/if}
 {if $current.group_name}Group: {$current.group_name}{/if}
 {/if}
 {if $call.feelings}
@@ -48,9 +48,9 @@ Respond/Reply to this Ticket here: https://www.plymouth.edu/webapp/{$smarty.capt
 = Ticket History
 ======================================================
 {foreach from=$history item=item}
-Updated by: {$pcache[$item.logger]->formatName('f m l')} ({$pcache[$item.logger]->username|default:"`$pcache[$item.logger]->wp_id`"})
+Updated by: {$pcache[$item.logger]->formatName('f l')} ({$pcache[$item.logger]->username|default:"`$pcache[$item.logger]->wp_id`"})
 Updated: {$item.update_date|date_format:"%b %e, %Y %r"}
-{if $item.assigned_to}Assigned to: {$pcache[$item.assigned_to]->formatName('f m l')} ({$pcache[$item.assigned_to]->username|default:"`$pcache[$item.assigned_to]->wp_id`"}){/if}
+{if $item.assigned_to}Assigned to: {$pcache[$item.assigned_to]->formatName('f l')} ({$pcache[$item.assigned_to]->username|default:"`$pcache[$item.assigned_to]->wp_id`"}){/if}
 {if $item.group_name}Group: {$item.group_name}{/if}
 
 
@@ -67,5 +67,5 @@ You are receiving this email because you are attached to this Plymouth State Uni
 If you wish to respond or add to this ticket, please do so here: https://www.plymouth.edu/webapp/{$smarty.capture.type}/ticket/{$call.call_id}.
 
 {if !$is_caller}
-This ticket is attached to {$pcache[$caller_id]->formatName('f m l')}: http://go.plymouth.edu/ape/{$pcache[$caller_id]->username|default:"`$pcache[$caller_id]->wp_id`"} (APE)
+This ticket is attached to {$pcache[$caller_id]->formatName('f l')}: http://go.plymouth.edu/ape/{$pcache[$caller_id]->username|default:"`$pcache[$caller_id]->wp_id`"} (APE)
 {/if}

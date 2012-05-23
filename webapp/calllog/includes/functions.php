@@ -405,11 +405,6 @@ function sendOpenCallMail($call_info, $action){
 
 		$current = array_slice( $history, 0, 1 );
 		$current = $current[0];
-		/*
-		psu::dbug($call_info);
-		psu::dbug($current);
-		die;
-		 */
 
 		// email ITS
 		$tpl = new PSUTemplate();
@@ -423,9 +418,8 @@ function sendOpenCallMail($call_info, $action){
 		$html_message = $tpl->fetch('email.ticket.html.tpl');
 
 		$to = implode(',', array_unique( $to ));
-
-		if($to){
-			$headers['from'] = $logger->formatName('f m l').' <'.$logger->wp_email.'>';
+		if( $to ) {
+			$headers['from'] = $logger->formatName('f l').' <'.$logger->wp_email.'>';
 			PSU::mail($to, $subject, array( stripslashes($text_message), stripslashes($html_message) ), $headers);
 		}//end if
 

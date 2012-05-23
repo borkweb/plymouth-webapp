@@ -236,7 +236,7 @@ class CallLog
 					foreach( $search_results as &$record ) {
 						$person = new PSUPerson( $record['user_login'] );
 						$record['identifier'] = $record['wp_id'] = $person->wp_id;
-						$record['name_full'] = $person->formatName('f m l');
+						$record['name_full'] = $person->formatName('f l');
 						$record['email'] = $person->username;
 						$record['dept'] = 'Family Portal';
 						$person->destroy();
