@@ -137,6 +137,8 @@ class PSU
 		'psuprod' => 'oracle/psuprod_psu/fixcase',
 		'r25' => 'oracle/r25_webviewer/fixcase',
 		'raintix' => 'mysql/raintix',
+		'rate_your_mate' => 'oracle/rate_your_mate/fixcase',
+		'rate_your_mate_dev' => 'oracle/rate_your_mate_dev/fixcase',
 		'reslife' => 'mysql/reslife',
 		'reslife_dev' => 'mysql/reslife_dev',
 		'userinfo' => 'mysql/user_info-admin/pdo',
@@ -3318,6 +3320,7 @@ class PSU
 			$this->add_database('moodle', 'mysql/moodle_dev');
 			$this->add_database('moodle2', 'mysql/moodle2_dev');
 			$this->add_database('myplymouth', 'mysql/myplymouth_dev');
+			$this->add_database('rate_your_mate', 'oracle/rate_your_mate_dev/fixcase');
 			$this->add_database('reslife', 'mysql/reslife_dev/pdo');
 		}//end elseif
 
