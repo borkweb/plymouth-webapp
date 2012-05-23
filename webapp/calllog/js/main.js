@@ -26,7 +26,7 @@ $jQuery(document).ready(function($){
 		var amount = $jQuery('.add-funds select').val();
 		var pidm = $jQuery('#caller_pidm').val();
 		
-		$jQuery.get( BASE_URL + '/print_balance.php?pidm=' + pidm + '&fund_increase=' + amount + '&action=update', `function(data){
+		$jQuery.get( BASE_URL + '/print_balance.php?pidm=' + pidm + '&fund_increase=' + amount + '&action=update', function(data){
 			data = $jQuery.trim(data);
 			$jQuery('.add-funds-throbber').slideUp('fast');
 			if(data == 'no_record' || data == 'invalid_privs' || data == 'too_small') {
