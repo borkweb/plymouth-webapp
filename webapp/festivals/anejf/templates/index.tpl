@@ -1,7 +1,13 @@
 {box title="`$PHP.ANEJF.YEAR` All New England Jazz Festival" size=12}
 	<p>Tuesday, March 12, 2013 (9:00 AM - 5:00 PM)</p>
 	<h3>Guest Conductor/Composer</h3>
-	<p>TBA</p>
+
+	<p><b>Graham Breedlove</b>, trumpet soloist with the Army Blues in Washington, DC
+	will be the guest conductor/soloist for the 2013 ANEJF. He has appeared as
+	a soloist all over the United States, and currently serves on the faculties
+	of Towson University, Catholic University, and the National Jazz Workshop.
+	His compositions have been featured on NBC's Today Show.</p>
+
 	<h3>Eligibility</h3>
 	<p>High School musicians (grades 10-12) recommended by their high school band director are eligible.</p>
 	<h3>Fee</h3>
