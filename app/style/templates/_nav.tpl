@@ -1,6 +1,5 @@
-<ul class="grid_16">
+<ul class="grid_12">
 	<li><a href="{$PHP.BASE_URL}/">Home</a></li>
-	<li class="pull-right"><a href="{literal}javascript:document.location.host={'www.plymouth.edu':'www.dev.plymouth.edu','www.dev.plymouth.edu':'www.plymouth.edu','perseus.plymouth.edu':'uranus.dev.plymouth.edu','uranus.dev.plymouth.edu':'perseus.plymouth.edu'}[document.location.host];{/literal}">dev/prod</a></li>
 	<li>
 		<a href="{$PHP.BASE_URL}/base">Base CSS</a>
 		<ul>
@@ -32,4 +31,8 @@
 	<li>
 		<a href="{$PHP.BASE_URL}/icons">Icons</a>
 	</li>
+</ul>
+<ul class="menu-right grid_4">
+	<li><a title="Make the grids add up to 16, and add menu-right to the second ul." href="#">Right Menu</a></li>
+	<li><a href="{literal}javascript:(function(){var h={'www.plymouth.edu':'www.dev.plymouth.edu','www.dev.plymouth.edu':'www.plymouth.edu','capricorn.plymouth.edu':'uranus.dev.plymouth.edu','uranus.dev.plymouth.edu':'capricorn.plymouth.edu'}[document.location.host];if(h)document.location.host=h;})(){/literal}">dev/prod</a></li>
 </ul>
