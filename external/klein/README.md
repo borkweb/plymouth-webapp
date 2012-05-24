@@ -88,6 +88,11 @@ respond(function ($request, $response, $app) {
 
     // The third parameter can be used to share scope and global objects
     $app->db = new PDO(...);
+    // $app also can store lazy services, e.g. if you don't want to
+    // instantiate a database connection on every response
+    $app->register('db', function() {
+        return new PDO(...);
+    });
 });
 
 respond('POST', '/users/[i:id]/edit', function ($request, $response) {
@@ -129,6 +134,30 @@ with('/users', function () {
 foreach(array('projects', 'posts') as $controller) {
     with("/$controller", "controllers/$controller.php");
 }
+```
+
+## Lazy services
+
+Services can be stored **lazily**, meaning that they are only instantiated on
+first use.
+
+``` php
+<?php
+respond(function ($request, $response, $app) {
+    $app->register('lazyDb', function() {
+        $db = new stdClass();
+        $db->name = 'foo';
+        return $db;
+    });
+});
+
+//Later
+
+respond('GET', '/posts', function ($request, $response, $app) {
+    // $db is initialised on first request
+    // all subsequent calls will use the same instance
+    echo $app->lazyDb->name;
+});
 ```
 
 ## Validators
@@ -261,7 +290,7 @@ $response->
     flash($msg, $type = 'info', $params = array()   // Set a flash message
     file($path, $filename = null)                   // Send a file
     noCache()                                       // Tell the browser not to cache the response
-    json($object, $callback = null)                 // Send an object as JSON(p)
+    json($object, $jsonp_prefix = null)             // Send an object as JSON or JSONP by providing padding prefix
     markdown($str, $args, ...)                      // Return a string formatted with markdown
     code($code = null)                              // Return the HTTP response code, or send a new code
     redirect($url, $code = 302)                     // Redirect to the specified URL

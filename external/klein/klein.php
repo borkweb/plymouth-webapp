@@ -19,8 +19,31 @@ function respond($method, $route = '*', $callback = null) {
         $method = null;
     }
 
+    if( $__namespace && $route[0] === '@' || ( $route[0] === '!' && $route[1] === '@' ) ) {
+        if( $route[0] === '!' ) {
+            $negate = true;
+            $route = substr( $route, 2 );
+        } else {
+            $negate = false;
+            $route = substr( $route, 1 );
+        }
+
+        // regex anchored to front of string
+        if( $route[0] === '^' ) {
+            $route = substr( $route, 1 );
+        } else {
+            $route = '.*' . $route; 
+        }
+
+        if( $negate ) {
+            $route = '@^' . $__namespace . '(?!' . $route . ')';
+        } else {
+            $route = '@^' . $__namespace . $route;
+        }
+    }
+
     // empty route with namespace is a match-all
-    if( $__namespace && ( null == $route || '*' == $route ) ) {
+    elseif( $__namespace && ( null == $route || '*' === $route ) ) {
         $route = '@^' . $__namespace . '(/|$)';
     } else {
         $route = $__namespace . $route;
@@ -171,7 +194,7 @@ function dispatch($uri = null, $req_method = null, array $params = null, $captur
             $match = preg_match($regex, $uri, $params);
         }
 
-        if ($match ^ $negate) {
+        if (isset($match) && $match ^ $negate) {
             if (null !== $params) {
                 $_REQUEST = array_merge($_REQUEST, $params);
             }
@@ -180,7 +203,9 @@ function dispatch($uri = null, $req_method = null, array $params = null, $captur
             } catch (Exception $e) {
                 $response->error($e);
             }
-            $count_match && ++$matched;
+            if ($_route !== '*' && $_route !== null) {
+                $count_match && ++$matched;
+            }
         }
     }
     if (!$matched) {
@@ -234,6 +259,9 @@ class _Request {
 
     protected $_id = null;
 
+    //HTTP headers helper
+    static $_headers = null;
+
     //Returns all parameters (GET, POST, named) that match the mask
     public function params($mask = null) {
         $params = $_REQUEST;
@@ -278,7 +306,7 @@ class _Request {
         $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'];
         if (!$secure && $required) {
             $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-            header('Location: ' . $url);
+            self::$_headers->header('Location: ' . $url);
         }
         return $secure;
     }
@@ -346,11 +374,13 @@ class _Response extends StdClass {
     protected $_view = null;
     protected $_code = 200;
 
+    static $_headers = null;
+
     //Enable response chunking. See: http://bit.ly/hg3gHb
     public function chunk($str = null) {
         if (false === $this->chunked) {
             $this->chunked = true;
-            header('Transfer-encoding: chunked');
+            self::$_headers->header('Transfer-encoding: chunked');
             flush();
         }
         if (null !== $str) {
@@ -366,9 +396,8 @@ class _Response extends StdClass {
     }
 
     //Sets a response header
-    public function header($key, $value = '') {
-        $key = str_replace(' ', '-', ucwords(str_replace('-', ' ', $key)));
-        header("$key: $value");
+    public function header($key, $value = null) {
+        self::$_headers->header($key, $value);
     }
 
     //Sets a response cookie
@@ -415,8 +444,8 @@ class _Response extends StdClass {
 
     //Tell the browser not to cache the response
     public function noCache() {
-        header("Pragma: no-cache");
-        header('Cache-Control: no-store, no-cache');
+        $this->header("Pragma: no-cache");
+        $this->header('Cache-Control: no-store, no-cache');
     }
 
     //Sends a file
@@ -430,21 +459,23 @@ class _Response extends StdClass {
         if (null === $mimetype) {
             $mimetype = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
         }
-        header('Content-type: ' . $mimetype);
-        header('Content-length: ' . filesize($path));
-        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        $this->header('Content-type: ' . $mimetype);
+        $this->header('Content-length: ' . filesize($path));
+        $this->header('Content-Disposition: attachment; filename="'.$filename.'"');
         readfile($path);
     }
 
-    //Sends an object as json
-    public function json($object, $callback = null) {
+    //Sends an object as json or jsonp by providing the padding prefix
+    public function json($object, $jsonp_prefix = null) {
         $this->discard();
         $this->noCache();
         set_time_limit(1200);
         $json = json_encode($object);
-        if (null !== $callback) {
-            echo "$callback($json)";
+        if (null !== $jsonp_prefix) {
+            header('Content-Type: text/javascript'); // should ideally be application/json-p once adopted
+            echo "$jsonp_prefix($json);";
         } else {
+            header('Content-Type: application/json');
             echo $json;
         }
     }
@@ -454,7 +485,7 @@ class _Response extends StdClass {
         if(null !== $code) {
             $this->_code = $code;
             $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
-            header("$protocol $code");
+            $this->header("$protocol $code");
         }
         return $this->_code;
     }
@@ -462,7 +493,7 @@ class _Response extends StdClass {
     //Redirects the request to another URL
     public function redirect($url, $code = 302) {
         $this->code($code);
-        header("Location: $url");
+        $this->header("Location: $url");
         exit;
     }
 
@@ -520,6 +551,8 @@ class _Response extends StdClass {
 
     //Renders a view + optional layout
     public function render($view, array $data = array()) {
+        $original_view = $this->_view;
+
         if (!empty($data)) {
             $this->set($data);
         }
@@ -532,6 +565,9 @@ class _Response extends StdClass {
         if (false !== $this->chunked) {
             $this->chunk();
         }
+
+        // restore state for parent render()
+        $this->_view = $original_view;
     }
 
     // Renders a view without a layout
@@ -744,15 +780,60 @@ class _Validator {
 }
 
 class _App {
-    public function __call( $method, $args ) {
+
+    protected $services = array();
+
+    //Check for a lazy service
+    public function __get($name) {
+        if (!isset($this->services[$name])) {
+            throw new InvalidArgumentException("Unknown service $name");
+        }
+        $service = $this->services[$name];
+        return $service();
+    }
+
+    //Call a class property like a method
+    public function __call($method, $args) {
         if (!isset($this->$method) || !is_callable($this->$method)) {
             throw new ErrorException("Unknown method $method()");
         }
+        return call_user_func_array($this->$method, $args);
+    }
 
-        if ( count($args) === 0 ) {
-            return call_user_func( $this->$method );
-        } else {
-            return call_user_func_array( $this->$method, $args );
+    //Register a lazy service
+    public function register($name, $closure) {
+        if (isset($this->services[$name])) {
+            throw new Exception("A service is already registered under $name");
         }
+        $this->services[$name] = function() use ($closure) {
+            static $instance;
+            if (null === $instance) {
+                $instance = $closure();
+            }
+            return $instance;
+        };
     }
 }
+
+class _Headers {
+    public function header($key, $value = null) {
+        header($this->_header($key, $value));
+    }
+
+    /**
+     * Output an HTTP header. If $value is null, $key is
+     * assume to be the HTTP response code, and the ":"
+     * separator will be omitted.
+     */
+    public function _header($key, $value = null) {
+        if (null === $value ) {
+            return $key;
+        }
+
+        $key = str_replace(' ', '-', ucwords(str_replace('-', ' ', $key)));
+        return "$key: $value";
+    }
+}
+
+_Request::$_headers = _Response::$_headers = new _Headers;
+
