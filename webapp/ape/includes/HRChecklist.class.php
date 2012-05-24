@@ -131,7 +131,6 @@ class HRChecklist {
 
 		if( PSU::isDev() ) {
 			$emails = array(
-				'jfoote@plymouth.edu',
 				'mtbatchelder@plymouth.edu',
 			);
 
@@ -330,7 +329,6 @@ class HRChecklist {
 		return PSU::db('hr')->Execute( $sql, array( $checklist_id, $_SESSION['pidm'] ) );
 	}//end hide
 
-
 	public static function is_closed( $checklist_id ) {
 		return PSU::db('hr')->GetOne("SELECT 1 FROM person_checklists WHERE id = ? AND closed = 1", array( $checklist_id ) );
 	}//end is_closed
@@ -463,9 +461,9 @@ class HRChecklist {
 								'end_date',
 								?
 							)";
-			if( PSU::db('hr')->Execute( $sql, array( $id, $date ) ) ) {
-				$response->no_outstanding_charges = HRChecklist::auto_mark_outstanding_charges( $person, $id, $initiator_pidm );
-				$response->no_ape_attributes = HRChecklist::auto_mark_ape_attributes( $person, $id, $initiator_pidm );
+			if( PSU::db('hr')->Execute( $sql, array( $response->id, $date ) ) ) {
+				$response->no_outstanding_charges = HRChecklist::auto_mark_outstanding_charges( $person, $response->id, $initiator_pidm );
+				$response->no_ape_attributes = HRChecklist::auto_mark_ape_attributes( $person, $response->id, $initiator_pidm );
 
 				return $response;
 			}//end if
@@ -486,7 +484,6 @@ class HRChecklist {
 		);
 		return PSU::db( 'hr' )->GetOne( $sql, $binds );
 	}//end close
-
 
 	/**
 	 * unhides a checklist for a given user

@@ -31,12 +31,19 @@ if( isset( $_GET['toggle'] ) && (IDMObject::authZ('permission', 'mis') || IDMObj
 
 	PSU::redirect( $url );
 } elseif( isset( $_POST[ 'end_date' ] ) ) {
-	$response = HRChecklist::start( $_POST['pidm'], $_POST['end_date'], $list, $_POST['position'], $myuser->pidm );
+
+	$end_date = $_POST['end_date'];
+
+	if( ! is_numeric( $end_date ) ) {
+		$end_date = strtotime( $end_date );
+	}//end if
+
+	$response = HRChecklist::start( $_POST['pidm'], $end_date, $list, $_POST['position'], $myuser->pidm );
 	$checklist_id = $response->id;
 
 	if( $checklist_id ) {
 		$attribute = 'ape_checklist_employee_exit';
-		$emails = HRChecklist::email( $person, $_POST['end_date'], $attribute, 2, 'employee-exit', $checklist_id, $response);
+		$emails = HRChecklist::email( $person, $end_date, $attribute, 2, 'employee-exit', $checklist_id, $response);
 
 		$_SESSION['successes'][] = 'The Employee Clearance Checklist for '.$person->formatName('f m l').' has been started.  Notifications have been sent to the following addresses: '.implode( ', ', $emails);
 	}//end if
