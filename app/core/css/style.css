@@ -738,14 +738,14 @@ label span span {
 
 /* drop down nav styles */
 
-.webapp-nav .inner > ul {
-	margin: 0;
-	width: 100%;
-}
-
 .webapp-nav ul > li {
 	float: left;
 	margin: 0;
+}
+
+.webapp-nav ul.menu-right {
+	width: auto;
+	float: right;
 }
 
 .webapp-nav ul li li{float:none;}
