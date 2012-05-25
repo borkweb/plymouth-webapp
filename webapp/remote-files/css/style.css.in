@@ -1,0 +1,261 @@
+* { margin: 0; padding: 0; }
+ul,ol,li { list-style: none; }
+
+body, #TB_window {
+	font-family: Trebuchet MS, Verdana, Arial, sans-serif;
+}
+
+body {
+	background-color: #b2b2b2;
+	padding: 1em;
+	color: black;
+	font-size: 80%;
+}
+
+h1 span {
+	padding-right: 15px;
+	color: #225378;
+}
+
+h1 span.hovered {
+	background-image: url('/%APP_PATH%/images/arrow-down.png');
+	background-position: center right;
+	background-repeat: no-repeat;
+}
+
+a, a:active, a:hover, a:visited {
+	color: black;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#header, .outer, .middle, .inner {
+	width: 782px;
+	background-repeat: no-repeat;
+}
+
+.outer {
+	background-image: url('/%APP_PATH%/images/box_back.gif');
+	background-position: bottom left;
+	background-repeat: repeat-y;
+	margin-bottom: 1em;
+}
+
+.middle {
+	background-image: url('/%APP_PATH%/images/box_bottom.gif');
+	background-position: bottom left;
+	padding-bottom: 10px;
+}
+
+.inner {
+	background-image: url('/%APP_PATH%/images/box_top.gif');
+	padding: 17px 15px 0 15px;
+	width: 752px;
+}
+
+#listing table {
+	width: 752px;
+	border-collapse: collapse;
+}
+
+#listing td {
+	padding: 1px;
+}
+
+#listing tr:hover td {
+	background-color: #aaaaaa;
+}
+
+#listing th a {
+	border-bottom: 1px dotted black;
+}
+
+#listing th a:hover {
+	text-decoration: none;
+}
+
+.badged {
+	padding-bottom: 3px;
+	padding-left: 19px;
+	background-repeat: no-repeat;
+	background-position: 0 2px;
+}
+
+.name { text-align: left; }
+.actions { text-align: left; width: 100px; }
+.mtime { text-align: left; width: 10em; }
+.size { text-align: right; width: 5em; }
+
+.badge {
+	background-image: url('/%APP_PATH%/images/badges-merged.gif'); 
+	display: block;
+	height: 16px; width: 16px;
+	float: left;
+	margin-right: 5px;
+}
+
+.dir .badge { background-position: -48px 0px; }
+.file .badge { background-position: -80px 0px; }
+.error .badge, .errors .badge { background-position: 0px -16px; }
+.messages .badge { background-position: -48px -16px; }
+.warnings .badge { background-position: -16px -16px; }
+
+td.actions .badge {
+	margin: 0 2px 2px 0;
+}
+
+.actions .delete { background-position: -32px -16px; }
+.actions .delete:hover { background-position: 0px 0px; }
+.actions .view { background-position: -32px 0px; }
+.actions .download { background-position: -16px 0px; }
+.actions .chmod { background-position: -64px -16px; }
+.actions .copy { background-position: -80px -16px; }
+
+#upload .badge { background-position: -64px 0px; }
+
+#upload-swf {
+	postion: relative;
+}
+
+.swfupload {
+	position: absolute;
+	z-index: 1;
+}
+
+.marked {
+	text-decoration: line-through;
+}
+
+td.actions a span {
+	position: absolute;
+	top: -1000px;
+	left: -1000px;
+}
+
+#upload {
+	margin: 10px 0 0 0;
+	width: 700px;
+}
+
+#upload p {
+	margin: 1em 0 0 0;
+}
+
+#status {
+	background: url('/%APP_PATH%/images/loading16.gif') left center no-repeat;
+	padding-left: 20px;
+	display: none;
+}
+
+div.messages ul, div.errors ul, div.warnings ul {
+	width: 782px;
+}
+
+div.messages li, div.errors li, div.warnings li {
+	padding: 1ex;
+	border: 1px solid black;
+	margin: 0 0 1ex 0;
+}
+
+div.messages ul a, div.errors ul a, div.warnings ul a {
+	text-decoration: underline;
+}
+
+div.warnings li { background-color: #eee; }
+div.messages li { background-color: #eee; }
+div.errors li { background-color: #E7B3B3; }
+
+p {
+	margin: 1em 0;
+}
+
+ul.bulleted li {
+	margin-left: 2em;
+	list-style: disc outside;
+}
+
+.dlist {
+	margin: 0;
+}
+
+#header {
+	position: relative;
+	margin-bottom: 1em;
+}
+
+#links {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+
+.hidden {
+	display: none;
+}
+
+#TB_window li {
+	list-style-type: disc;
+	margin-left: 2em;
+}
+
+#TB_window li span {
+	font-weight: bold;
+}
+
+#TB_window #filter-input {
+	border: none;
+	background-color: transparent;
+	font-size: 100%;
+}
+
+#TB_window form div {
+	border: 1px solid black;
+	padding: 2px;
+	background-color: white;
+	float: left;
+}
+
+#TB_window form div span {
+	color: #888;
+}
+
+#TB_window input.submit {
+	border: 1px solid black;
+	margin-left: 1ex;
+}
+
+br.clear {
+	clear: both;
+	height: 1px;
+}
+
+#server-list {
+	position: absolute;
+	border: 1px solid black;
+	background: url('/%APP_PATH%/images/servers.gif') no-repeat -12px -10px;
+	background-color: white;
+	display: none;
+}
+
+#server-list h2 {
+	display: none;
+}
+
+#server-list a {
+	display: block;
+	padding: 2px 4px;
+	text-decoration: none;
+	background-color: #eee;
+	margin-left: 15px;
+}
+
+#server-list a:hover {
+	background-color: #ddd;
+}
+
+/*
+vim:ts=2:sw=2:noet:
+*/
