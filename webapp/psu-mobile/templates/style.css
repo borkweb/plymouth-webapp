@@ -1,0 +1,443 @@
+/* CSS Variables for SASS */
+/* jQuery Mobile style overrides */
+/* jQuery Mobile Global Styles */
+.ui-body-c, .ui-dialog.ui-overlay-c {
+  background-color: #eaeaea;
+  background-image: url(images/medium/noise.png);
+  background-size: 75px; }
+
+/* Images depending on screen density */
+/* Extra high - 2 times */
+@media screen and (-webkit-device-pixel-ratio: 2) {
+  .ui-body-c, .ui-dialog.ui-overlay-c {
+    background-image: url(images/xhigh/noise.png); } }
+/* High - 1.5 times */
+@media screen and (-webkit-device-pixel-ratio: 1.5) {
+  .ui-body-c, .ui-dialog.ui-overlay-c {
+    background-image: url(images/high/noise.png); } }
+/* Medium/Normal - 1.0 times */
+@media screen and (-webkit-device-pixel-ratio: 1.0) {
+  .ui-body-c, .ui-dialog.ui-overlay-c {
+    background-image: url(images/medium/noise.png); } }
+/* Low - 0.75 times */
+@media screen and (-webkit-device-pixel-ratio: 0.75) {
+  .ui-body-c, .ui-dialog.ui-overlay-c {
+    background-image: url(images/low/noise.png); } }
+header.ui-header, footer.ui-footer {
+  border: 0px none; }
+
+.ui-header .ui-btn-icon-left .ui-btn-inner, .ui-footer .ui-btn-icon-left .ui-btn-inner, .ui-mini .ui-btn-icon-left .ui-btn-inner {
+  padding-left: 27px; }
+
+.ui-btn-icon-left .ui-btn-inner {
+  padding-left: 33px; }
+
+.ui-header .ui-btn-inner, .ui-footer .ui-btn-inner, .ui-mini .ui-btn-inner {
+  padding: .4em 8px .4em; }
+
+.ui-header .ui-btn-left, .ui-footer .ui-btn-left {
+  left: 10px; }
+
+/* Global Styles */
+.vertically-centered {
+  position: absolute;
+  width: 100%; }
+
+h1 {
+  font-size: 24px; }
+
+h2 {
+  font-size: 22px; }
+
+h3 {
+  font-size: 20px; }
+
+a, a:link {
+  text-decoration: none; }
+
+/* Header */
+header.ui-header {
+  overflow: hidden;
+  height: 52px;
+  line-height: 52px;
+  /* Images depending on screen density */
+  /* Extra high - 2 times */
+  /* High - 1.5 times */
+  /* Medium/Normal - 1.0 times */
+  /* Low - 0.75 times */ }
+  header.ui-header h1#header-logo {
+    width: 124px;
+    height: 35px;
+    margin: 5px auto;
+    padding: 3px;
+    line-height: 35px;
+    background-image: url(images/medium/psu_logo.png);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 124px;
+    font-size: 18px; }
+    header.ui-header h1#header-logo span {
+      display: none; }
+  header.ui-header .ui-btn {
+    line-height: normal;
+    top: 12px;
+    box-shadow: none; }
+  header.ui-header .ui-btn[data-rel=back] span.ui-icon {
+    background-size: 776px 18px;
+    box-shadow: none; }
+  @media screen and (-webkit-device-pixel-ratio: 2) {
+    header.ui-header h1#header-logo {
+      background-image: url(images/xhigh/psu_logo.png); }
+    header.ui-header .ui-btn[data-rel=back] span.ui-icon {
+      background-image: url(images/icons-36-white.png) !important; } }
+  @media screen and (-webkit-device-pixel-ratio: 1.5) {
+    header.ui-header h1#header-logo {
+      background-image: url(images/high/psu_logo.png); }
+    header.ui-header .ui-btn[data-rel=back] span.ui-icon {
+      background-image: url(images/icons-36-white.png) !important; } }
+  @media screen and (-webkit-device-pixel-ratio: 1.0) {
+    header.ui-header h1#header-logo {
+      background-image: url(images/medium/psu_logo.png); }
+    header.ui-header .ui-btn[data-rel=back] span.ui-icon {
+      background-image: url(images/icons-18-white.png) !important; } }
+  @media screen and (-webkit-device-pixel-ratio: 0.75) {
+    header.ui-header h1#header-logo {
+      background-image: url(images/low/psu_logo.png); } }
+
+/* Footer */
+footer.ui-footer {
+  height: 52px;
+  line-height: 52px; }
+
+/* Inner content styles */
+/* Dashboard */
+#page-dashboard {
+  /* Slide Up Info */ }
+  #page-dashboard .ui-content {
+    padding: 0px; }
+  #page-dashboard nav#dashboard {
+    width: 100%;
+    margin: auto;
+    padding: 15px 0px;
+    overflow: hidden; }
+    #page-dashboard nav#dashboard ul#dashboard-mapps {
+      margin: 0px;
+      padding: 0px 1px;
+      overflow: hidden;
+      text-align: center;
+      /* Styles based on orientation change */ }
+      #page-dashboard nav#dashboard ul#dashboard-mapps li {
+        display: block;
+        float: left;
+        overflow: hidden;
+        width: 33%;
+        padding: 8px 0px; }
+        #page-dashboard nav#dashboard ul#dashboard-mapps li a {
+          display: block;
+          margin-bottom: 16px;
+          font-size: 13px;
+          font-weight: normal;
+          text-decoration: none;
+          color: #000; }
+        #page-dashboard nav#dashboard ul#dashboard-mapps li i.psu-icon {
+          display: block;
+          margin: 0px auto;
+          margin-bottom: 10px;
+          font-style: normal;
+          font-weight: normal;
+          font-smoothing: always;
+          color: #444; }
+        #page-dashboard nav#dashboard ul#dashboard-mapps li i.psu-icon:hover {
+          color: #000; }
+      #page-dashboard nav#dashboard ul#dashboard-mapps li.dash-middle-element {
+        width: 34%; }
+      @media screen and (orientation:portrait) {
+        #page-dashboard nav#dashboard ul#dashboard-mapps li {
+          width: 33%; }
+        #page-dashboard nav#dashboard ul#dashboard-mapps li.dash-middle-element {
+          width: 34%; } }
+      @media screen and (orientation:landscape) {
+        #page-dashboard nav#dashboard ul#dashboard-mapps li {
+          width: 20%; }
+        #page-dashboard nav#dashboard ul#dashboard-mapps li.dash-middle-element {
+          width: 20%; } }
+  #page-dashboard a.dashboard-ui-bar-button {
+    width: 100%;
+    height: 48px;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+    background-image: none;
+    border: 0px;
+    line-height: 52px; }
+    #page-dashboard a.dashboard-ui-bar-button span.ui-btn-inner {
+      height: 52px;
+      padding: 0px;
+      border: 0px none; }
+      #page-dashboard a.dashboard-ui-bar-button span.ui-btn-inner i {
+        height: 52px;
+        line-height: 52px;
+        color: #8a8;
+        text-shadow: none; }
+  #page-dashboard div#hidden-info-div {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: 0px;
+    z-index: 10000;
+    background: #fff; }
+    #page-dashboard div#hidden-info-div div.ui-bar {
+      padding: 0px;
+      border: 0px; }
+    #page-dashboard div#hidden-info-div div.info-panel {
+      margin: 10px auto;
+      text-align: center;
+      letter-spacing: 1px;
+      /* Images depending on screen density */
+      /* Extra high - 2 times */
+      /* High - 1.5 times */
+      /* Medium/Normal - 1.0 times */
+      /* Low - 0.75 times */ }
+      #page-dashboard div#hidden-info-div div.info-panel .big-color-logo {
+        width: 160px;
+        height: 45px;
+        margin: 15px auto;
+        background-image: url(images/medium/psu_logo_large_color.png);
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        background-size: 160px 45px; }
+      #page-dashboard div#hidden-info-div div.info-panel h1.app-title {
+        margin: 5px 0px;
+        font-size: 20px; }
+      #page-dashboard div#hidden-info-div div.info-panel h2, #page-dashboard div#hidden-info-div div.info-panel h3, #page-dashboard div#hidden-info-div div.info-panel h4, #page-dashboard div#hidden-info-div div.info-panel h5 {
+        font-weight: normal; }
+      #page-dashboard div#hidden-info-div div.info-panel h2.app-version {
+        margin: 4px 0px;
+        font-size: 17px; }
+      #page-dashboard div#hidden-info-div div.info-panel h3.app-build {
+        margin: 4px 0px;
+        font-size: 9px;
+        letter-spacing: 0px;
+        color: #999; }
+      #page-dashboard div#hidden-info-div div.info-panel h4.copyright {
+        margin: 5px 0px;
+        margin-top: 15px;
+        font-size: 10px; }
+        #page-dashboard div#hidden-info-div div.info-panel h4.copyright a, #page-dashboard div#hidden-info-div div.info-panel h4.copyright a:link {
+          text-decoration: none;
+          color: #300; }
+      #page-dashboard div#hidden-info-div div.info-panel ul.app-frameworks {
+        margin: 5px 0px;
+        padding: 0px;
+        list-style: none;
+        font-size: 10px; }
+        #page-dashboard div#hidden-info-div div.info-panel ul.app-frameworks li {
+          display: block; }
+        #page-dashboard div#hidden-info-div div.info-panel ul.app-frameworks li#phonegap {
+          display: none; }
+      @media screen and (-webkit-device-pixel-ratio: 2) {
+        #page-dashboard div#hidden-info-div div.info-panel .big-color-logo {
+          background-image: url(images/xhigh/psu_logo_large_color.png); } }
+      @media screen and (-webkit-device-pixel-ratio: 1.5) {
+        #page-dashboard div#hidden-info-div div.info-panel .big-color-logo {
+          background-image: url(images/high/psu_logo_large_color.png); } }
+      @media screen and (-webkit-device-pixel-ratio: 1.0) {
+        #page-dashboard div#hidden-info-div div.info-panel .big-color-logo {
+          background-image: url(images/medium/psu_logo_large_color.png); } }
+      @media screen and (-webkit-device-pixel-ratio: 0.75) {
+        #page-dashboard div#hidden-info-div div.info-panel .big-color-logo {
+          background-image: url(images/low/psu_logo_large_color.png); } }
+  #page-dashboard a#footer-info-button, #page-dashboard a#hidden-info-button {
+    display: block;
+    height: 100%;
+    top: 0px;
+    box-shadow: none; }
+
+/* Newsfeed */
+#page-newsfeed ul#newsfeed li.newsfeed-item {
+  overflow: hidden; }
+  #page-newsfeed ul#newsfeed li.newsfeed-item div.feed-icon {
+    display: block;
+    float: left;
+    width: 46px;
+    height: 46px;
+    margin-left: -5px;
+    margin-right: 5px; }
+    #page-newsfeed ul#newsfeed li.newsfeed-item div.feed-icon .psu-icon.large {
+      width: 46px;
+      height: 46px;
+      margin-top: 0px;
+      text-shadow: none; }
+    #page-newsfeed ul#newsfeed li.newsfeed-item div.feed-icon .icon-facebook-item {
+      color: #385c99; }
+    #page-newsfeed ul#newsfeed li.newsfeed-item div.feed-icon .icon-twitter-item {
+      color: #6bb8fe; }
+    #page-newsfeed ul#newsfeed li.newsfeed-item div.feed-icon .icon-news-item {
+      color: #ff9111; }
+  #page-newsfeed ul#newsfeed li.newsfeed-item h1 {
+    margin-top: 0px;
+    font-size: 14px; }
+  #page-newsfeed ul#newsfeed li.newsfeed-item .ui-li-aside {
+    width: 90px;
+    margin-top: 0px; }
+  #page-newsfeed ul#newsfeed li.newsfeed-item p {
+    margin-top: 3px;
+    margin-bottom: 0px; }
+
+/* Campus Map */
+#page-campusmap .ui-content {
+  padding: 0px; }
+#page-campusmap div#content-container {
+  width: 100%;
+  position: absolute;
+  top: 51px;
+  bottom: 0px; }
+  #page-campusmap div#content-container div#campus-google-map {
+    width: 100%;
+    height: 100%; }
+
+/* Feedback Form */
+#page-feedback .ui-content {
+  padding: 5px; }
+#page-feedback fieldset {
+  padding-top: 4px; }
+  #page-feedback fieldset label, #page-feedback fieldset div.input-container {
+    margin: 4px 8px; }
+#page-feedback input, #page-feedback textarea, #page-feedback select {
+  width: 100%;
+  /* Use CSS3 box-sizing to correctly set a full width on these elements */
+  box-sizing: border-box;
+  /* css3 rec */
+  -moz-box-sizing: border-box;
+  /* ff2 */
+  -ms-box-sizing: border-box;
+  /* ie8 */
+  -webkit-box-sizing: border-box;
+  /* safari3 */
+  -khtml-box-sizing: border-box;
+  /* konqueror */ }
+#page-feedback label {
+  font-size: 16px;
+  font-weight: normal;
+  color: #045340; }
+#page-feedback textarea {
+  height: 72px; }
+#page-feedback .ui-btn {
+  margin: 0px;
+  box-shadow: none; }
+  #page-feedback .ui-btn input {
+    margin: auto; }
+#page-feedback .ui-select .ui-btn-text {
+  text-align: left; }
+
+/* Feedback form results */
+#page-feedback-results .ui-content {
+  padding: 0px; }
+#page-feedback-results div.form-response {
+  margin: 15px;
+  padding: 10px;
+  text-align: center; }
+  #page-feedback-results div.form-response header h1 {
+    margin: 0px auto;
+    margin-bottom: 20px;
+    font-size: 26px; }
+  #page-feedback-results div.form-response p {
+    margin: 0px auto; }
+  #page-feedback-results div.form-response a[data-role=button] {
+    margin-top: 25px; }
+#page-feedback-results div.error {
+  background-color: #ffe6e6; }
+#page-feedback-results div.success {
+  background-color: #e6ffe6; }
+
+/* Clusters */
+#page-clusters li.cluster h1 {
+  margin: 0px; }
+#page-clusters li.cluster h2 {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: normal; }
+#page-clusters li.cluster p {
+  margin-bottom: 0px; }
+
+/* Directory */
+#page-directory h2 {
+  margin-top: 0px; }
+
+/* Directory Results */
+#page-directory-results h2, #page-directory-results h3 {
+  margin: 0px; }
+#page-directory-results p {
+  margin-top: 6px;
+  margin-bottom: 0px; }
+
+/* Directory Details */
+#page-directory-details h2 {
+  margin: 0px; }
+#page-directory-details h3 {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: normal; }
+#page-directory-details .ui-btn {
+  margin-left: 0px;
+  margin-right: 0px; }
+
+/* Events */
+#page-events li.event h2 {
+  margin: 0px; }
+#page-events li.event h3 {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: normal; }
+#page-events li.event p {
+  margin-bottom: 0px; }
+
+/* Events Details */
+#page-events-details h2 {
+  margin: 0px; }
+#page-events-details h3 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: normal; }
+#page-events-details h4 {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: normal; }
+#page-events-details div.event-content h1 {
+  font-size: 16px;
+  font-weight: normal; }
+#page-events-details div.event-content h2 {
+  font-size: 16px;
+  font-weight: normal; }
+
+/* Styles based on the device's OS */
+html.android header .ui-btn[data-rel=back] {
+  display: none; }
+html.android header h1#header-logo {
+  float: left;
+  margin-left: 4px;
+  text-align: left; }
+
+html.android a.dashboard-ui-bar-button i {
+  position: relative;
+  top: 3px; }
+
+html.android .m-app header h1#header-logo {
+  width: auto;
+  background: none; }
+  html.android .m-app header h1#header-logo span {
+    display: inline; }
+
+html.android .m-app header h1#header-logo.back-button {
+  padding-left: 20px;
+  cursor: pointer; }
+  html.android .m-app header h1#header-logo.back-button span.back-image {
+    width: 18px;
+    height: 35px;
+    float: left;
+    margin-left: -20px;
+    background-image: url(images/icons-18-white.png);
+    background-repeat: no-repeat;
+    background-position: -144px 50%; }
