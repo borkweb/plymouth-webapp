@@ -18,7 +18,7 @@ h1 span {
 }
 
 h1 span.hovered {
-	background-image: url('/%APP_PATH%/images/arrow-down.png');
+	background-image: url('../images/arrow-down.png');
 	background-position: center right;
 	background-repeat: no-repeat;
 }
@@ -38,20 +38,20 @@ a:hover {
 }
 
 .outer {
-	background-image: url('/%APP_PATH%/images/box_back.gif');
+	background-image: url('../images/box_back.gif');
 	background-position: bottom left;
 	background-repeat: repeat-y;
 	margin-bottom: 1em;
 }
 
 .middle {
-	background-image: url('/%APP_PATH%/images/box_bottom.gif');
+	background-image: url('../images/box_bottom.gif');
 	background-position: bottom left;
 	padding-bottom: 10px;
 }
 
 .inner {
-	background-image: url('/%APP_PATH%/images/box_top.gif');
+	background-image: url('../images/box_top.gif');
 	padding: 17px 15px 0 15px;
 	width: 752px;
 }
@@ -90,7 +90,7 @@ a:hover {
 .size { text-align: right; width: 5em; }
 
 .badge {
-	background-image: url('/%APP_PATH%/images/badges-merged.gif'); 
+	background-image: url('../images/badges-merged.gif'); 
 	display: block;
 	height: 16px; width: 16px;
 	float: left;
@@ -145,7 +145,7 @@ td.actions a span {
 }
 
 #status {
-	background: url('/%APP_PATH%/images/loading16.gif') left center no-repeat;
+	background: url('../images/loading16.gif') left center no-repeat;
 	padding-left: 20px;
 	display: none;
 }
@@ -235,7 +235,7 @@ br.clear {
 #server-list {
 	position: absolute;
 	border: 1px solid black;
-	background: url('/%APP_PATH%/images/servers.gif') no-repeat -12px -10px;
+	background: url('../images/servers.gif') no-repeat -12px -10px;
 	background-color: white;
 	display: none;
 }

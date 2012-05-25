@@ -1,28 +1,19 @@
 <?php
 
-require_once('session_handler.class.php');
+require_once __DIR__ . '/../../legacy/git-bootstrap.php';
+require_once 'autoload.php';
 
-$GLOBALS['PROTOCOL'] = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
+PSU::session_start();
+
 $GLOBALS['BASE_DIR'] = dirname(__FILE__);
-$GLOBALS['BASE_URL'] = '/%APP_PATH%';
+$GLOBALS['BASE_URL'] = 'https://' . $_SERVER['HTTP_HOST'] . '/webapp/remote-files';
 
-// APP_PATH //
-$GLOBALS['SMARTY_COMPILE'] = $GLOBALS['TMP'] . '/%APP_PATH%_templates_c';
-
-$GLOBALS['COMMON_JS'] = $GLOBALS['PROTOCOL'].'://www.plymouth.edu/includes/js'; // DEBUG: change to better path once we go live?
+$GLOBALS['COMMON_JS'] = 'https://www.plymouth.edu/includes/js'; // DEBUG: change to better path once we go live?
 
 $GLOBALS['LOCAL_INCLUDES'] = $GLOBALS['BASE_DIR'].'/includes';
 
 $GLOBALS['MAX_RENAME_LENGTH'] = 100;
 $GLOBALS['DEFAULT_HOST'] = 'titan';
-
-// ************ External Includes ************* //
-require_once('PSUTools.class.php');
-require_once('PSUHTML.class.php');
-require_once('security_functions.php');
-require_once('json/json_extension_api.inc.php');
-require_once('PSUDatabase.class.php');
-require_once('IDMObject.class.php');
 
 // ************ Internal Includes ************* //
 require_once($GLOBALS['LOCAL_INCLUDES'].'/SCPlib.class.php');
@@ -31,7 +22,7 @@ require_once($GLOBALS['LOCAL_INCLUDES'].'/RFSmarty.class.php');
 require_once($GLOBALS['LOCAL_INCLUDES'].'/functions.php');
 require_once($GLOBALS['BASE_DIR'].'/rfutil/rfutil.inc.php');
 
-$username = casify();
+IDMObject::authN();
 
 $GLOBALS['BANNER'] = PSUDatabase::connect('oracle/psc1_psu/fixcase');
 $GLOBALS['RemoteFiles'] = PSUDatabase::connect('mysql/myplymouth');
@@ -39,11 +30,8 @@ $GLOBALS['BannerIDM'] = new IDMObject($GLOBALS['BANNER']);
 $GLOBALS['PHPSESSID'] = $_COOKIE['PHPSESSID'];
 
 // make sure our session variables are set up
-if(!isset($_SESSION['pidm']))
+if( ! isset( $_SESSION['javascript'] ) )
 {
-	$_SESSION['pidm'] = $GLOBALS['BannerIDM']->getIdentifier($username, 'username', 'pid');
-	$_SESSION['errors'] = $_SESSION['messages'] = array();
-	$_SESSION['username'] = $username;
 	$_SESSION['javascript'] = true;
 }
 
@@ -63,8 +51,9 @@ if(isset($_GET['go']))
 	PSUHTML::redirect($GLOBALS['BASE_URL'] . "/" . $go . ":");
 }
 
+
 $GLOBALS['SSH_HOST'] = isset($_REQUEST['server']) ? $_REQUEST['server'] : $GLOBALS['DEFAULT_HOST'];
-$GLOBALS['SCP'] = new SCPlib($GLOBALS['SSH_HOST'], '/var/www/.ssh/config');
+$GLOBALS['SCP'] = new SCPlib($GLOBALS['SSH_HOST']);
 $GLOBALS['RFP'] = new RFPermissions($GLOBALS['BannerIDM'], $GLOBALS['RemoteFiles'], $GLOBALS['SSH_HOST']);
 
 // vim:ts=2:sw=2:noet:

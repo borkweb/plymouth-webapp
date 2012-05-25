@@ -300,7 +300,6 @@ function rf_unlink($path)
 	return $result;
 }//end rf_unlink
 
-require_once('/web/includes_psu/PSUException.class.php');
 class RFUtilException extends PSUException
 {
 	const UNREADABLE_PATH = 1;
