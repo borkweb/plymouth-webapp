@@ -28,10 +28,16 @@ class IDMAttribute extends \PSU_Population_Query {
 		$args = \PSU::params( $args, $defaults );
 
 		$sql = "
-			SELECT DISTINCT wp_id
-			  FROM v_idm_attributes
-			 WHERE attribute = :attribute
-			   AND type_id = :type_id
+			SELECT distinct wp_id
+			  FROM (
+						SELECT wp_id
+							FROM v_idm_attributes
+						 WHERE attribute = :attribute
+							 AND type_id = :type_id
+						 ORDER BY lower(last_name), 
+									 lower(first_name), 
+									 lower(middle_name)
+							)
 		";
 
 		$results = \PSU::db('banner')->GetCol( $sql, $args );
