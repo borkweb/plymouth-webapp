@@ -8,14 +8,19 @@
  * @author		Alan Baker <a_bake@plymouth.edu>
  * @copyright 2008, Plymouth State University, ITS
  */ 
+require dirname( dirname( dirname( __DIR__ ) ) ) . '/legacy/git-bootstrap.php';
+
 require_once 'autoload.php';
 PSU::session_start();
+
+$config = \PSU\Config\Factory::get_config();
+
 /*******************[Site Constants]*****************/
 // Base directory of application
 $GLOBALS['BASE_DIR']=dirname(__FILE__);
 
 // Base URL: whatever the URL is 
-$GLOBALS['BASE_URL']='https://'.$_SERVER['HTTP_HOST'].'/webapp/systems/workorder';
+$GLOBALS['BASE_URL']= $config->get('systems-workorder', 'base_url');
 
 // Local Includes
 $GLOBALS['INCLUDES']=$GLOBALS['BASE_DIR'].'/includes';
@@ -25,15 +30,14 @@ $GLOBALS['TEMPLATES']=$GLOBALS['BASE_DIR'].'/templates';
 
 /*******************[End Site Constants]*****************/
 $GLOBALS['NUM_ITEMS']=7;
-if(PSU::isDev())
+if(PSU::isDev()) {
 	$GLOBALS['ORDER_USERNAME'] = "a_bake";
-else
+} else {
 	$GLOBALS['ORDER_USERNAME'] = "tom";
+}//end else
 
-$config = \PSU\Config\Factory::get_config();
-
-$GLOBALS['PARTS_MARKUP'] = $config->get( 'systems', 'parts_markup' );
-$GLOBALS['PARTS_MARKUP_MAX'] = $config->get( 'systems', 'parts_markup_max' );
+$GLOBALS['PARTS_MARKUP'] = $config->get( 'systems-workorder', 'parts_markup' );
+$GLOBALS['PARTS_MARKUP_MAX'] = $config->get( 'systems-workorder', 'parts_markup_max' );
 $GLOBALS['SHOP_EMAIL']="computer-service@plymouth.edu";
 $GLOBALS['IP']=explode(".",$_SERVER['REMOTE_ADDR']);
 
@@ -42,39 +46,33 @@ $GLOBALS['HD_IPS'] = \PSU::db('systems')->GetCol( $sql );
 
 $GLOBALS['IS_HD'] = in_array($_SERVER['REMOTE_ADDR'],$GLOBALS['HD_IPS']);
 
-
 /*******************[Includes]**********************/
 require_once('xtemplate.php');  //XTemplates
 require_once("adldap/adLDAP.php"); // AD integration
 require_once("functions.php"); // local functions
 /*******************[End Includes]**********************/
-if(!isset($GLOBALS['AD']))
-{
-        $conf = PSUDatabase::connect('ldap/password','return');
-        $conf['password']= PSUSecurity::password_decode($conf['password']);
-        $options['account_suffix']="@plymouth.edu";
-        $options['base_dn']=$conf['dn'];
-        $options['domain_controllers']=array($conf['hostname'],$conf['hostname2'
-]);
-        $options['ad_username']=$conf['username'];
-        $options['ad_password']=$conf['password'];
-        $options['real_primarygroup']=true;
-        $options['use_ssl']=true;
-        $options['recursive_groups']=true;
+if(!isset($GLOBALS['AD'])) {
+	$conf = PSUDatabase::connect('ldap/password','return');
+	$conf['password']= PSUSecurity::password_decode($conf['password']);
+	$options['account_suffix']="@plymouth.edu";
+	$options['base_dn']=$conf['dn'];
+	$options['domain_controllers']=array($conf['hostname'],$conf['hostname2']);
+	$options['ad_username']=$conf['username'];
+	$options['ad_password']=$conf['password'];
+	$options['real_primarygroup']=true;
+	$options['use_ssl']=true;
+	$options['recursive_groups']=true;
 
-        $GLOBALS['AD'] = new adLDAP($options);
+	$GLOBALS['AD'] = new adLDAP($options);
 }
 
+$GLOBALS['SYSTEMS_DB'] = PSU::db('systems');
 
-if(strcasecmp($_SERVER['HTTP_HOST'],"www2")==0 || strcasecmp($_SERVER['HTTP_HOST'],"www2.plymouth.edu")==0 || strcasecmp($_SERVER['HTTP_HOST'],"uranus.plymouth.edu")==0 || strcasecmp($_SERVER['HTTP_HOST'],"www.dev.plymouth.edu")==0 || strcasecmp($_SERVER['HTTP_HOST'],"uranus.dev.plymouth.edu")==0)
-	$GLOBALS['SYSTEMS_DB'] = PSUDatabase::connect('mysql/systems_test');
-else
-	$GLOBALS['SYSTEMS_DB'] = PSUDatabase::connect('mysql/systems');
 // do whatever you do to authenticate the user....set the 
 // username into a session variable.
 // at PSU we use phpCAS:
-if( $GLOBALS['IS_HD'] || $GLOBALS['IP'][2]==112 || $GLOBALS['IP'][2]==114 || $GLOBALS['IP'][2]==33 || $GLOBALS['IP'][2]==32)
-{ // make sure we're either on an acceptable helpdesk computer, or on the 112 or 114 networks, otherwise deny access 
+if( $GLOBALS['IS_HD'] || $GLOBALS['IP'][2]==112 || $GLOBALS['IP'][2]==114 || $GLOBALS['IP'][2]==33 || $GLOBALS['IP'][2]==32) {
+	// make sure we're either on an acceptable helpdesk computer, or on the 112 or 114 networks, otherwise deny access 
 	IDMObject::authN();
 	if( ! (
        IDMObject::authZ('banner', 'student_active')
@@ -87,13 +85,10 @@ if( $GLOBALS['IS_HD'] || $GLOBALS['IP'][2]==112 || $GLOBALS['IP'][2]==114 || $GL
 		echo "You must be a current student, employee, alumni, or retiree to use this service";
 		exit;
 	}
-}
-else
-{
+} else {
 	echo "You do not have access to use this service from this location";
 	exit;
 }
-	
 
 /*******************[End Authentication]********************/
 
@@ -108,4 +103,3 @@ if($result->RecordCount()<1)
 }//end if */
 
 /*******************[End Authorization]********************/
-
