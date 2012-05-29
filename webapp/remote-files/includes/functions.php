@@ -3,7 +3,6 @@
 /**
  * General functions for Remote Files.
  */
-
 function jsonAndExit($output, $status=0)
 {
 	header('Content-Type: text/javascript');
@@ -24,7 +23,3 @@ function rf_log($data)
 
 	$db->insert($GLOBALS['RemoteFiles'], 'remote_files_log', $data);
 }
-
-
-// vim:ts=2:sw=2:noet:
-?>

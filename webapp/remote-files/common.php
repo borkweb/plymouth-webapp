@@ -51,6 +51,14 @@ if(isset($_GET['go']))
 	PSUHTML::redirect($GLOBALS['BASE_URL'] . "/" . $go . ":");
 }
 
+$remote_files = new PSU\RemoteFiles;
+
+$config = \PSU\Config\Factory::get_config();
+if( isset( $_GET['ssh-fixup'] ) && $_GET['ssh-fixup'] && $_GET['ssh-fixup'] === $config->get( 'remote-files', 'ssh_fixup' ) ) {
+	$fixup_dir = '/tmp/remote-files-feed';
+	$remote_files->ssh_config_update( $fixup_dir );
+	die( 'Complete.' );
+}
 
 $GLOBALS['SSH_HOST'] = isset($_REQUEST['server']) ? $_REQUEST['server'] : $GLOBALS['DEFAULT_HOST'];
 $GLOBALS['SCP'] = new SCPlib($GLOBALS['SSH_HOST']);
