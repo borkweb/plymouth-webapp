@@ -72,12 +72,30 @@
 			</script>
 		{/if}
 
+		{* The PhoneGap/Cordova script file *}
 		<script>
 
 			// Use a try, in case the GlobalTools didn't load correctly
 			try {
 				if (GlobalTools.deviceOS() != 'other') {
 					scriptName = '{$PHP.BASE_URL}/js/' + scriptName + '-' + '{$clientFrameworkVersion}' + '_' + GlobalTools.deviceOS();
+				}
+			}
+			catch (e) {
+				console.log(e);
+			}
+
+			// Actually write the script tag and load the JS
+			document.write('<script src="' + scriptName + '.js"><\/script>');
+		</script>
+
+		{* The ChildBrowser plugin script file *}
+		<script>
+
+			// Use a try, in case the GlobalTools didn't load correctly
+			try {
+				if (GlobalTools.deviceOS() != 'other') {
+					scriptName = '{$PHP.BASE_URL}/js/childbrowser_' + GlobalTools.deviceOS();
 				}
 			}
 			catch (e) {
