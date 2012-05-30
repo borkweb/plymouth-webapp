@@ -1,0 +1,41 @@
+#!/usr/local/bin/php -q
+<?php
+
+require_once('rfutil.inc.php');
+
+$cmd = $_SERVER['argv'][1];
+$args = $_SERVER['argv'][2];
+
+if($args == '-e')
+{
+	$args = $_SERVER['argv'][3];
+	$args = base64_decode($args);
+}
+
+switch($cmd)
+{
+	case 'cat':
+		// caller will expect file contents from cat. errors must be passed via exit code.
+		$result = rf_cat($args);
+		exit($result);
+		break;
+	case 'ls':
+		$data = rf_ls($args); break;
+	case 'type':
+		$data = rf_type($args); break;
+	case 'rm':
+	case 'unlink':
+	case 'remove':
+		$data = rf_unlink($args); break;
+	case 'put':
+		$data = rf_put($args); break;
+	case 'rename':
+		$data = rf_rename($args); break;
+	case 'chmod':
+		$data = rf_chmod($args); break;
+}
+
+echo serialize($data);
+
+// vim:ts=2:sw=2:noet:
+?>

@@ -1,0 +1,24 @@
+#
+# do not edit .htaccess. edit .htaccess.in, and run `make` when you're done.
+#
+
+php_value auto_prepend_file ./common.php
+php_value auto_append_file none
+
+php_value upload_max_filesize 100M
+php_value post_max_size 101M
+
+php_value memory_limit 64M
+
+Options -MultiViews -Indexes
+
+RewriteEngine on
+RewriteBase /webapp/remote-files/
+RewriteRule ^$ titan: [R=301,QSA,L]
+RewriteRule ^([a-z]+):$ index.php?server=$1 [QSA,L]
+RewriteRule ^([a-z]+):view(/.*)$ download.php?path=$2&server=$1&view=1 [QSA,L]
+RewriteRule ^([a-z]+):(browse|chmod|download|rename|unlink|upload)$ $1:$2/ [R=301,QSA,L]
+RewriteRule ^([a-z]+):(browse|chmod|download|rename|unlink|upload)(/.*)$ $2.php?path=$3&server=$1 [QSA,L]
+
+# redirect old urls
+RewriteRule ^(browse|chmod|download|rename|unlink|upload)(/.*)$ gandalf:$1$2 [R=301,QSA,L]
