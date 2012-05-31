@@ -34,8 +34,9 @@ with( '/festivals', __DIR__ . '/festivals.php' );
 with( '/style', __DIR__ . '/style.php' );
 with( '/teacher-cert', __DIR__ . '/teacher-cert.php' );
 
-respond( '404', function() {
-	header( 'Content-Type: text/plain' );
+respond( '404', function( $request, $response, $app ) {
+	$response->code( 404 );
+	$response->header( 'Content-Type', 'text/plain' );
 	echo '404 Not Found';
 	error_log( sprintf( "404 %s%s", $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'] ), E_USER_NOTICE );
 });
