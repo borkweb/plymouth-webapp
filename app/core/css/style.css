@@ -17,9 +17,6 @@
 	box-sizing: content-box;
 }
 
-/** PSU GO Bar **/
-#psu_gobar_42199{display: none !important;}
-
 html{
 	background: #fff url(../images/bg.jpg) center 80px repeat-x;
 	/* maxvoltar.com/archive/-webkit-font-smoothing */
@@ -2934,7 +2931,7 @@ cite {
   h2, h3{ page-break-after: avoid; }
   
 	#webapp-page{background-image: none;}
-	#webapp-head, #webapp-nav, #webapp-apres-foot, #webapp-final, #psu_gobar_42199{ display: none; }
+	#webapp-head, #webapp-nav, #webapp-apres-foot, #webapp-final { display: none; }
 
 	.no-print{display: none !important;}
 	.print_only{display: block;}

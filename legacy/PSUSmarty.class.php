@@ -151,7 +151,6 @@ class PSUSmarty extends Smarty
 		);
 
 		// register any custom functions
-		$this->register_function('PSU_GoBar', array($this, 'psu_gobar'));
 		$this->register_function('PSU_JS', array($this, 'psu_js'));
 		$this->register_function('psu_js', array($this, 'psu_js'));
 		$this->register_function('PSU_GOOGLE_LAZY_JS', array($this, 'psu_google_lazy_js'));
@@ -414,26 +413,6 @@ class PSUSmarty extends Smarty
 	}//end psu_head_includes
 
 	/**
-	 * psu_gobar
-	 *
-	 * Insert the Go Bar into the current page.
-	 */
-	function psu_gobar($params, &$tpl)
-	{
-		// get the template data
-		$username = isset($params['username']) ? $params['username'] : $_SESSION['username'];
-		$tpl->assign('psu_gobar_42199_user', $username);
-		$go_html = $this->fetch('/web/pscpages/webapp/gobar/templates/gobar.tpl');
-		$tpl->clear_assign('psu_gobar_42199_user');
-
-		// make sure parent template uses the correct CSS and JS files
-		$tpl->addCSS('/webapp/gobar/templates/style.css');
-		$tpl->addJS('/webapp/gobar/gobar.js');
-
-		return $go_html;
-	}//end psu_gobar
-
-	/**
 	 * Output the user's authZ data as a JavaScript object.
 	 */
 	function psu_authz_js( $params, &$tpl )
@@ -599,7 +578,7 @@ class PSUSmarty extends Smarty
 		$tpl->addCSS( '/app/core/css/style-psuprogress.css' );
 
 		return $progress_html;
-	}//end psu_gobar
+	}//end psu_progress
 
 	/**
 	 * psu_puke

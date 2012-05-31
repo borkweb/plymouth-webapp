@@ -236,20 +236,6 @@ class PSUHTML
 	}//end getSelectOptions
 
 	/**
-	 * Display the 'go' bar in place.
-	 */
-	public static function gobar($username=false)
-	{
-		$username = $username === false ? $_SESSION['username'] : $username;
-
-		require_once('PSUSmarty.class.php');
-		$tpl = new PSUSmarty('gobar');
-		$tpl->assign('psu_gobar_42199_includes', true);
-		$tpl->assign('psu_gobar_42199_user', $username);
-		$tpl->display('/web/pscpages/webapp/gobar/templates/gobar.tpl');
-	}
-
-	/**
 	 * Force the client to use HTTPS.
 	 */
 	public static function forceSSL()
