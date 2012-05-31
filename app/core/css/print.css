@@ -13,8 +13,7 @@ body.webapp-prod{
 #webapp-head,
 #webapp-nav,
 #webapp-apres-foot,
-#webapp-final,
-#psu_gobar_42199{
+#webapp-final{
 	display: none;
 }
 
