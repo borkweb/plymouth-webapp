@@ -42,6 +42,12 @@
 						Events
 					</a>
 				</li>
+				<li id="mapp-userdata">
+					<a href="userdata/" data-auth="required">
+						{iconbox id="events" size="large"}
+						User Data
+					</a>
+				</li>
 			</ul>
 		</nav>
 	{* End dashboard *}

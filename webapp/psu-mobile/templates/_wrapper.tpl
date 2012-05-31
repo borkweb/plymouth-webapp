@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js {if $smarty.session.username}authenticated{/if}" lang="en">
 <head> 
 	<meta charset="utf-8">
 
@@ -38,6 +38,12 @@
 	{* PSU Mobile/Custom (Must be in this order) *}
 	<link rel="stylesheet" href="{"`$PHP.BASE_URL`/templates/style.css"|cdn}">
 	{* PSU Mobile/Custom *}
+
+	<script>
+		// Let's set some constants
+		var HOST = 'http{if $smarty.server.HTTPS == 'on'}s{/if}://{$smarty.server.HTTP_HOST}';
+		var BASE_URL = '{$PHP.BASE_URL}';
+	</script>
 
 	{if $PHP.IS_DEV}
 		<script>

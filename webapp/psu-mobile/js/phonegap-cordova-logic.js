@@ -19,6 +19,21 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 
 	// Now that the framework has loaded, let's wait for jQuery to be ready so we can do some more elegant things. :)
 	$(document).ready( function() {
+		// Let's create some plugin variables
+		var childBrowser;
+
+		// Let's install/initialize some plugins
+		try {
+			if (window.plugins.childBrowser !== null) {
+				childBrowser = window.plugins.childBrowser; // ChildBrowser
+			}
+			else if (ChildBrowser !== null && ChildBrowser !== undefined) {
+				childBrowser = ChildBrowser.install(); // ChildBrowser
+			}
+		}
+		catch (e) {
+			psu.log('Couldn\'t load plugin. Died with: ' + e);
+		}
 
 		// Add the Framework version to the info panel and show it
 		var $infoElement = $('.info-panel .app-frameworks #' + nativeFramework.name.toLowerCase() );
@@ -138,6 +153,74 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 				'No,Yes'								// Choices
 			);
 
+		});
+
+		// Let's remove the webapp authentication logic, we need it to be different for the phonegap app
+		$(document).off('vclick.webapp', 'a[data-auth=required]');
+
+		// When a link to an authentication required page is clicked
+		$(document).on('vclick', 'a[data-auth=required]', function(event) {
+			// Prevent the page from changing normally
+			event.preventDefault();
+
+			// jQuery selector and class
+			var $htmlTag = $('html');
+			var authClass = 'authenticated';
+
+			// Let's grab the link's URL
+			var linkUrl = $(this).attr('href');
+
+			// Are we already authenticated?
+			var authStatus = $htmlTag.hasClass(authClass);
+
+			// Let's create a function to continue loading the page at the originally intended URL
+			var continueLoading = function() {
+				// Use jQuery Mobile to load the new page
+				$.mobile.changePage( linkUrl, {
+					reloadPage: "true"
+				});
+			};
+
+			// Function to run on a successful login
+			var loginSuccess = function() {
+				// Log the information
+				psu.log('The user is has logged in!');
+
+				// Close the childBrowser
+				psu.log('ChildBrowser closing. We don\'t need it open anymore.');
+				childBrowser.close();
+
+				// Add a class to the html, so we don't have to worry about using the childBrowser while the user's session is still alive
+				$htmlTag.addClass(authClass);
+
+				// Let's load the page that required login/authentication
+				continueLoading();
+			};
+
+			// If we're already logged in
+			if (authStatus === true) {
+				// Let's just load the page
+				continueLoading();
+			}
+			// Otherwise, we need to log in... its required
+			else {
+				// Let's make sure that the ChildBrowser plugin is ready and available
+				if (childBrowser !== null) {
+					// Ok, let's load our authentication page
+					childBrowser.showWebPage( LOGIN_URL, { showLocationBar: true });
+
+					// Let's setup a function to run when the child browser is closed
+					childBrowser.onLocationChange = function(location) {
+						// Log the information
+						psu.log('ChildBrowser location changed to: ' + location);
+
+						// Let's check if the user has logged in successfully
+						if (/login_success/.test(location)) {
+							loginSuccess();
+						}
+					};
+				}
+			}
 		});
 
 	}); // End jQuery dependence
