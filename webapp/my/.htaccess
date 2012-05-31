@@ -5,7 +5,7 @@ php_value log_errors 1
 php_value error_log /var/log/php/mercury.log
 
 RewriteEngine on
-
+RewriteBase /webapp/my/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) index.php/$1 [L,QSA]
