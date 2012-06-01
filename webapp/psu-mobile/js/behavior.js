@@ -216,6 +216,9 @@ $(document).on('vclick.webapp', 'a[data-auth=required]', function(event) {
 	// Prevent the page from changing normally
 	event.preventDefault();
 
+	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	event.stopPropagation();
+
 	// jQuery selector and class
 	var $htmlTag = $('html');
 	var authClass = 'authenticated';
@@ -229,6 +232,7 @@ $(document).on('vclick.webapp', 'a[data-auth=required]', function(event) {
 	// Let's create a function to continue loading the page at the originally intended URL
 	var continueLoading = function() {
 		// Use jQuery Mobile to load the new page
+		psu.log('Ok. Loading the AUTH required page: ' + linkUrl);
 		$.mobile.changePage( linkUrl, {
 			reloadPage: "true"
 		});
@@ -299,6 +303,9 @@ $(document).on('submit', '#page-directory form', function(event) {
 	// Prevent the form from submitting normally
 	event.preventDefault();
 
+	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	event.stopPropagation();
+
 	// Get the data from the searh box and URL encode it
 	var query = encodeURI($('#directory-search').val());
 
@@ -310,6 +317,9 @@ $(document).on('submit', '#page-directory form', function(event) {
 $(document).on('vclick', '#page-directory-results #directory-results a', function(event) {
 	// Prevent the form from submitting normally
 	event.preventDefault();
+
+	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	event.stopPropagation();
 
 	// Get the url from the link
 	var url = $(this).attr('href');
@@ -335,6 +345,9 @@ $(document).on('vclick', '#page-directory-results #directory-results a', functio
 $(document).on('vclick', '#page-events #events a', function(event) {
 	// Prevent the form from submitting normally
 	event.preventDefault();
+
+	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	event.stopPropagation();
 
 	// Get the url from the link
 	var url = $(this).attr('href');

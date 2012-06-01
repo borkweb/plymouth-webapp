@@ -163,6 +163,9 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 			// Prevent the page from changing normally
 			event.preventDefault();
 
+			// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+			event.stopPropagation();
+
 			// jQuery selector and class
 			var $htmlTag = $('html');
 			var authClass = 'authenticated';
@@ -176,6 +179,7 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 			// Let's create a function to continue loading the page at the originally intended URL
 			var continueLoading = function() {
 				// Use jQuery Mobile to load the new page
+				psu.log('Ok. Loading the AUTH required page: ' + linkUrl);
 				$.mobile.changePage( linkUrl, {
 					reloadPage: "true"
 				});
