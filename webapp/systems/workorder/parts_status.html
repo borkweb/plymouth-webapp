@@ -1,0 +1,97 @@
+<?php
+/**
+ * admin_display.html
+ *
+ * Repair Shop Workorder System - parts ordering & receiving
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2008, Plymouth State University, ITS
+ */ 
+if(!checkAuthorization($_SESSION['username']))
+	exit("Authorization Required");
+$GLOBALS['tpl']=new XTemplate('parts_status.tpl',$GLOBALS['TEMPLATES']);
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+
+if(!$_SESSION['privileged'] && $_SESSION['username']!=$GLOBALS['ORDER_USERNAME'])
+	$GLOBALS['tpl']->assign('disabled',"disabled");
+
+$order_query = "select * from shop_workorder_items where part=1 and ordered=0 and received=0 and removed=0 order by vendor, workorder_id";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($order_query);
+for($i=0; $i<$res->RecordCount(); $i++)
+{
+	$array = $res->FetchRow();
+    if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+	$GLOBALS['tpl']->assign('vendor',$array['vendor']);
+    $GLOBALS['tpl']->assign('wo',$array['workorder_id']);
+    $GLOBALS['tpl']->assign('part',$array['item']);
+    $GLOBALS['tpl']->assign('num',$i);
+    $GLOBALS['tpl']->assign('id',$array['id']);
+	$GLOBALS['tpl']->parse('main.order_part_row');
+    
+}
+$GLOBALS['tpl']->assign('num_order',$res->RecordCount());   
+if($res->RecordCount()==0)
+	$GLOBALS['tpl']->parse('main.no_order');
+else
+	 $GLOBALS['tpl']->parse('main.order_submit');
+ 
+$receive_query = "select * from shop_workorder_items where part=1 and ordered=1 and received=0 and removed=0 order by vendor, workorder_id";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($receive_query);
+for($i=0; $i<$res->RecordCount(); $i++)
+{
+	$array = $res->FetchRow();
+    if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+	$GLOBALS['tpl']->assign('vendor',$array['vendor']);
+    $GLOBALS['tpl']->assign('wo',$array['workorder_id']);
+    $GLOBALS['tpl']->assign('part',$array['item']);
+    $GLOBALS['tpl']->assign('num',$i);
+    $GLOBALS['tpl']->assign('id',$array['id']);
+	$GLOBALS['tpl']->parse('main.receive_part_row');
+}
+$GLOBALS['tpl']->assign('num_receive',$res->RecordCount());  
+if($res->RecordCount()==0)
+	$GLOBALS['tpl']->parse('main.no_receive');
+else
+	$GLOBALS['tpl']->parse('main.receive_submit');
+    
+$received_query = "select shop_workorder_items.id as id,vendor,workorder_id,item,device_manufacturer,device_model,shop_workorder.username as username from shop_workorder,shop_workorder_items where shop_workorder.id=shop_workorder_items.workorder_id and part=1 and ordered=1 and received=1 and removed=0 and closed=0 and current_status not like '%pickup%' order by shop_workorder.id";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($received_query);
+for($i=0; $i<$res->RecordCount(); $i++)
+{
+	$array = $res->FetchRow();
+    if($i%2==0)
+    	$rowclass = "class=\"alternaterow\"";
+    else
+    	$rowclass = "class=\"row\"";
+    $GLOBALS['tpl']->assign('rowclass', $rowclass);
+    $GLOBALS['tpl']->assign('id',$array['id']);
+	$GLOBALS['tpl']->assign('vendor',$array['vendor']);
+    $GLOBALS['tpl']->assign('wo',$array['workorder_id']);
+    $GLOBALS['tpl']->assign('part',$array['item']);
+    $GLOBALS['tpl']->assign('manufacturer',$array['device_manufacturer']);
+    $GLOBALS['tpl']->assign('model',$array['device_model']);
+    $user_info = $GLOBALS['AD']->user_info($array['username']);
+	$GLOBALS['tpl']->assign('name',$user_info[0]['displayname'][0]);
+    $GLOBALS['tpl']->assign('num',$i);
+	$GLOBALS['tpl']->parse('main.receivedrow');
+}
+$GLOBALS['tpl']->assign('num_undo',$res->RecordCount());
+if($res->RecordCount()==0)
+	$GLOBALS['tpl']->parse('main.receivednone');
+else
+	$GLOBALS['tpl']->parse('main.received_submit');
+    
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

@@ -130,6 +130,7 @@ class PSU
 		'surplus' => 'mysql/surplus/pdo',
 		'surplus_dev' => 'mysql/surplus_dev/pdo',
 		'systems' => 'mysql/systems/pdo',
+		'systems_dev' => 'mysql/systems_test/pdo',
 		'portal' => 'mysql/portal/pdo',
 		'portal_dev' => 'mysql/portal_dev/pdo',
 		'psp' => 'oracle/psc1_psu_psp/fixcase',
@@ -3322,6 +3323,7 @@ class PSU
 			$this->add_database('myplymouth', 'mysql/myplymouth_dev');
 			$this->add_database('rate_your_mate', 'oracle/rate_your_mate_dev/fixcase');
 			$this->add_database('reslife', 'mysql/reslife_dev/pdo');
+			$this->add_database('systems', 'mysql/systems_test/pdo');
 		}//end elseif
 
 		if(isset($_SESSION['psutools_redirect_sid']))

@@ -1,0 +1,110 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	background:url(../images/background.png) repeat-x top;
+}
+#main {
+	margin: 0px;
+	padding: 0px;
+	width: 800px;
+	position: relative;
+	text-align: left;
+	left: auto;
+	right: auto;
+	border:#000000 1px solid;
+}
+#header {
+	width: 100%;
+	position: relative;
+	text-align: left;
+	left: auto;
+	right: auto;
+	background-color:#FFFFFF;
+	border-bottom: 1px solid #000000;
+}
+#content{
+	width: 100%;
+	background-color:#CDD8D4;
+}
+p{
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+#bottombar {
+	width: 100%;
+	position: relative;
+	text-align: left;
+	left: auto;
+	right: auto;
+	background-color:#3B4F4C;
+	height:18px;
+}
+#topbar {
+	width: 100%;
+	position: relative;
+	text-align: left;
+	left: auto;
+	right: auto;
+	background-color:#3B4F4C;
+	height:18px;
+}
+#centerfloat {
+	width: 87%;
+	padding-top:35px;
+	padding-bottom:35px;
+	padding-left:10px;
+	padding-right:10px;
+	text-align: justify;
+	left: auto;
+	right: auto;
+	line-height:21px;
+	background-color:#FFFFFF;
+}
+#ratetable {
+	border: 2px #000000 solid;
+	background-color:#FFFFFF;
+}
+.border{
+   border: 2px double #000000;
+}
+.headertext{
+	font-size:18px;
+	font-family:Times New Roman, Times, serif;
+	color:#3B4F4C;
+	font-weight:bold;
+}
+.tablehead {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: bold;
+	font-variant: normal;
+	color: #FFFFFF;
+	background-color: #003333;
+	text-align: center;
+}
+
+.alternaterow{
+	background-color:#999966;
+}
+
+label {
+	font-weight: bold;
+	padding-right: 10px;
+}
+
+.buttons{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: center;
+	padding-right:10px;
+	padding-left:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+	background-color: #333333;
+ 	color: #FFFFFF;
+}

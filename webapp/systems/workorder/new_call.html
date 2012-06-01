@@ -1,0 +1,27 @@
+<?php
+/**
+ * ready_pickup.html
+ *
+ * Repair Shop Workorder System - Display all workorders ready for pickup, to be displayed in iframe
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2007, Plymouth State University, ITS
+ */ 
+if(!checkAuthorization($_SESSION['username']))
+	exit("Authorization Required");
+$GLOBALS['tpl']=new XTemplate('new_call.tpl',$GLOBALS['TEMPLATES']);
+
+if($_POST['username']!="")
+{
+	if($GLOBALS['AD']->user_ingroup($_POST['username'], "Domain Users"))
+    	header("Location: workorder.html?u=".$_POST['username']);
+    else
+    	$GLOBALS['tpl']->parse('main.error');
+}
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>

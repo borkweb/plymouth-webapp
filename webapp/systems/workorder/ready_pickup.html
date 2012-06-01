@@ -1,0 +1,45 @@
+<?php
+/**
+ * ready_pickup.html
+ *
+ * Repair Shop Workorder System - Display all workorders ready for pickup, to be displayed in iframe
+ *
+ * @version		1.0
+ * @author		Alan Baker <a_bake@plymouth.edu>
+ * @copyright 2007, Plymouth State University, ITS
+ */ 
+if(!checkAuthorization($_SESSION['username']))
+	exit("Authorization Required");
+$GLOBALS['tpl']=new XTemplate('ready_pickup.tpl',$GLOBALS['TEMPLATES']);
+$GLOBALS['tpl']->assign('logouturl',$GLOBALS['BASE_URL']."?logout="); 
+
+$query = "Select * from shop_workorder where closed=0 and (current_status like '%pickup%' or current_status like 'Transferred to LLC') order by id";
+$res = $GLOBALS['SYSTEMS_DB']->Execute($query);
+	$num = $res->RecordCount();
+    for($i=0; $i<$num; $i++)
+    {
+    	if($i%2==0)
+    		$rowclass = "class=\"alternaterow\"";
+    	else
+    		$rowclass = "class=\"row\"";
+        $GLOBALS['tpl']->assign('rowclass', $rowclass);
+    	$array = $res->FetchRow();
+		$GLOBALS['tpl']->assign('wo',$array['id']);
+        if(strcasecmp($array['current_status'],"Transferred to LLC")==0)
+        	$GLOBALS['tpl']->assign('idclass',"blue");
+        else
+        	$GLOBALS['tpl']->assign('idclass',"");
+        $GLOBALS['tpl']->assign('username',$array['username']);
+        $user_info = $GLOBALS['AD']->user_info($array['username']);
+		$GLOBALS['tpl']->assign('name',$user_info[0]['displayname'][0]);
+        $GLOBALS['tpl']->assign('manufacturer',$array['device_manufacturer']);
+        $GLOBALS['tpl']->assign('model',$array['device_model']);
+        $GLOBALS['tpl']->parse('main.pickuprow');
+	}
+
+
+/****************Output the page****************************/
+$GLOBALS['tpl']->parse('main');
+$GLOBALS['tpl']->out('main');
+
+?>
