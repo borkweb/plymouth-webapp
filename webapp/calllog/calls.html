@@ -6,6 +6,8 @@ $tpl->assign('blog', getNewsFeed());
 
 $calls = array();
 
+$time = time();
+
 $result = returnOpenCalls($_GET['option'], $_GET['group'], $_GET['sort_by']);
 $i = 0;
 if(!empty($result) && is_array($result)){
@@ -16,17 +18,28 @@ if(!empty($result) && is_array($result)){
 		$row['building_name'] = getBuildingName($row['location_building_id']);
 		if (($row['its_assigned_group'] != 0) || ($groupArray[1] != "")){
 			if($row['tlc_assigned_to'] != 'unassigned'){
-				$row['assigned_to'] = $groupArray[1]."_group, ".$row['tlc_assigned_to'];
+				$row['assigned_to']['group'] = $groupArray[1];
+			  $row['assigned_to'][] = $row['tlc_assigned_to'];
 			}else{
-				$row['assigned_to'] = $groupArray[1]."_group";
+				$row['assigned_to']['group'] = $groupArray[1];
 			}
 		}else if($row['tlc_assigned_to'] != ""){
-			$row['assigned_to'] = $row['tlc_assigned_to'];
+			$row['assigned_to'][] = $row['tlc_assigned_to'];
 		}else{
-			$row['assigned_to'] = "None";
+			$row['assigned_to'][] = "None";
 		}
+
+		if($row['date_assigned'])
+		{
+			$assign_datetime = $row['date_assigned'].' '.$row['time_assigned'];
+			$row['activity_datetime'] = time() - strtotime($assign_datetime);
+			$row['date_assigned'] = date('M j, Y', strtotime($assign_datetime));
+			$row['time_assigned'] = date('g:i a', strtotime($assign_datetime));
+		}//end if
+
+		$row['call_activity_diff'] = \PSU::date_diff( $time, strtotime( $assign_datetime ), 'simple' );
 		$row['call_title'] = $row['title'];
-		$row['call_summary'] = substr($row['comments'],0,100).((strlen($row['comments'])>100)?'...':'').' -'.$row['updated_by'].' @'.date('M j, y g:ia',strtotime($row['date_assigned'].' '.$row['time_assigned']));
+		$row['call_summary'] = substr($row['comments'],0,100).((strlen($row['comments'])>100)?'...':'');
 		$row['show_comments'] = str_replace("\"", "&#34",addslashes(substr(strip_tags(str_replace(array("\n","\t","\r"),'',$row['comments'])),0,30)));
 
 		$call_datetime = $row['call_date'].' '.$row['call_time'];
@@ -35,14 +48,6 @@ if(!empty($result) && is_array($result)){
 		$row['call_time'] = date('g:i a', strtotime($call_datetime));
 		if( $row['feelings_face'] ) {
 			$row['feelings_face'] = '<br/><img src="/webapp/feedback/templates/images/feedback-'.$row['feelings_face'].'.png" class="feedback-face" title="'.$row['feelings'].'"/>';
-		}//end if
-
-		if($row['date_assigned'])
-		{
-			$assign_datetime = $row['date_assigned'].' '.$row['time_assigned'];
-			$row['activity_datetime'] = time() - strtotime($assign_datetime);
-			$row['date_assigned'] = date('M j, Y', strtotime($assign_datetime));
-			$row['time_assigned'] = date('g:i a', strtotime($assign_datetime));
 		}//end if
 
 		// If the time that the call has been open (call_open_time) is greater than one week (604800 seconds)
