@@ -4,6 +4,10 @@ function redirect(url){
 }
 
 $jQuery(document).ready(function($){
+	$jQuery('.call-age-status').popover({
+		placement: 'left'
+	});
+
 	$jQuery('.box .replace-toggle').on('click', function(e) {
 		e.preventDefault();
 		$jQuery(this).next().show();
