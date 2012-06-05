@@ -1,11 +1,12 @@
 <div style="padding: 1em;">
 
-<img height="130" width="98" src="{$user->idcard()}" class="left">
+<img height="130" width="98" src="{$user->idcard()}" class="pull-left">
 <div style="margin-left: 110px;">
 	<h3>{$user->first_name} {$user->last_name}</h3>
 	<ul class="bullets">
-		<li>Username: {$user->username}</li>
+		<li>Username: <a href="{$PHP.BASE_URL}/user/{$user->username}">{$user->username}</a></li>
 		<li>Pidm: {$user->pidm}</li>
+		<li>WP ID: {$user->wp_id}</li>
 	</ul>
 </div>
 
@@ -19,7 +20,7 @@
 	<li>
 		ID: {$log.id}
 		<ul class="bullets">
-			<li>Granted by: {$log.granted_by|escape}</li>
+			<li>Granted by: <a href="{$PHP.BASE_URL}/user/{$log.granted_by|escape}">{$log.granted_by|escape}</a></li>
 			{if $log.reason}
 				<li>Reason: {$log.reason|escape}</li>
 			{/if}

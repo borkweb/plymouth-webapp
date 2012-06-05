@@ -373,7 +373,12 @@ table.tablesorter tbody td{
 }
 
 .datacolumn h2{
+	font-size: 1.3em;
 	color: #999;
+}
+
+.datacolumn select {
+	width: auto;
 }
 
 .datacolumn li.clickable h2{
