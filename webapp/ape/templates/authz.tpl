@@ -32,7 +32,7 @@
 		<li class="adduser">
 			Add User: 
 			<input type="text" size="15" name="adduser" id="adduser"> 
-			<button>Add</button>
+			<button class="btn btn-primary">Add</button>
 			<img src="/images/icons/16x16/animations/throbber.gif" height="16" width="16" style="display: none;" id="adduser-throbber"/>
 			<div style="font-size: 0.8em;margin-top: 0.5em;">
 			Start: {html_select_date prefix="start_" month_format="%b" day_value_format="%d" end_year='+10'}
