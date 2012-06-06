@@ -1,0 +1,16 @@
+<?php
+if( $GLOBALS['disabled_chat'] ) {
+	$sql = "DELETE FROM user_meta WHERE name = 'disabled_chat' AND wp_id = ?";
+} else {
+	$sql = "INSERT INTO user_meta (wp_id, name, value, activity_date) VALUES ( ?, 'disabled_chat', '1', NOW())";
+}//end else
+
+if( PSU::db('go')->Execute( $sql, array( $_SESSION['wp_id'] ) ) ) {
+	if( $GLOBALS['disabled_chat'] ) {
+		$_SESSION['successes'][] = 'You have successfully enabled the chat bar in myPlymouth v5 Beta.';
+	} else {
+		$_SESSION['successes'][] = 'You have successfully disabled the chat bar in myPlymouth v5 Beta.';
+	}//end else
+}//end if
+
+PSU::redirect( $GLOBALS['BASE_URL'] );

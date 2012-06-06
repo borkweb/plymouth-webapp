@@ -1,0 +1,115 @@
+<?php
+if(isAdmin() && $_GET['specific']) {
+	$wp_id = PSU::get('idmobject')->getIdentifier($_GET['specific'],'username','wp_id');
+	if($wp_id) {
+		$_SESSION['specific_wp_id'] = $wp_id;
+		$_SESSION['specific'] = $_GET['specific'];
+	}//end if
+} elseif($_GET['cancel_specific']) {
+	unset($_SESSION['specific']);
+}//end else
+
+if(isAdmin() && $_SESSION['specific'] != $_SESSION['username'] && $_SESSION['specific']!='') {
+	$wp_id = $_SESSION['specific_wp_id'];
+	$user = $_SESSION['specific'];
+} else {
+	$wp_id = $_SESSION['wp_id'];
+	$user = $_SESSION['username'];
+}//end else
+
+$person = new PSUPerson( $_SESSION['wp_id'] );
+
+// only track visits if the person is opted in to the new portal
+if( $person->wpuser_array['portalv5'] ) {
+	$sql = "REPLACE INTO user_meta (wp_id, name, value, activity_date) VALUES (?, 'visited_theme_page', NOW(), NOW())";
+	PSU::db('go')->Execute( $sql, array( $_SESSION['wp_id'] ) );
+}//end if
+
+if($_GET['theme']) {
+	if(isset($valid_themes[$_GET['theme']])) {
+		$too_awesome = false;
+
+		if(isAdmin() && $_SESSION['specific']!=$_SESSION['username'] && $_SESSION['specific']!='') {
+			if(in_array($user,array('zbtirrell','mtbatchelder','jrlemieux','sdcapraro')) && $_SESSION['username']!='mtbatchelder') {
+				$_SESSION['errors'][] = 'This user is too awesome for you to mess with.';
+				$too_awesome = true;
+			}//end if
+		}//end if
+
+		if( ! $too_awesome ) {
+			if( $_SESSION['specific'] && $_SESSION['specific'] != $_SESSION['username'] ) {
+				$set_by = $_SESSION['username'];
+				$_SESSION['successes'][] = sprintf('Theme settings have been updated for <strong>%s</strong>', $_SESSION['specific']);
+			} else {
+				$set_by = 'user';
+				$_SESSION['successes'][] = 'Your theme has been set successfully.';
+			}
+			$theme->setUserTheme($wp_id, $_GET['theme'], $set_by );
+			/*
+			if($_SESSION['facebook'])
+			{
+				PSU::get('facebook')->require_login();
+				if($_SESSION['wp_id'] == $wp_id && PSU::get('facebook')->api_client->users_hasAppPermission('status_update', PSU::get('facebook')->user))
+				{
+					$message = 'has chosen the '.$valid_themes[$_GET['theme']]['name'].' Theme for myPlymouth';
+					$attachment = array(
+						'name' => $valid_themes[$_GET['theme']]['name'].' Theme',
+						'href' => 'http://www.plymouth.edu/webapp/themes/',
+						'description' => 'Plymouth State University has '.$num_themes.' to customize the look of myPlymouth!  If you are a member of the PSU Community, you can customize your experience too!',
+						'media' => array(
+							array(
+								'type' => 'image',
+								'src' => 'http://www.plymouth.edu/webapp/themes/my/themes/'.$_GET['theme'].'/screenshot.jpg',
+								'href' => 'http://www.plymouth.edu/webapp/themes/my/themes/'.$_GET['theme'].'/screenshot.jpg'
+							)
+						)
+					);
+					$action_links = array(
+						array('text' => 'Use this theme too!',
+									'href' => 'http://www.plymouth.edu/webapp/themes?theme='.$_GET['theme']
+						)
+					);
+					PSU::get('facebook')->api_client->stream_publish($message, $attachment, $action_links, null, PSU::get('facebook')->user);
+				}//end if
+			}//end if
+			*/
+		}
+	} else {
+		$_SESSION['errors'][] = 'There was an error setting your theme.';
+	}//end else
+	header('Location: '.$GLOBALS['BASE_URL']);
+	exit;
+}//end if
+
+$tpl = new PSUTemplate('PSU Themes');
+$tpl->assign('username',$user);
+$tpl->assign('specific',$_SESSION['specific']);
+
+if( $event_theme = PSU::curl( $GLOBALS['BASE_URL'] .'/my?is_event=1', PSU::FILE_GET_CONTENTS ) ) {
+	$event_theme = PSUTheme::getThemeData( $event_theme );
+	$tpl->assign('event_theme', $event_theme );
+}//end if
+
+$current_theme = $theme->getUserTheme($wp_id);
+$tpl->assign('current_theme',$current_theme);
+$tpl->assign('themes',$valid_themes);
+
+$tpl->assign('admin',isAdmin());
+
+$tpl->assign('num_themes_set', $theme->getThemeCount());
+
+$popular = $theme->getPopularThemes();
+foreach($popular as $key=>$the_theme) {
+	if(!$valid_themes[$key]) {
+		unset($popular[$key]);
+	}//end if
+}//end foreach	
+$tpl->assign('popular',$popular);
+
+if($_GET['who']) {
+	$tpl->assign('who', $valid_themes[$_GET['who']]);
+	$theme_users = $theme->getUsersByTheme($_GET['who']);
+	$tpl->assign('theme_users',$theme_users);
+}//end if
+$tpl->assign('person', new PSUPerson($user));
+$tpl->display('index.tpl');

@@ -1,0 +1,27 @@
+<?php
+if($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+	if($theme->updateUserOptout($_SESSION['wp_id'], $_POST['theme']))
+	{
+		$_SESSION['successes'][] = 'Your settings have been saved successfully.';
+	}//end if
+	else
+	{
+		$_SESSION['errors'][] = 'Your settings failed to save.  Please try again later.';
+	}//end else
+	header('Location: '.$GLOBALS['BASE_URL'].'/optout.html');
+	exit;
+}//end if
+$tpl = new PSUTemplate('Opt-Out');
+$sql = "SELECT theme_id FROM user_theme_optout WHERE wp_id = ?";
+$themes = PSU::db('myplymouth')->GetCol($sql, array($_SESSION['wp_id']));
+$optout = array();
+foreach($themes as $o)
+{
+	$optout[$o] = true;
+}//end foreach
+$sql = "SELECT * FROM theme WHERE level in ('holiday','event','hidden-event') ORDER BY name";
+$tpl->assign('optout', $optout);
+$tpl->assign('themes', PSU::db('myplymouth')->GetAll($sql));
+
+$tpl->display('optout.tpl');

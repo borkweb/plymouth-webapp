@@ -1,0 +1,83 @@
+.screenshot{
+	border: 1px solid #000;
+	display: block;
+	height: 62px;
+	margin: 5px auto;
+	width: 100px;
+}
+
+.theme_list{
+	margin: 0;
+	padding: 0;
+}
+
+.theme_list li{
+	border: 1px solid #F3F1E6;
+	font-size: 0.9em;
+	height: 110px;
+	list-style: none;
+	margin-bottom: 30px;
+	padding-top: 35px;
+	text-align: center;
+
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+.theme_list li:hover{
+	background: rgba(227, 227, 227, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.theme_list li.selected{
+	background: #f8f4b3;
+	border: 1px solid #999;
+}
+
+.theme_list li.selected:hover {
+	border-color: #333;
+}
+
+.success{
+	background:#AFCEAA;
+	border-color:#476542;
+}
+
+.specific{
+	margin-top: 30px;
+	font-size: 0.9em;
+	text-align: right;
+}
+
+.users{
+	float:left;
+	margin-left: 25px;
+}
+
+.users h3{
+	font-size: 1.0em;
+}
+
+.users ul{
+	list-style-type: none;
+}
+
+.note{
+	color: #999;
+	font-style: italic;
+}
+
+.new-theme {
+	background-image: url(images/new-theme.png) !important;
+	background-repeat: no-repeat !important;
+	background-position: top center !important;
+}
+
+.set-by {
+	color: rgba(0, 0, 0, 0.2);
+}
+
+.set-by:hover {
+	color: rgba(0, 0, 0, 0.5);
+}

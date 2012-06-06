@@ -1,0 +1,41 @@
+<?php
+require_once 'session_handler.class.php';
+header("Cache-Control: no-cache, must-revalidate");
+
+require_once 'PSUDatabase.class.php';
+//require_once 'includes/holidays.php';
+require_once 'PSUTheme.class.php';
+//require_once 'includes/crews.php';
+
+$my = PSUDatabase::connect('mysql/myplymouth');
+
+/************[ BEGIN: Main Vars ]***********/
+$theme = new PSUTheme($my, dirname(__FILE__));
+//$theme->loadUserTheme($_SESSION['pidm']);
+
+$day = date('j');
+$month = date('n');
+$month_name = strtolower(date('F'));
+$year = date('Y');
+/************[ END: Main Vars ]***********/
+
+/****************************************
+ * GENERAL SETTINGS
+ ****************************************/
+@include_once('general.php');
+
+/****************************************
+ * MONTH SETTINGS
+ ****************************************/
+//@include_once('months/'.$month_name.'.php');
+
+/****************************************
+ * EXTREME SETTINGS
+ ****************************************/
+//@include_once('extreme.php');
+
+/****************************************
+ * set header and output
+ ****************************************/
+$theme->out();
+?>

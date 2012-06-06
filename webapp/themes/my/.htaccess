@@ -1,0 +1,10 @@
+php_value auto_prepend_file none
+
+RewriteBase /webapp/themes/my/
+RewriteEngine on
+
+RewriteRule ^style.css$ index.php [QSA,L]
+RewriteRule ^login.css$ index.php?style=login [QSA,L]
+RewriteRule ^my.php$ index.php?style=my [QSA,L]
+RewriteRule ^js.php$ index.php?style=my&js=1 [QSA,L]
+RewriteRule ^behavior.js$ js.php [QSA,L]
