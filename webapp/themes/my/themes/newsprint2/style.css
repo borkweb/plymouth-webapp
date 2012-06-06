@@ -1,0 +1,1542 @@
+/***************************************
+ * PSU Thickbox Styles
+ ***************************************/
+
+#TB_ajaxContent{padding-top:10px;}
+
+#tb-title-bar a{color:#fff;}
+#tb-content{text-align:left;}
+#tb-content a{color:blue;}
+#TB_title,#tb-title-bar{
+	background: url('http://s1.plymouth.edu/webapp/style/templates/images/my/channel_header_tile.gif');
+	background-color: #9EA980;
+	border-bottom:1px solid #454A2C;
+	color: #fff;
+	font-size: 1.1em;
+	font-weight:bold;
+}
+/***************************************
+ * Alert Styles
+ ***************************************/
+
+#alertAdminMessageDiv{
+	position: absolute;
+	top: 50px;
+	left: 75px;
+	visibility: hidden;
+	z-index:10;
+}
+#alertSessionExpireMessageDiv{
+	position: absolute;
+	top: 50px;
+	left: 75px;
+	visibility: hidden;
+	z-index:10;
+}
+.alertwhite {background-color: #ffffff;z-index:10;}
+.alertwarning {background-color: #ff0000;z-index:10;}
+.alerttext12 {color: #000000; font-size: 12px;z-index:10;}
+
+/*** Tags ***/
+body.inside a:link, a:active, a:visited{color: #333;text-decoration: underline;}
+body.inside a:hover{color: #000;}
+
+body{
+	background:#000000;
+	font-family: arial, helvetica, sans-serif;
+	font-size:90%;
+	margin:5px;
+}
+
+body.inside{
+	background-color: #FBFAF5;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/bg.gif);
+	margin: 0px;
+}
+
+body.white{background:#fff;background-image:none;}
+
+body.inside h2{
+	color: #000;
+	font-family: times new roman, serif;
+	font-weight: bold;
+	margin:0px;
+}
+body.inside fieldset{ border: 1px solid #ccc;}
+body.inside form.bordered input{border:1px solid pink;}
+iframe{background:#fff;border: 0px;}
+iframe.framed-content{background:#fff;}
+body.inside input,select,textarea{background:#fff;border:1px solid #333;}
+input.date_picker{margin-right:10px;}
+legend{color:#825000;font-weight:bold;}
+
+/*** Classes ***/
+body.inside .button{
+	background:#ccc;
+	border:1px solid #999;
+	margin-right:25px;
+	margin-top:16px;
+}
+
+/* stuff for the header */
+.corner_left{
+	display: none;
+}
+.corner_right{
+	display:none;
+}
+#footer a{color:#ccc;}
+
+.inside #header{
+	background-color: #534941;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/header_bg.gif);
+	border-bottom: none;
+	height: 110px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.inside #header .extra_bg{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/header_bg_left.gif);
+	width: 740px;
+	height: 110px;
+}
+
+.inside #header .my_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/my_logo.gif);
+	width: 500px;
+	height: 110px;
+}
+
+.inside #header .psu_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/psu_logo.gif);
+	right: 0px;
+	width: 173px;
+	height: 110px;
+}
+
+body.inside #header ul{
+	color:#666;
+	font-size:1.0em;
+	margin: 0px;
+	padding: 0px;
+	position: absolute;
+	top: 25px;
+	right: 155px;
+	text-align:center;
+	width:17em;
+}
+#header ul li{display: inline; list-style-type: none; padding:0 5px 0 0;}
+#header ul li.options_left{position:absolute;bottom:0px;left:0px;padding:0;margin:0;marker-offset:0;height:21px;}
+#header ul li.options_right{position:absolute;bottom:0px;right:0px;padding:0;margin:0;marker-offset:0;height:21px;}
+#header ul a{color:#fff;padding:3px 7px;}
+#header ul a:hover{color:#000;}
+#header ul a img{display:none;margin-right:5px;vertical-align:middle;}
+
+.inside #header_message{
+	background-color: #65574C;
+	background-image: none;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.inside #header_message .extra_bg{
+	background-color: none;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/rounds_lower.gif);
+	background-repeat: no-repeat;
+}
+
+.inside #header .corner_left,#header .corner_right{
+	background-image: none;
+}
+
+.inside #header_message{
+	background-color: #FBFAF5;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/bg.gif);
+	height:58px;
+}
+
+.inside #header_message #tabs a{
+	border-top: 1px solid #999;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}
+
+.inside #header_message #tabs .top_left{
+	display:none;
+}
+
+.inside #header_message .options{
+	margin-top: 15px;
+}
+
+.inside #header_message #tabs .top_right{
+	display:none;
+}
+
+
+.inside #header_message .options a{
+	color: #000;
+}
+
+#header_message strong{color:#000;}
+#header_message strong a {color:#999;text-decoration:underline;}
+#header_message .options{
+	margin:5px 10px 0 0;
+	float:right;
+	font-size:0.8em;
+}
+#header_message .options li{float:left;list-style:none;margin-right:10px;text-align:center;}
+#header_message .options img{vertical-align:middle;}
+#header_message .options a{color:#000;}
+
+#header_message img.header_icon{}
+
+#tabs li a{
+	background: #f8f8f8;
+	border-bottom:1px solid #999;
+	color:#222;
+	padding:2px 5px 2px 5px;
+}
+#tabs li.active a,#tabs li.active a:hover{
+	background: #fff;
+	border:none;
+	color: #000;
+	bottom:0px;
+	margin-top:0;
+	padding-top:6px;
+	z-index:2;
+}
+#tabs li a:hover{background: #eee;color:#000;}
+#tabs li a .top_left{
+	background:none;
+	display:none;
+}
+#tabs li a .top_right{
+	background:none;
+	display:none;
+}
+
+#tabs li.more ul{
+	background: #fff;
+	border-bottom:1px solid #ccc;
+	border-left:1px solid #ccc;
+	border-right:1px solid #ccc;
+}
+.inside #header_message #tabs li.more li{
+	border-bottom:1px solid #ccc;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.inside #header_message #tabs li.more li a{
+	border: none;
+	border-top: none;
+	border-bottom: none;
+	border-left: none;
+	border-right: none;
+}
+
+.inside #header_message #tabs li.more li:hover{
+	background: #ccc;
+	border-bottom:1px solid #999;
+	border-left: none;
+	border-right: none;
+}
+#tabs li.more .down-arrow{
+	background: url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/all_icons.gif?version=1') -114px -46px no-repeat;
+	margin:0;
+	padding:0;
+	height:11px;
+	vertical-align:middle;
+	width:8px;
+}
+#tabs li.more:hover .down-arrow{
+	background: url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/all_icons.gif?version=1') -102px -46px no-repeat;
+}
+
+.inside #sub_header{
+	background: #fff;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+	border-bottom: 3px double #999;
+	margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+#overlay{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 90;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+}
+.columns-top-left{
+	display:none;
+}
+#left-nav-column{background: none;border: none;padding-top: 5px; width: 200px;}
+
+.widget{border-bottom: none;font-size:0.8em;margin-bottom:5px;}
+.widget .body{
+	background: #FBFAF5  url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/bg.gif);
+	border-top: none;
+	padding-bottom:5px;
+}
+
+.widget .header{
+	background: #fff;
+	border: 1px solid #ccc;
+	font-family: times new roman, serif;
+}
+
+.widget .go-box{
+	background: #fff;
+	border:1px solid #000;
+	width:130px;
+}
+
+#widget-go-search .header{
+	padding: 5px 0 5px 0;
+}
+
+.widget .go-submit{border:1px solid #666;}
+#widget-services ul{
+	margin: 0;
+	padding: 0 0 0 15px;
+}
+#widget-services ul ul{
+	margin: 0 0 0 15px;
+	padding: 0;
+}
+
+#widget-services ul li{
+	list-style:url('http://s1.plymouth.edu/webapp/style/templates/images/my/sidebar_bullet.png');
+	
+}
+#widget-popular ul li{
+	list-style:inside url('http://s1.plymouth.edu/webapp/style/templates/images/my/sidebar_bullet.png');
+}
+
+#widget-bookmarks .body #add-bookmark{
+	border-bottom: 1px dotted #B3BB86;
+	display:none;
+	padding-bottom:3px;
+	overflow:auto;
+}
+#widget-bookmarks .body #add-folder{
+	border-bottom: 1px dotted #B3BB86;
+	display:none;
+	padding-bottom:3px;
+	overflow:auto;
+}
+#widget-bookmarks #bookmarks li.bookmark{list-style:inside url('http://s1.plymouth.edu/webapp/style/templates/images/my/sidebar_bullet.png');}
+#widget-bookmarks .dropOver{background:#FDF5B0;}
+#widget-bookmarks .bookmark-parent{color: #BAB8B0;padding:3px;}
+
+#widget-bookmarks .bookmark-trash{
+	background:#ead4d4;
+	border-bottom:1px dotted #800000;
+	border-top:1px dotted #800000;
+	display:none;
+	margin-top:15px;
+	padding:3px;
+}
+.widget .ds-container fieldset {border: 1px solid #999;padding:3px;}
+.widget .ds-container ul{background: none;height:1.2em;margin:0;padding:3px 0 0 0;text-align:center;}
+.widget .ds-container li{
+	border-bottom: none;
+	display:block;
+	float:left;
+	list-style:none;
+	padding: 2px;
+	text-align:center;
+	width:47%;
+}
+.widget .ds-container li.selected{
+	background: white;
+	border:1px solid #ccc;
+}
+.widget .ds-container li a{
+	color: black;
+}
+
+.widget .ds-container li.selected a{
+	color: #000;
+}
+.widget .ds-container .temp_text{color:#999;}
+
+img.sidebar_icon,#widget-bookmarks .icon{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/all_icons.gif?version=1');
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	width:16px;
+}
+body.inside #body{
+	background-color: transparent;
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/coffee_stain.gif');
+	background-repeat: no-repeat;
+	background-position: top right;
+	z-index:0;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+#columns{border-top: none;}
+#columns .column{border-left: 1px solid #ccc; padding-top: 0px;}
+
+iframe{border:1px solid #ccc;}
+.iframe-container{background:#fff;}
+#body .framed-content{background:#fff;min-height: 700px;height:1500px;width: 100%;}
+
+#search-window{background:#fff;overflow:auto;}
+
+#search-window #search-help{border:1px solid #999ccc;width:99%;}
+#search-window .results{border:1px solid #999ccc;width:99%;}
+#search-window iframe{width:100%;}
+
+.channel{
+	font-size:0.9em;
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+.channel .body{
+	background: none;
+	border-bottom: 2px solid #000;
+	border-left: none;
+	border-right: none;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.channel h1{font-size: 1.2em;}
+.channel h2{font-size: 1.1em;}
+.channel .header{
+	background: none;
+	border-bottom: 3px double #000;
+	color: #000;
+	font-size: 1.0em;
+	font-weight:bold;
+	padding: 10px 5px 10px 5px;
+}
+
+.channel .header .extra_bg{
+	background: none;
+}
+.channel .header h1{
+	color: #000;
+	font-family: times new roman, serif;
+	font-size:1.6em;
+	font-weight:bold;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.channel .header .top-left{background:none;}
+.channel .header .top-right{background:none;}
+
+.channel .header ul.options li{display:inline;list-style:none;}
+.channel .header ul.options li a{padding: 0px 2px;}
+.channel .header_image{height:30px;	border-left: 1px solid #909183;}
+.channel .shadow{background: none;}
+.channel ul, ol{padding-left: 10px;	margin-left: 10px;}
+
+.secondary_table_block{border:1px solid #ddd;}
+.secondary_table_header{
+	background: #fff;
+	padding:2px;
+}
+.secondary_table_cell_1{
+	background: none;
+}
+.secondary_table_cell_2{
+	background: #eee;
+}
+
+img.channel_icon{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/all_icons.gif?version=1');
+	background-repeat:no-repeat;
+}
+
+.email-channel .email-list th{background:#fff;border-right:1px solid #ccc;color:#000;}
+.email-channel img.icon{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/all_icons.gif?version=1');
+	background-repeat:no-repeat;
+}
+
+.email-channel ul li {
+	list-style-image:url(/psu/images/sidebar_bullet.png);
+	list-style-position:inside;
+	list-style-type:disc;
+}
+.email-channel ul li span{color:#444;}
+
+.message-text{
+	background: #666;	
+	border: 1px dotted #ccc;
+	color: yellow;
+	padding: 5px;	
+	margin: 3px;
+}
+
+
+.divider{border-top: 1px solid #999;}
+
+.percent_bar{background: #fff;border: 1px solid #ccc;}
+.percent_bar .fill{background: #333;color: #fff;text-align:center;}
+.shaded_box{background: #999; border: 1px solid #ccc;}
+body.inside .side_links a:link,.side_links a:active,.side_links a:visited{color: #999;text-decoration: none;}
+body.inside .side_links a:hover{color: #000;}
+
+#columns img.throbber{
+	border: 1px solid #ccc;
+}
+
+
+/**********************************************
+ * Hot Links Styles
+ **********************************************/
+.widget ul.popular-tabs{background:none;height:1.2em;margin:0;padding:3px 0 0 0;text-align:center;}
+.widget ul.popular-tabs li{
+	border-bottom:1px solid #eee;
+	padding: 2px;
+	width: 47%;
+}
+.widget ul.popular-tabs li.selected{
+	background: white;
+	border:1px solid #ccc;
+}
+
+.widget ul.popular-tabs li a{color:#999;}
+.widget ul.popular-tabs li.selected a{color:#000;}
+
+.widget #popular-everyone{clear:both;margin-top:5px;}
+.widget #popular-me{clear:both;margin-top:5px;}
+
+#widget-dashboard .body{padding-left:5px;}
+
+/**********************************************
+ * Custom Thickbox Styles
+ **********************************************/
+/* styles for profile */
+
+
+fieldset label{float:left;font-weight:normal;width:100%;padding-top: 10px;}
+fieldset label span{float:left;font-weight:bold;width:10em;text-align:left;}
+fieldset label.top span{display:block;float:none;width:100%;}
+
+input.disabled {border: 1px solid #F2F2F2;background-color: #F2F2F2;}
+input.required, textarea.required {}
+input.validation-failed, textarea.validation-failed {
+	border: 1px solid #FF3300;
+	color : #FF3300;
+}
+input.validation-passed, textarea.validation-passed {
+	border: 1px solid #00CC00;
+	color : #000;
+}
+
+.validation-advice {
+	margin: 5px 0;
+	padding: 2px;
+	background-color: #FF3300;
+	color : #FFF;
+	font-weight: bold;
+}
+
+strong.req{color:red;}
+.percent_bar{margin: 5px 0px;}
+.success{color:green;font-weight:bold;}
+#login_error{color:red;font-weight:bold;}
+
+/*************[Weather Styles]*****************/
+
+/*************[Luminis Overrides]**************/
+.uportal-background-light{
+	background-color:#ccc;
+	background-image:none;
+	border: 1px dotted #999;
+	padding: 5px;
+}	
+.uportal-background-light td{
+	background:none;
+	border:none;
+	padding: 1px;
+}
+
+input.btnvert, input.btn, input.btnsm{
+	background-image: none;
+	background-color: #ccc;
+	border: 1px solid #444;
+}
+input.btnvert:hover, input.btn:hover, input.btnsm:hover{
+	background-color: #ddd;
+}
+
+#tabs_tda{
+	background: #B8C08B;
+	border: 1px solid #5D5C55;
+	padding:5px;
+}
+#tabs_tda #tab{
+	background: #d6d6b7;
+	border: 1px solid #AAB27C;
+	padding: 3px 5px;
+}
+#tabs_tda .texttabon{font-weight:bold;}
+
+#tabs_tda a#tab:link,#tabs_tda a#tab:active,#tabs_tda a#tab:visited{
+	color: #555;
+}
+
+.bgtabon .uportal-channel-text{border-top:1px solid #999;}
+
+.bgtabon table table{margin: 5px 0px;}
+
+.uportal-background-content img,.uportal-channel-text img{
+	margin-right: 3px;
+}
+
+.ChanBoxBg{border: 1px solid #999;padding: 5px;}
+#tabs_tda #add_a_new_tab{margin-right: 5px;}
+
+.uportal-label{font-weight: bold;}
+
+.uportal-background td{
+	border: 1px solid #999;
+}
+.uportal-background td td{
+	border: none;
+}
+.uportal-background-highlight{
+	background-color: #F2EFE1;
+}
+.uportal-channel-strong{
+	font-weight:bold;
+}
+
+.uportal-background-shadow{
+	background:#999;
+}
+
+.workflowdefault{
+	background: #EAE7D7;
+	border: 1px solid #BAB8B0;
+	padding: 3px;
+}
+.workflowcurrent{
+	background: #d6d6b7;
+	border: 1px solid #BAB8B0;
+	padding: 3px;
+}
+.workflowvisited{
+	background: #BBC38E;
+	border: 1px solid #5D5C55;
+	padding: 3px;
+}
+
+#chlist td{
+	background: #F5F2E6;
+}
+
+#chlist td table.uportal-background-med td{
+	background: #E2DFD4;
+}
+
+.uportal-text-small-unread{
+	font-weight: bold;
+	color : Black;
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-size : 10px;
+}
+
+.uportal-text-small-read{
+	color : Black;
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-size : 10px;
+}
+
+#admin\.navigation\.links .uportal-channel-text{
+	background:#ccc;
+	border:1px dotted #999;
+	display:block;
+	margin-bottom:10px;
+	padding:10px;
+}
+
+#admin\.navigation\.links .uportal-channel-text img{display:none;}
+
+/*********************************************************
+ * Login Styles
+ *********************************************************/
+
+#splash{margin-top:75px;text-align:center;}
+#splash #header,#splash #header_message,#splash #sub_header,#splash #body,#splash #splash-footer{
+	border: none;
+	margin:0 auto;
+	text-align:left;
+	width:706px;
+}
+#splash #header{
+	background: url('http://s1.plymouth.edu/webapp/style/templates/images/my/splash/splash_top.gif') top left no-repeat;
+	height:68px;
+}
+#splash #header .extra_bg{background:none;}
+#splash #body{
+	background: url('http://s1.plymouth.edu/webapp/style/templates/images/my/splash/splash_main_tile.gif') top left repeat-y;
+	position:relative;
+}
+#splash #body img.middle{border-left:1px solid #B8AE88;float:right;margin-right: 3px;}
+#splash #body div.window{
+	background-image: url('https://s1.plymouth.edu/includes/imagerotator.php?TYPE=2&ROTATION_DIR=/graphics/my/');
+	background-position: top left;
+	border-left:1px solid #B8AE88;
+	float:right;
+	margin:0 3px 0 0;
+	overflow:auto;
+	width:465px;
+	height:244px;
+	text-align:center;
+	position: relative;
+}
+#splash #splash-footer{text-align:center;}
+#splash #splash-footer .footer-content{background:url('http://s1.plymouth.edu/webapp/style/templates/images/my/splash/splash_bottom_tile.gif') top left repeat-y;}
+#splash form#cplogin{font-size:0.9em;height:244px;margin:0;padding:0;width:225px;}
+#splash .side_links{margin:10px 0 0 0;padding:0 5px;}
+#splash h2{margin:0;padding:0;}
+#splash a:hover{color:#000;}
+#splash fieldset{border:none;margin:0;padding:20px 0 0 10px;}
+#splash input{background:#fff;font-size:1.4em;padding:3px;width:207px;}
+#splash input:hover{background:#ffffdd;}
+#splash input.login{background:#fff;border:1px solid pink;display:block;font-size:1.3em;width:200px;}
+#splash input.button{
+	background: #E4E0CA url('http://s1.plymouth.edu/webapp/style/templates/images/my/login_button_bg.gif') repeat-x;
+	border: 3px double #BAB8AD;
+	color:#84350F;
+	width:auto;
+}
+#splash input.button:hover{	background: #E4E0CA url('http://s1.plymouth.edu/webapp/style/templates/images/my/login_button_bg.gif') repeat-x;}
+#splash h3{margin:0px;margin-bottom:5px;}
+.success{color:green;font-weight:bold;}
+
+#splash .window .alert{
+	background: #fff;
+	border: 3px solid #000;
+	margin: 3px auto 15px auto;
+	padding: 5px;
+	position: relative;
+	text-align: left;
+	width: 90%;
+}
+
+#splash .window .alert h2{
+	margin: 0 0 5px 0;
+	padding: 0;
+}
+
+#login_error{color:red;font-weight:bold;}
+/*********************************************************
+ *
+ * Outside Styles
+ *
+ *********************************************************/
+body.login .cas{
+}
+body.login .alert{
+	display:none;
+	top:10px;
+	position:absolute;
+	text-align:center;
+	width:100%;
+	z-index:100;
+}
+body.login .alert .content{
+	background: #d8deb9;
+	border: 1px dashed #969c70;
+	font-size:0.9em;
+	margin: 20px auto 0 auto;
+	padding:5px;
+	width:750px;
+}
+body.outside label{float:left;width:100%;padding-top: 10px;}
+body.outside label span{float:left;font-weight:bold;padding:3px;width:6em;text-align:left;}
+
+body.outside input{
+	background: #fff;
+	border: 1px solid #444;
+	font-size:1.2em;
+	padding: 3px;
+	vertical-align:middle;
+}
+
+body.outside input:hover{background: #FFFFDD;}
+
+body.outside .alert{
+	margin-top:20px;
+	text-align:center;
+	width:100%;
+}
+
+body.outside .alert .content{
+	background: #d8deb9;
+	border: 1px dashed #969c70;
+	font-size:0.9em;
+	margin: 20px auto;
+	padding:5px;
+	width:750px;
+}
+body.outside div#alert-block{
+	background: transparent url('http://s1.plymouth.edu/webapp/style/templates/images/my/login_area.gif') no-repeat;
+	font-size:1.2em;
+	height:256px;
+	margin: 150px auto 0 auto;
+	padding:0 15px 0 15px;
+	position:relative;
+	text-align:left;
+	width: 406px;
+}
+
+body.outside .alert{
+	margin-top:20px;
+	text-align:center;
+	width:100%;
+}
+body.outside .alert .content{
+	background: #d8deb9;
+	border: 1px dashed #969c70;
+	font-size:0.9em;
+	margin: 20px auto;
+	padding:5px;
+	width:750px;
+}
+body.outside .alert img{display:block;margin:5px auto;}
+body.outside #footer{color:#E4E0CA;}
+body.outside #footer a{color: #ddd;text-decoration:none;}	
+body.outside #footer a:hover{color:#fff;}
+
+/*********************************************************
+ *
+ * Poll Styles
+ *
+ *********************************************************/
+ 
+#poll_results h2{
+	background: #eee;
+	border: 1px dotted #999;
+	color: 000;
+	font-size: 1.2em;
+	font-weight:bold;
+	margin: 3px 0;
+	padding:3px;
+}
+
+#poll_results ul{
+	margin:5px 0;
+	padding:0;
+}
+
+#poll_results li{
+	list-style:none;
+	margin:3px 3px 6px 3px;
+	padding:0;
+}
+
+#poll_results #form_bt_vote{
+	background: #ccc;
+	border:1px solid #bbb;
+}
+#poll_results #form_bt_vote:hover{
+	background:#e3e3e3;
+}
+#poll_results label{display:block;}
+#poll_results .percentage{
+	color:#444;
+	font-size:0.9em;
+	text-align:right;
+}
+#poll_results .bar{
+	background: #000;
+	border-bottom:1px solid #000;
+	border-left:1px solid #000;
+	border-top:1px solid #000;
+	font-size:1px;
+	height:10px;
+}
+#poll_results .no-bar{
+	background: #fff;
+	border-bottom:1px solid #fff;
+	border-right:1px solid #fff;
+	border-top:1px solid #fff;
+	font-size:1px;
+	height:10px;
+}
+#poll_results table{font-size:1.0em;margin:3px 0;}
+#poll_results .votes{font-style:italic;margin: 3px 0;}
+#poll_results .answer{
+	border-bottom: 1px dotted #999;
+	color:#444;
+	font-size: 1.0em;
+	margin: 0 0 3px 0;
+	padding:3px;
+}
+#poll_results .provided{
+	border-top: 1px dotted #999;
+	color:#444;
+	font-size: 0.9em;
+	margin: 3px 0;
+	padding:3px;
+}
+
+#alertAdminMessageDiv,#alertSessionExpireMessageDiv{
+	background: #F4F1E6;
+	border: 3px solid #B70F38;
+	padding: 10px;
+}
+/**********************************************
+ * Forgot Username Styles
+ **********************************************/
+
+/**********************************************
+ * Individual Channel Styles
+ **********************************************/
+ul.game-channel{list-style-type:none;margin:0;padding:0;}
+ul.game-channel li{
+	background:#fff;
+	border-bottom:1px solid #ccc;
+	border-top:1px solid #ccc;
+	margin: 5px 0;
+	padding:5px;
+}
+ul.game-channel li img{border:1px solid #000;margin-right:5px;vertical-align:middle;}
+ul.game-channel li a{color: #000;}
+/**********************************************
+ * Tool Topnav Styles
+ **********************************************/
+body.topnav a:link,body.bgmenu a:link,body.admin a:link{color: #4B55D1;text-decoration: none;}
+body.topnav a:active,body.bgmenu a:active,body.admin a:active{color: #4B55D1;text-decoration: none;}
+body.topnav a:visited,body.bgmenu a:visited,body.admin a:visited{color: #4B55D1;text-decoration: none;}
+body.topnav a:hover,body.bgmenu a:hover,body.admin a:hover{color: #060E79;}
+body.topnav a img{margin-right:3px;}
+body.topnav{
+	background: #E9E6D4;
+	background-image:url(/psu/images/header_bg_left.gif);
+	background-repeat:repeat-x;
+	border-bottom:1px solid #BAB8B0;
+	color: #fff;
+}
+
+body.topnav .bgtabon{display:none;}
+body.topnav .taboff{background:none;}
+
+body.topnav h1{color:#000;}
+body.topnav div.taboff{
+	background:#d6d6b7;
+	border-left:1px solid #BAB8B0;
+	border-right:1px solid #BAB8B0;
+	border-top:1px solid #BAB8B0;
+	margin:0 5px;
+}
+body.topnav div.taboff:hover{background:#E1E1C6;}
+body.topnav .tabon{background:none;}
+body.topnav div.tabon{background:#E9E5D4;margin:0 5px;}
+body.topnav div.tabon{
+	border-left:1px solid #BAB8B0;
+	border-right:1px solid #BAB8B0;
+	border-top:1px solid #BAB8B0;
+}
+
+/**********************************************
+ * Tool Menu Styles
+ **********************************************/
+
+body.bgmenu{
+	background: #F5F2E6;
+	background-image:none;
+}
+
+.bg1{background:none;}
+.bg1 img{visibility:hidden;}
+.bg3{background:none;}
+.bg3 img{display:none;}
+
+td.datarowitem-checkbox{background:#F5F2E6;border-top:1px dotted #BAB8B0;font-size:0.9em;}
+td.datarowitem{background:#F5F2E6;border-top:1px dotted #BAB8B0;font-size:0.9em;}
+td.datarowitem-groupdescription{background:#F5F2E6;border-top:1px dotted #BAB8B0;font-size:0.9em;}
+
+.text10 img{margin-right:3px;}
+/**********************************************
+ * Admin Styles
+ **********************************************/
+
+body.admin{
+	background: #E1E0CD;
+	background-image:none;
+	border-left:1px solid #BAB8B0;
+	margin:0px;
+	padding:5px;
+}
+
+body.admin ul{list-style-type:none;}
+body.admin .bg1,body.admin .bg3{display:none;}
+body.admin .bgmlight{display:none;}
+body.admin .bglight{background:none;border-bottom:1px solid #909183;}
+body.admin .bgslight{background:#F5F2E6;border:1px dotted #909183;padding:3px;}
+body.admin .bgtabon{background: #BAB8B0;}
+body.admin .bgtabon img{display:none;}
+body.admin table table td h2.text12 b{font-size:1.1em;font-weight:bold;margin:3px 0;}
+
+body.admin .bgwhite{
+	background:#F5F2E6;border:1px dotted #909183;margin-bottom:3px;padding:3px;
+}
+
+body.admin input,body.admin select,body.admin textarea{background:#fff;padding:3px;}
+body.admin input:hover,body.admin select:hover,body.admin textarea:hover{background:#FFFFDD;}
+
+
+/**********************************************
+ * Group Tool Styles
+ **********************************************/
+
+body.gcstudio{
+background: #E1E0CD;
+background-image:none;
+border-left:1px solid #BAB8B0;
+margin:0px;
+padding:5px;
+}
+body.gcstudio a img{margin-right:3px;}
+body.gcstudio h1{
+	color: #85360F;
+	font-size:1.5em;
+	font-weight:bold;
+}
+
+body.gcstudio table{font-size:1.0em;}
+
+body.gcstudio #btitle{
+	font-size: 1.3em;
+}
+
+body.gcstudio .bg1{background:none;border-top:1px solid #5D5C55;}
+body.gcstudio .bg3{background:none;}
+body.gcstudio .bglight{background:none;}
+body.gcstudio .bgmlight{display:none;}
+body.gcstudio .bgtabon{background:none;border-top:1px solid #5D5C55;}
+body.gcstudio .bgwhite{
+	background:#fff;
+	border-bottom: 1px solid #909183;
+	border-left: 1px solid #909183;
+	border-right: 1px solid #909183;
+	border-top: 5px solid #B4BC86;
+	padding:3px;
+}
+
+body.gcstudio .bgslight{background:none;}
+
+body.gcstudio .bgslight td{
+	background:#fff;
+	border-bottom: 1px solid #909183;
+	border-left: 1px solid #909183;
+	border-right: 1px solid #909183;
+	border-top: 5px solid #B4BC86;
+	padding:3px;
+}
+body.gcstudio img{vertical-align:middle;}
+body.gcstudio table table table table .bgslight td{background:#fff;border:none;}
+body.gcstudio .bgslight td td{
+	background: none;
+	border:none;
+}
+
+body.gcstudio #topiclst_tbl .bgslight td{
+	background:#fff;
+	border-bottom: 1px solid #909183;
+	border-left: none;
+	border-right: none;
+	border-top: 5px solid #B4BC86;
+	padding:3px;
+}
+
+body.gcstudio td.sectioninfo{
+	background:#fff;
+	border: 1px dotted #909183;
+	padding:5px;
+}
+
+body.gcstudio #group_index_tbl{
+	background:#F5F2E6;
+	border-top:1px dotted #909183;
+	padding:5px;
+}
+
+body.gcstudio #category_tree{
+	background:#F5F2E6;
+	border-top:1px dotted #909183;
+	padding:5px;
+}
+
+body.gcstudio input,body.gcstudio select,body.gcstudio textarea{background:#fff;padding:3px;}
+body.gcstudio input:hover,body.gcstudio select:hover,body.gcstudio textarea:hover{background:#FFFFDD;}
+
+body.gcstudio .msgblock{
+	background-color:#fff;
+}
+
+/**********************************************
+ * RSS Styles
+ **********************************************/
+
+ul.rss{
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+ul.rss li{margin: 0 0 3px 0;padding:3px;}
+ul.rss li.expanded{
+	border-bottom: 1px dotted #454A2C;
+	padding-bottom: 10px;
+}
+ul.rss li.expanded h3 img{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/all_icons.gif?version=1');
+	background-position:-144px -64px;
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	width:16px;
+}
+ul.rss li.contracted h3 img{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/all_icons.gif?version=1');
+	background-position:-128px -64px;
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	width:16px;
+}
+ul.rss h3{font-size:1.0em;font-weight:normal;}
+ul.rss h3 a{border-bottom:1px dotted #999;}
+
+/**********************************************
+ * My Courses Styles
+ **********************************************/
+#mycourses-container {font-size:1.0em;}
+#mycourses-container a{text-decoration:none;}
+#mycourses-container h1{font-size:1.2em;margin:0 0 3px 0;}
+#mycourses-container h2{
+	background:pink;
+	border-top:1px solid #666;
+	font-size:1.1em;
+	margin:0 0 3px 0;
+	padding:3px;
+}
+
+#mycourses-container img.icon{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/all_icons.gif?version=1');
+	background-repeat:no-repeat;
+	height:16px;
+	margin:0;
+	padding:0;
+	vertical-align:middle;
+	width:16px;
+}
+
+/**********************************************
+ * Webcam and Weather Styles
+ **********************************************/
+/*globals*/
+#myweather h2.nopad{margin: 0;padding: 0 0 2px; 0;}
+#myweather .smtext {color: #ff0000;font-size: 0.8em;}
+/*index*/
+#myweather a.webcam-thumb{border: 3px solid #444;display:block;float:right;}
+#myweather a.webcam-thumb img{border: 1px solid #000;}
+.channel #myweather ul.wx-tabs{
+	clear:both;
+	margin:5px 0 0 0;
+	padding:0;
+	text-align:center;
+}
+#myweather .wx-tabs a{
+	background: #fff;
+	border:1px solid #ccc;
+	color: #000;
+	display:block;
+	margin:0 2px;
+	padding:3px;
+}
+#myweather .wx-tabs a:hover{background: #eee;}
+
+/*weather*/
+/*fcst*/
+#myweather .wx_fcstbox{
+/*	background-color:#E1E0CD;*/ 
+	background-color:#666; 
+	border:1px solid #ccc;
+	color: #fff;
+	float:left;
+	height:125px; 
+	left:5px; 
+	margin:4px;
+	margin-bottom:20px
+	position:relative; 
+	top:10px;
+	width:48px; 
+}
+#myweather .wx_fcstelem{
+	color:#000;
+	font-weight:bold;
+	text-align:center;
+	width:48px;
+}
+#myweather .wx_fcstterm{
+	color:fff;
+	font-weight:none;
+	text-align:center;
+	font-size:.9em;
+	width:48px;
+}
+#myweather .wx_fcsthi{color:red;}
+#myweather .wx_fcstlo{color:blue;}
+/*maps*/
+#myweather li.c1{background: #fff; list-style:none;margin:1px;}
+#myweather li.c2{background-color: #eee; list-style:none;margin:1px;}
+/*prefs*/
+/*about*/
+#myweather div.c1{background-color: #fff; font-size:.9em;margin:1px;}
+#myweather div.c2{background-color: #eee; font-size:.9em;margin:1px 1px 10px 1px;}
+
+/* ----- add selectors here for font sizing ----- */
+#JT_close_left, #JT_close_right{font-size: 1.1em;}
+#JT_copy p, #JT_copy ul{font-size: 1.1em;}
+
+/* ---------->>> jtip <<<---------------------------------------------------------------*/
+
+#JT_arrow_left{
+	background: url(../images/arrow_left.gif) no-repeat left top;
+	position: absolute;
+	z-index:101;
+	left:-12px;
+	height:23px;
+	width:10px;
+}
+
+#JT_arrow_right{
+	background: url(../images/arrow_right.gif) no-repeat left top;
+	position: absolute;
+	z-index:101;
+	height:23px;
+	width:11px;
+}
+
+/* for consistency between firefox and IE */
+body > #JT_arrow_right {
+  margin-left: 3px;
+}
+
+#JT {
+	position: absolute;
+	z-index:100;
+	border: 2px solid #999;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+#JT_copy{
+	padding:10px;
+	color:pink;
+}
+
+.JT_loader{
+	background: url(../images/loader.gif) no-repeat center center;
+	width:100%;
+	height:12px;
+}
+
+#JT_close_left{
+	background-color: #999;
+	text-align: left;
+	padding-left: 8px;
+	padding-bottom: 5px;
+	padding-top: 2px;
+	font-weight:bold;
+}
+
+#JT_close_right{
+	background-color: #999;
+	text-align: left;
+	padding-left: 8px;
+	padding-bottom: 5px;
+	padding-top: 2px;
+	font-weight:bold;
+}
+
+#JT_copy p{
+margin:3px 0;
+}
+
+#JT_copy img{
+	padding: 1px;
+	border: 1px solid #999;
+}
+
+.jTip{
+cursor:help;
+}
+
+#JT iframe{
+	display:none;
+	display/**/:block;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:-1;
+	filter:mask();
+	height:3000px;
+}
+
+/* Main Style Sheet for jQuery Calendar */
+#calendar_div, .calendar_inline {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+	background: #ddd;
+}
+#calendar_div {
+	display: none;
+	border: 1px solid #FF9900;
+	z-index: 10; /*must have*/ 
+}
+#calendar_div, .calendar_control, .calendar_links, .calendar_header, .calendar {
+	width: 200px;
+}
+.calendar_inline {
+	float: left;
+	display: block;
+	border: 0;
+}
+.calendar_dialog {
+	padding: 5px !important;
+	border: 4px ridge #ddd !important;
+}
+button.calendar_trigger {
+	width: 25px;
+}
+img.calendar_trigger {
+	margin: 2px;
+	vertical-align: middle;
+}
+.calendar_prompt {
+	float: left;
+	width: 181px;
+	padding: 2px;
+	background: #ddd;
+	color: #000;
+}
+* html .calendar_prompt {
+	width: 185px;
+}
+.calendar_control, .calendar_links, .calendar_header, .calendar {
+	clear: both;
+	float: left;
+	color: #fff;
+}
+.calendar_control {
+	background: #FF9900;
+}da
+.calendar_links {
+	background: #E0F4D7;
+}
+.calendar_control, .calendar_links {
+	font-weight: bold;
+	font-size: 80%;
+	letter-spacing: 1px;
+	background: #fff;
+}
+.calendar_links label { /* disabled links */
+	padding: 2px 5px;
+	color: #888;
+}
+.calendar_clear, .calendar_prev {
+	float: left;
+}
+.calendar_current {
+	float: left;
+	width: 35%;
+	text-align: center;
+}
+.calendar_close, .calendar_next {
+	float: right;
+}
+.calendar_header {
+	background: #fff;
+	text-align: center;
+	font-weight: bold;
+	display:block;
+}
+.calendar_header select {
+	background: #fff;
+	color: #000;
+	border: 0px;
+	font-weight: bold;
+}
+.calendar {
+	background: #999;
+	text-align: center;
+	font-size: 100%;
+}
+.calendar a {
+	display: block;
+	width: 100%;
+}
+.calendar .calendar_titleRow {
+	background: #F4F1E6;
+	color: #000 !important;
+}
+.calendar .calendar_daysRow {
+	background: #FFF;
+	color: #444;
+}
+.calendar .calendar_daysCell {
+	color: #000;
+	padding: 1px 5px;
+	border: 1px solid #ddd;
+}
+#calendar .calendar_daysCell a{
+	display: block;
+}
+.calendar .calendar_weekEndCell {
+	background: #F4F1E6;
+}
+.calendar .calendar_daysCellOver {
+	background: #fff;
+	border: 1px solid #777;
+}
+.calendar .calendar_unselectable {
+	color: #888;
+}
+.calendar_today {
+	background: #999 !important;
+}
+.calendar_currentDay {
+	background: #ece050 !important;
+}
+
+/* ________ CALENDAR LINKS _______
+
+** Reset link properties and then override them with !important */
+
+#calendar_div_0 {
+	border: 1px solid #B4BB88;
+}
+#calendar_div a, .calendar_inline a {
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: #000;
+}
+.calendar_inline .calendar_links a {
+	padding: 0 5px !important;
+}
+.calendar_control a, .calendar_links a {
+	padding: 2px 5px !important;
+	color: #000 !important;
+}
+.calendar_titleRow a {
+	color: #000 !important;
+}
+.calendar_control a:hover {
+	/*background: #fdd !important;*/
+	color: pink !important;
+}
+.calendar_links a:hover, .calendar_titleRow a:hover {
+	background: #FFF !important;
+	color: pink !important;
+}
+
+/* ___________ IE6 IFRAME FIX ________ */
+
+.calendar_cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 193px; /*must have to match width and borders*/
+    height: 200px; /*must have to match maximum height*/ 
+}
+
+/*********** CUSTOM Calendar Styles ************/
+#cal_container{
+	text-align:center;
+}
+
+#cal_container a img.zcal{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/all_icons.gif?version=1');
+	background-position:-112px -64px;
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	vertical-align:middle;
+	width:16px;
+}
+
+#zcal_calendar{
+	margin: 0 auto;
+}
+#zcal_appt_text{
+	clear: both;
+	margin: 0 auto;
+	padding: 5px;
+	text-align: left;
+}
+
+#zcal_appt_text ul{
+	margin: 0;
+	padding: 0;
+}
+
+#zcal_appt_text ul li{
+	border-bottom: 1px dotted #999;
+	list-style: none;
+	margin: 0 0 5px 10px;
+	padding: 3px;
+}
+
+#zcal_appt_text .time{
+	padding-left: 10px;
+}
+#zcal_appt_text .location{
+	padding-left: 10px;
+}
+#zcal_appt_text .fragment{
+	padding-left: 10px;
+	overflow: hidden;
+	width: 98%;
+}
+
+.calendar_inline{
+	float: none;
+	margin: 0 auto;
+	width: 200px;
+}
+
+.calendar_inline a{
+	color: #777;
+}
+
+.calendar_inline .has_appt a{
+	color: #000;
+	font-weight:bold;
+}
