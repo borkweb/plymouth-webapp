@@ -88,6 +88,7 @@ $app_routes = array(
 	'directory',
 	'events',
 	'login',
+	'logout',
 	'schedule',
 );
 
