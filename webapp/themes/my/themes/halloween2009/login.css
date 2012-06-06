@@ -1,0 +1,52 @@
+html{
+	background: #333;
+	background-image: url(https://www.plymouth.edu/webapp/themes/my/themes/halloween2009/images/login_bg.gif);
+}
+a, #adminmenu a, #poststuff #edButtonPreview, #poststuff #edButtonHTML, #the-comment-list p.comment-author strong a, #media-upload a.del-link, #media-items a.delete, .plugins a.delete, .ui-tabs-nav a{
+	color: #ffe610;
+}
+#login .message-container, #login #login_error, #login p.message{
+	background: #000;
+	background-image: url(https://www.plymouth.edu/webapp/themes/my/themes/halloween2009/images/login_form_bg.gif?2);
+	border: none;
+}
+#connect-inner, #login form, #login .message-container, #login #login_error{
+	background: #000;
+	background-image: url(https://www.plymouth.edu/webapp/themes/my/themes/halloween2009/images/login_form_bg.gif?2);
+	border: none;
+}
+
+#login #loginform div.window{
+	background-image: url(https://www.plymouth.edu/webapp/themes/my/themes/halloween2009/images/splash.gif?2);
+	border-color: #000;
+}
+
+#connect-outer, #login{
+	background-image: url(https://www.plymouth.edu/webapp/themes/my/themes/halloween2009/images/login_bottom.png);
+}
+
+form{
+-moz-box-shadow:none;
+-webkit-box-shadow: none;
+}
+
+#connect-outer h1 a, #login h1 a{
+	background-image: url(https://www.plymouth.edu/webapp/themes/my/themes/halloween2009/images/login_top.png?1);
+}
+
+#user_pass, #user_login, #user_email, #login .input{
+	background-color: #333;
+}
+
+#login form input{
+	color: #fff;
+}
+
+.button-primary, .submit .button-primary, #login form .submit input{
+	background-image: url(https://www.plymouth.edu/webapp/themes/my/themes/halloween2009/images/button-grad.png);
+	border-color: #986911 !important;
+}
+
+.button-primary:hover, #login form .submit input:hover{
+	border-color: #ffa600 !important;
+}
