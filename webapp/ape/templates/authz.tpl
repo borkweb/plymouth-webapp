@@ -1,4 +1,4 @@
-{box title="Access Management"}
+{box title="Access Management" size=16}
 <script type="text/javascript">
 	$(apejs.distauthz_init);
 </script>
@@ -47,7 +47,7 @@
 	</ul>
 </div>
 {if $AUTHZ.permission.ape_attribute_admin}
-{box title="Access Management Management"}
+{box title="Access Management Management" size=16}
 	{if $authz_message}
 	<h3>{$authz_message}</h3>
 	{/if}

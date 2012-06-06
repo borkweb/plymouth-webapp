@@ -1,4 +1,4 @@
-{box}
+{box title="Accounts Pending Creation" size=16}
 {if $pending}
 <table class="grid">
 	<thead>

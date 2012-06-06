@@ -1,4 +1,4 @@
-{box title=$title}
+{box title=$title size=16}
 
 <table class="grid">
 <tr>

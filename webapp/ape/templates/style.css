@@ -240,14 +240,6 @@ table.roles li{
 	display: none ! important;
 }
 
-.tooltip {
-	color: white;
-	background-color: black;
-	padding: 1ex;
-	display: block;
-	width: 10em;
-}
-
 .highlight td {
 	background-color: #66cc33 !important;
 }

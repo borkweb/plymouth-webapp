@@ -10,16 +10,16 @@
 		<li>
 			<label>Username:</label>
 			{capture name=username_history}
-				{if $person->username_history} history - 
-					<table>
+				{if $person->username_history}
+					<table class="table table-condensed">
 						<tr><th>Username</th><th>As Of</th></tr>
 					{foreach from=$person->username_history item=history}
-						<tr><td>{$history.username}</td><td align=center>{$history.activity_date|date_format:'%B %e, %Y'}</td></tr>
+						<tr><td>{$history.username}</td><td align=center>{$history.activity_date|date_format:'%b %e, %Y'}</td></tr>
 					{/foreach}
 					</table>
 				{/if}
 			{/capture}
-			<span class="gobtpac_external_user" title="gobtpac_external_user {$smarty.capture.username_history|escape}">
+			<span class="username-history" title="Username History" data-content="{$smarty.capture.username_history|escape}">
 			{if $person->username == $person->login_name}
 				{$person->username|default:"No Username"}
 				{if $person->username_history}{icon id="ape-history" boxed=true}{/if}
@@ -61,7 +61,7 @@
 				{if $person->ssn_exists}
 				<li class="secure">
 					<label>SSN:</label>
-					<a href="{$PHP.BASE_URL}/user.html?username={$person->login_name}&action=view_ssn" class="retrieve" id="view_ssn">View SSN</a> <span style="background-color: black;" id="view_ssn_out"></span>
+					<a href="{$PHP.BASE_URL}/user.html?username={$person->login_name}&action=view_ssn" class="retrieve tooltip-trigger" title="Viewing the SSN is logged." id="view_ssn">View SSN</a> <span style="background-color: black;" id="view_ssn_out"></span>
 				</li>
 				{/if}
 				{if $person->certification_number}

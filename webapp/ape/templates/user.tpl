@@ -1,6 +1,6 @@
 <div id="user_info">
 	{capture name="title"}{$person->formatName('f m l')} ({$person->id}){/capture}
-	{box title="<span class='section-title'>Identity/Access:</span> `$smarty.capture.title`"}
+	{box title="<span class='section-title'>Identity/Access:</span> `$smarty.capture.title`" size=16}
 	<img id="print-confidential" src="/webapp/style/templates/images/confidential_960.png"/>
 	<div class="note ticket">
 		<a href="https://www.plymouth.edu/webapp/calllog/{if $person->login_name or $person->pidm}user/{if $person->login_name}{$person->login_name}{else}{$person->pidm}{/if}/{else}new_call.html?caller=generic{/if}">create ticket</a>{*
@@ -127,7 +127,7 @@
 		</ol>
 	</div>
 	{/if}
-	<div class="grid_8 alpha">
+	<div class="grid_8 grid-internal">
 		{include file="blocks/block.identifiers.tpl"}
 		{include file="blocks/block.accounts.tpl"}
 		<div id="ape_id_password" class="ape-section {if $myuser->go_states.ape_id_password === '0'}ape-section-hidden{/if}">
@@ -432,7 +432,7 @@
 		</div>
 		{/if}
 	</div>
-	<div class="grid_8 omega">
+	<div class="grid_8 grid-internal">
 		{include file="blocks/block.roles.tpl"}
 		{if $AUTHZ.permission.ape_attribute || $AUTHZ.permission.ape_attribute_admin}
 		<div id="ape_id_attributes" class="ape-section {if $myuser->go_states.ape_id_attributes === '0'}ape-section-hidden{/if}">
@@ -477,7 +477,7 @@
 			{/foreach}
 			</ul>
 			<div class="clear"></div>
-			<table class="roles grid">
+			<table class="roles table table-striped table-condensed table-bordered">
 			<thead>
 				<tr>
 					<th>Role</th>
@@ -488,34 +488,89 @@
 				{if $role.source != 'hr' || $AUTHZ.permission.ape_hr}
 				<tr id="role-{$role.id}">
 					<td class="idmrole {if $role.origin_id}origin-{$role.origin_id}{/if}">
-						{strip}<span class="idmrole" title="{$role.attribute} (via {$role.source})">{$role.name}</span>
+						{if $role.origin_id}
+						<span class="origin hidden">{$role.origin_id}</span>
+						{/if}
+						{capture name=role_tooltip}{strip}
+							<table class="table table-condensed">
+							<tr>
+								<td>ID:</td><td>{$role.id}</td>
+							</tr>
+							<tr>
+							<td>Granted by:</td><td>{$role.granted_by} {if $role.grantor_pidm}({$role.grantor_pidm}){/if}</td>
+							</tr>
+							<tr>
+							<td>Source:</td><td>{$role.source}</td>
+							</tr>
+							{if $role.origin_id}
+							<tr>
+								<td>Origin:</td><td>{$role.origin.attribute} (<span class="origin">{$role.origin_id}</span>)</td>
+							</tr>
+							{/if}
+							<tr>
+							<td>Start:</td><td>{$role.start_date|date_format:'%m/%d/%Y'}</td>
+							</tr>
+							{if $role.end_date}
+							<tr>
+								<td>End:</td><td>{$role.end_date|date_format:'%m/%d/%Y'}</td>
+							</tr>
+							{/if}
+							{if $role.reason}
+							<tr>
+							<td>Reason:</td><td>{$role.reason|nl2br}</td>
+							</tr>
+							{/if}
+							<tr>
+							<td>Attribute:</td><td>{$role.attribute}</td>
+							</tr>
+							</table>{/strip}
+						{/capture}
+						{strip}<span class="idmrole" title="{$role.name} (via {$role.source})" data-content="{$smarty.capture.role_tooltip|escape}">{$role.name}</span>
 						{if $ape->canAdminRole($role) && $AUTHZ.permission.ape_attribute_admin}
 							&nbsp;[<a href="{$PHP.BASE_URL}/actions/idm.php?pidm={$person->pidm}&amp;action=remove&amp;id={$role.id}">x</a>]
 						{/if}{/strip}
-						<div class="hidden" id="tooltip-role{$role.id}">{strip}
-							<ul>
-							<li>ID: {$role.id}</li>
-							<li>Granted by: {$role.granted_by} {if $role.grantor_pidm}({$role.grantor_pidm}){/if}</li>
-							<li>Source: {$role.source}</li>
-							{if $role.origin_id}
-								<li>Origin: {$role.origin.attribute} (<span class="origin">{$role.origin_id}</span>)</li>
-							{/if}
-							<li>Start: {$role.start_date|date_format:'%m/%d/%Y'}</li>
-							{if $role.end_date}
-								<li>End: {$role.end_date|date_format:'%m/%d/%Y'}</li>
-							{/if}
-							<li>Reason: {$role.reason|nl2br}</li>
-							<li>Attribute: {$role.attribute}</li>
-							</ul>
-						</div>{/strip}
 					</td>
 					<td>
 						{strip}<ul>
 						{assign var=children value=$ape->roleChildren($role.id)}
 						{foreach from=$children item=child}
+						{capture name=child_tooltip}{strip}
+							<table class="table table-condensed">
+							<tr>
+								<td>ID:</td><td>{$child.id}</td>
+							</tr>
+							<tr>
+							<td>Granted by:</td><td>{$child.granted_by} {if $child.grantor_pidm}({$child.grantor_pidm}){/if}</td>
+							</tr>
+							<tr>
+							<td>Source:</td><td>{$child.source}</td>
+							</tr>
+							{if $child.origin_id}
+							<tr>
+								<td>Origin:</td><td>{$child.origin.attribute} (<span class="origin">{$child.origin_id}</span>)</td>
+							</tr>
+							{/if}
+							<tr>
+							<td>Start:</td><td>{$child.start_date|date_format:'%m/%d/%Y'}</td>
+							</tr>
+							{if $child.end_date}
+							<tr>
+								<td>End:</td><td>{$child.end_date|date_format:'%m/%d/%Y'}</td>
+							</tr>
+							{/if}
+							{if $child.reason}
+							<tr>
+							<td>Reason:</td><td>{$child.reason|nl2br}</td>
+							</tr>
+							{/if}
+							<tr>
+							<td>Attribute:</td><td>{$child.attribute}</td>
+							</tr>
+							</table>{/strip}
+						{/capture}
 							<li>
 							{if $child.name}
-								<span title="{$child.attribute|escape}">{$child.name}</span>
+								<span class="idmchild" title="{$child.name|escape}" data-content="{$smarty.capture.child_tooltip|escape}">{$child.name}</span>
 							{else}
 								<code>{$child.attribute}</code>
 							{/if}
@@ -563,38 +618,28 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('span.idmrole').tooltip({
-		bodyHandler: function(){
-			var id = $(this).parents('tr:eq(0)').attr('id').substr(5);
-			return $('#tooltip-role' + id).html();
-		},
-		delay: 0
-	});
-
 	$('td.idmrole').mouseover(function(){
-		var id = $(this).parents('tr:eq(0)').attr('id').substr(5);
+		var id = $(this).closest('tr').attr('id').substr(5);
 		var origin = $(this).find('span.origin').text();
 
-		if(origin)
-		{
+		if(origin) {
 			id = origin;
 		}
 
-		$('td.origin-' + id).addClass('highlight-light');
-		$('tr#role-' + id + ' td.idmrole').addClass('highlight');
+		$('td.origin-' + id).closest('tr').addClass('highlight');
+		$('tr#role-' + id).addClass('highlight');
 	});
 
 	$('td.idmrole').mouseout(function(){
-		var id = $(this).parents('tr:eq(0)').attr('id').substr(5);
+		var id = $(this).closest('tr').attr('id').substr(5);
 		var origin = $(this).find('span.origin').text();
 
-		if(origin)
-		{
+		if(origin) {
 			id = origin;
 		}
 
-		$('td.origin-' + id).removeClass('highlight-light');
-		$('tr#role-' + id + ' td.idmrole').removeClass('highlight');
+		$('td.origin-' + id).closest('tr').removeClass('highlight');
+		$('tr#role-' + id).removeClass('highlight');
 	});
 
 	$('#resetpassword-form').submit(function(){

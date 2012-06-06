@@ -3,7 +3,7 @@
 	margin-bottom: 1em;
 }
 </style>
-{box title="Welcome to the PSU Analysis and Provisioning Engine!"}
+{box title="Welcome to the PSU Analysis and Provisioning Engine!" size=16}
 	<p>
 		If you would like to analyze a specific user, search for one here:
 	</p>
@@ -23,7 +23,7 @@
 	</ul>	
 {/box}
 
-{box title="Connect.ply Login Errors"}
+{box title="Connect.ply Login Errors" size=16}
 	<p>Connect.plymouth.edu logs the following events during the login process, adding them
 	together to return a code during login errors:</p>
 	<table class="grid" id="sl-error-codes">

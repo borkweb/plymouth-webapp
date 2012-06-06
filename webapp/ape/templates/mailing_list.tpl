@@ -1,5 +1,4 @@
-<div class="block">
-	<h1>Campus Mailing Lists</h1>
+{box title="Campus Mailing Lists" size=16}
 	<p>View the members of staff mailing lists on campus.</p>
 	<form action="{$PHP.BASE_URL}/actions/view-list.php" method="get">
 	<select name="list">
@@ -15,13 +14,12 @@
 	</select>
 	<input type="submit" value="View">
 	</form>
-</div>
+{/box}
 {if $mailing_list}
-<div class="block">
-	<h1>{$mailing_list.name}</h1>
+{box title=$mailing_list.name size=16}
 	<p>Manually-assigned list members are displayed below.</p>
 	{if $list_members}
-		<table class="listserv">
+		<table class="table">
 			<thead>
 				<tr>
 					<th class="name">Name</th>
@@ -53,5 +51,5 @@
 	{else}
 		<p>There are no manually-assigned users in this mailing list. They may be added through the user detail page via APE.</p>
 	{/if}
-</div>
+{/box}
 {/if}

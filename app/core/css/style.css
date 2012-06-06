@@ -1087,6 +1087,13 @@ label span span {
 	font-size: 1px;
 }
 
+.box .grid-internal {
+	margin-left: 0;
+	margin-right: 0;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 /* border-box style */
 .border-box > .title,
 .border-box > .subheader,
