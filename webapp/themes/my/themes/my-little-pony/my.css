@@ -1,0 +1,138 @@
+html, body {
+	background: #9fdfe1 url(themes/my-little-pony/images/bg.jpg) top center no-repeat;
+}
+
+a:hover {
+	color: #EE4097;
+}
+
+#page { background: none; }
+
+#webapp-apre-body,
+#webapp-avant-body,
+#webapp-body,
+#webapp-foot,
+#webapp-apres-foot {
+	background: url(themes/my-little-pony/images/content-bg.png) top center repeat-y;
+}
+
+#webapp-head .container {
+	background-image: none;
+	color: #fff;
+	text-shadow: -1px -1px 2px #000, 1px 1px 2px #000, 0 0 5px #000;
+}
+
+.webapp-head .myplymouth_logo {
+	background: url(themes/my-little-pony/images/my-logo.png);
+	margin-top: -15px;
+	margin-left: -5px;
+	width: 327px;
+	height: 194px;
+	text-indent: -999999px;
+}
+
+#webapp-head,
+#webapp-nav {
+	background: transparent;
+	border-bottom: none;
+	border-top: none;
+}
+
+#webapp-head .container {
+	padding-top: 50px;
+	height: 260px;
+}
+
+.webapp-head .psu_logo {
+	background: none;
+	width: 200px;
+	height: 60px;
+}
+
+.webapp-head h1,
+.webapp-head h1 a {
+	color: #ee4097;
+	font-size: 2em;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+}
+
+#webapp-nav {
+	height: auto;
+}
+
+#webapp-nav .container {
+	background: url(themes/my-little-pony/images/content-top.png) top center no-repeat;
+}
+
+.webapp-nav {
+	background: transparent;
+	height: auto;
+}
+
+.webapp-nav .inner > ul > li {
+	color: #000;
+	margin-right: 0;
+}
+
+.webapp-nav a.active, .webapp-nav a:hover, .webapp-nav .selected a, .webapp-nav .selected a:hover {
+	background: transparent;
+	color: #EE4097;
+}
+
+.webapp-nav .inner > ul > li > a {
+	color: #2885CA;
+	padding-top: 25px;
+	padding-bottom: 10px;
+}
+
+.webapp-nav ul > li > .parent-hover, 
+.webapp-nav a.menu-expand {
+	color: #EE4097;
+}
+
+.webapp-nav a.menu-expand,
+.webapp-nav ul > li ul a {
+	background: #eee;
+	border-color: rgba(200, 200, 200, 1);
+}
+
+.webapp-nav ul > li ul li a.first {
+	background-color: #eee;
+}
+
+.webapp-nav ul > li ul .child-hover1 {
+	background-color: #eee;
+	color: #000;
+}
+
+.webapp-nav ul > li ul .child-hover2 {
+	background-color: #eee;
+	color: #000;
+}
+
+.webapp-nav a:hover, 
+.webapp-nav ul > li > a:hover {
+	color: #EE4097;
+}
+
+#webapp-avant-body { 
+	clear: both;
+	border-top: none; 
+}
+
+.webapp-avant-body > .inner,
+.webapp-body > .inner {
+	padding-bottom: 20px;
+}
+
+#webapp-apres-foot .webapp-apres-foot h3 {
+	color: #333;
+}
+
+.webapp-apres-foot a {
+	color: #333;
+}
+#webapp-apres-foot .webapp-apres-foot a.active,
+#webapp-apres-foot .webapp-apres-foot a:hover {
+	color: #000;
+}
