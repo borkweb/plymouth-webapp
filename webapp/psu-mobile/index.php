@@ -87,8 +87,8 @@ $app_routes = array(
 	'clusters',
 	'directory',
 	'events',
-	'userdata',
 	'login',
+	'schedule',
 );
 
 foreach( $app_routes as $base ) {

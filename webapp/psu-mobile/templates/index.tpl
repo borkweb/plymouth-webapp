@@ -42,10 +42,10 @@
 						Events
 					</a>
 				</li>
-				<li id="mapp-userdata">
-					<a href="userdata/" data-auth="required">
+				<li id="mapp-schedule">
+					<a href="schedule/" data-auth="required">
 						{iconbox id="events" size="large"}
-						User Data
+						Schedule
 					</a>
 				</li>
 			</ul>
