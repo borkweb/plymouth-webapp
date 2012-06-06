@@ -13,6 +13,10 @@ uploads_dir = "/web/uploads"
 ; development or production server
 ;dev = 1
 
+; settings used by PSU::curl()
+;[curl]
+;ssl_verifypeer = 1
+
 ;[cdn]
 ;enabled = 1
 
