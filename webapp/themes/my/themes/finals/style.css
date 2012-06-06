@@ -1,0 +1,73 @@
+body.inside{
+	background-color: #fff;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/finals/images/bg.gif);
+	margin-top: 0px;
+}
+
+.inside #header .corner_left,#header .corner_right{
+	background-image: none;
+}
+
+.inside #header{
+	background-color: #fff;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/finals/images/header_bg.gif);
+	background-repeat: repeat;
+	border-bottom: none;
+	height: 150px;
+}
+.inside #header .my_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/finals/images/my_logo.gif);
+	width: 500px;
+	height: 110px;
+}
+
+.inside #header .psu_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/finals/images/psu_logo.gif);
+	right: 0px;
+	width: 154px;
+	height: 150px;
+}
+
+.inside #header_message{
+	background-color: #fff;
+	background-image: none;
+	height:2.5em;
+}
+.inside #header_message .extra_bg{
+	background-color: none;
+	background-image: none;
+	background-repeat: no-repeat;
+}
+
+.inside #header_message #tabs a{
+	border-top: 1px solid #999;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}
+
+.inside #header_message #tabs .top_left{
+	display:none;
+}
+
+.inside #header_message .options{
+}
+
+.inside #header_message #tabs .top_right{
+	display:none;
+}
+
+
+.inside #header_message .options a{
+	color: #000;
+}
+
+.inside #sub_header{
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}
+
+.inside #body{
+	border-bottom: 1px solid #999;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}

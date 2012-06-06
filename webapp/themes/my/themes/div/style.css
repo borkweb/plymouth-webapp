@@ -1,0 +1,18 @@
+img{
+	border: 1px solid limegreen;
+}
+
+div{
+	border: 1px solid red;
+}
+
+ul{
+	border: 1px solid blue;
+}
+
+li{
+	border: 1px solid cyan;
+}
+
+
+#header div,#header img{margin: 0;}

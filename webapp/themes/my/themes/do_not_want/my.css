@@ -1,0 +1,121 @@
+html, body {
+	background: #F600FF url(https://s0.plymouth.edu/webapp/themes/my/themes/do_not_want/images/hamsters.gif);
+	background-repeat: repeat-x;
+	background-position: bottom left;
+	background-attachment: fixed;
+	font-family: Courier New, Arial;
+}
+
+#page { background: none; }
+
+#webapp-head {
+	background: cyan;
+	border: none;
+}
+
+.fluid #webapp-nav,
+#webapp-nav {
+	background: yellow;
+	border-color: white;
+	border-bottom: red;
+	height: auto;
+}
+
+#webapp-nav .webapp-nav {
+	background: transparent;
+}
+
+.webapp-nav a.active, .webapp-nav a:hover, .webapp-nav .selected a, .webapp-nav .selected a:hover {
+	background: rgba( 255, 255, 255, 0.7);
+	color: black;
+}
+
+.webapp-nav .inner > ul > li > a,
+.webapp-nav ul > li > .parent-hover {
+	color: #000;
+}
+
+.webapp-nav ul > li ul .child-hover1 {
+	background-color: yellow;
+	color: black;
+}
+
+.webapp-nav ul > li ul a {
+	background-color: cyan;
+	border-color: #fff;
+}
+
+h1 {color: red;}
+h2 {color: blue;}
+h3 {color: magenta;}
+h4 {color: green;}
+h5 {color: orange;}
+h6 {color: pink;}
+
+fieldset {
+	border-color: cyan;
+}
+
+legend {
+	color: magenta;
+}
+
+input, textarea, button, a.button {
+	background: yellow;
+	border: 1px solid blue;
+	color: red;
+}
+
+.box > .title {
+	background: red;
+	border-color: red;
+}
+
+.border-box > .title, .border-box > .title h2, .border-box .title h2 a, .border-box > .title a {
+	color: white;
+}
+
+.message-container > div, .message-messages {
+	background-color: yellow;
+	border-color: black;
+	color: black;
+}
+
+.message-success, .message-container .message-successes {
+	background-color: cyan;
+	border-color: yellow;
+	color: black;
+}
+
+.message-error, .message-container .message-errors {
+	background-color: red;
+	border-color: yellow;
+	color: black;
+}
+
+.message-warning, .message-container .message-warnings {
+	background-color: orange;
+	border-color: yellow;
+	color: black;
+}
+
+#go-sidebar .widget .title {
+	background: yellow;
+	color: black;
+}
+
+#go-sidebar .go-profile .body{
+	background: yellow;
+}
+
+#go-sidebar .widget{
+	border-bottom: 1px solid white;
+}
+
+#webapp-body #go-sidebar .widget ul.popular-tabs{
+	background-color: red;
+}
+
+.fluid #webapp-avant-body, .fluid #webapp-body, .fluid #webapp-apres-body, .fluid #webapp-foot {
+	background-color: transparent;
+}
