@@ -1,0 +1,125 @@
+/***********[Theme: Star Wars]*************/
+
+html, body {
+    background: #28334b url(themes/star-wars/images/tst.jpg) top center no-repeat;
+}
+
+#webapp-apre-body,
+#webapp-avant-body,
+#webapp-body,
+#webapp-foot,
+#webapp-apres-foot {
+    background: url(themes/star-wars/images/mainContentFullBody.png) top center repeat-y;
+}
+
+#webapp-apres-foot {
+    margin-bottom: 100px;
+}
+
+#webapp-apres-foot .container {
+    background: url(themes/star-wars/images/mainContentFullBottom.png) center bottom no-repeat;
+}
+
+.webapp-apres-foot {
+    background-image: none;
+    border-color: transparent;
+}
+
+#webapp-head .container,
+#webapp-nav .container {
+    background-image: none;
+    color: #172032;
+    text-shadow: -1px -1px 2px #000, 1px 1px 2px #000, 0 0 5px #000;
+}
+
+#webapp-head a {
+    color: #172032;
+}
+
+#webapp-head,
+#webapp-nav {
+    background: transparent;
+    border-bottom: none;
+    border-top: none;
+}
+
+#webapp-head .container {
+    padding-top: 10px;
+    height: 260px;
+}
+
+.webapp-head .psu_logo {
+    background: url(themes/league-of-legends/images/psulogo.png);
+    margin-top: 100px;
+    margin-left: -20px;
+    width: 200px;
+    height: 60px;
+}
+
+.webapp-head .myplymouth_logo {
+    background: url(themes/star-wars/images/mylogo.png);
+    margin-top: 30px;
+    width: 327px;
+    height: 194px;
+    text-indent: -999999px;
+}
+
+.webapp-head h1,
+.webapp-head h1 a {
+    color: white;
+    font-size: 2em;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 1), 0 0 15px #000;
+}
+
+#webapp-nav {
+}
+
+#webapp-nav .container {
+    background: url(themes/star-wars/images/mainContentFullTop.png) top center no-repeat;
+    margin-bottom: -10px;
+}
+
+.webapp-nav {
+    background: transparent;
+    border-radius: 10px;    
+    -moz-border-radius: 10px;   
+    -webkit-border-radius: 10px;    
+    height: 53px;
+}
+
+.webapp-nav .inner > ul > li {
+    margin-right: 0;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 10px;
+}
+
+#webapp-avant-body { border-top: none; }
+
+.webapp-avant-body > .inner,
+.webapp-body > .inner {
+    padding-bottom: 20px;
+}
+
+#go-sidebar .widget .title,
+.border-box > .title {
+    background: url(themes/star-wars/images/Heading.png);
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+}
+
+#go-sidebar .widget .body, 
+.border-box > .body, .border-box > .foot {
+    background: #white url(themes/star-wars/images/body-bg-light.png);
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot {
+    border-right: none;
+}
+
+#go-sidebar .widget {
+    border-color: transparent;
+}
+
