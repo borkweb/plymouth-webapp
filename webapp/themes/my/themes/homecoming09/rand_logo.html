@@ -1,0 +1,6 @@
+<?php
+
+$url = 'http://www.plymouth.edu/webapp/themes/my/themes/homecoming09/images/psu_'.rand(1,11).'.jpg';
+
+header('Content-Type: image/jpeg');
+echo file_get_contents($url);
