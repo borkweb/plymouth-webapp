@@ -2,7 +2,8 @@
 
 use Mobile\Newsfeeds,
 	Mobile\Feedback,
-	Mobile\Events;
+	Mobile\Events,
+	Mobile\Directory;
 
 class Mobile {
 
@@ -87,6 +88,28 @@ class Mobile {
 		}
 
 		return $feed_data;
+
+	} // End events
+
+	/**
+	 * Directory Search.
+	 * Searches using the Directory API and returns cleaned/normalized results
+	 *
+	 * @param $query (string)	A string containg the contents of the query to search the Directory with.
+	 */
+	public static function directory_search($query) {
+		// Get the results
+		$search_results = Directory::get_results($query);
+
+		// Let's parse the dates from the feed
+		Directory::clean_results($search_results);
+
+		// If called with Ajax, make sure to respond in JSON format
+		if ($ajax_format) {
+			return json_encode($feed_data);
+		}
+
+		return $search_results;
 
 	} // End events
 
