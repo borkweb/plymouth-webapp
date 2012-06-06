@@ -1,0 +1,349 @@
+html, body{
+	background-color: #000;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/bg.png);
+	background-repeat: repeat-x;
+	background-position: top right;
+}
+
+#page {
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/ice.png);
+	background-repeat: no-repeat;
+	background-position: center 200px;
+}
+
+#webapp-head{
+	background-color: transparent;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/header_bg.png);
+	border-bottom: none;
+	color: yellow;
+	height: 168px;
+}
+
+
+#webapp-head .container{
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#webapp-head .webapp-head {
+	padding-top: 0;
+}
+
+#webapp-head .webapp-head .inner{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/fire.png);
+	background-repeat: no-repeat;
+	background-position: bottom left;
+	height: 168px;
+}
+
+#webapp-head .webapp-head #search,
+.webapp-head h1{
+	color: yellow;
+	margin-top: 36px;
+}
+
+.webapp-head h1{
+	background-image: url(https://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/psu_logo.png);
+	background-repeat: no-repeat;
+	margin-top: 0;
+	color: white;
+	font-size: 1.3em;
+	padding-top: 100px;
+	text-indent: 2em;
+	min-width: 188px;
+}
+
+.webapp-head h1 a{
+	color: white;
+}
+
+.webapp-head h1.myplymouth_logo{
+	background-image: url(themes/neutrally-apocalyptic/images/my_logo.png);
+	background-repeat: none;
+	width: 295px;
+	height: 138px;
+	text-indent: -9999999px;
+	margin-top: 0;
+	margin-left: 0;
+	padding-top: 0;
+	padding-left: 0;
+}
+
+.webapp-head .psu_logo{ 
+	display: none;
+}
+
+.fluid #webapp-nav,
+#webapp-nav{
+	background-color: transparent;
+	background-image: none;
+	border-bottom: none;
+	border-top: none;
+	margin-bottom: 1em;
+	height: auto;
+}
+
+#webapp-nav .container{
+	background-image: url(themes/neutrally-apocalyptic/images/nav_bg.png);
+	background-repeat: none;
+	background-position: top center;
+}
+
+#webapp-nav .webapp-nav{
+	background-color: transparent;
+	background-image: none;
+	color: #ccc;
+	font-family: Verdana, Arial, Sans-Serif;
+}
+
+.webapp-nav a{ color: #ccc; }
+
+.webapp-nav > ul > li { padding-top: 0.3em; }
+
+.webapp-nav ul > li > .parent-hover,
+.webapp-nav a.active,
+.webapp-nav a:hover {
+	background: rgba(0, 0, 0, 0.1);
+	color: #fff;
+}
+
+.webapp-nav .selected a,
+.webapp-nav .selected a:hover{
+	color: #fff;
+}
+
+.webapp-nav ul > li ul a{
+	border-color: #000;
+}
+
+#webapp-avant-body{
+	background-color: transparent;
+	background-image: none;
+	background-repeat: repeat-x;
+	border-top: none;
+}
+
+.webapp-avant-body .message-container{margin-bottom: 0; margin-top: 0;}
+
+.fluid #webapp-avant-body, .fluid #webapp-body, .fluid #webapp-apres-body, .fluid #webapp-foot {
+	background-color: transparent;
+}
+
+#webapp-body{
+	background-color: transparent;
+	background-image: none;
+	background-repeat: repeat-x;
+}
+
+#webapp-avant-body .container,
+#webapp-apres-body .container,
+#webapp-avant-foot .container,
+#webapp-foot .container,
+#webapp-apres-foot .container,
+#webapp-body > .container{
+	background-image: none;
+}
+
+#webapp-foot,
+#webapp-apres-foot{
+	background-color: transparent;
+}
+
+#webapp-foot,
+#webapp-apres-foot, #webapp-final {
+	background: none;
+}
+
+.box { margin-bottom: 1.75em; }
+
+.border-box > .title{
+	background-color: transparent;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/nav_bg.png);
+	border: none;
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	-webkit-border-top-left-radius: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+	-moz-border-radius-topleft: 0.5em;
+	-moz-border-radius-topright: 0.5em;
+}
+
+.border-box > .title h2 .section-title {
+	color: orange !important;
+}
+
+.border-box > .title,
+.border-box > .title h2,
+.border-box > .title h2 a,
+.border-box > .title a{
+	color: #eee;
+}
+
+.border-box > .title > .obj1 {
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/title_fire_ice.png);
+	background-repeat: no-repeat;
+	position: absolute;
+	top: -33px;
+	left: -10px;
+	width: 229px;
+	height: 61px;
+}
+
+.border-box > .title > .obj2 {
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/title_fire_ice.png);
+	background-position: -16px -61px;
+	background-repeat: no-repeat;
+	position: absolute;
+	top: -4px;
+	right: -8px;
+	width: 213px;
+	height: 39px;
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot{
+	border-right: none;
+}
+
+.border-box > .subheader{
+	border-left: none;
+	border-right: none;
+}
+
+.border-box > .body{
+	border-bottom: none;
+	border-left: none;
+	border-right: none;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 0.5em;
+	-webkit-border-bottom-right-radius: 0.5em;
+	-moz-border-radius-bottomleft: 0.5em;
+	-moz-border-radius-bottomright: 0.5em;
+}
+
+.clear-box > .title h2,
+.clear-box > .title h2 a{
+	color: #000;
+}
+
+.clear-box > .title .box-inner{
+	border-color: #000;
+}
+
+.clear-box > .subheader .box-inner{ color: #333; }
+
+#go-sidebar .go-profile .body{
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	-webkit-border-top-left-radius: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+	-moz-border-radius-topleft: 0.5em;
+	-moz-border-radius-topright: 0.5em;
+}
+
+#go-sidebar .widget{
+	border-bottom: none;
+}
+
+#go-sidebar .widget .title{
+	background-color: transparent;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/nav_bg.png);
+}
+
+#go-sidebar .widget .body{
+	background-color: #fff;
+}
+
+#webapp-body #go-sidebar .widget ul.popular-tabs{
+	background-color: #fff3ce;
+	border-top: none;
+}
+
+.webapp-foot a{color: #333;}
+
+.webapp-apres-foot {
+	background-image: none;
+	border-color: #333;
+}
+
+#webapp-apres-foot h3 {
+	border-color: #222;
+	color: #f07f02;
+}
+
+#webapp-apres-foot #foot-logo-column {
+	padding-top: 20px;
+}
+
+#webapp-apres-foot #foot-logo-column .logo {
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/psu_logo.png);
+	width: 188px;
+	height: 106px;
+}
+
+#webapp-final {
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/nav_bg.png);
+}
+
+.box .clear-box > .title h2, .clear-box > .title h2 a {
+	color: #000;
+}
+
+.clear-box > .title h2, .clear-box > .title h2 a {
+	color: #eee;
+}
+
+.clear-box > .title .box-inner {
+	border-color: #555;
+}
+
+.box .clear-box > .body {
+	color: #000;
+}
+
+.clear-box > .body {
+	color: #fff;
+}
+
+.message-container > div, .message-messages {
+	background-color: transparent;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/message-bg.png);
+	background-repeat: repeat;
+	border: 2px solid #000;
+
+	border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+}
+
+.message-container a {
+	color: #fff;
+	text-decoration: underline;
+}
+
+.message-warning, .message-container .message-warnings {
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/alert-bg.png);
+	background-color: transparent;
+	border-color: #000;
+}
+
+.message-success, .message-container .message-successes {
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/success-bg.png);
+	background-color: transparent;
+	border-color: #000;
+}
+
+.message-error, .message-container .message-errors {
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/neutrally-apocalyptic/images/error-bg.png);
+	background-color: transparent;
+	border-color: #000;
+}
+
+.my_finances .message {
+	background-repeat: no-repeat;
+}
+
+.my_finances .message a {
+	color: #2885CA;
+}
