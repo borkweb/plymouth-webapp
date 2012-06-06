@@ -412,6 +412,21 @@ footer.ui-footer {
   font-size: 16px;
   font-weight: normal; }
 
+/* Schedule */
+#page-schedule li.class h2 {
+  margin: 0px; }
+#page-schedule li.class h3 {
+  margin: 2px 0px;
+  font-size: 14px;
+  font-weight: normal; }
+#page-schedule li.class h4 {
+  margin-top: 0px;
+  font-size: 14px;
+  font-weight: normal; }
+#page-schedule li.class p {
+  margin-top: 1px;
+  margin-bottom: 0px; }
+
 /* Styles based on the device's OS */
 html.android header .ui-btn[data-rel=back] {
   display: none; }

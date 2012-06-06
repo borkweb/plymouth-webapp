@@ -582,6 +582,29 @@ footer.ui-footer {
 	}
 }
 
+/* Schedule */
+#page-schedule {
+	li.class {
+		h2 {
+			margin: 0px;
+		}
+		h3 {
+			margin: 2px 0px;
+			font-size: 14px;
+			font-weight: normal;
+		}
+		h4 {
+			margin-top: 0px;
+			font-size: 14px;
+			font-weight: normal;
+		}
+		p {
+			margin-top: 1px;
+			margin-bottom: 0px;
+		}
+	}
+}
+
 
 /* Styles based on the device's OS */
 html.android header {
