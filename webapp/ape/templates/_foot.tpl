@@ -6,4 +6,4 @@
 <div class="grid_8" style="text-align: right;">
 	<a href="{$PHP.BASE_URL}/actions/cache-flush.php" title="Flush the IDM cache">flush cache</a>
 </div>
-<script language="JavaScript" type="text/javascript" src="/includes/js/wz_tooltip.js"></script>
+<script language="javascript" type="text/javascript" src="/app/core/js/wz_tooltip.js"></script>
