@@ -821,6 +821,11 @@ class PSU
 		curl_setopt($ch, CURLOPT_FAILONERROR, true);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
+		// dev environments may need verifypeer disabled
+		$config = \PSU\Config\Factory::get_config();
+		$ssl_verifypeer = (bool) $config->get( 'curl', 'ssl_verifypeer', 1 );
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $ssl_verifypeer);
+
 		curl_exec($ch);
 
 		fflush($fp);
