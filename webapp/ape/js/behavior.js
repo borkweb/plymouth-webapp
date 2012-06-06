@@ -367,13 +367,13 @@ $(document).ready(function(){
 		return false;
 	});
 
-	$('.roles .banner_myp li,.roles .ad li,.gobtpac_external_user').tooltip({
-		showBody: ' - ',
-		delay: 0
-	});
+	$('.roles .banner_myp li, .roles .ad li').popover({placement: 'left'});
+	$('.idmrole, .idmchild').popover({placement: 'left'});
+	$('.username-history').popover();
+	$('.tooltip-trigger').tooltip();
 
 	// The above .tooltip() removes the element's title, so we're free to find all unhandled titles here.
-	$('[title]').addClass('title-tooltip').tooltip().contents().wrap('<span class="inherit"/>');
+	//$('[title]').addClass('title-tooltip').tooltip().contents().wrap('<span class="inherit"/>');
 
 	$('.more').click(function(){
 		$(this).siblings('select').attr({size:10, multiple:'multiple'}).end().hide();

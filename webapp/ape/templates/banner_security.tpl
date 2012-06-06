@@ -85,7 +85,7 @@
 		padding: 0.25em;
 	}
 </style>
-{box title="Banner Security"}
+{box title="Banner Security" size=16}
 	<ul id="security">
 		<li><a href="{$PHP.BASE_URL}/banner_security_data.html?load=user" class="drill">Users</a></li>
 		<li><a href="{$PHP.BASE_URL}/banner_security_data.html?load=role" class="drill">Roles</a></li>

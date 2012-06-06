@@ -3,17 +3,17 @@
 			<table class="grid roles" width="100%">
 				<tr>
 					<th>Banner
-							(<a href="{$PHP.BASE_URL}/actions/synchronize.php?pidm={$person->pidm}&synchronize_ldi=1" title="This link is merely a mimic of the ICGORODM tool in INB.  If a user's Banner roles or Moodle data gets out of sync, simply click this link to synchronize the account!">sync</a>)
+							(<a class="tooltip-trigger" href="{$PHP.BASE_URL}/actions/synchronize.php?pidm={$person->pidm}&synchronize_ldi=1" title="This link is merely a mimic of the ICGORODM tool in INB.  If a user's Banner roles or Moodle data gets out of sync, simply click this link to synchronize the account!">sync</a>)
 					</th>
 					<th>Active Directory
-					(<a href="{$PHP.BASE_URL}/actions/synchronize.php?pidm={$person->pidm}&synchronize_ad=1" title="If a user's AD and Banner roles get out of sync, simply click this link to synchronize the account!">sync</a>)</th>
+					(<a class="tooltip-trigger" href="{$PHP.BASE_URL}/actions/synchronize.php?pidm={$person->pidm}&synchronize_ad=1" title="If a user's AD and Banner roles get out of sync, simply click this link to synchronize the account!">sync</a>)</th>
 				</tr>
 				<tr>
 					<td valign="top">
 						<ul class="banner_myp">
 							{* add role descriptions to mysql myplymouth.gtvsqru_desc. html is allowed. *}
 							{foreach from=$person->combined_roles key=role item=contents}
-								<li {if $contents.description}title="{$role|escape} - {$contents.description|escape|nl2br}"{/if}>
+								<li {if $contents.description}title="{$role|escape}" data-content="{$contents.description|escape|nl2br}"{/if}>
 								<img src="{$PHP.BASE_URL}/images/blank.gif" class="badge badge-ban{if $contents.banner} badge-active{/if}">
 								{$role}
 								</li>
@@ -25,7 +25,7 @@
 					<td valign="top" class="ad">
 						<ul>
 							{foreach from=$person->ad_roles  key=role item=description}
-								<li {if $description}title="{$role|escape} - {$description|escape|nl2br}"{/if}>{$role}</li>
+								<li {if $description}title="{$role|escape}" data-content="{$description|escape|nl2br}"{/if}>{$role}</li>
 							{foreachelse}
 								<li><em>none</em></li>
 							{/foreach}

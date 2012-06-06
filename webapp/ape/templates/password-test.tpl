@@ -1,4 +1,4 @@
-{box title=$title}
+{box title=$title size=16}
 {if $smarty.get.username}
 Password test for <a href="{$PHP.BASE_URL}/user/{$smarty.get.username}">{$smarty.get.username}</a>.
 {/if}

@@ -1,6 +1,6 @@
 {capture name="title"}Accounts Pending Deletion ({$pending|@count}){/capture}
 
-{box title=$smarty.capture.title}
+{box title=$smarty.capture.title size=16}
 <p>The following accounts have the "pending_deletion" role in Active Directory.</p>
 
 <ul class="bullets">
