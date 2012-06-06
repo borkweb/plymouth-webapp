@@ -15,7 +15,7 @@ class Directory {
 		// PSU::api uses Guzzle for its HTTP responses. We need to catch an exception, in case the call fails
 		try {
 			// Get the search results with the PSU REST API
-			$search_results = (array) \PSU::api('backend')->get('directory/search/' . $query );
+			$search_results = (array) \PSU::api('backend')->get('directory/search/' . urlencode( $query ) );
 		}   
 		catch (Guzzle\Http\Message\BadResponseException $e) {
 			// Lets grab the exception and put it into the session

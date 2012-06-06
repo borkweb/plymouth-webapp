@@ -10,7 +10,7 @@ respond( '/?', function( $request, $response, $app ){
 // When someone searches
 respond( '/search/[:what]/?', function( $request, $response, $app ){
 	// Get the search parameter from the request (url encode it... it may contain spaces, etc)
-	$search_query = urlencode( $request->param( 'what' ) );
+	$search_query = $request->param( 'what' );
 
 	// Initialize the search results array, in case the API fails
 	$search_results = array();
