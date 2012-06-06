@@ -253,6 +253,9 @@ footer.ui-footer {
     height: 100%;
     top: 0px;
     box-shadow: none; }
+  #page-dashboard #logout-btn {
+    width: 50%;
+    margin: 25px auto; }
 
 /* Newsfeed */
 #page-newsfeed ul#newsfeed li.newsfeed-item {

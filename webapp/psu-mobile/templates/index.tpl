@@ -77,6 +77,9 @@
 				<li class="cordova-required" id="cordova">Native API provided by Cordova <span></span></li>
 			</ul>
 		</div>
+		<a href="{$PHP.BASE_URL}/logout/" id="logout-btn" data-role="button">
+			Logout
+		</a>
 	</div>
 {/jqm_page}
 {* End jQuery Mobile Page *}
