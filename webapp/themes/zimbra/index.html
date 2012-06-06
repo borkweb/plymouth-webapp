@@ -1,11 +1,11 @@
 <?php
-require_once 'session_handler.class.php';
-header("Cache-Control: no-cache, must-revalidate");
 
-require_once 'PSUDatabase.class.php';
-//require_once 'includes/holidays.php';
-require_once 'PSUTheme.class.php';
-//require_once 'includes/crews.php';
+require dirname( dirname( dirname( __DIR__ ) ) ) . '/legacy/git-bootstrap.php';
+require_once 'autoload.php';
+
+PSU::session_start();
+
+header("Cache-Control: no-cache, must-revalidate");
 
 $my = PSUDatabase::connect('mysql/myplymouth');
 
@@ -22,7 +22,7 @@ $year = date('Y');
 /****************************************
  * GENERAL SETTINGS
  ****************************************/
-@include_once('general.php');
+@include_once __DIR__ . '/general.php';
 
 /****************************************
  * MONTH SETTINGS
@@ -38,4 +38,3 @@ $year = date('Y');
  * set header and output
  ****************************************/
 $theme->out();
-?>

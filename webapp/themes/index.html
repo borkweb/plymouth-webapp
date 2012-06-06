@@ -85,7 +85,7 @@ $tpl = new PSUTemplate('PSU Themes');
 $tpl->assign('username',$user);
 $tpl->assign('specific',$_SESSION['specific']);
 
-if( $event_theme = PSU::curl( $GLOBALS['BASE_URL'] .'/my?is_event=1', PSU::FILE_GET_CONTENTS ) ) {
+if( $event_theme = PSU::curl( $GLOBALS['BASE_URL'] .'/my/?is_event=1', PSU::FILE_GET_CONTENTS ) ) {
 	$event_theme = PSUTheme::getThemeData( $event_theme );
 	$tpl->assign('event_theme', $event_theme );
 }//end if

@@ -1,20 +1,17 @@
 <?php
 
-session_start();
+require dirname( dirname( dirname( __DIR__ ) ) ) . '/legacy/git-bootstrap.php';
+require_once 'autoload.php';
+
+PSU::session_start();
 
 header("Cache-Control: no-cache, must-revalidate");
 
-require_once 'PSUDatabase.class.php';
-require_once 'includes/holidays.php';
-require_once 'PSUTheme.class.php';
-require_once 'IDMObject.class.php';
-require_once 'includes/crews.php';
-
-$my = PSUDatabase::connect('mysql/myplymouth');
-if($_SESSION['pidm']) IDMObject::loadAuthZ($_SESSION['pidm']);
+require_once __DIR__ . '/includes/holidays.php';
+require_once __DIR__ . '/includes/crews.php';
 
 /************[ BEGIN: Main Vars ]***********/
-$theme = new PSUTheme($my, dirname(__FILE__));
+$theme = new PSUTheme( PSU::db('myplymouth'), dirname(__FILE__) );
 $theme->loadUserTheme($_SESSION['wp_id']);
 
 $day = date('j');
