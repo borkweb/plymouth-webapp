@@ -1,0 +1,300 @@
+html, body{
+	background-color: #fff;
+	background-image: url(themes/spring-fling-12/images/bg.jpg);
+	background-repeat: repeat-x;
+	background-position: top right;
+}
+
+#page {
+	background-image: url(themes/spring-fling-12/images/grunge.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#page-inner {
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.month-april #page-inner,
+.month-may.day-of-month-2 #page-inner,
+.month-may.day-of-month-3 #page-inner,
+.month-may.day-of-month-4 #page-inner,
+.month-may.day-of-month-5 #page-inner {
+	background-image: url(themes/spring-fling-12/images/head-event.png);
+}
+
+#webapp-head{
+	background-color: transparent;
+	background-image: none;
+	border-bottom: none;
+}
+
+.month-april #webapp-head,
+.month-may.day-of-month-2 #webapp-head,
+.month-may.day-of-month-3 #webapp-head,
+.month-may.day-of-month-4 #webapp-head,
+.month-may.day-of-month-5 #webapp-head {
+	height: 180px;
+}
+
+#webapp-head .container{
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#webapp-head .webapp-head{padding-top:0;}
+.myplymouth #webapp-head .webapp-head{height: 123px;}
+
+#webapp-head .webapp-head #search,
+#webapp-head .webapp-head .inner > form,
+.webapp-head h1{
+	color: #000;
+	margin-top: 70px;
+}
+
+.myplymouth #webapp-head .webapp-head h1{
+	margin-top: 20px;
+}
+
+#webapp-head .webapp-head .inner > form {
+	opacity: 0.9;
+}
+
+#webapp-head .webapp-head .inner > form:hover {
+	opacity: 1;
+}
+
+.webapp-head h1,
+.webapp-head h1 a{
+	color: #e5120b;
+}
+
+.webapp-head h1.myplymouth_logo{
+	background-image: url(themes/spring-fling-12/images/my-logo.png);
+	background-repeat: no-repeat;
+	width: 238px;
+	height: 137px;
+	margin-top: 7px !important;
+	margin-left: -5px;
+	text-indent: -9999px;
+}
+
+.webapp-head .psu_logo{ 
+	display: none;
+}
+
+#webapp-nav{
+	background-color: transparent;
+	background-image: none;
+	border-bottom: none;
+	border-top: none;
+	margin-bottom: 1em;
+}
+
+#webapp-nav .container{
+	background-image: none;
+	background-repeat: none;
+	background-position: top center;
+	border-bottom: none;
+	border-top: none;
+}
+
+#webapp-nav .webapp-nav{
+	background-color: transparent;
+	background-image: none;
+	color: #ccc;
+	font-family: Verdana, Arial, Sans-Serif;
+}
+
+.webapp-nav .inner{ padding: 1em 0;}
+
+.webapp-nav a{ 
+	color: #333; 
+	border-bottom: 1px dotted transparent;
+}
+
+.webapp-nav a:hover {
+	background-color: transparent;
+	border-color: transparent;
+}
+
+.webapp-nav > ul > li { padding-top: 0.3em; }
+
+.webapp-nav ul > li > .parent-hover,
+.webapp-nav a.active,
+.webapp-nav a:hover {
+	color: #000;
+	border-bottom: 1px dotted #777;
+}
+
+.webapp-nav .selected a,
+.webapp-nav .selected a:hover{
+	color: #000;
+}
+
+.webapp-nav ul > li ul a{
+	color: #333;
+}
+
+.webapp-nav .inner > ul > li > a {
+	color: #333;
+}
+
+#webapp-avant-body{
+	background-color: transparent;
+	background-image: none;
+	background-repeat: repeat-x;
+	border-top: none;
+}
+
+.webapp-avant-body .message-container{margin-bottom: 0; margin-top: 0;}
+
+#webapp-body{
+	background-color: transparent;
+	background-image: none;
+	background-repeat: repeat-x;
+}
+
+#webapp-avant-body .container,
+#webapp-apres-body .container,
+#webapp-avant-foot .container,
+#webapp-foot .container,
+#webapp-apres-foot .container,
+#webapp-body > .container{
+	background-image: none;
+}
+
+#webapp-foot,
+#webapp-apres-foot{
+	background-color: transparent;
+}
+
+.border-box > .title{
+	background-color: rgb(0,0,0);
+	background-color: transparent\9;
+	background-color: rgba(0, 0, 0, 0.1);
+	background-image: none;
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	border-top-left-radius: 0.5em;;
+	border-top-right-radius: 0.5em;;
+	-webkit-border-top-left-radius: 0.5em;;
+	-webkit-border-top-right-radius: 0.5em;;
+	-moz-border-radius-topleft: 0.5em;;
+	-moz-border-radius-topright: 0.5em;;
+
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#000000,endColorstr=#000000);
+	zoom: 1;
+}
+
+.border-box > .title:nth-child(n) {
+	filter: none;
+}
+
+.border-box > .title,
+.border-box > .title h2,
+.border-box > .title h2 a,
+.border-box > .title a{
+	color: #555;
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot{
+	border-right: none;
+}
+
+.border-box > .subheader{
+	border-left: 1px solid #eee;
+	border-right: 1px solid #eee;
+}
+
+.border-box > .body{
+	border-bottom: 1px solid #eee;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #eee;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 0.5em;;
+	-webkit-border-bottom-right-radius: 0.5em;;
+	-moz-border-radius-bottomleft: 0.5em;;
+	-moz-border-radius-bottomright: 0.5em;;
+}
+
+.clear-box > .title h2,
+.clear-box > .title h2 a{
+	color: #000;
+}
+
+.clear-box > .title .box-inner{
+	border-color: #ccc;
+}
+
+.clear-box > .subheader .box-inner{ color: #555; }
+
+#go-sidebar .go-profile .body{
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	-webkit-border-top-left-radius: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+	-moz-border-radius-topleft: 0.5em;
+	-moz-border-radius-topright: 0.5em;
+}
+
+#go-sidebar .widget{
+	border-bottom: 1px solid #ccc;
+}
+
+#go-sidebar .widget .title{
+	background-color: rgba(0, 0, 0, 0.1);
+	background-image: none;
+}
+
+#go-sidebar .widget .body{
+	background-color: #fff;
+	border: 1px solid #eee;
+}
+
+#webapp-body #go-sidebar .widget ul.popular-tabs{
+	background-color: #f5f5f5;
+	border-top: none;
+}
+
+.webapp-foot a{color: #333;}
+
+#webapp-apres-foot,
+#webapp-final {
+	background: #000;
+}
+
+#webapp-foot {
+	background-image: url(themes/spring-fling-12/images/crowd.png);
+	background-position: center bottom;
+	background-repeat: repeat-x;
+	min-height: 200px;
+}
+
+#webapp-apres-foot #foot-logo-column .logo {
+	background-image: url(themes/spring-fling-12/images/psulogo.png);
+}
+
+#webapp-apres-foot h3 {
+	border-color: #555;
+	color: #fff;
+}
+
+.webapp-apres-foot {
+	background: none;
+	border: none;
+}
+
+#webapp-apres-foot a {
+	color: #999;
+}
+
+#webapp-apres-foot a:hover {
+	color: #fff;
+}
