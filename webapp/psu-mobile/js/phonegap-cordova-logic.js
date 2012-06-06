@@ -197,6 +197,9 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 				// Add a class to the html, so we don't have to worry about using the childBrowser while the user's session is still alive
 				$htmlTag.addClass(authClass);
 
+				// We should probably show the logout button now
+				$('#logout-btn').show(0);
+
 				// Let's load the page that required login/authentication
 				continueLoading();
 			};

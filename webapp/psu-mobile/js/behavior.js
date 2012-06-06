@@ -1,5 +1,6 @@
 // Let's set some properties
 var LOGIN_URL = HOST + BASE_URL + '/login/';
+var LOGOUT_URL = HOST + BASE_URL + '/logout/';
 
 // Things to happen RIGHT AWAY (as soon as this loads)
 
@@ -251,6 +252,59 @@ $(document).on('vclick.webapp', 'a[data-auth=required]', function(event) {
 		// So let's load the login page
 		window.location.href = LOGIN_URL + '?redirect_to=' + redirectUrl;
 	}
+});
+
+// When the logout button is clicked
+$(document).on('vclick', '#logout-btn', function(event) {
+	// Prevent the page from changing normally
+	event.preventDefault();
+
+	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	event.stopPropagation();
+
+	// Let's keep track of this element
+	var self = this;
+
+	// jQuery selector and class
+	var $htmlTag = $('html');
+	var authClass = 'authenticated';
+
+	// Logout url
+	var logoutUrl = LOGOUT_URL + '?ajax';
+
+	// Create an AJAX request
+	var logoutRequest = $.ajax({
+		url:      logoutUrl,
+		type:     'GET',
+		dataType: 'json',
+		timeout:  3000, // Give it a reasonable amount of time to check the connection
+		async:    true,
+		cache:    false
+	}); 
+
+	// If successful
+	logoutRequest.done(function (data) {
+		// Let the user know what just happened
+		alert('You have successfully logged out!');
+
+		// Let's remove the authenticated class
+		var authStatus = $htmlTag.removeClass(authClass);
+
+		// Ok, let's hide the button now
+		$(self).hide(0);
+
+		psu.log('User successfully logged out.');
+	}); 
+
+	// If it fails
+	logoutRequest.fail(function () {
+		psu.log('User logout failed!');
+	}); 
+
+	// Regardless
+	logoutRequest.always(function (jqXHR, textStatus) {
+		psu.log('Logout request: ' + textStatus);
+	});
 });
 
 
