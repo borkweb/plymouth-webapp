@@ -1,0 +1,260 @@
+html, body {
+	background: #553623 url(themes/minecraft/images/bg.png) repeat;
+}
+
+#page {
+	background: url(themes/minecraft/images/back-shadow.png) repeat-y;
+}
+
+#webapp-head .container,
+#webapp-nav .container {
+	background-image: none;
+}
+
+#webapp-head .container {
+	background: url(themes/minecraft/images/header.png) center center no-repeat;
+	height: 96px;
+}
+
+#webapp-head,
+#webapp-nav,
+#webapp-avant-body {
+	background: transparent;
+	border-bottom: none;
+	border-top: none;
+}
+
+#webapp-head {
+	background: url(themes/minecraft/images/sky.png);
+	height: 96px;
+}
+
+.webapp-head h1,
+.webapp-head h1 a {
+	color: #eee;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+}
+
+.webapp-head .myplymouth_logo {
+	background: url(themes/minecraft/images/my-logo.png);
+	margin-top: -15px;
+	margin-left: -5px;
+	width: 248px;
+	height: 57px;
+}
+
+.webapp-head .myplymouth_logo a {
+	text-indent: -9999999px;
+	display: block;
+}
+
+.webapp-head .psu_logo {
+	background: url(themes/minecraft/images/psu_logo.png);
+	width: 70px;
+	height: 67px;
+	top: -15px;
+	right: 20px;
+}
+
+#webapp-nav {
+	background: url(themes/minecraft/images/dirt-light.png);
+	box-shadow: 0 5px 25px rgba(0, 0, 0, 1);
+	-mox-box-shadow: 0 5px 25px rgba(0, 0, 0, 1);
+	-webkit-box-shadow: 0 5px 25px rgba(0, 0, 0, 1);
+
+	font-weight: bold;
+	height: 32px;
+}
+
+#webapp-nav .container {
+	background: url(themes/minecraft/images/dirt-top.png) repeat-x;
+}
+
+.webapp-nav {
+	background: transparent;
+}
+
+.webapp-nav .inner {
+	padding-bottom: 0;
+	padding-top: 0;
+}
+
+.webapp-nav .inner > ul > li {
+	height: 32px;
+	margin-right: 0;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	padding-top: 5px;
+}
+
+.webapp-nav .inner > ul > li > a {
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 1.2em;
+	font-weight: bold;
+	text-shadow: -1px -1px 1px #000, 1px 1px 1px #000, 0 0 5px #000;
+	margin-top: 3px;
+	padding-bottom: 0;
+	padding-top: 0;
+}
+
+.webapp-nav ul > li > a:hover {
+	background: transparent;
+	color: rgba(255, 255, 255, 1);
+	font-weight: bold;
+}
+
+.webapp-nav ul > li:hover {
+	background-color: rgba(0, 0, 0, .3);
+}
+
+.webapp-nav a.menu-expand,
+.webapp-nav ul > li ul a {
+	background: #fff url(themes/minecraft/images/sand.png) repeat;
+	border-color: rgba(0, 0, 0, 0.2);
+	color: #000;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .2);
+}
+
+.webapp-nav ul > li ul li a.first {
+	background-color: #fff;
+	color: #000;
+}
+
+.webapp-nav ul > li ul .child-hover1 {
+	background-color: #fff;
+	background-image: url(themes/minecraft/images/sand-dark.png);
+	color: #000;
+}
+
+.webapp-nav ul > li ul .child-hover2 {
+	background-color: #fff;
+	background-image: url(themes/minecraft/images/sand-dark.png);
+	color: #000;
+}
+
+#webapp-body {
+	background: none;
+}
+
+.border-box,
+.message-container {
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot {
+	border-bottom: 0;
+	border-left: 0;
+	border-right: 0;
+	border-top: 0;
+}
+
+.message-container > div {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.message-container > div, .message-messages {
+	border-color: #89897c;
+}
+
+.message-error a, .message-container .message-errors a,
+.message-errors a,
+.message-warnings a,
+.message-successes a {
+	color: rgba(255, 255, 255, 0.8);
+	border-bottom: 1px dotted rgba(255, 255, 255, 0.5);
+	text-decoration: none;
+}
+
+.message-errors a:hover,
+.message-warnings a:hover,
+.message-successes a:hover {
+	color: rgba(255, 255, 255, 1);
+}
+
+#go-sidebar .widget .body, 
+.border-box > .body, .border-box > .foot {
+	background: #fff url(themes/minecraft/images/wool-light.png);
+}
+
+.border-box {
+}
+
+.border-box:hover {
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
+
+#go-sidebar .widget .title,
+.border-box > .title {
+	background: url(themes/minecraft/images/wood.png);
+}
+
+#go-sidebar .widget {
+	border-color: #333;
+}
+
+.clear-box > .title, .clear-box > .title h2, .clear-box .title h2 a, .clear-box > .title a,
+.border-box > .title, .border-box > .title h2, .border-box .title h2 a, .border-box > .title a {
+	color: #fff;
+	text-shadow: -1px -1px 0 #000, 1px 1px 0 #000, 0 0 5px #000;
+}
+
+.border-box > .title span, .border-box > .title h2 span, .border-box .title h2 span a, .border-box > .title span a {
+	text-shadow: none;
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot {
+	border-right: none;
+}
+
+.clear-box > .body {
+	color: #fff;
+}
+
+.border-box .clear-box > .body {
+	color: #000;
+}
+
+#webapp-apres-foot {
+	background: url(themes/minecraft/images/stone.png) repeat;
+}
+
+#webapp-apres-foot .container {
+	background: url(themes/minecraft/images/footer.png) center top no-repeat;
+}
+
+#webapp-apres-foot h3 {
+	border-color: rgba(255, 255, 255, 0.2);
+	color: #fff;
+	text-shadow: -1px -1px 0 #000, 1px 1px 0 #000, 0 0 5px #000;
+}
+
+#webapp-apres-foot #foot-logo-column .logo {
+	background: url(themes/lgbtq/images/psulogo.png) no-repeat center center;
+}
+
+#webapp-apres-foot a {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+#webapp-apres-foot a:hover {
+	color: rgba(255, 255, 255, 1);
+}
+
+.webapp-apres-foot {
+	background-image: none;
+	border-color: transparent;
+}
+
+#webapp-final {
+	background: url(themes/minecraft/images/bedrock.png) repeat;
+}
+
+#webapp-final #foot-address, #webapp-final #foot-copy,
+#webapp-final .inner a,
+#webapp-final .inner {
+	color: #fff;
+	font-weight: bold;
+	text-shadow: -1px -1px 0 #000, 1px 1px 0 #000, 0 0 5px #000;
+}
