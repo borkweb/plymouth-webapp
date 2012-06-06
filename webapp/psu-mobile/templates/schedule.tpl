@@ -21,15 +21,15 @@
 								{$class->meeting_info->end_time|date_format:"%I:%M %P"}
 							</p>
 						{/if}
+						<span class="ui-li-aside">
+							{$class->instructors[0]->instructor_name}
+						</span>
 					</li>
 				{/foreach}
 			{/foreach}
 		{/foreach}
 		</ul>
 	{/jqm_content}
-	{php}
-		//\PSU::dbug($this->get_template_vars('schedule'));
-	{/php}
 
 {/jqm_page}
 {* End jQuery Mobile Page *}
