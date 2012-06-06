@@ -1,0 +1,213 @@
+html, body {
+	background: #000 url(themes/international-week-11/images/bg.jpg) top center no-repeat;
+}
+
+#webapp-apre-body,
+#webapp-avant-body,
+#webapp-body,
+#webapp-foot {
+	background: transparent url(themes/international-week-11/images/content-bg.png) top center repeat-y;
+}
+
+#webapp-head .container {
+	background-image: none;
+	color: #fff;
+	text-shadow: -1px -1px 2px #000, 1px 1px 2px #000, 0 0 5px #000;
+}
+
+#webapp-head,
+#webapp-nav {
+	background: transparent;
+	border-bottom: none;
+	border-top: none;
+}
+
+#webapp-head .webapp-head {
+	padding-top: 0;
+}
+
+#webapp-head .container {
+	height: 255px;
+}
+
+.webapp-head .psu_logo {
+	background: none;
+	width:100px;
+	height: 60px;
+}
+
+.webapp-head h1,
+.webapp-head h1 a {
+	color: #fff;
+	font-size: 2em;
+	margin-top: 80px;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, .5), 0 0 15px rgba(0, 0, 0, .5);
+}
+
+.webapp-head .myplymouth_logo {
+	background: url(themes/international-week-11/images/my-logo.png);
+	margin-left: -50px;
+	width: 724px;
+	height: 255px;
+	margin-top: 0;
+	text-indent: -999999px;
+}
+
+#webapp-nav .container {
+	background: transparent url(themes/international-week-11/images/nav-bg.png) top center no-repeat;
+}
+
+.webapp-nav {
+	background: transparent;
+	height: 45px;
+}
+
+.webapp-nav .inner > ul > li {
+	color: #000;
+	margin-right: 0;
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-top: 7px;
+}
+
+.webapp-nav a.active, .webapp-nav a:hover, .webapp-nav .selected a, .webapp-nav .selected a:hover {
+	color: rgba( 255, 255, 255, 1);
+}
+
+.webapp-nav a {
+	color: rgba( 255, 255, 255, 0.7);
+}
+
+.webapp-nav ul > li > .parent-hover, 
+.webapp-nav a.menu-expand {
+	color: rgba( 255, 255, 255, 1);
+}
+
+.webapp-nav a.menu-expand,
+.webapp-nav ul > li ul a {
+	background: rgba(0, 0, 0, 0.9);
+	border-color: rgba(30, 30, 30, 1);
+}
+
+.webapp-nav ul > li ul li a.first {
+	background-color: #000;
+}
+
+.webapp-nav ul > li ul .child-hover1 {
+	background-color: #000;
+	color: #ccc;
+}
+
+.webapp-nav ul > li ul .child-hover2 {
+	background-color: #000;
+	color: #ccc;
+}
+
+.webapp-nav a:hover, 
+.webapp-nav ul > li > a:hover {
+	color: #fff;
+}
+
+.webapp-avant-body .message-container {
+	margin-top: 0;
+}
+
+#webapp-avant-body { border-top: none; }
+
+.webapp-avant-body > .inner,
+.webapp-body > .inner {
+	padding-bottom: 20px;
+}
+
+.border-box,
+.message-container {
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+}
+
+.border-box {
+	opacity: 0.9;
+}
+
+.border-box:hover {
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+	opacity: 1;
+}
+
+#go-sidebar .widget .title ,
+.border-box > .title {
+	background: rgba(56, 81, 126, .3);
+}
+
+.border-box > .title, .border-box > .title h2, .border-box .title h2 a, .border-box > .title a {
+	color: #ddd;
+}
+
+#go-sidebar .widget {
+	border-bottom: 1px solid #000;
+}
+
+#go-sidebar .widget .body {
+	border-top: 1px solid #000;
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot {
+	border-right: 0;
+}
+
+.message-container a {
+	color: #fff;
+	text-decoration: underline;
+}
+
+.message-container > div, .message-messages {
+	background-color: #3a70ad;
+	border-color: #4e7eb4;
+}
+
+.message-warning, .message-container .message-warnings {
+}
+
+.message-error, .message-container .message-errors {
+}
+
+.message-success, .message-container .message-successes {
+}
+
+.webapp-apres-foot {
+	background-image: none;
+	border-color: rgba(0, 0, 0, 0.5);
+}
+
+#webapp-apres-foot{
+	background-image: none;
+	background-color: #111;
+	border-top: 1px solid #000;
+}
+
+.webapp-apres-foot{
+	background-image: none;
+	border: none;
+}
+
+#webapp-apres-foot a:hover{ color: #fff; }
+
+#webapp-apres-foot h3{
+	color: #ffeca0;
+	border-bottom: 1px solid #493e2d;
+}
+
+#webapp-apres-foot #foot-logo-column .logo {
+	background: url(themes/international-week-11/images/psulogo.png) no-repeat center center;
+}
+
+#webapp-final {
+	background: #222;
+}
+
+#webapp-final #foot-address, #webapp-final #foot-copy,
+#webapp-final .inner a,
+#webapp-final .inner {
+	color: #fff;
+	font-weight: bold;
+	text-shadow: -1px -1px 0 #000, 1px 1px 0 #000, 0 0 5px #000;
+}
