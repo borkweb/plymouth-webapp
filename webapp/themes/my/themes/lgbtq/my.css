@@ -1,0 +1,165 @@
+html, body {
+	background: #9abbdc url(themes/lgbtq/images/bg.png) repeat-x;
+}
+
+#page {
+	background: url(themes/lgbtq/images/flag.png) no-repeat 0 35px;
+}
+
+#webapp-head,
+#webapp-nav,
+#webapp-avant-body {
+	background: transparent;
+	border-bottom: none;
+	border-top: none;
+}
+
+.webapp-head h1,
+.webapp-head h1 a {
+	color: #d0e3f4;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+}
+
+.webapp-head .psu_logo {
+	background: url(themes/lgbtq/images/psulogo.png);
+}
+
+.fluid #webapp-nav {
+	background-image: none;
+}
+
+.webapp-nav {
+	background: transparent;
+}
+
+.webapp-nav .inner > ul > li > a {
+	background: transparent;
+	border-left: 0;
+	border-right: 0;
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 1.1em;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+	padding-bottom: 3px;
+}
+
+.webapp-nav ul > li > a:hover {
+	color: rgba(255, 255, 255, 1);
+}
+
+.webapp-nav .inner > ul > li > a:hover {
+	border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+	padding-bottom: 0;
+}
+
+.webapp-nav .inner > ul > li:first-child > a:hover {
+	border-color: rgba(255, 0, 0, .5) !important;
+}
+
+.webapp-nav .inner > ul > li:nth-child(2) > a:hover {
+	border-color: rgba(255, 120, 0, .5) !important;
+}
+
+.webapp-nav .inner > ul > li:nth-child(3) > a:hover {
+	border-color: rgba(255, 255, 0, .5) !important;
+}
+
+.webapp-nav .inner > ul > li:nth-child(4) > a:hover {
+	border-color: rgba(148, 212, 141, .9) !important;
+}
+
+.webapp-nav .inner > ul > li:nth-child(6) > a:hover {
+	border-color: rgba(164, 55, 215, .5) !important;
+}
+
+.webapp-nav ul > li ul a {
+	border-color: #537da2;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+}
+
+.webapp-nav ul > li ul li a.first {
+	border-color: #537da2;
+	color: #fff;
+}
+
+.webapp-nav ul > li ul .child-hover1 {
+	background-color: #74a0c7;
+	color: #fff;
+}
+
+.webapp-nav ul > li ul .child-hover2 {
+	background-color: #74a0c7;
+	color: #fff;
+}
+
+.fluid #webapp-avant-body, .fluid #webapp-body, .fluid #webapp-apres-body, .fluid #webapp-foot {
+	background-color: transparent;
+}
+
+#webapp-body {
+	background: none;
+}
+
+.border-box,
+.message-container {
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+}
+
+.message-container > div {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.message-container > div, .message-messages {
+	border-color: #89897c;
+}
+
+.message-error a, .message-container .message-errors a,
+.message-errors a,
+.message-warnings a,
+.message-successes a {
+	color: rgba(255, 255, 255, 0.8);
+	border-bottom: 1px dotted rgba(255, 255, 255, 0.5);
+	text-decoration: none;
+}
+
+.message-errors a:hover,
+.message-warnings a:hover,
+.message-successes a:hover {
+	color: rgba(255, 255, 255, 1);
+}
+
+.border-box {
+	opacity: 0.9;
+}
+
+.border-box:hover {
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+	opacity: 1;
+}
+
+.border-box > .title {
+	background: #eee;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+#webapp-apres-foot h3 {
+	border-color: rgba(255, 255, 255, 0.2);
+}
+
+#webapp-apres-foot #foot-logo-column .logo {
+	background: url(themes/lgbtq/images/psulogo.png) no-repeat center center;
+}
+
+#webapp-apres-foot a {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+#webapp-apres-foot a:hover {
+	color: rgba(255, 255, 255, 1);
+}
+
+.webapp-apres-foot {
+	background-image: url(themes/lgbtq/images/apres_foot.png);
+	border-color: rgba(255, 255, 255, 0.2);
+}
