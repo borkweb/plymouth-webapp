@@ -1,0 +1,147 @@
+html, body {
+	background: #000 url(themes/league-of-legends/images/bg.jpg) top center no-repeat;
+}
+
+hr {
+	height: 15px;
+	background: url(themes/league-of-legends/images/hr_sep.png) top center no-repeat;
+	border: none;
+}
+
+#page { background: none; }
+
+#webapp-apre-body,
+#webapp-avant-body,
+#webapp-body,
+#webapp-foot,
+#webapp-apres-foot {
+	background: url(themes/league-of-legends/images/content-bg.jpg) top center repeat-y;
+}
+
+#webapp-apres-foot {
+	margin-bottom: 100px;
+}
+
+#webapp-apres-foot .container {
+	background: url(themes/league-of-legends/images/content_bot.png) center bottom no-repeat;
+}
+
+.webapp-apres-foot {
+	background-image: none;
+	border-color: transparent;
+}
+
+#webapp-head .container,
+#webapp-nav .container {
+	background-image: none;
+	color: #fff;
+	text-shadow: -1px -1px 2px #000, 1px 1px 2px #000, 0 0 5px #000;
+}
+
+#webapp-head a {
+	color: #fff;
+}
+
+#webapp-head,
+#webapp-nav {
+	background: transparent;
+	border-bottom: none;
+	border-top: none;
+}
+
+#webapp-head .container {
+	padding-top: 100px;
+	height: 260px;
+}
+
+.webapp-head .psu_logo {
+	background: url(themes/league-of-legends/images/psulogo.png);
+	width: 200px;
+	height: 60px;
+}
+
+.webapp-head .myplymouth_logo {
+	background: url(themes/league-of-legends/images/mylogo.png) no-repeat center center;
+	display: block;
+	height: 139px;
+	position: relative;
+	text-indent: -9999999px;
+	width: 250px;
+}
+
+.webapp-head h1,
+.webapp-head h1 a {
+	color: yellow;
+	font-size: 2em;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 1), 0 0 15px #000;
+}
+
+#webapp-nav {
+	height: auto;
+}
+
+#webapp-nav .container {
+	background: url(themes/league-of-legends/images/nav.jpg) top center no-repeat;
+	height: auto;
+}
+
+.webapp-nav {
+	background: transparent;
+	border-radius: 10px;	
+	-moz-border-radius: 10px;	
+	-webkit-border-radius: 10px;	
+	height: auto;
+}
+
+.webapp-nav a.active, .webapp-nav a:hover, .webapp-nav .selected a, .webapp-nav .selected a:hover {
+	background: transparent;
+}
+
+.webapp-nav ul > li ul a {
+	text-shadow: none;
+}
+
+.webapp-nav .inner > ul > li {
+	margin-right: 0;
+}
+
+#webapp-avant-body { border-top: none; }
+
+.webapp-avant-body > .inner,
+.webapp-body > .inner {
+	padding-bottom: 20px;
+}
+
+#go-sidebar .widget .title,
+.border-box > .title {
+	background: url(themes/league-of-legends/images/heading.jpg);
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	border-bottom: none;
+}
+
+#go-sidebar .widget .body, 
+.border-box > .body, .border-box > .foot {
+	background: #fff url(themes/league-of-legends/images/body-bg-light.jpg);
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot {
+	border-right: none;
+}
+
+#go-sidebar .widget {
+	border-color: transparent;
+}
+
+#webapp-apres-foot h3{
+	color: #000;
+}
+
+.webapp-apres-foot a {
+	color: #333;
+}
+#webapp-apres-foot .webapp-apres-foot a.active,
+#webapp-apres-foot .webapp-apres-foot a:hover {
+	color: #000;
+}
