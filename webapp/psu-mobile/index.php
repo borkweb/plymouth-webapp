@@ -16,6 +16,10 @@ $GLOBALS['APP_VERSION'] = '0.7.1';
 $GLOBALS['APP_BUILD_NAME'] = 'jqm-html5';
 $GLOBALS['APP_BUILD_TYPE'] = 'beta';
 
+// Set some globals about our server for easy use later
+$GLOBALS['APP_HOST'] = ($_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+$GLOBALS['APP_URL'] = $GLOBALS['APP_HOST'] . $_SERVER['HTTP_HOST'] . $GLOBALS['BASE_URL'];
+
 // If the app is currently running on the development server
 if (PSU::isdev()) {
 	// Have the APP_BUILD_TYPE global reflect the current server/code status
