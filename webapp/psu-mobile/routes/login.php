@@ -10,11 +10,11 @@ respond( '/?', function( $request, $response, $app ) {
 
 	// If we got here, we must be authenticated
 	// Redirect by changing the URL to send a success Flag to the JavaScript onLocationChange API
-	header('Location: login_success/');
+	header('Location: login-success/');
 });
 
 // Let's make sure to redirect them to the originally called URL if they requested to
-respond( '/login_success/?', function( $request, $response, $app ) {
+respond( '/login-success/?', function( $request, $response, $app ) {
 	if (!empty($_SESSION['called_url'])) {
 		// Redirect to the originally intended authentication url
 		header('Location: ' . $_SESSION['called_url']);

@@ -433,6 +433,10 @@ footer.ui-footer {
   margin-top: 1px;
   margin-bottom: 0px; }
 
+/* Logout Message */
+#page-logout-message {
+  text-align: center; }
+
 /* Styles based on the device's OS */
 html.android header .ui-btn[data-rel=back] {
   display: none; }

@@ -12,14 +12,21 @@ respond( '/?', function( $request, $response, $app ) {
 	// If the "ajax" parameter was not sent along with the request
 	if ( ! $request->param( 'ajax' ) ) {
 		// Redirect by changing the URL to send a success Flag to the JavaScript onLocationChange API
-		header('Location: logout_success/');
+		header('Location: logout-success/');
 	}
 });
 
 // Let's make sure to redirect them to the originally called URL if they requested to
-respond( '/logout_success/?', function( $request, $response, $app ) {
+respond( '/logout-success/?', function( $request, $response, $app ) {
 	if ( ! empty( $_SESSION['called_url'] ) ) {
 		// Redirect to the originally intended authentication url
 		header('Location: ' . $_SESSION['called_url']);
 	}
+});
+
+// Let's create a cute little message page... so that PhoneGap users just see a flashing page
+respond( '/logout-message/?', function( $request, $response, $app ) {
+	// Display the template
+	$app->tpl->assign( 'show_page', 'logout-message' );
+	$app->tpl->display( '_wrapper.tpl' );
 });

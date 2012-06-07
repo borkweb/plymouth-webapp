@@ -222,7 +222,7 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 						psu.log('ChildBrowser location changed to: ' + location);
 
 						// Let's check if the user has logged in successfully
-						if (/login_success/.test(location)) {
+						if (/login-success/.test(location)) {
 							loginSuccess();
 						}
 					};
