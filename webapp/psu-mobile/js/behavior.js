@@ -255,56 +255,9 @@ $(document).on('vclick.webapp', 'a[data-auth=required]', function(event) {
 });
 
 // When the logout button is clicked
-$(document).on('vclick', '#logout-btn', function(event) {
-	// Prevent the page from changing normally
-	event.preventDefault();
-
-	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
-	event.stopPropagation();
-
-	// Let's keep track of this element
-	var self = this;
-
-	// jQuery selector and class
-	var $htmlTag = $('html');
-	var authClass = 'authenticated';
-
-	// Logout url
-	var logoutUrl = LOGOUT_URL + '?ajax';
-
-	// Create an AJAX request
-	var logoutRequest = $.ajax({
-		url:      logoutUrl,
-		type:     'GET',
-		dataType: 'json',
-		timeout:  3000, // Give it a reasonable amount of time to check the connection
-		async:    true,
-		cache:    false
-	}); 
-
-	// If successful
-	logoutRequest.done(function (data) {
-		// Let the user know what just happened
-		alert('You have successfully logged out!');
-
-		// Let's remove the authenticated class
-		var authStatus = $htmlTag.removeClass(authClass);
-
-		// Ok, let's hide the button now
-		$(self).hide(0);
-
-		psu.log('User successfully logged out.');
-	}); 
-
-	// If it fails
-	logoutRequest.fail(function () {
-		psu.log('User logout failed!');
-	}); 
-
-	// Regardless
-	logoutRequest.always(function (jqXHR, textStatus) {
-		psu.log('Logout request: ' + textStatus);
-	});
+$(document).on('vclick.webapp', '#logout-btn', function(event) {
+	// Show the page loading message while we redirect
+	$.mobile.showPageLoadingMsg();
 });
 
 
@@ -414,4 +367,20 @@ $(document).on('vclick', '#page-events #events a', function(event) {
 		type: "post",
 		data: eventData
 	});
+});
+
+
+/*
+ *
+ * Logout Message
+ *
+ */
+
+// When a result is clicked
+$(document).on('pageinit', '#page-logout-message', function(event) {
+	// Delay the page load for a second, so that we can actually show the message
+	window.setInterval( function() {
+		// Ok, now let's load the url
+		window.location.href = LOGOUT_URL;
+	}, 1500);
 });

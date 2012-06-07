@@ -198,7 +198,7 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 				$htmlTag.addClass(authClass);
 
 				// We should probably show the logout button now
-				$('#logout-btn').show(0);
+				$('#logout-btn').show(0).css('display', 'block !important');
 
 				// Let's load the page that required login/authentication
 				continueLoading();
@@ -227,6 +227,64 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 						}
 					};
 				}
+			}
+		});
+
+		// Let's remove the webapp logout logic, we need it to be different for the phonegap app
+		$(document).off('vclick.webapp', '#logout-btn');
+
+		// When the logout button is clicked
+		$(document).on('vclick', '#logout-btn', function(event) {
+			// Prevent the page from changing normally
+			event.preventDefault();
+
+			// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+			event.stopPropagation();
+
+			// Let's keep track of this element
+			var self = this;
+
+			// jQuery selector and class
+			var $htmlTag = $('html');
+			var authClass = 'authenticated';
+
+			// Logout url
+			var logoutUrl = LOGOUT_URL + 'logout-message';
+
+			// Function to run on a successful login
+			var logoutSuccess = function() {
+				// Log the information
+				psu.log('The user has successfully logged out.');
+
+				// Close the childBrowser
+				psu.log('ChildBrowser closing. We don\'t need it open anymore.');
+				childBrowser.close();
+
+				// Add a class to the html, so we don't have to worry about using the childBrowser while the user's session is still alive
+				$htmlTag.removeClass(authClass);
+
+				// We should probably show the logout button now
+				$(self).hide(0);
+
+				// Let the user know what just happened
+				alert('You have successfully logged out!');
+			};
+
+			// Let's make sure that the ChildBrowser plugin is ready and available
+			if (childBrowser !== null) {
+				// Ok, let's load our authentication page
+				childBrowser.showWebPage( logoutUrl, { showLocationBar: true });
+
+				// Let's setup a function to run when the child browser is closed
+				childBrowser.onLocationChange = function(location) {
+					// Log the information
+					psu.log('ChildBrowser location changed to: ' + location);
+
+					// Let's check if the user has logged in successfully
+					if (/logout-success/.test(location) || /connect/.test(location) || /wp-login/.test(location)) {
+						logoutSuccess();
+					}
+				};
 			}
 		});
 
