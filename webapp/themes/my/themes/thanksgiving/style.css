@@ -1,0 +1,18 @@
+body.inside{
+	background-color: #C2D0D4;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/thanksgiving/images/bg.gif);
+	background-repeat: repeat-x;
+}
+
+.inside #header .corner_left,#header .corner_right{
+	background-image: none;
+}
+
+.inside #header_message{
+	background-color: #65574C;
+	background-image: none;
+}
+
+.inside #header_message img.header_icon{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/thanksgiving/images/all_icons.gif);
+}

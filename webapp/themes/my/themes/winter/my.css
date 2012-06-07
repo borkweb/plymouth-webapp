@@ -1,0 +1,232 @@
+html, body{
+	background-color: #73aae2;
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/winter/images/bg.gif');
+	background-repeat: repeat-x;
+	background-position: top left;
+	color: #6e6c67;
+}
+
+h1 { color: #253f59; }
+h2 { color: #4e6e8f; }
+h3 { color: #755f80; }
+h4 { color: #669acf; }
+
+#page{
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
+#webapp-head{
+	background-color: transparent;
+	background-image:  url('http://s1.plymouth.edu/webapp/themes/my/themes/winter/images/header_bg.gif');
+	background-position: bottom left;
+	background-repeat: repeat-x;
+	border-bottom: none;
+	height: 194px;
+}
+
+#webapp-head .container{
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#webapp-head .webapp-head{height: 135px;padding-top:0;}
+
+#webapp-head .webapp-head #search,
+.webapp-head h1{
+	color: #fff;
+	margin-top: 50px;
+}
+
+.webapp-head h1{
+	font-size: 2.5em;
+	margin-top: 65px;
+}
+
+.webapp-head h1 a{
+	color: #fff;
+}
+
+.webapp-head h1.myplymouth_logo{
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/winter/images/my5_logo.png');
+	background-repeat: none;
+	width: 305px;
+	height: 113px;
+	margin-top: 20px;
+	margin-left: 0px;
+	text-indent: -9999px;
+}
+
+.psu_logo{ display: none;}
+
+.fluid #webapp-nav,
+#webapp-nav{
+	background-color: #d6effc;
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/winter/images/message_bg.gif');
+	border-bottom: none;
+	border-top: none;
+	height: 60px;
+}
+
+#webapp-nav .container{
+	background-image: none;
+	background-repeat: none;
+	background-position: top center;
+	border-bottom: none;
+}
+
+#webapp-nav .webapp-nav{
+	background-color: transparent;
+	background-image: none;
+	color: #555;
+	font-family: Verdana, Arial, Sans-Serif;
+}
+
+.webapp-nav .inner{ padding: 2em 0 0.8em;}
+
+.webapp-nav a{ color: #555; }
+
+.webapp-nav > ul > li { padding-top: 0.3em; }
+
+.webapp-nav ul > li > .parent-hover,
+.webapp-nav a.active,
+.webapp-nav a:hover {
+	color: #5279a0;
+}
+
+.webapp-nav a:hover {
+	background-color: transparent;
+	border-color: transparent;
+}
+
+.webapp-nav ul > li ul a{
+	color: #333;
+}
+
+.webapp-nav .inner > ul > li > a {
+	color: #333;
+}
+
+.webapp-nav .selected a,
+.webapp-nav .selected a:hover{
+	color: #5279a0;
+}
+
+.webapp-nav ul > li ul a{
+	background-color: #fff;
+	border-color: #999;
+}
+
+#webapp-avant-body{
+	background-color: #d6effc;
+	background-image: none;
+	background-repeat: repeat-x;
+	border-top: none;
+}
+
+.webapp-avant-body .message-container{margin-bottom: 0; margin-top: 0;}
+
+#webapp-body{
+	background-color: #d6effc;
+	background-image: none;
+	background-repeat: repeat-x;
+}
+
+#webapp-avant-body .container,
+#webapp-apres-body .container,
+#webapp-avant-foot .container,
+#webapp-foot .container,
+#webapp-body > .container{
+	background-color: #d6effc;
+}
+
+#webapp-foot {
+	background-color: #d6effc;
+}
+
+.border-box > .title{
+	background-color: #90bce9;
+	background-image: none;
+	border-bottom: 1px solid #73aae2;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	border-top-left-radius: 0.5em;;
+	border-top-right-radius: 0.5em;;
+	-webkit-border-top-left-radius: 0.5em;;
+	-webkit-border-top-right-radius: 0.5em;;
+	-moz-border-radius-topleft: 0.5em;;
+	-moz-border-radius-topright: 0.5em;;
+}
+
+.border-box > .title,
+.border-box > .title h2,
+.border-box > .title h2 a,
+.border-box > .title a{
+	color: #eee;
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot{
+	border-right: none;
+}
+
+.border-box > .subheader{
+	border-left: none;
+	border-right: none;
+}
+
+.border-box > .body{
+	border-bottom: none;
+	border-left: none;
+	border-right: none;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 0.5em;;
+	-webkit-border-bottom-right-radius: 0.5em;;
+	-moz-border-radius-bottomleft: 0.5em;;
+	-moz-border-radius-bottomright: 0.5em;;
+}
+
+.clear-box > .title h2,
+.clear-box > .title h2 a{
+	color: #000;
+}
+
+.clear-box > .title .box-inner{
+	border-color: #000;
+}
+
+.clear-box > .subheader .box-inner{ color: #333; }
+
+#go-sidebar .widget{
+	border-bottom: 1px solid #73aae2;
+}
+
+#go-sidebar .widget .title{
+	background-color: #90BCE9;
+	background-image: none;
+}
+
+#go-sidebar .widget .body{
+	background-color: #fff;
+	border-top: 1px solid #73aae2;
+}
+
+#go-sidebar .go-profile .body{
+	border-top: none;
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	-webkit-border-top-left-radius: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+	-moz-border-radius-topleft: 0.5em;
+	-moz-border-radius-topright: 0.5em;
+}
+
+#webapp-body #go-sidebar .widget ul.popular-tabs{
+	background-color: #fff3ce;
+	border-top: none;
+}
+
+.webapp-foot a{color: #333;}

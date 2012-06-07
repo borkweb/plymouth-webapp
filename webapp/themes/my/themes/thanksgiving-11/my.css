@@ -1,0 +1,233 @@
+html, body {
+	background: #6690ad url(themes/thanksgiving-11/images/bg-gradient.png) repeat-x;
+}
+
+#page {
+	background: transparent url(themes/thanksgiving-11/images/bg.png) top center no-repeat;
+}
+
+.user-mtbatchelder #page,
+.month-november.day-of-month-23 #page,
+.month-november.day-of-month-24 #page {
+	background-image: url(themes/thanksgiving-11/images/bg-hats.png);
+}
+
+#webapp-apre-body,
+#webapp-avant-body,
+#webapp-body,
+#webapp-foot {
+	background: url(themes/thanksgiving-11/images/content-bg.png) top center repeat-y;
+}
+
+#webapp-head .container {
+	background-image: none;
+	color: #ababab;
+	text-shadow: -1px -1px 2px #000, 1px 1px 2px #000, 0 0 5px #000;
+}
+
+.month-november .webapp-head .myplymouth_logo {
+	background: url(themes/thanksgiving-11/images/my-logo.png) no-repeat;
+	margin-left: -15px;
+	width: 550px;
+	height: 93px;
+	text-indent: -999999px;
+}
+
+#webapp-head,
+.fluid #webapp-nav,
+#webapp-nav {
+	background: transparent;
+	border-bottom: none;
+	border-top: none;
+}
+
+#webapp-head .container {
+	height: 255px;
+}
+
+.webapp-head .psu_logo {
+	background: none;
+	width: 200px;
+	height: 60px;
+}
+
+.webapp-head h1,
+.webapp-head h1 a {
+	color: #fff;
+	font-size: 2em;
+	margin-top: 0;
+	padding-top: 20px;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, .5);
+}
+
+#webapp-head .webapp-head .myplymouth_logo {
+	padding-top: 0;
+}
+
+#webapp-nav {
+	height: auto;
+}
+
+#webapp-nav .container {
+	background: transparent;
+}
+
+.webapp-nav {
+	background: transparent;
+	min-height: 45px;
+}
+
+.webapp-nav .inner > ul > li {
+	color: #000;
+	margin-right: 0;
+	padding-top: 7px;
+}
+
+.webapp-nav a.active, .webapp-nav a:hover, .webapp-nav .selected a, .webapp-nav .selected a:hover {
+	background: transparent;
+	color: rgba( 255, 255, 255, 1);
+}
+
+.webapp-nav a {
+	color: rgba( 255, 255, 255, 0.5);
+}
+
+.webapp-nav ul > li > .parent-hover, 
+.webapp-nav a.menu-expand {
+	color: rgba( 255, 255, 255, 1);
+}
+
+.webapp-nav .inner > ul > li > a {
+	padding: 11px 10px;
+}
+
+.webapp-nav a.menu-expand,
+.webapp-nav ul > li ul a {
+	border-color: rgba(30, 30, 30, 1);
+}
+
+.webapp-nav ul > li ul li a.first {
+	background-color: #000;
+}
+
+.webapp-nav ul > li ul .child-hover1 {
+	background-color: #000;
+	color: #ccc;
+}
+
+.webapp-nav ul > li ul .child-hover2 {
+	background-color: #000;
+	color: #ccc;
+}
+
+.webapp-nav a:hover, 
+.webapp-nav ul > li > a:hover {
+	color: #fff;
+}
+
+.webapp-avant-body .message-container {
+	margin-top: 0;
+}
+
+#webapp-avant-body { border-top: none; }
+
+.webapp-avant-body > .inner,
+.webapp-body > .inner {
+	padding-bottom: 20px;
+}
+
+.border-box,
+.message-container {
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+}
+
+#go-sidebar .widget .title ,
+.border-box > .title {
+	background: rgba(0, 0, 0, .3);
+	border-top: 0;
+	border-left: 0;
+}
+
+.border-box > .body {
+	border-left: 0;
+}
+
+#go-sidebar .widget {
+	border-bottom: 1px solid #000;
+}
+
+#go-sidebar .widget .body {
+	border-top: 1px solid #000;
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot {
+	border-right: 0;
+}
+
+.clear-box > .title h2, .clear-box > .title h2 a,
+.border-box > .title, .border-box > .title h2, .border-box .title h2 a, .border-box > .title a {
+	color: #eee;
+}
+
+.message-warnings a,
+.message-errors a,
+.message-successes a {
+	color: #fff;
+	text-decoration: underline;
+}
+
+.message-container > div, .message-messages {
+	border-color: #353430;
+}
+
+.message-warning, .message-container .message-warnings {
+	border-color: #353430;
+}
+
+.message-error, .message-container .message-errors {
+	border-color: #353430;
+}
+
+.message-success, .message-container .message-successes {
+	border-color: #353430;
+}
+
+.webapp-apres-foot {
+	background-image: none;
+	border-color: rgba(0, 0, 0, 0.5);
+}
+
+#webapp-apres-foot{
+	background-image: none;
+	background-color: #3d5668;
+	border-top: 1px solid #2f4453;
+}
+
+.webapp-apres-foot{
+	background-image: none;
+	border: none;
+}
+
+#webapp-apres-foot a{ color: #ccc; }
+#webapp-apres-foot a:hover{ color: #fff; }
+
+#webapp-apres-foot h3{
+	color: #ffeca0;
+	border-bottom: 1px solid #2f4453;
+}
+
+#webapp-apres-foot #foot-logo-column .logo {
+	background: url(themes/thanksgiving-11/images/psulogo.png) no-repeat center center;
+}
+
+#webapp-final {
+	background: #263540;
+}
+
+#webapp-final #foot-address, #webapp-final #foot-copy,
+#webapp-final .inner a,
+#webapp-final .inner {
+	color: #fff;
+	font-weight: bold;
+	text-shadow: -1px -1px 0 #000, 1px 1px 0 #000, 0 0 5px #000;
+}

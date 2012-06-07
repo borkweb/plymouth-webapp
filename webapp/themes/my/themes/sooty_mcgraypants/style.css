@@ -1,0 +1,829 @@
+/***************************************
+ * PSU Thickbox Styles
+ ***************************************/
+#TB_title,#tb-title-bar{
+	background-image: none;
+	background-color: #666;
+	border-bottom:1px solid #333;
+	color: #fff;
+}
+/***************************************
+ * Alert Styles
+ ***************************************/
+
+.alertwhite {background-color: #ffffff;z-index:10;}
+.alertwarning {background-color: #ff0000;z-index:10;}
+.alerttext12 {color: #000000; font-size: 12px;z-index:10;}
+
+/*** Tags ***/
+body.inside a:link, a:active, a:visited{color: #4B55D1;}
+body.inside a:hover{color: #060E79;}
+
+body{background:#000000;}
+body.inside{background: #000000;}
+body.white{background:#fff;background-image:none;}
+
+body.inside h2{
+	color: #666;
+	font-family: arial, helvetica, sans-serif;
+	font-weight: bold;
+	margin:0px;
+}
+body.inside fieldset{ border: 1px solid #ccc;}
+form.bordered input{border:1px solid #333;}
+iframe{background:#fff;border: 0px;}
+iframe.framed-content{background:#fff;}
+body.inside input,select,textarea{background:#FCFBE7;border:1px solid #333;}
+body.inside legend{color:#825000;}
+
+/*** Classes ***/
+body.inside .button{
+	background:#ccc;
+	border:1px solid #333;
+}
+
+/* stuff for the header */
+.corner_left{display: none;}
+.corner_right{display:none;}
+body.inside #footer a{color:#ccc;}
+
+body.inside #header{
+	background: #999;
+	border-bottom:1px solid #333;
+	color: #000;
+	height:69px;
+}
+body.inside #header .extra_bg{
+	background: none;
+}
+body.inside #header .my_logo{
+	background: url('http://s1.plymouth.edu/webapp/themes/my/themes/sooty_mcgraypants/images/my_logo.gif') top left no-repeat;
+	height:64px;
+	width:300px;
+}
+body.inside #header .psu_logo{
+	background: url('http://s1.plymouth.edu/webapp/themes/my/themes/sooty_mcgraypants/images/psu_logo.gif') top left no-repeat;
+	height:65px;
+	position:absolute;
+	right:15px;
+	top:0;
+	width:164px;
+}
+
+body.inside #header ul{
+	color:#666;
+}
+body.inside #header ul a{color:#85360F;}
+body.inside #header ul a:hover{color:#000;}
+body.inside #header_message{
+	background: #444;
+	background-image: none;
+	color:#fff;
+}
+body.inside #header_message .extra_bg{
+	background: none;
+}
+body.inside #header_message strong{color:#EAEBC5;}
+body.inside #header_message strong a {color:#EAEBC5;}
+
+body.inside #header_message .options a{color:#fff;}
+
+body.inside #tabs li a{
+	background:#666;
+	border-bottom:1px solid #333;
+	color:#222;
+}
+body.inside #tabs li.active a,#tabs li.active a:hover{
+	background:#999;
+	border:none;
+	color:#000;
+}
+body.inside #tabs li a:hover{background:#bbb;color:#000;}
+body.inside #tabs li a .top_left{
+	background:none;
+}
+body.inside #tabs li a .top_right{
+	background:none;
+}
+body.inside #tabs li.more ul{
+	background:#666;
+	border-bottom:1px solid #333;
+	border-left:1px solid #333;
+	border-right:1px solid #333;
+}
+body.inside #tabs li.more li{
+	border-bottom:1px solid #555;
+	border-top:1px solid #555;
+}
+
+body.inside #tabs li.more li:hover{
+	background: #999;
+	border-bottom:1px solid #777;
+	border-top:1px solid #777;
+}
+
+body.inside #sub_header{
+	background: #999;
+	border-top:1px solid #333;
+}
+
+body.inside #overlay{
+	background-color: #000;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+}
+
+#left-nav-column{background: #999;border-right:1px solid #666;	width: 200px;}
+
+.widget{border-bottom:1px solid #666;font-size:0.8em;}
+.widget .body{
+	background:#ccc;
+	border-top:1px solid #666;
+}
+
+.widget .go-box{
+	background:#fff;
+	border:1px solid #444;
+	width:130px;
+}
+.widget .go-submit{border:1px solid #666;}
+
+#widget-services ul li{
+	list-style:url('http://s1.plymouth.edu/webapp/style/templates/images/my/sidebar_bullet.png');
+}
+#widget-popular ul li{list-style:inside url('http://s1.plymouth.edu/webapp/style/templates/images/my/sidebar_bullet.png');}
+
+#widget-bookmarks .body #add-bookmark{
+	border-bottom: 1px dotted #B3BB86;
+}
+#widget-bookmarks .body #add-folder{
+	border-bottom: 1px dotted #B3BB86;
+}
+#widget-bookmarks #bookmarks li.bookmark{list-style:inside url('http://s1.plymouth.edu/webapp/style/templates/images/my/sidebar_bullet.png');}
+#widget-bookmarks .dropOver{background:#FDF5B0;}
+#widget-bookmarks .bookmark-parent{color: #BAB8B0;padding:3px;}
+
+#widget-bookmarks .bookmark-trash{
+	background:#ead4d4;
+	border-bottom:1px dotted #800000;
+	border-top:1px dotted #800000;
+}
+.widget .ds-container fieldset {border: 1px solid #999;padding:3px;}
+.widget .ds-container ul{background:#333;}
+.widget .ds-container li{
+	border-bottom:1px solid #333;
+}
+.widget .ds-container li.selected{
+	background:#ccc;
+	border-bottom:1px solid #ccc;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	border-top: 1px solid #666;
+}
+.widget .ds-container li a{
+	color: yellow;
+}
+
+.widget .ds-container li.selected a{
+	color: #000;
+}
+.widget .ds-container .temp_text{color:#999;}
+
+#body{background: #555;z-index:0;}
+#columns{border-top:1px solid #333;}
+
+.iframe-container{background:#fff;}
+#body .framed-content{background:#fff;}
+
+#search-window{background:#fff;}
+
+#search-window #search-help{border:1px solid #999ccc;}
+#search-window .results{border:1px solid #999ccc;}
+
+.channel .body{
+	background: #ccc;
+	border-bottom: 1px solid #333;
+	border-left: 1px solid #333;
+	border-right: 1px solid #333;
+}
+
+.channel .header{
+	background-image: none;
+	background-color: #999;
+	border-left: 1px solid #333;
+	border-right: 1px solid #333;
+	border-bottom:1px solid #666;
+	border-top: 1px solid #333;
+	color: #000;
+}
+
+.channel .header .extra_bg{
+	background: none;
+}
+.channel .header h1{
+	color: #000;
+}
+
+.channel .header .top-left{background:none;}
+.channel .header .top-right{background:none;}
+
+.channel .header_image{border-left: 1px solid #909183;}
+.channel .shadow{background: none;}
+
+.secondary_table_block{border:1px solid #ddd;}
+.secondary_table_header{
+	background: #ddd;
+}
+.secondary_table_cell_1{
+	background:#fff;
+}
+.secondary_table_cell_2{
+	background:#ccc;
+}
+
+.email-channel .email-list th{background:#999;border-right:1px solid #777;color:yellow;}
+
+.email-channel ul li {
+	list-style-image:url(/psu/images/sidebar_bullet.png);
+	list-style-position:inside;
+	list-style-type:disc;
+}
+.email-channel ul li span{color:#444;}
+
+.message-text{
+	background: #666;	
+	border: 1px dotted #333;
+	color: yellow;
+}
+
+.divider{border-top: 1px solid #999;}
+
+.percent_bar{background: #fff;border: 1px solid #333;}
+.percent_bar .fill{background: #789161;color: #fff;}
+.shaded_box{background: #999; border: 1px solid #333;}
+.side_links a:link,.side_links a:active,.side_links a:visited{color: yellow;}
+.side_links a:hover{color: #fff;}
+
+
+/**********************************************
+ * Hot Links Styles
+ **********************************************/
+.widget ul.popular-tabs{background:#333;}
+.widget ul.popular-tabs li{
+	border-bottom:1px solid #333;
+}
+.widget ul.popular-tabs li.selected{
+	background:#ccc;
+	border-bottom:1px solid #ccc;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	border-top: 1px solid #666;
+}
+.widget ul.popular-tabs li a{color:yellow;}
+.widget ul.popular-tabs li.selected a{color:#000;}
+
+/**********************************************
+ * Custom Thickbox Styles
+ **********************************************/
+/* styles for profile */
+
+fieldset label{float:left;font-weight:normal;width:100%;padding-top: 10px;}
+fieldset label span{float:left;font-weight:bold;width:10em;text-align:left;}
+fieldset label.top span{display:block;float:none;width:100%;}
+
+input.disabled {border: 1px solid #F2F2F2;background-color: #F2F2F2;}
+input.validation-failed, textarea.validation-failed {
+	border: 1px solid #FF3300;
+	color : #FF3300;
+}
+input.validation-passed, textarea.validation-passed {
+	border: 1px solid #00CC00;
+	color : #000;
+}
+
+.validation-advice {
+	background-color: #FF3300;
+	color : #FFF;
+}
+
+strong.req{color:red;}
+.success{color:green;}
+#login_error{color:red;}
+
+/*************[Weather Styles]*****************/
+
+/*************[Luminis Overrides]**************/
+.uportal-background-light{
+	background-color:#ccc;
+	background-image:none;
+	border: 1px dotted #999;
+}	
+.uportal-background-light td{
+	background:none;
+	border:none;
+}
+
+input.btnvert, input.btn, input.btnsm{
+	background-image: none;
+	background-color: #ccc;
+	border: 1px solid #444;
+}
+input.btnvert:hover, input.btn:hover, input.btnsm:hover{
+	background-color: #ddd;
+}
+
+#tabs_tda{
+	background: #B8C08B;
+	border: 1px solid #5D5C55;
+}
+#tabs_tda #tab{
+	background: #d6d6b7;
+	border: 1px solid #AAB27C;
+}
+
+#tabs_tda a#tab:link,#tabs_tda a#tab:active,#tabs_tda a#tab:visited{
+	color: #555;
+}
+
+.bgtabon .uportal-channel-text{border-top:1px solid #999;}
+
+.ChanBoxBg{border: 1px solid #999;}
+
+.uportal-label{font-weight: bold;}
+
+.uportal-background td{
+	border: 1px solid #999;
+}
+
+.uportal-background-highlight{
+	background-color: #F2EFE1;
+}
+
+.uportal-background-shadow{
+	background:#999;
+}
+
+.workflowdefault{
+	background: #EAE7D7;
+	border: 1px solid #BAB8B0;
+}
+.workflowcurrent{
+	background: #d6d6b7;
+	border: 1px solid #BAB8B0;
+}
+.workflowvisited{
+	background: #BBC38E;
+	border: 1px solid #5D5C55;
+}
+
+#chlist td{
+	background: #F5F2E6;
+}
+
+#chlist td table.uportal-background-med td{
+	background: #E2DFD4;
+}
+
+.uportal-text-small-unread{
+	color : Black;
+}
+
+.uportal-text-small-read{
+	color : Black;
+}
+
+#admin\.navigation\.links .uportal-channel-text{
+	background:#ccc;
+	border:1px dotted #999;
+}
+
+/*********************************************************
+ * Login Styles
+ *********************************************************/
+
+
+/*********************************************************
+ *
+ * Outside Styles
+ *
+ *********************************************************/
+
+/*********************************************************
+ *
+ * Poll Styles
+ *
+ *********************************************************/
+ 
+#poll_results h2{
+	border-bottom: 1px dotted #999;
+	color:#333;
+}
+
+#poll_results #form_bt_vote{
+	background: #ccc;
+	border:1px solid #bbb;
+}
+#poll_results #form_bt_vote:hover{
+	background:#e3e3e3;
+}
+#poll_results .percentage{
+	color:#444;
+}
+#poll_results .bar{
+	background: yellow;
+	border-bottom:1px solid #333;
+	border-left:1px solid #333;
+	border-top:1px solid #333;
+}
+#poll_results .no-bar{
+	background: #666;
+	border-bottom:1px solid #333;
+	border-right:1px solid #333;
+	border-top:1px solid #333;
+}
+#poll_results .answer{
+	border-bottom: 1px dotted #999;
+	color:#444;
+}
+#poll_results .provided{
+	border-top: 1px dotted #999;
+	color:#444;
+}
+
+#alertAdminMessageDiv,#alertSessionExpireMessageDiv{
+	background: #F4F1E6;
+	border: 3px solid #B70F38;
+}
+/**********************************************
+ * Forgot Username Styles
+ **********************************************/
+
+/**********************************************
+ * Individual Channel Styles
+ **********************************************/
+ul.game-channel{list-style-type:none;margin:0;padding:0;}
+ul.game-channel li{
+	background:#666;
+	border-bottom:1px solid #333;
+	border-top:1px solid #333;
+}
+ul.game-channel li img{border:1px solid #000;}
+ul.game-channel li a{color: yellow;}
+/**********************************************
+ * Tool Topnav Styles
+ **********************************************/
+body.topnav a:link,body.bgmenu a:link,body.admin a:link{color: #4B55D1;}
+body.topnav a:active,body.bgmenu a:active,body.admin a:active{color: #4B55D1;}
+body.topnav a:visited,body.bgmenu a:visited,body.admin a:visited{color: #4B55D1;}
+body.topnav a:hover,body.bgmenu a:hover,body.admin a:hover{color: #060E79;}
+body.topnav{
+	background: #E9E6D4;
+	background-image:url(/psu/images/header_bg_left.gif);
+	background-repeat:repeat-x;
+	border-bottom:1px solid #BAB8B0;
+	color: #fff;
+}
+
+body.topnav h1{color:#000;}
+body.topnav div.taboff{
+	background:#d6d6b7;
+	border-left:1px solid #BAB8B0;
+	border-right:1px solid #BAB8B0;
+	border-top:1px solid #BAB8B0;
+}
+body.topnav div.taboff:hover{background:#E1E1C6;}
+body.topnav .tabon{background:none;}
+body.topnav div.tabon{background:#E9E5D4;}
+body.topnav div.tabon{
+	border-left:1px solid #BAB8B0;
+	border-right:1px solid #BAB8B0;
+	border-top:1px solid #BAB8B0;
+}
+
+/**********************************************
+ * Tool Menu Styles
+ **********************************************/
+
+body.bgmenu{
+	background: #F5F2E6;
+	background-image:none;
+}
+
+.bg1{background:none;}
+.bg3{background:none;}
+.bg3 img{display:none;}
+
+td.datarowitem-checkbox{background:#F5F2E6;border-top:1px dotted #BAB8B0;}
+td.datarowitem{background:#F5F2E6;border-top:1px dotted #BAB8B0;}
+td.datarowitem-groupdescription{background:#F5F2E6;border-top:1px dotted #BAB8B0;}
+
+/**********************************************
+ * Admin Styles
+ **********************************************/
+
+body.admin{
+	background: #E1E0CD;
+	background-image:none;
+	border-left:1px solid #BAB8B0;
+}
+
+body.admin .bglight{background:none;border-bottom:1px solid #909183;}
+body.admin .bgslight{background:#F5F2E6;border:1px dotted #909183;}
+body.admin .bgtabon{background: #BAB8B0;}
+
+body.admin .bgwhite{
+	background:#F5F2E6;border:1px dotted #909183;
+}
+
+body.admin input,body.admin select,body.admin textarea{background:#fff;}
+body.admin input:hover,body.admin select:hover,body.admin textarea:hover{background:#FFFFDD;}
+
+
+/**********************************************
+ * Group Tool Styles
+ **********************************************/
+
+body.gcstudio{
+background: #E1E0CD;
+background-image:none;
+border-left:1px solid #BAB8B0;
+}
+body.gcstudio h1{
+	color: #85360F;
+	font-weight:bold;
+}
+
+body.gcstudio .bg1{background:none;border-top:1px solid #5D5C55;}
+body.gcstudio .bg3{background:none;}
+body.gcstudio .bglight{background:none;}
+body.gcstudio .bgtabon{background:none;border-top:1px solid #5D5C55;}
+body.gcstudio .bgwhite{
+	background:#fff;
+	border-bottom: 1px solid #909183;
+	border-left: 1px solid #909183;
+	border-right: 1px solid #909183;
+	border-top: 5px solid #B4BC86;
+}
+
+body.gcstudio .bgslight{background:none;}
+
+body.gcstudio .bgslight td{
+	background:#fff;
+	border-bottom: 1px solid #909183;
+	border-left: 1px solid #909183;
+	border-right: 1px solid #909183;
+	border-top: 5px solid #B4BC86;
+}
+body.gcstudio table table table table .bgslight td{background:#fff;border:none;}
+body.gcstudio .bgslight td td{
+	background: none;
+	border:none;
+}
+
+body.gcstudio #topiclst_tbl .bgslight td{
+	background:#fff;
+	border-bottom: 1px solid #909183;
+	border-left: none;
+	border-right: none;
+	border-top: 5px solid #B4BC86;
+}
+
+body.gcstudio td.sectioninfo{
+	background:#fff;
+	border: 1px dotted #909183;
+}
+
+body.gcstudio #group_index_tbl{
+	background:#F5F2E6;
+	border-top:1px dotted #909183;
+}
+
+body.gcstudio #category_tree{
+	background:#F5F2E6;
+	border-top:1px dotted #909183;
+}
+
+body.gcstudio input,body.gcstudio select,body.gcstudio textarea{background:#fff;}
+body.gcstudio input:hover,body.gcstudio select:hover,body.gcstudio textarea:hover{background:#FFFFDD;}
+
+body.gcstudio .msgblock{
+	background-color:#fff;
+}
+
+/**********************************************
+ * RSS Styles
+ **********************************************/
+
+ul.rss li.expanded{
+	border-bottom: 1px dotted #454A2C;
+}
+
+ul.rss h3 a{border-bottom:1px dotted #999;}
+
+/**********************************************
+ * My Courses Styles
+ **********************************************/
+#mycourses-container h2{
+	background:#333;
+	border-top:1px solid #666;
+}
+
+/**********************************************
+ * Webcam and Weather Styles
+ **********************************************/
+/*globals*/
+#myweather .smtext {color: #ff0000;}
+/*index*/
+#myweather a.webcam-thumb{border: 3px solid #444;}
+#myweather a.webcam-thumb img{border: 1px solid #000;}
+.channel #myweather ul.wx-tabs{
+	border-top:1px solid #333;
+}
+#myweather .wx-tabs a{
+	background:#666;
+	color: yellow;
+}
+#myweather .wx-tabs a:hover{background:#999;}
+
+/*weather*/
+/*fcst*/
+#myweather .wx_fcstbox{
+/*	background-color:#E1E0CD;*/ 
+	background-color:#666; 
+	border:1px solid #333;
+	color: yellow;
+}
+#myweather .wx_fcstelem{
+	color:yellow;
+}
+#myweather .wx_fcstterm{
+	color:fff;
+}
+#myweather .wx_fcsthi{color:red;}
+#myweather .wx_fcstlo{color:blue;}
+/*maps*/
+#myweather li.c1{background:#666;}
+#myweather li.c2{background-color:#444;}
+/*prefs*/
+/*about*/
+#myweather div.c1{background-color:#666;}
+#myweather div.c2{background-color:#444;}
+
+/* ----- add selectors here for font sizing ----- */
+
+
+/* ---------->>> jtip <<<---------------------------------------------------------------*/
+
+#JT_arrow_left{
+	background: url(../images/arrow_left.gif) no-repeat left top;
+}
+
+#JT_arrow_right{
+	background: url(../images/arrow_right.gif) no-repeat left top;
+}
+
+/* for consistency between firefox and IE */
+
+#JT {
+	border: 2px solid #999;
+	background-color: #fff;
+}
+
+#JT_copy{
+	color:#333;
+}
+
+.JT_loader{
+	background: url(../images/loader.gif) no-repeat center center;
+}
+
+#JT_close_left{
+	background-color: #999;
+}
+
+#JT_close_right{
+	background-color: #999;
+}
+
+#JT_copy img{
+	border: 1px solid #999;
+}
+
+/* Main Style Sheet for jQuery Calendar */
+#calendar_div, .calendar_inline {
+	background: #ddd;
+}
+#calendar_div {
+	border: 1px solid #FF9900;
+}
+
+.calendar_dialog {
+	border: 4px ridge #ddd !important;
+}
+
+.calendar_prompt {
+	background: #ddd;
+	color: #000;
+}
+.calendar_control, .calendar_links, .calendar_header, .calendar {
+	color: #fff;
+}
+.calendar_control {
+	background: #FF9900;
+}da
+.calendar_links {
+	background: #E0F4D7;
+}
+.calendar_control, .calendar_links {
+	background: #B8C08C;
+}
+.calendar_links label { /* disabled links */
+	color: #888;
+}
+
+.calendar_header {
+	background: #B8C08C;
+}
+.calendar_header select {
+	background: #B8C08C;
+	color: #000;
+	border: 0px;
+}
+.calendar {
+	background: #999;
+}
+.calendar a {
+	display: block;
+}
+.calendar .calendar_titleRow {
+	background: #F4F1E6;
+	color: #000 !important;
+}
+.calendar .calendar_daysRow {
+	background: #FFF;
+	color: #444;
+}
+.calendar .calendar_daysCell {
+	color: #000;
+	border: 1px solid #ddd;
+}
+.calendar .calendar_weekEndCell {
+	background: #F4F1E6;
+}
+.calendar .calendar_daysCellOver {
+	background: #fff;
+	border: 1px solid #777;
+}
+.calendar .calendar_unselectable {
+	color: #888;
+}
+.calendar_today {
+	background: #999 !important;
+}
+.calendar_currentDay {
+	background: #ece050 !important;
+}
+
+/* ________ CALENDAR LINKS _______
+
+** Reset link properties and then override them with !important */
+
+#calendar_div_0 {
+	border: 1px solid #B4BB88;
+}
+#calendar_div a, .calendar_inline a {
+	background: none;
+	color: #000;
+}
+.calendar_control a, .calendar_links a {
+	color: #000 !important;
+}
+.calendar_titleRow a {
+	color: #000 !important;
+}
+.calendar_control a:hover {
+	/*background: #fdd !important;*/
+	color: #333 !important;
+}
+.calendar_links a:hover, .calendar_titleRow a:hover {
+	background: #FFF !important;
+	color: #333 !important;
+}
+
+/* ___________ IE6 IFRAME FIX ________ */
+
+
+/*********** CUSTOM Calendar Styles ************/
+
+#zcal_appt_text ul li{
+	border-bottom: 1px dotted #999;
+}
+
+.calendar_inline a{
+	color: #777;
+}
+
+.calendar_inline .has_appt a{
+	color: #000;
+}

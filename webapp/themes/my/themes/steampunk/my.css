@@ -1,0 +1,296 @@
+html, body{
+	background-color: #5C5547;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/steampunk/images/header_bg.png);
+	background-repeat: repeat-x;
+	background-position: top right;
+	color: #6e6c67;
+}
+
+#page{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/steampunk/images/bg_left.png);
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
+#page-inner{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/steampunk/images/bg_right.png);
+	background-repeat: no-repeat;
+	background-position: top right;
+}
+
+#webapp-head{
+	background-color: transparent;
+	border-bottom: none;
+	height: 181px;
+}
+
+#webapp-head .container{
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#webapp-head .webapp-head{
+	height: 181px;padding-top:0;
+}
+
+.webapp-head .inner{
+	padding-top: 60px;
+}
+
+#webapp-head .webapp-head #search,
+.webapp-head h1{
+	color: #ffeca0;
+	margin-top: 50px;
+}
+
+.webapp-head h1{
+	font-size: 2.5em;
+}
+
+.webapp-head h1 a{
+	color: #ffeca0;
+}
+
+.webapp-head h1.myplymouth_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/steampunk/images/steampunk_my_logo.png);
+	background-repeat: none;
+	width: 351px;
+	height: 61px;
+	margin-top: 55px;
+	margin-left: 0px;
+	text-indent: -9999px;
+}
+
+.webapp-head .psu_logo{ 
+	display: none;
+}
+
+#webapp-head input,
+#webapp-head textarea,
+#webapp-head select,
+#webapp-head button{
+	background: #BAAF8E;
+	border: 1px solid #111;
+	color: #000;
+	padding: 3px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.fluid #webapp-nav,
+#webapp-nav{
+	background-color: transparent;
+	background-image: none;
+	border-bottom: none;
+	border-top: none;
+	height: auto;
+}
+
+#webapp-nav .container{
+	background-image: none;
+	background-repeat: none;
+}
+
+#webapp-nav .webapp-nav{
+	background-color: transparent;
+	background-image: none;
+	color: #999;
+	font-family: Verdana, Arial, Sans-Serif;
+}
+
+.webapp-nav a{ color: #999; }
+
+.webapp-nav ul > li > .parent-hover,
+.webapp-nav a.active,
+.webapp-nav a:hover {
+	background: none;
+	color: #eee;
+}
+
+.webapp-nav .selected a,
+.webapp-nav .selected a:hover{
+	color: #fff;
+}
+
+.webapp-nav ul > li ul a{
+	border-color: #000;
+}
+
+#webapp-avant-body{
+	background-color: transparent;
+	background-image: none;
+	background-repeat: repeat-x;
+	border-top: none;
+}
+
+.webapp-avant-body .message-container{margin-bottom: 0; margin-top: 0;}
+
+.fluid #webapp-avant-body, .fluid #webapp-body, .fluid #webapp-apres-body, .fluid #webapp-foot {
+	background-color: transparent;
+}
+
+#webapp-body{
+	background-color: transparent;
+	background-image: none;
+	background-repeat: repeat-x;
+}
+
+#webapp-avant-body .container,
+#webapp-apres-body .container,
+#webapp-avant-foot .container,
+#webapp-foot .container,
+#webapp-apres-foot .container,
+#webapp-body > .container{
+	background-image: none;
+}
+
+#webapp-foot,
+#webapp-apres-foot{
+	background-color: transparent;
+}
+
+.border-box{
+	background-color: transparent;
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/steampunk/images/channel_bg.gif');
+	background-position: left 48px;
+	background-repeat: repeat-x;
+}
+
+.border-box > .box-inner{
+}
+
+.border-box > .title{
+	background-color: transparent;
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/steampunk/images/channel_bg_left.gif');
+	background-position: top left;
+	background-repeat: no-repeat;
+	border-bottom: 1px solid #333;
+	border-left: 0;
+	border-top: 0;
+
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	-webkit-border-top-left-radius: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+	-moz-border-radius-topleft: 0.5em;
+	-moz-border-radius-topright: 0.5em;
+}
+
+.border-box > .title .box-inner{
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/steampunk/images/channel_bg_right.gif');
+	background-position: right;
+	background-repeat: no-repeat;
+	height: 48px;
+	padding-top: 15px;
+}
+
+.border-box > .title h2{
+	text-indent: 40px;
+}
+
+.border-box > .title,
+.border-box > .title h2,
+.border-box > .title h2 a,
+.border-box > .title a{
+	color: #ffeca0;
+	font-size: 1.1em;
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot{
+	border-right: none;
+}
+
+.box > .title h2 .section-title{ color: #fff; }
+
+.border-box > .subheader{
+	border-left: 1px solid #29261c;
+	border-right: 1px solid #29261c;
+}
+
+.border-box > .body{
+	opacity: 0.9;
+	border-bottom: 1px solid #29261c;
+	border-left: 1px solid #29261c;
+	border-right: 1px solid #29261c;
+	border-bottom-left-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+	-webkit-border-bottom-left-radius: 0.5em;
+	-webkit-border-bottom-right-radius: 0.5em;
+	-moz-border-radius-bottomleft: 0.5em;
+	-moz-border-radius-bottomright: 0.5em;
+}
+
+.clear-box > .title h2,
+.clear-box > .title h2 a{
+	color: #000;
+}
+
+.clear-box > .title .box-inner{
+	border-color: #000;
+}
+
+.clear-box > .subheader .box-inner{ color: #333; }
+
+#go-sidebar .go-profile .body{
+	opacity: 0.9;
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	-webkit-border-top-left-radius: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+	-moz-border-radius-topleft: 0.5em;
+	-moz-border-radius-topright: 0.5em;
+}
+
+#go-sidebar .widget{
+	border-bottom: 1px solid #493e2d;
+}
+
+#go-sidebar .widget .title{
+	background-color: #2c2217;
+	background-image: none;
+}
+
+#go-sidebar .widget .body{
+	background-color: #fff;
+}
+
+#webapp-body #go-sidebar .widget ul.popular-tabs{
+	background-color: #000;
+	border-top: none;
+}
+
+#go-sidebar .border-box > .title .box-inner{
+	background-image: none;
+	height: auto;
+	padding-top: 0.3em;
+}
+
+#go-sidebar .widget .body{
+	border-color: #333;
+}
+
+.webapp-foot a{color: #ccc;}
+
+#webapp-apres-foot{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/steampunk/images/steampunk_apres_foot_bg.png);
+	background-color: #25221c;
+	border-top: 1px solid #000;
+}
+
+.webapp-apres-foot{
+	background-image: none;
+	border: none;
+}
+
+#webapp-apres-foot a:hover{ color: #fff; }
+
+#webapp-apres-foot h3{
+	color: #ffeca0;
+	border-bottom: 1px solid #493e2d;
+}
+
+#webapp-apres-foot #foot-logo-column .logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/steampunk/images/steampunk_psu_footer_logo.png);
+}

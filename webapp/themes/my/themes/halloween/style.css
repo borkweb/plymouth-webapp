@@ -1,0 +1,41 @@
+body.inside{
+	background-color: #000;
+	background-image: none;
+}
+
+#header{
+	background-color: #534941;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/halloween/images/header_bg.gif);
+	border-bottom: none;
+}
+#header .my_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/halloween/images/my_logo.gif);
+	width: 429px;
+}
+
+#header .psu_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/halloween/images/psu_logo.gif);
+}
+
+#header .extra_bg{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/halloween/images/header_bg_left.gif);
+	width: 636px;
+}
+
+#header .corner_left,#header .corner_right{
+	background-image: none;
+}
+
+#header_message{
+	background-color: #65574C;
+	background-image: none;
+}
+
+#header_message .extra_bg{
+	background-color: #65574C;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/halloween/images/message_bg.gif);
+}
+
+#header_message img.header_icon{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/halloween/images/all_icons.gif);
+}

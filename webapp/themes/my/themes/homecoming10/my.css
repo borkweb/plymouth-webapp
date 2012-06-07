@@ -1,0 +1,167 @@
+html, body{
+	background-color: #FFF2CD;
+	background-image: none;
+}
+
+#page { background: none; }
+
+#webapp-head{
+	background-color: #ffd865;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/homecoming10/images/header_bg.png);
+	border-bottom: none;
+	height: 135px;
+}
+
+#webapp-head .container{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/homecoming10/images/header.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#webapp-head .webapp-head{height: 135px;padding-top:0;}
+
+#webapp-head .webapp-head #search,
+.webapp-head h1{
+	margin-top: 50px;
+}
+
+.webapp-head h1.myplymouth_logo{
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/homecoming10/images/my_logo.png');
+	background-repeat: none;
+	width: 278px;
+	height: 135px;
+	margin: 0 auto;
+	text-indent: -9999px;
+}
+
+.psu_logo{ display: none;}
+
+.fluid #webapp-nav,
+#webapp-nav{
+	background-color: transparent;
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/homecoming10/images/nav_bg.png');
+	border-bottom: none;
+	border-top: none;
+	height: 40px;
+}
+
+#webapp-nav .container{
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/homecoming10/images/nav.png');
+	background-repeat: none;
+	background-position: top center;
+}
+
+#webapp-nav .webapp-nav{
+	background-color: transparent;
+	background-image: none;
+	color: #957a29;
+	font-family: Verdana, Arial, Sans-Serif;
+}
+
+.webapp-nav .inner > ul > li > a {
+	color: #957A29;
+	padding: 10px;
+}
+
+.webapp-nav ul > li > .parent-hover,
+.webapp-nav a.active,
+.webapp-nav a:hover {
+	background: transparent;
+	color: #333;
+}
+
+.webapp-nav .selected a,
+.webapp-nav .selected a:hover{
+	color: #000;
+}
+
+.webapp-nav ul > li ul a{
+	border-color: #ccc;
+}
+
+#webapp-avant-body{
+	background-color: #fff2cd;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/homecoming10/images/body_bg_tile.png);
+	background-repeat: repeat-x;
+	border-top: none;
+}
+
+.webapp-avant-body .message-container{margin-bottom: 0; margin-top: 0;}
+
+.fluid #webapp-avant-body, .fluid #webapp-body, .fluid #webapp-apres-body, .fluid #webapp-foot {
+	background-color: #fff2cd;
+}
+
+#webapp-body{
+	background-color: #fff2cd;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/homecoming10/images/body_bg_tile.png);
+	background-repeat: repeat-x;
+}
+
+#webapp-body > .container{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/homecoming10/images/body_bg.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#webapp-foot {
+	background-color: #fff2cd;
+}
+
+.border-box > .title{
+	background-color: #fee69e;
+	border-bottom: 1px solid #f2cd5f;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-topright: 10px;
+}
+
+.border-box > .title,
+.border-box > .title h2,
+.border-box > .title h2 a,
+.border-box > .title a{
+	color: #957a2e;
+}
+
+.box > .title, .box > .subheader, .box > .body, .box > .foot{
+	border-right: none;
+}
+
+.border-box > .body{
+	border-bottom: none;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-moz-border-radius-bottomright: 10px;
+}
+
+#go-sidebar .go-profile .body{
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-topright: 10px;
+}
+
+#go-sidebar .widget{
+	border-bottom: 1px solid #f2cd5f;
+}
+
+#go-sidebar .widget .title{
+	background-color: #fee69e;
+}
+
+#go-sidebar .widget .body{
+	background-color: #fff;
+}
+
+#webapp-body #go-sidebar .widget ul.popular-tabs{
+	background-color: #fff3ce;
+	border-top: none;
+}

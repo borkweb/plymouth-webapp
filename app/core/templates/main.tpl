@@ -32,10 +32,10 @@
 <div id="impersonating">
 	<div class="container_16">
 	<div class="grid_16">
-		<img src="https://s0.dev.plymouth.edu/images/icons/22x22/status/dialog-warning.png" class="icon"/>
+		<img src="{"/images/icons/22x22/status/dialog-warning.png"|cdn}" class="icon"/>
 		You are currently impersonating <a href="https://go.plymouth.edu/ape/{$smarty.session.username}" target="_blank">{$smarty.session.username}</a> (<a href="https://go.plymouth.edu/ape/{$smarty.session.wp_id}" target="_blank">{$smarty.session.wp_id}</a>).
 		<strong>Anything</strong> you do will be done as {$smarty.session.username} and <em>will</em> be <strong>logged</strong>.
-		<a href="/webapp/ape/actions/account-impersonate.php?identifier={$smarty.session.username}&action=cancel">Switch back</a> to your account.
+		<a href="/webapp/ape/actions/account-impersonate.php?identifier={$smarty.session.username}&amp;action=cancel">Switch back</a> to your account.
 	</div>
 	</div>
 </div>

@@ -1,0 +1,9 @@
+#webapp-head h1 { font-size: 1.2em; }
+#webapp-head .webapp-head { min-height: 1em; padding-top: 0.5em; }
+.webapp-head .psu_logo {
+	background-image: none;
+	text-indent: 0;
+	text-align: right;
+}
+.webapp-nav .inner { padding: 0.1em 0; }
+.box > .title div.secondary, .box > .title h2 { font-size: 1em; }

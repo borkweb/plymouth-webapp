@@ -1,0 +1,53 @@
+#page,
+.topsy-flip,
+.myplymouth #webapp-head,
+.myplymouth #webapp-nav,
+.myplymouth #webapp-apres-body,
+.myplymouth #webapp-avant-body,
+.myplymouth #webapp-apres-foot,
+.myplymouth #webapp-foot,
+.myplymouth .channel,
+.myplymouth .go-profile,
+.myplymouth #go-search,
+.myplymouth #remote-widget-container .widget {
+	transform: rotate(180deg);
+	-ms-transform: rotate(180deg); /* IE 9 */
+	-webkit-transform: rotate(180deg); /* Safari and Chrome */
+	-o-transform: rotate(180deg); /* Opera */
+	-moz-transform: rotate(180deg); /* Firefox */
+}
+
+body.myplymouth #page {
+	transform: rotate(0deg);
+	-ms-transform: rotate(0deg); /* IE 9 */
+	-webkit-transform: rotate(0deg); /* Safari and Chrome */
+	-o-transform: rotate(0deg); /* Opera */
+	-moz-transform: rotate(0deg); /* Firefox */
+}
+
+.topsy-flip {
+	font-weight: bold;
+	color: red;
+}
+
+#topsy-turvy-notice {
+	background: #000 url(/webapp/themes/my/themes/topsy-turvy/images/classy_fabric.png);
+	border-bottom: #333;
+	color: #9ed19e;
+}
+
+#topsy-turvy-notice a {
+	color: cyan;
+}
+
+#topsy-turvy-notice .inner {
+	border-top: 2px solid rgba( 0, 0, 0, 0.3 );
+	border-bottom: 2px solid rgba( 0, 0, 0, 0.3 );
+	height: 100%;
+	padding: 0.5em;
+	text-align: center;
+}
+
+#webapp-head {
+	border-top: 0;
+}

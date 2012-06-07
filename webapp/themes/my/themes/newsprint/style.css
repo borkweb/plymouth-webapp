@@ -1,0 +1,84 @@
+body.inside{
+	background-color: #FBFAF5;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/bg.gif);
+	margin-top: 0px;
+}
+
+.inside #header .corner_left,#header .corner_right{
+	background-image: none;
+}
+
+.inside #header_message{
+	background-color: #65574C;
+	background-image: none;
+}
+
+.inside #header{
+	background-color: #534941;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/header_bg.gif);
+	border-bottom: none;
+	height: 110px;
+}
+.inside #header .my_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/my_logo.gif);
+	width: 500px;
+	height: 110px;
+}
+
+.inside #header .psu_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/psu_logo.gif);
+	right: 0px;
+	width: 173px;
+	height: 110px;
+}
+
+.inside #header .extra_bg{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/header_bg_left.gif);
+	width: 740px;
+	height: 110px;
+}
+
+.inside #header_message{
+	background-color: #FBFAF5;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/bg.gif);
+	height:58px;
+}
+.inside #header_message .extra_bg{
+	background-color: none;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/newsprint/images/rounds_lower.gif);
+	background-repeat: no-repeat;
+}
+
+.inside #header_message #tabs a{
+	border-top: 1px solid #999;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}
+
+.inside #header_message #tabs .top_left{
+	display:none;
+}
+
+.inside #header_message .options{
+	margin-top: 15px;
+}
+
+.inside #header_message #tabs .top_right{
+	display:none;
+}
+
+
+.inside #header_message .options a{
+	color: #000;
+}
+
+.inside #sub_header{
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}
+
+.inside #body{
+	border-bottom: 1px solid #999;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}

@@ -18,13 +18,13 @@
 }
 
 html{
-	background: #fff url(../images/bg.jpg) center 80px repeat-x;
+	background: #fff;
 	/* maxvoltar.com/archive/-webkit-font-smoothing */
 	-webkit-font-smoothing: antialiased;
 }
 
 body{
-	background: #fff url(../images/bg.jpg) center 80px repeat-x;
+	background: #fff;
 	color: #000;
 	font-family: Helvetica, Arial, Sans-Serif;
 	overflow: auto;

@@ -1,0 +1,29 @@
+.inside #header{
+	background-color: #534941;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/thanksgiving/images/header_bg.gif);
+	border-bottom: none;
+	height: 100px;
+}
+.inside #header .my_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/thanksgiving/phase8/images/my_logo.gif);
+	width: 244px;
+	height: 100px;
+}
+
+.inside #header .psu_logo{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/thanksgiving/images/psu_logo.gif);
+	right: 0px;
+	width: 215px;
+	height: 100px;
+}
+
+.inside #header .extra_bg{
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/thanksgiving/phase8/images/header_bg_left.gif);
+	width: 780px;
+	height: 100px;
+}
+
+.inside #header_message .extra_bg{
+	background-color: #65574C;
+	background-image: url(http://s1.plymouth.edu/webapp/themes/my/themes/thanksgiving/images/table_cloth.gif);
+}

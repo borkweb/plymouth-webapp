@@ -1,0 +1,1431 @@
+/***************************************
+ * PSU Thickbox Styles
+ ***************************************/
+
+#TB_ajaxContent{padding-top:10px;}
+
+#tb-title-bar a{color:#000;}
+#tb-content{text-align:left;}
+#tb-content a{color:blue;}
+#TB_title,#tb-title-bar{
+	background-image: none;
+	background-color: #eeeeee;
+	border-bottom:1px solid #ccc;
+	color: #5d3c1e;
+	font-size: 1.1em;
+	font-weight:bold;
+}
+
+/********* Combined Styles **************/
+.calendar_header,
+.calendar_links,
+.calendar_control,
+.calendar .calendar_titleRow,
+ul.game-channel li,
+.channel .toggle-list h2,
+.widget ul.popular-tabs li.selected,
+.widget ul.popular-tabs li.selected a,
+.widget .ds-container fieldset,
+body.inside input.btnvert, 
+body.inside input.btn, 
+body.inside input.btnsm,
+#myweather .wx-tabs a,
+.secondary_table_header, 
+.email-channel .email-list th,
+.uportal-background-light,
+.bgslight,
+.bgslight .text10{
+	background: #eeeeee;
+	border: 1px solid #ccc;
+	color: #5d3c1e;
+}
+
+body.inside .calendar_header select,
+body.inside input, select, textarea,
+body.inside input, body.inside textarea, body.inside select, body.inside button,
+.widget .ds-container input, .widget .ds-container select{
+	background: #f8f5dd;
+	border:1px solid #ccc;
+	color: #000;
+}
+/********** End Combined Styles *************/
+
+/*** Tags ***/
+a:link, a:active, a:visited,.side_links a:link, .side_links a:active, .side_links a:visited{color: #5279a0;text-decoration: none;}
+a:hover, .side_links a:hover{color: #000;}
+
+#splash #body div.window{
+	background-image: url(https://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/platypus_login.gif);
+}
+
+body{
+	font-family: arial, helvetica, sans-serif;
+	font-size:90%;
+	margin:5px;
+}
+
+body.inside{
+	background-color: #fff;
+	background-image: none;
+	background-repeat: repeat-x;
+	color: #000;
+	margin: 0px;
+}
+
+body.white{background:#fff;background-image:none;}
+
+body.inside h2{
+	color: #5d3c1e;
+	font-weight: bold;
+	margin: 0 0 0.5em 0;
+}
+body.inside fieldset{ border: 1px solid #ccc;}
+body.inside form.bordered input{border:1px solid #000;}
+iframe{background:#fff;border: 0px;}
+iframe.framed-content{background:#fff;}
+input.date_picker{margin-right:10px;}
+legend{color:#403A33;font-weight:bold;}
+
+body.inside input, body.inside textarea, body.inside select, body.inside button{
+	padding: 3px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+ul{color: #ccc;}
+ul li{color: #000;}
+
+/*** Classes ***/
+body.inside .button{
+	background:#ddd;
+	border:1px solid #333;
+	margin-right:25px;
+	margin-top:16px;
+}
+
+/* stuff for the header */
+.corner_left{
+	display: none;
+}
+.corner_right{
+	display:none;
+}
+#footer a{color:#ccc;}
+
+.inside #header{
+	background-color: #ff7900;
+	background-image:  url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/header_bg.gif');
+	background-position: top center;
+	border-bottom: none;
+	height: 164px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+}
+
+.inside #header .extra_bg{
+	background-image: none;
+	width: 0;
+	height: 0;
+}
+
+.inside #header .my_logo{
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/my_logo.gif');
+	width: 283px;
+	height: 89px;
+	margin-top: 40px;
+	margin-left: 40px;
+}
+
+.inside #header .psu_logo{
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/psu_logo.gif');
+	right: 0px;
+	width: 259px;
+	height: 150px;
+}
+
+body.inside #header ul{
+	color:#666;
+	font-size:1.0em;
+	margin: 0px;
+	padding: 0px;
+	position: absolute;
+	top: 25px;
+	right: 155px;
+	text-align:center;
+	width:17em;
+}
+#header ul li{display: inline; list-style-type: none; padding:0 5px 0 0;}
+#header ul li.options_left{position:absolute;bottom:0px;left:0px;padding:0;margin:0;marker-offset:0;height:21px;}
+#header ul li.options_right{position:absolute;bottom:0px;right:0px;padding:0;margin:0;marker-offset:0;height:21px;}
+#header ul a{color:#fff;padding:3px 7px;}
+#header ul a:hover{color:#000;}
+#header ul a img{display:none;margin-right:5px;vertical-align:middle;}
+
+.inside #header_message{
+	background-color: #ff7900;
+	background-image:  url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/header_bg.gif');
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	border-bottom: 1px solid #a44e00;
+	height: 30px;
+	margin-bottom: 0.5em;
+	margin-left: 0px;
+	margin-right: 0px;
+	position: relative;
+	zoom:1;
+}
+
+.inside #header_message .extra_bg{
+	background-color: none;
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: top right;
+	position: relative;
+	zoom:1;
+}
+
+.inside #header .corner_left,#header .corner_right{
+	background-image: none;
+}
+
+.inside #header_message #tabs a{
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.inside #header_message #tabs .top_left{
+	display:none;
+}
+
+.inside #header_message .options{
+	margin-top: 0;
+	margin-right: 10px;
+	margin-left: 0;
+	margin-bottom: 0;
+	float:right;
+	font-size:0.8em;
+}
+
+.inside #header_message #tabs .top_right{
+	display:none;
+}
+
+
+.inside #header_message .options a{
+	border-bottom: none;
+	color: #fff;
+}
+
+#header_message strong{color:#eee;}
+#header_message strong a {color:#eee;text-decoration:none;}
+#header_message .options{
+	margin-top: 5px;
+	margin-right: 10px;
+	margin-left: 0;
+	margin-bottom: 0;
+	float:right;
+	font-size:0.8em;
+}
+#header_message .options li{float:left;list-style:none;margin-right:10px;text-align:center;}
+#header_message .options img{vertical-align:middle;}
+
+#header_message img.header_icon{
+	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1');
+}
+
+#tabs{
+	bottom: 2px;
+	left: 0px;
+	position: absolute;
+}	
+
+#tabs li{
+	margin: 0.65em 0em 0em 0.3em;
+}
+
+#tabs li a{
+	background: #ffa14d;
+	background-image: none;
+	border-bottom: none;
+	border-top: none;
+	color: #7f5026;
+	font-size: 0.9em;
+	font-weight: bold;
+	padding: 0.5em 0.75em;
+	text-decoration: none;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+}
+#tabs li.active a,#tabs li.active a:hover{
+	background: #fff;
+	background-image: none;
+	border:none;
+	color: #000;
+	bottom:0px;
+	font-weight: bold;
+	margin-top:0;
+	padding-top: 0.5em;
+	z-index:2;
+}
+#tabs li a:hover{
+	background: #fff;
+	background-image: none;
+	color: #000;
+}
+#tabs li a .top_left{
+	background:none;
+	display:none;
+}
+#tabs li a .top_right{
+	background:none;
+	display:none;
+}
+
+#tabs li.more ul{
+	background: #fff;
+	border-bottom:1px solid #a44e00;
+	border-left:1px solid #a44e00;
+	border-right:1px solid #a44e00;
+}
+.inside #header_message #tabs li.more li{
+	border-bottom:1px dotted #ccc;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.inside #header_message #tabs li.more li a{
+	border: none;
+	border-top: none;
+	border-bottom: none;
+	border-left: none;
+	border-right: none;
+}
+
+.inside #header_message #tabs li.more li:hover{
+	background: transparent;
+	border-bottom:1px dotted #bbb;
+	border-left: none;
+	border-right: none;
+}
+#tabs li.more .down-arrow{
+	background: url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1') -114px -46px no-repeat;
+	margin:0;
+	padding:0;
+	height:11px;
+	vertical-align:middle;
+	width:8px;
+}
+#tabs li.more:hover .down-arrow{
+	background: url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1') -102px -46px no-repeat;
+}
+
+.inside #sub_header{
+	background: #fff;
+	background-image: none;
+	background-repeat: repeat-x;
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+	border-top: none;
+	clear: both;
+	color: #000;
+	margin-bottom: 0;
+	margin-left: 0px;
+	margin-right: 0px;
+	padding: 5px 20px 0px 10px;
+}
+
+.inside #sub_header strong, .inside #sub_header .date{
+	color: #333;
+	font-weight: normal;
+	padding: 5px;
+}
+
+#overlay{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 90;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+}
+.columns-top-left{
+	display:none;
+}
+#left-nav-column{background: none;border: none;padding-top: 5px; width: 200px;}
+
+.widget{
+	border-bottom: none;
+	font-size:0.8em;
+	margin-bottom:5px;
+}
+.widget .body{
+	background: #fff;
+	background-image: none;
+	border-top: none;
+	color: #333;
+	padding: 5px 3px;
+
+}
+
+.widget .header{
+	background: #ddd;
+	background-image: none;
+	border: none;
+	border-bottom: none;
+	color: #333;
+	padding: 5px 3px;
+	border-radius: 5px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+.widget .header .options a{border:none;}
+.widget .go-box{
+	background: #fff;
+	border: 1px solid #000;
+	color: #000;
+	width:130px;
+}
+
+#widget-go-search .header{
+	padding: 5px 0 5px 0;
+}
+
+.widget .go-submit{border:1px solid #000;}
+
+.widget ul li{
+	color: #5d3c1e;
+	list-style-type:none;
+	margin: 5px 0px;
+	padding: 0px 3px;
+}
+
+.widget ul li li{
+	list-style-type: square;
+}
+
+.widget ul{color: #073177;}
+
+#widget-services ul{
+	margin: 0;
+	padding: 0 0 0 0.5em;
+}
+#widget-services ul ul{
+	margin: 0 0 0 15px;
+	padding: 0;
+}
+
+#widget-services ul li{
+	font-weight: bold;
+	list-style: none;
+	margin-bottom: 1.5em;
+}
+
+#widget-services ul li li{
+	font-weight: normal;
+	margin-bottom: 0.5em;
+}
+
+#widget-popular ul li{
+	color: #ccc;
+	list-style:disc;
+}
+
+#widget-bookmarks .body #add-bookmark{
+	border-bottom: 1px dotted #B3BB86;
+	display:none;
+	padding-bottom:3px;
+	overflow:auto;
+}
+#widget-bookmarks .body #add-folder{
+	border-bottom: 1px dotted #B3BB86;
+	display:none;
+	padding-bottom:3px;
+	overflow:auto;
+}
+#widget-bookmarks #bookmarks li.bookmark{list-style:inside url('http://s1.plymouth.edu/webapp/style/templates/images/my/sidebar_bullet.png');}
+#widget-bookmarks .dropOver{background:#FDF5B0;}
+#widget-bookmarks .bookmark-parent{color: #BAB8B0;padding:3px;}
+
+#widget-bookmarks .bookmark-trash{
+	background:#ead4d4;
+	border-bottom:1px dotted #800000;
+	border-top:1px dotted #800000;
+	display:none;
+	margin-top:15px;
+	padding:3px;
+}
+.widget .ds-container fieldset {
+	background: none;
+	color: #000;
+	padding:3px;
+}
+.widget .ds-container ul{background: none;height:1.2em;margin:0;padding:3px 0 0 0;text-align:center;}
+.widget .ds-container li{
+	background: #fff;
+	border: none;
+	border-bottom: none;
+	padding: 3px 0px;
+	width: 47%;
+}
+.widget .ds-container li.selected{
+	background: #ccc;
+	border: none;
+}
+.widget .ds-container input, .widget .ds-container select{
+}
+.widget .ds-container li a{border-bottom: none;}
+.widget .ds-container li.selected a{border-bottom: none;}
+
+.widget .ds-container .temp_text{color:#000;}
+.widget .ds-container #ds-person-search .ds-what{
+	width: 140px;
+}
+
+img.sidebar_icon,#widget-bookmarks .icon{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1');
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	width:16px;
+}
+body.inside #body{
+	background-color: #fff;
+	background-image: none;
+	background-repeat: repeat-x;
+	background-position: 0px -32px;
+	color: #000;
+	z-index:0;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+#columns{border-top: none;}
+#columns .column{border-left: none; padding-top: 0px;}
+
+iframe{border:1px solid #000;}
+.iframe-container{background:#000;}
+#body .framed-content{background:#000;min-height: 700px;height:1500px;width: 100%;}
+
+#search-window{background:#000;overflow:auto;}
+
+#search-window #search-help{border:1px solid #999ccc;width:99%;}
+#search-window .results{border:1px solid #999ccc;width:99%;}
+#search-window iframe{width:100%;}
+
+.channel{
+	color: #000;
+	font-size:0.9em;
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+.channel .body{
+	background: #fff;
+	background-image: none;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	color: #000;
+	-webkit-border-bottom-left-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	-moz-border-radius-bottomright: 3px;
+	border-bottom: none;
+	border-left: none;
+	border-right: none;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.channel p{
+	margin-bottom: 0.5em;
+}
+.channel h1{font-size: 1.2em;}
+.channel h2{font-size: 1.1em;}
+.channel .header{
+	background-color: #ff7900;
+	background-image: none;
+	background-position: bottom left;
+	background-repeat: repeat-x;
+	border-bottom: 1px solid #a44e00;
+	color: #666;
+	font-size: 1.0em;
+	font-weight:bold;
+	height: 1.5em;
+	padding: 3px 5px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+}
+.channel ul{color: #555;}
+.channel ul li{color: #555;}
+.channel .header ul.options{
+	margin-top: 3px;
+	margin-right: 3px;
+}
+.channel .header .options a{border:none;}
+
+.channel .header .extra_bg{
+	background: none;
+}
+.channel .header h1{
+	color: #fff;
+	font-weight:bold;
+	padding: 3px;
+	z-index: 100;
+}
+.channel .header .extra_bg{
+	background-image: none;
+	background-position: top left;
+	background-repeat: no-repeat;
+}
+.channel .header .top-left{
+	background:none;
+}
+.channel .header .top-right{
+	background-image: none;
+	background-position: bottom right;
+	background-repeat: no-repeat;
+}
+
+.channel .header ul.options li{display:inline;list-style:none;}
+.channel .header ul.options li a{padding: 0px 2px;}
+.channel .header_image{height:30px;	border-left: 1px solid #000;}
+
+img.channel_icon {
+background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1');
+background-repeat:no-repeat;
+height:14px;
+padding:0;
+width:13px;
+}
+img.ci_edit,img.ci_focus,img.ci_help,img.ci_maximize,img.ci_minimize,img.ci_remove {opacity:0.3;}
+
+.channel .shadow{background: none;}
+.channel ul, ol{padding-left: 10px;	margin-left: 10px;}
+
+.secondary_table_block{border:none;}
+.secondary_table_header{
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	margin-bottom: 5px;
+	padding:3px;
+}
+.secondary_table_cell_1{
+	background: none;
+	padding: 3px;
+}
+.secondary_table_cell_2{
+	background: #eee;
+	padding: 3px;
+}
+
+img.channel_icon{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1');
+	background-repeat:no-repeat;
+}
+
+.email-channel .email-list th{
+	border-left: none;
+	border-top: none;
+}
+.email-channel img.icon{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1');
+	background-repeat:no-repeat;
+}
+
+.email-channel ul li {
+	list-style-position:inside;
+	list-style-type:disc;
+}
+.email-channel ul li span{color:#eee;}
+
+.message-text{
+	background: #433D32;	
+	border: 1px dotted #ccc;
+	color: #eee;
+	padding: 5px;	
+	margin: 3px;
+}
+
+
+.divider{border-top: 1px solid #999;}
+
+.percent_bar{background: #fff;border: 1px solid #ccc;}
+.percent_bar .fill{background: #333;color: #fff;text-align:center;}
+.shaded_box{background: #999; border: 1px solid #ccc;}
+
+.pic_addresses{border:1px solid #000;}
+.pic_emails{border:1px solid #000;}
+
+.channel .toggle-list h2{
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	font-size: 1.0em;
+	margin-bottom: 5px;
+	padding: 3px;
+}
+
+.channel .toggle-list .links{
+	padding: 5px;
+}
+
+body.inside .acad_info_header{
+	border: none;
+	border-bottom: 1px solid #000;
+}
+
+/**********************************************
+ * Hot Links Styles
+ **********************************************/
+.widget ul.popular-tabs{background:none;height:1.2em;margin:0;padding:3px 0 0 0;text-align:center;}
+.widget ul.popular-tabs li{
+	background: none;
+	border-bottom: none;
+	padding: 3px 0px;
+	width: 47%;
+}
+.widget ul.popular-tabs li.selected{
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	font-weight: bold;
+}
+
+.widget ul.popular-tabs li a{border-bottom: none;}
+.widget ul.popular-tabs li.selected a{
+	background: none;
+	border: none;
+}
+
+.widget #popular-everyone{clear:both;margin-top:5px;}
+.widget #popular-me{clear:both;margin-top:5px;}
+
+#widget-dashboard .body{padding-left:5px;}
+
+/**********************************************
+ * Custom Thickbox Styles
+ **********************************************/
+/* styles for profile */
+#TB_window img{border: 1px solid #000;}
+
+fieldset label{float:left;font-weight:normal;width:100%;padding-top: 10px;}
+fieldset label span{float:left;font-weight:bold;width:10em;text-align:left;}
+fieldset label.top span{display:block;float:none;width:100%;}
+
+input.disabled {border: 1px solid #F2F2F2;background-color: #F2F2F2;}
+input.required, textarea.required {}
+input.validation-failed, textarea.validation-failed {
+	border: 1px solid #FF3300;
+	color : #FF3300;
+}
+input.validation-passed, textarea.validation-passed {
+	border: 1px solid #00CC00;
+	color : #000;
+}
+
+.validation-advice {
+	margin: 5px 0;
+	padding: 2px;
+	background-color: #FF3300;
+	color : #FFF;
+	font-weight: bold;
+}
+
+strong.req{color:red;}
+.percent_bar{margin: 5px 0px;}
+.success{color:green;font-weight:bold;}
+#login_error{color:red;font-weight:bold;}
+
+/*************[Weather Styles]*****************/
+
+/*************[Luminis Overrides]**************/
+.bgslight{
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.bgslight .text10{
+	background: none;
+	border: none;
+}
+
+.bgslight img{display:none;}
+
+.uportal-background-light{
+	background-image:none;
+	padding: 5px;
+}	
+.uportal-background-light td{
+	background:none;
+	border:none;
+	padding: 1px;
+}
+
+body.inside input.btnvert, 
+body.inside input.btn, 
+body.inside input.btnsm{
+	background-image: none;
+}
+input.btnvert:hover, input.btn:hover, input.btnsm:hover{
+	background-color: #7B7666;
+}
+
+body.inside #managetargetedannouncements #personal_abm_tbl td{
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 3px;
+	padding: 3px 0px;
+}
+
+body.inside #managetargetedannouncements #personal_abm_tbl img{
+	display: none;
+}
+
+#tabs_tda{
+	background: #03245A;
+	border: 1px solid #000;
+	padding:5px;
+}
+#tabs_tda #tab{
+	background: #ccc;
+	border: 1px solid #000;
+	padding: 3px 5px;
+}
+#tabs_tda .texttabon{font-weight:bold;}
+
+#tabs_tda a#tab:link,#tabs_tda a#tab:active,#tabs_tda a#tab:visited{
+	color: #555;
+}
+
+.bgtabon .uportal-channel-text{border-top:1px solid #999;}
+
+.bgtabon table table{margin: 5px 0px;}
+
+.uportal-background-content img,.uportal-channel-text img{
+	margin-right: 3px;
+}
+
+.ChanBoxBg{border: 1px solid #999;padding: 5px;}
+#tabs_tda #add_a_new_tab{margin-right: 5px;}
+
+.uportal-label{font-weight: bold;}
+
+.uportal-background td{
+	border: 1px solid #999;
+}
+.uportal-background td td{
+	border: none;
+}
+.uportal-background-highlight{
+	background-color: #F2EFE1;
+}
+.uportal-channel-strong{
+	font-weight:bold;
+}
+
+.uportal-background-shadow{
+	background:#000;
+}
+
+.workflowdefault{
+	background: #433D32;
+	border: 1px solid #000;
+	padding: 3px;
+}
+.workflowcurrent{
+	background: #d6d6b7;
+	border: 1px solid #000;
+	padding: 3px;
+}
+.workflowvisited{
+	background: #433D32;
+	border: 1px solid #000;
+	padding: 3px;
+}
+
+#chlist td{
+	background: #F5F2E6;
+}
+
+#chlist td table.uportal-background-med td{
+	background: #E2DFD4;
+}
+
+.uportal-text-small-unread{
+	font-weight: bold;
+	color : Black;
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-size : 10px;
+}
+
+.uportal-text-small-read{
+	color : Black;
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-size : 10px;
+}
+
+#admin\.navigation\.links .uportal-channel-text{
+	background:#433D32;
+	border:1px dotted #000;
+	display:block;
+	margin-bottom:10px;
+	padding:10px;
+}
+
+#admin\.navigation\.links .uportal-channel-text img{display:none;}
+
+.channel .body .uportal-channel-text{
+	color: #000;
+}
+
+/*********************************************************
+ *
+ * Poll Styles
+ *
+ *********************************************************/
+ 
+#poll_data h2{
+	background: none;
+	border: none;
+	color: #5d3c1e;
+	font-size: 1.2em;
+	font-weight:bold;
+	margin: 3px 0;
+	padding:3px;
+}
+
+#poll_data ul{
+	margin:5px 0;
+	padding:0;
+}
+
+#poll_data li{
+	list-style:none;
+	margin:3px 3px 6px 3px;
+	padding:0;
+}
+
+#poll_data #form_bt_vote{
+	background: #ccc;
+	border:1px solid #bbb;
+}
+#poll_data #form_bt_vote:hover{
+	background:#e3e3e3;
+}
+#poll_data label{display:block;}
+#poll_data .percentage{
+	color:#999;
+	font-size:0.9em;
+	text-align:right;
+}
+#poll_data .bar{
+	background: #ff7900;
+	border-bottom:1px solid #ccc;
+	border-left:1px solid #ccc;
+	border-top:1px solid #ccc;
+	font-size:1px;
+	height:10px;
+}
+#poll_data .no-bar{
+	background: #eee;
+	border-bottom:1px solid #ccc;
+	border-right:1px solid #ccc;
+	border-top:1px solid #ccc;
+	font-size:1px;
+	height:10px;
+}
+#poll_data table{font-size:1.0em;margin:3px 0;}
+#poll_data .votes{font-style:italic;margin: 3px 0;}
+#poll_data .answer{
+	border-bottom: 1px dotted #999;
+	color:#444;
+	font-size: 1.0em;
+	margin: 0 0 3px 0;
+	padding:3px;
+}
+#poll_results .provided{
+	border-top: 1px dotted #999;
+	color:#444;
+	font-size: 0.9em;
+	margin: 3px 0;
+	padding:3px;
+}
+
+#alertAdminMessageDiv,#alertSessionExpireMessageDiv{
+	background: #F4F1E6;
+	border: 3px solid #B70F38;
+	padding: 10px;
+}
+/**********************************************
+ * Forgot Username Styles
+ **********************************************/
+
+/**********************************************
+ * Individual Channel Styles
+ **********************************************/
+ul.game-channel{list-style-type:none;margin:0;padding:0;}
+ul.game-channel li{
+	margin: 5px 0;
+	padding:5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+ul.game-channel li img{border:1px solid #000;margin-right:5px;vertical-align:middle;}
+ul.game-channel li a{color: #000;}
+/**********************************************
+ * Tool Topnav Styles
+ **********************************************/
+body.topnav a:link,body.bgmenu a:link,body.admin a:link{color: #4B55D1;text-decoration: none;}
+body.topnav a:active,body.bgmenu a:active,body.admin a:active{color: #4B55D1;text-decoration: none;}
+body.topnav a:visited,body.bgmenu a:visited,body.admin a:visited{color: #4B55D1;text-decoration: none;}
+body.topnav a:hover,body.bgmenu a:hover,body.admin a:hover{color: #060E79;}
+body.topnav a img{margin-right:3px;}
+body.topnav{
+	background: #E9E6D4;
+	background-image:url(/psu/images/header_bg_left.gif);
+	background-repeat:repeat-x;
+	border-bottom:1px solid #BAB8B0;
+	color: #fff;
+}
+
+body.topnav .bgtabon{display:none;}
+body.topnav .taboff{background:none;}
+
+body.topnav h1{color:#000;}
+body.topnav div.taboff{
+	background:#d6d6b7;
+	border-left:1px solid #BAB8B0;
+	border-right:1px solid #BAB8B0;
+	border-top:1px solid #BAB8B0;
+	margin:0 5px;
+}
+body.topnav div.taboff:hover{background:#E1E1C6;}
+body.topnav .tabon{background:none;}
+body.topnav div.tabon{background:#E9E5D4;margin:0 5px;}
+body.topnav div.tabon{
+	border-left:1px solid #BAB8B0;
+	border-right:1px solid #BAB8B0;
+	border-top:1px solid #BAB8B0;
+}
+
+/**********************************************
+ * Tool Menu Styles
+ **********************************************/
+
+body.bgmenu{
+	background: #F5F2E6;
+	background-image:none;
+}
+
+.bg1{background:none;}
+.bg1 img{visibility:hidden;}
+.bg3{background:none;}
+.bg3 img{display:none;}
+
+td.datarowitem-checkbox{background:#F5F2E6;border-top:1px dotted #BAB8B0;font-size:0.9em;}
+td.datarowitem{background:#F5F2E6;border-top:1px dotted #BAB8B0;font-size:0.9em;}
+td.datarowitem-groupdescription{background:#F5F2E6;border-top:1px dotted #BAB8B0;font-size:0.9em;}
+
+.text10 img{margin-right:3px;}
+
+/**********************************************
+ * RSS Styles
+ **********************************************/
+
+ul.rss{
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+ul.rss li{margin: 0 0 3px 0;padding:3px;}
+ul.rss li.expanded{
+	border-bottom: 1px dotted #454A2C;
+	padding-bottom: 10px;
+}
+ul.rss li.expanded h3 img{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1');
+	background-position:-144px -64px;
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	width:16px;
+}
+ul.rss li.expanded h3 a{
+	border-bottom: 1px dotted #ccc;
+}
+ul.rss li.contracted h3 img{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1');
+	background-position:-128px -64px;
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	width:16px;
+}
+ul.rss h3{font-size:1.0em;font-weight:normal;}
+ul.rss h3 a{border-bottom: none;}
+
+/**********************************************
+ * My Courses Styles
+ **********************************************/
+#mycourses-container {font-size:1.0em;}
+#mycourses-container a{text-decoration:none;}
+#mycourses-container h1{font-size:1.2em;margin:0 0 3px 0;}
+#mycourses-container h2{
+	background:#333;
+	border-top:1px solid #666;
+	font-size:1.1em;
+	margin:0 0 3px 0;
+	padding:3px;
+}
+
+#mycourses-container img.icon{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1');
+	background-repeat:no-repeat;
+	height:16px;
+	margin:0;
+	padding:0;
+	vertical-align:middle;
+	width:16px;
+}
+
+/**********************************************
+ * Webcam and Weather Styles
+ **********************************************/
+/*globals*/
+#myweather h2.nopad{margin: 0;padding: 0 0 2px; 0;}
+#myweather .smtext {color: #ff0000;font-size: 0.8em;}
+/*index*/
+#myweather a.webcam-thumb{border: 3px solid #ccc;display:block;float:right;}
+#myweather a.webcam-thumb img{border: 1px solid #a3b1bf;}
+.channel #myweather ul.wx-tabs{
+	border-top: 1px solid #ccc;
+	clear:both;
+	margin:5px 0 0 0;
+	padding:0;
+	text-align:center;
+}
+#myweather .wx-tabs a{
+	display:block;
+	margin:0 2px;
+	padding:3px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+#myweather .wx-tabs a:hover{
+	background: #a8bcd2;
+	color: #fff;
+	font-weight: normal;
+}
+
+/*weather*/
+/*fcst*/
+#myweather .wx_fcstbox{
+	background-color:#433D32; 
+	border:1px solid #000;
+	color: #ccc;
+	float:left;
+	height:125px; 
+	left:5px; 
+	margin:4px;
+	margin-bottom:20px
+	position:relative; 
+	top:10px;
+	width:48px; 
+}
+#myweather .wx_fcstelem{
+	color:#000;
+	font-weight:bold;
+	text-align:center;
+	width:48px;
+}
+#myweather .wx_fcstterm{
+	color:000;
+	font-weight:none;
+	text-align:center;
+	font-size:.9em;
+	width:48px;
+}
+#myweather .wx_fcsthi{color:#ff0000;}
+#myweather .wx_fcstlo{color:#7DA9BB;}
+/*maps*/
+#myweather li.c1{background: none; list-style:none;margin:1px;}
+#myweather li.c2{background-color: #cccccc; list-style:none;margin:1px;}
+/*prefs*/
+/*about*/
+#myweather div.c1{background-color: none; font-size:.9em;margin:1px;}
+#myweather div.c2{background-color: #cccccc; font-size:.9em;margin:1px 1px 10px 1px;}
+
+
+/* Main Style Sheet for jQuery Calendar */
+#calendar_div, .calendar_inline {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+	background: #cccccc;
+}
+#calendar_div {
+	display: none;
+	border: 1px solid #000;
+	z-index: 10; /*must have*/ 
+}
+#calendar_div, .calendar_control, .calendar_links, .calendar_header, .calendar {
+	width: 200px;
+}
+.calendar_inline {
+	float: left;
+	display: block;
+	border: 0;
+}
+.calendar_dialog {
+	padding: 5px !important;
+	border: 4px ridge #000 !important;
+}
+button.calendar_trigger {
+	width: 25px;
+}
+img.calendar_trigger {
+	margin: 2px;
+	vertical-align: middle;
+}
+.calendar_prompt {
+	float: left;
+	width: 181px;
+	padding: 2px;
+	background: #cccccc;
+	color: #eee;
+}
+* html .calendar_prompt {
+	width: 185px;
+}
+.calendar_control, .calendar_links, .calendar_header, .calendar {
+	clear: both;
+	float: left;
+	color: #fff;
+}
+.calendar_control {
+	background: #FF9900;
+}da
+.calendar_links {
+	border: none;
+}
+.calendar_control, .calendar_links {
+	border: none;
+	font-weight: bold;
+	font-size: 80%;
+	letter-spacing: 1px;
+}
+.calendar_links label { /* disabled links */
+	padding: 2px 5px;
+	color: #ccc;
+}
+.calendar_clear, .calendar_prev {
+	float: left;
+}
+.calendar_current {
+	float: left;
+	width: 35%;
+	text-align: center;
+}
+.calendar_close, .calendar_next {
+	float: right;
+}
+.calendar_header {
+	border: none;
+	text-align: center;
+	font-weight: bold;
+	display:block;
+}
+body.inside .calendar_header select {
+	font-weight: bold;
+}
+.calendar {
+	background: #000;
+	text-align: center;
+	font-size: 100%;
+}
+.calendar a {
+	display: block;
+	width: 100%;
+}
+.calendar a:hover{
+	border: none;
+}
+.calendar .calendar_titleRow {
+	border: none;
+}
+.calendar .calendar_daysRow {
+	background: #fff;
+	color: #666;
+}
+.calendar .calendar_daysCell {
+	color: #333;
+	padding: 1px 5px;
+	border: 1px solid #000;
+}
+#calendar .calendar_daysCell a{
+	color: black;
+	display: block;
+}
+.calendar .calendar_weekEndCell {
+	background: #dbe0e6;
+}
+.calendar .calendar_daysCellOver {
+	background: yellow;
+	border: none;
+	color: #000;
+}
+.calendar .calendar_unselectable {
+	color: #888;
+}
+.calendar_today {
+	background: orange !important;
+}
+.calendar_currentDay {
+	background: yellow !important;
+}
+
+/* ________ CALENDAR LINKS _______
+
+** Reset link properties and then override them with !important */
+
+#calendar_div_0 {
+	border: 1px solid #000;
+}
+#calendar_div a, .calendar_inline a {
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: #000;
+}
+.calendar_inline .calendar_links a {
+	padding: 0 5px !important;
+}
+.calendar_control a, .calendar_links a {
+	padding: 2px 5px !important;
+	color: #000 !important;
+}
+.calendar_titleRow a {
+	color: #000 !important;
+}
+.calendar_control a:hover {
+	/*background: #fdd !important;*/
+	color: #000 !important;
+}
+.calendar_links a:hover, .calendar_titleRow a:hover {
+	color: #000 !important;
+}
+
+/* ___________ IE6 IFRAME FIX ________ */
+
+.calendar_cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 193px; /*must have to match width and borders*/
+    height: 200px; /*must have to match maximum height*/ 
+}
+
+/*********** CUSTOM Calendar Styles ************/
+#cal_container{
+	text-align:center;
+}
+
+#cal_container a img.zcal{
+	background-image:url('http://s1.plymouth.edu/webapp/themes/my/themes/platypus/images/all_icons.png?version=1');
+	background-position:-112px -64px;
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	vertical-align:middle;
+	width:16px;
+}
+
+#zcal_calendar{
+	margin: 0 auto;
+}
+#zcal_appt_text{
+	clear: both;
+	margin: 0 auto;
+	padding: 5px;
+	text-align: left;
+}
+
+#zcal_appt_text ul{
+	margin: 0;
+	padding: 0;
+}
+
+#zcal_appt_text ul li{
+	border-bottom: 1px dotted #111;
+	list-style: none;
+	margin: 0 0 5px 10px;
+	padding: 3px;
+}
+
+#zcal_appt_text .time{
+	padding-left: 10px;
+}
+#zcal_appt_text .location{
+	padding-left: 10px;
+}
+#zcal_appt_text .fragment{
+	padding-left: 10px;
+	overflow: hidden;
+	width: 98%;
+}
+
+.calendar_inline{
+	float: none;
+	margin: 0 auto;
+	width: 200px;
+}
+
+.calendar_inline a{
+	color: #444;
+}
+
+.calendar_inline .has_appt a{
+	color: #5d3c1e;
+	font-weight:bold;
+}
+
+.plants-date, .plants-weblinktext a:link, .plants-weblinktext a:visited, .plants-weblinktext a:hover, .plants-weblinktext a:active, .plants-weblinktext a:focus{
+	background: #433D32;
+	border: 1px solid #000;
+}
+
+.pic_addresses, .pic_emails, .pic_phones{
+	border: 1px dotted #000;
+}
