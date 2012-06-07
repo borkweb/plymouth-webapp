@@ -2863,12 +2863,23 @@ class IDMObject
 	 * Calls phpCAS::logout
 	 *
 	 * @since		version 1.0.2
+	 * @param 	string $redirect_url the url to redirect to after logout
 	 * @access		public
 	 */
-	static function unauthN()
+	static function unauthN( $redirect_url = null )
 	{
 		require_once('cas/CAS.php');
-		phpCAS::logout();
+
+		// Setup CAS. The logout method requires CAS to be setup first
+		self::setupCAS();
+
+		// If a url was passed
+		if ( isset($redirect_url) ) {
+			phpCAS::logoutWithRedirectService( $redirect_url );
+		}
+		else {
+			phpCAS::logout();
+		}
 	}//end unauthN
 
 	/**
