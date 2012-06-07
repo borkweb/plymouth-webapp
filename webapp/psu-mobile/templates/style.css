@@ -437,6 +437,10 @@ footer.ui-footer {
 #page-logout-message {
   text-align: center; }
 
+/* Logout Success */
+#page-logout-success {
+  text-align: center; }
+
 /* Styles based on the device's OS */
 html.android header .ui-btn[data-rel=back] {
   display: none; }

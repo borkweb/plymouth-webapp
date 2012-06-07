@@ -379,8 +379,11 @@ $(document).on('vclick', '#page-events #events a', function(event) {
 // When a result is clicked
 $(document).on('pageinit', '#page-logout-message', function(event) {
 	// Delay the page load for a second, so that we can actually show the message
-	window.setInterval( function() {
-		// Ok, now let's load the url
-		window.location.href = LOGOUT_URL;
+	window.setTimeout( function() {
+		// Let's setup our redirect url
+		var redirectUrl = HOST + BASE_URL + '/logout/logout-success/';
+
+		// So let's load the logout page
+		window.location.href = LOGOUT_URL + '?redirect_to=' + redirectUrl;
 	}, 1500);
 });

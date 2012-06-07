@@ -198,7 +198,7 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 				$htmlTag.addClass(authClass);
 
 				// We should probably show the logout button now
-				$('#logout-btn').show(0).css('display', 'block !important');
+				$('#logout-btn').show(0).css('display', 'block');
 
 				// Let's load the page that required login/authentication
 				continueLoading();
@@ -263,11 +263,12 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 				// Add a class to the html, so we don't have to worry about using the childBrowser while the user's session is still alive
 				$htmlTag.removeClass(authClass);
 
-				// We should probably show the logout button now
-				$(self).hide(0);
+				// We should probably hide the logout button now
+				$(self).hide(0).css('display', 'none');
 
-				// Let the user know what just happened
-				alert('You have successfully logged out!');
+				// Refresh/repaint
+				$(window).trigger('resize');
+				$(window).trigger('updatelayout');
 			};
 
 			// Let's make sure that the ChildBrowser plugin is ready and available
@@ -280,9 +281,12 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 					// Log the information
 					psu.log('ChildBrowser location changed to: ' + location);
 
-					// Let's check if the user has logged in successfully
+					// Let's check if the user has logged out successfully
 					if (/logout-success/.test(location) || /connect/.test(location) || /wp-login/.test(location)) {
-						logoutSuccess();
+						// Delay the finished function for a second, so that we can actually show the message
+						window.setTimeout( function() {
+							logoutSuccess();
+						}, 1500);
 					}
 				};
 			}
