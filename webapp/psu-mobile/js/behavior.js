@@ -218,7 +218,10 @@ $(document).on('vclick.webapp', 'a[data-auth=required]', function(event) {
 	event.preventDefault();
 
 	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
-	event.stopPropagation();
+	event.stopImmediatePropagation();
+
+	// Show the page loading message while we redirect
+	$.mobile.showPageLoadingMsg();
 
 	// jQuery selector and class
 	var $htmlTag = $('html');
