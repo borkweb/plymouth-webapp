@@ -17,8 +17,8 @@ $GLOBALS['APP_BUILD_NAME'] = 'jqm-html5';
 $GLOBALS['APP_BUILD_TYPE'] = 'beta';
 
 // Set some globals about our server for easy use later
-$GLOBALS['APP_HOST'] = ($_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
-$GLOBALS['APP_URL'] = $GLOBALS['APP_HOST'] . $_SERVER['HTTP_HOST'] . $GLOBALS['BASE_URL'];
+$GLOBALS['APP_PROTOCOL'] = ($_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+$GLOBALS['APP_URL'] = $GLOBALS['APP_PROTOCOL'] . $_SERVER['HTTP_HOST'] . $GLOBALS['BASE_URL'];
 
 // If the app is currently running on the development server
 if (PSU::isdev()) {
@@ -42,6 +42,10 @@ else {
 // Include my custom mobile smarty class
 require_once $GLOBALS['BASE_DIR'] . '/includes/MobileTemplate.class.php';
 
+// Include my custom mobile smarty class
+require_once $GLOBALS['BASE_DIR'] . '/includes/MobileParams.class.php';
+
+// Include the Klein PHP routing engine
 require_once 'klein/klein.php';
 
 if( file_exists( $GLOBALS['BASE_DIR'] . '/debug.php' ) ) {
@@ -58,6 +62,9 @@ includes_psu_register( 'Mobile', $GLOBALS['BASE_DIR'] . '/includes' );
 
 // Make some objects available elsewhere
 respond( function( $request, $response, $app ) {
+	// Initialize the custom parameters
+	$app->params = new MobileParams;
+
 	// Initialize the PSU smarty templating
 	$app->tpl = new MobileTemplate;
 });
@@ -65,19 +72,19 @@ respond( function( $request, $response, $app ) {
 // Generic request 
 respond( '/', function( $request, $response, $app ) {
 	// Grab a couple of the request parameters
-	$response->session('phonegap', $request->param('phonegap'));
-	$response->session('cordova', $request->param('cordova'));
-	$response->session('client-app', $request->param('client-app'));
+	$app->params['phonegap'] = $request->param('phonegap');
+	$app->params['cordova'] = $request->param('cordova');
+	$app->params['client-app'] = $request->param('client-app');
 
 	// Remove the variables if they're null
-	if (is_null($_SESSION['phonegap'])) {
-		unset($_SESSION['phonegap']);
+	if (is_null($app->params['phonegap'])) {
+		unset($app->params['phonegap']);
 	}
-	if (is_null($_SESSION['cordova'])) {
-		unset($_SESSION['cordova']);
+	if (is_null($app->params['cordova'])) {
+		unset($app->params['cordova']);
 	}
-	if (is_null($_SESSION['client-app-version'])) {
-		unset($_SESSION['client-app-version']);
+	if (is_null($app->params['client-app'])) {
+		unset($app->params['client-app']);
 	}
 
 	// Show the index on a generic request
