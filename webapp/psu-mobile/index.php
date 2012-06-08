@@ -67,6 +67,9 @@ respond( function( $request, $response, $app ) {
 
 	// Initialize the PSU smarty templating
 	$app->tpl = new MobileTemplate;
+
+	// Add the parameters object to the template
+	$app->tpl->assign( 'params', $app->params );
 });
 
 // Generic request 

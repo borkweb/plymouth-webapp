@@ -145,6 +145,21 @@ $(document).on('vclick', 'html.android h1#header-logo', function() {
 	$.mobile.changePage(backUrl, {reverse: true});
 });
 
+// Allow overriding the back button
+$(document).on('vclick', 'a[data-rel=back][data-force-href=true]', function(event) {
+	// Prevent the page from changing normally
+	event.preventDefault();
+
+	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	event.stopImmediatePropagation();
+
+	// Grab the url of the hard-coded back button
+	var backUrl = $('a[data-rel=back]').attr('href');
+
+	// Use jQuery Mobile's page change function to animate with transitions and load with Ajax, even if they weren't already there (that's why we're not using history.back)
+	$.mobile.changePage(backUrl, {reverse: true});
+});
+
 
 /*
  *
@@ -253,7 +268,7 @@ $(document).on('vclick.webapp', 'a[data-auth=required]', function(event) {
 		var redirectUrl = BASE_URL + '/' + linkUrl;
 
 		// So let's load the login page
-		window.location.href = LOGIN_URL + '?redirect_to=' + redirectUrl;
+		window.location.href = LOGIN_URL + '?redirect_to=' + redirectUrl + '&came_from=' + document.URL;
 	}
 });
 

@@ -4,6 +4,7 @@
 respond( '/?', function( $request, $response, $app ) {
 	// Let's create a session variable, so we know where to redirect back to
 	$app->params['called_url'] = $request->param( 'redirect_to' );
+	$app->params['back_button_url'] = $request->param( 'came_from' );
 
 	// Authenticate the user
 	IDMObject::authN();
@@ -15,7 +16,7 @@ respond( '/?', function( $request, $response, $app ) {
 
 // Let's make sure to redirect them to the originally called URL if they requested to
 respond( '/login-success/?', function( $request, $response, $app ) {
-	if (!empty($_SESSION['called_url'])) {
+	if ( !empty( $app->params['called_url'] ) ) {
 		// Redirect to the originally intended authentication url
 		header('Location: ' . $app->params['called_url']);
 	}
