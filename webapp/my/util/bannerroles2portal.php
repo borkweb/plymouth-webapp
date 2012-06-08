@@ -1,6 +1,11 @@
 <?php
 
-require_once 'PSUTools.class.php';
+//
+// Cache banner roles in the MySQL portal database
+//
+
+require __DIR__ . '/init.php';
+require_once 'autoload.php';
 
 ini_set('memory_limit', '512M');
 set_time_limit(-1);

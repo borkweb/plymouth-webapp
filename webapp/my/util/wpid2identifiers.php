@@ -4,6 +4,9 @@
  * Take wpids from connect and populate them into the idm person_identifiers database.
  */
 
+require __DIR__ . '/init.php';
+require_once 'autoload.php';
+
 ignore_user_abort(true);
 
 if( ob_get_level() ) {

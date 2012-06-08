@@ -8,9 +8,8 @@
  * Append ?simple=1 to URL to hide names.
  */
 
-require_once 'IDMObject.class.php';
-require_once 'PSUWordPress.php';
-require_once 'PSUPerson.class.php';
+require __DIR__ . '/init.php';
+require_once 'autoload.php';
 
 IDMObject::authN();
 
