@@ -2,7 +2,7 @@
 ini_set('memory_limit', -1);
 
 class PSUReport{
-	/**
+ 	/**
 	 * Max data length of each column
 	 */
 	public $data_length = array();
@@ -43,10 +43,15 @@ class PSUReport{
 	public $hide_csv = false;
 
 	/**
+	 * Restrict field width
+	 */
+	public $max_field_width = 650;
+	
+	/**
 	 * allow paging?
 	 */
 	public $paging = 20;
-
+ 
 	/**
 	 * the field used in to specifiy if a simple graph should be displayed
 	 */
@@ -82,7 +87,7 @@ class PSUReport{
 	 */
 	public static $time;
 
-	public function __construct( $id, $report, $drill = array() ){
+ 	public function __construct( $id, $report, $drill = array() ){
 		$this->id = $id;
 		$this->_chart_data = array();
 
@@ -399,6 +404,13 @@ class PSUReport{
 	}//end createBind
 
 	/**
+	 * get width of field text
+	 */
+	public function getTextWidth( $text ) {
+		return strlen( $text );
+	}
+ 
+	/**
 	 * create graph instance
 	 */
 	public function graph(){
@@ -449,7 +461,7 @@ class PSUReport{
 
 		// Determine max length of values in column 
 		foreach( $row as $field=>$data ) {
-			$field_length = strlen( $data );
+			$field_length = $this->getTextWidth( $data ); 
 			if( $field_length > $this->data_length[ $field ] ) { 
 				$this->data_length[ $field ] = $field_length;
 			}
@@ -461,7 +473,7 @@ class PSUReport{
 
 		return $row;
 	}//end parse_row
-
+ 
 	/**
 	 * retrieves the source of the query
 	 */
