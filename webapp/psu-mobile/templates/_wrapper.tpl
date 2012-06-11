@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js {if $smarty.session.username}authenticated{/if}" lang="en">
+<html class="no-js {if $params.username}authenticated{/if}" lang="en">
 <head> 
 	<meta charset="utf-8">
 
@@ -61,17 +61,17 @@
 	{* Necessary Global Tools *}
 
 	{* If the phonegap/cordova session variable is set, include the PhoneGap/Cordova javascript *}
-	{if isset($smarty.session.phonegap) || isset($smarty.session.cordova)}
+	{if isset($params.phonegap) || isset($params.cordova)}
 
 		{* Load the PhoneGap/Cordova JavaScript files *}
-		{if isset($smarty.session.phonegap)}
-			{assign var='clientFrameworkVersion' value=$smarty.session.phonegap}
+		{if isset($params.phonegap)}
+			{assign var='clientFrameworkVersion' value=$params.phonegap}
 
 			<script>
 				var scriptName = 'phonegap';
 			</script>
-		{elseif isset($smarty.session.cordova)}
-			{assign var='clientFrameworkVersion' value=$smarty.session.cordova}
+		{elseif isset($params.cordova)}
+			{assign var='clientFrameworkVersion' value=$params.cordova}
 
 			<script>
 				var scriptName = 'cordova';
@@ -150,7 +150,7 @@
 	<script src="{"`$PHP.BASE_URL`/js/behavior.js"|cdn}"></script>
 
 		{* If the phonegap/cordova session variable is set, include the PhoneGap/Cordova javascript *}
-		{if isset($smarty.session.phonegap) || isset($smarty.session.cordova)}
+		{if isset($params.phonegap) || isset($params.cordova)}
 
 			<script src="{"`$PHP.BASE_URL`/js/phonegap-cordova-logic.js"|cdn}"></script>
 
