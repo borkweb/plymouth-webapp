@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js {if $params.username}authenticated{/if}" lang="en">
+<html class="no-js {if $smarty.session.username}authenticated{/if}" lang="en">
 <head> 
 	<meta charset="utf-8">
 
