@@ -4,7 +4,7 @@ class FinaidParams implements ArrayAccess {
 	const SESSION_KEY = 'webapp-finaid';
 
 	public function offsetExists( $key ) {
-		return isset( $_SESSION[ self::SESSION_KEY ] );
+		return isset( $_SESSION[ self::SESSION_KEY ][ $this->key($key) ] );
 	}
 
 	public function offsetGet( $key ) {
