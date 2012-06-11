@@ -1,0 +1,373 @@
+/********[BEGIN utility styles]********/
+.avatar{
+	border: 3px double #ccc;
+	float: left;
+	margin-right: 0.5em;
+}
+
+#go-sidebar .avatar{
+	margin-right: 1em;
+}
+
+/********[END utility styles]********/
+/********[BEGIN header styles]********/
+.webapp-head .psu_logo{
+	background: url(/webapp/my/templates/images/psulogo.png);
+	overflow: hidden;
+	position: absolute;
+	height: 42px;
+	text-indent: -5000px;
+	width: 150px;
+	top: 5px;
+	right: 0;
+}
+
+.webapp-head #tab-box{
+	display: none;
+	font-size: 1em;
+	margin-top: 5px;
+	z-index: 10;
+}
+/********[END header styles]********/
+/********[BEGIN nav styles]********/
+.webapp-nav .new-tab{display:none;}
+.webapp-nav:hover .new-tab{display:block;}
+.webapp-nav .new-tab a{
+	color: inherit;
+	font-weight: bold;
+}
+
+.webapp-nav .icon-logout{
+	background-image: url(/webapp/my/templates/images/all_icons.png);
+	background-position: 0px -32px;
+	background-repeat: no-repeat;
+	height: 22px;
+	width: 22px;
+	margin-right: 0.5em;
+	vertical-align: middle;
+}
+/********[END nav styles]********/
+/********[BEGIN Avant Body]******/
+.webapp-avant-body .date{text-align: right;}
+/********[END Avant Body]******/
+/********[BEGIN Foot]**********/
+#go-foot{
+	background: #000;
+	display: none;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
+/********[END Foot]************/
+/********[BEGIN sidebar]*******/
+.sidebar_throbber{
+	background: url(/webapp/my/templates/images/big_throbber.gif);
+	width: 54px;
+	height: 55px;
+}
+
+#go-sidebar .widget{
+	background: transparent;
+	margin-bottom: 0;
+	border-bottom: 1px solid #e0e0e0;
+	border-top: none;
+
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+
+	-moz-box-shadow: none;
+}
+
+#go-sidebar .widget > .title{
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+}
+
+#go-sidebar .widget > .foot{
+	border-bottom: none;
+}
+
+#go-sidebar .widget .title,
+#go-sidebar .widget > .subheader,
+#go-sidebar .widget > .body,
+#go-sidebar .widget > .foot{
+	border: none;
+}
+
+#go-sidebar .widget{font-size: 0.9em;}
+#go-sidebar .widget img{margin:3px;vertical-align:middle;}
+#go-sidebar .widget .body{
+	background: #eaeaea;
+	border-top: 1px solid #e0e0e0;
+	padding-bottom:5px;
+
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	-moz-border-radius-bottomright: 0;
+	-moz-border-radius-bottomleft: 0;
+	-webkit-border-bottom-right-radius: 0;
+	-webkit-border-bottom-left-radius: 0;
+}
+
+#go-sidebar .widget .title{
+	background: #f5f5f5;
+}
+
+#go-sidebar .widget p{margin-bottom: 0;}
+#go-sidebar .widget ul{
+	margin-bottom: 0;
+}
+
+#go-sidebar .widget > .title{
+	cursor: move;
+	font-size:1.1em;
+	font-weight:bold;
+	position:relative;
+}
+
+#go-sidebar .widget .body .box-inner > ul{
+	list-style-type: none;
+	margin: 0;
+	padding:0;
+}
+#go-sidebar .widget .options{margin:0px;float:right;}
+#go-sidebar .widget .options li{display:inline;list-style:none;}
+#go-sidebar .widget .body .box-inner > ul li,
+#go-sidebar .widget .body .box-inner > div ul li{
+	margin-left: 0;
+}
+
+/* we need an override here for the bookmarks styling in jstree */
+#go-sidebar .widget .body .box-inner .jstree li{
+	margin-left: 18px;
+}
+
+#go-sidebar .widget .foot{
+	background: none;
+	display:none;
+}
+/*--------[BEGIN go-profile]---------*/
+#go-sidebar .go-profile .title{
+	background: #eaeaea;
+	cursor: default;
+	display: none;
+}
+
+#go-sidebar .go-profile .body{
+	border-top: none;
+
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+	-moz-border-radius-topright: 6px;
+	-moz-border-radius-topleft: 6px;
+	-webkit-border-top-right-radius: 6px;
+	-webkit-border-top-left-radius: 6px;
+
+	-moz-box-shadow: none;
+}
+
+#go-sidebar .go-profile .body .box-inner{
+	padding-top: 0.5em;
+}
+
+#go-sidebar .go-profile .items{
+	clear: both;
+}
+#go-sidebar .go-profile .items img{
+	margin: 3px;
+	vertical-align: middle;
+}
+/*--------[END go-profile]---------*/
+/*--------[BEGIN go-search]---------*/
+.go-box-inactive{color: #999;}
+
+#widget-go-search .add-channels{
+	display: none;
+}
+
+#widget-go-search > .title{cursor: auto;}
+#widget-go-search .layout-options{
+	margin-top: 0.5em;
+	text-align: center;
+}	
+
+#go-sidebar .widget .go-box{
+	background:#fff;
+	border:1px solid #bcbcbc;
+	width:130px;
+}
+#go-sidebar .widget .go-submit{border:1px solid #bcbcbc;}
+/*--------[END go-search]---------*/
+/*--------[BEGIN go-services]---------*/
+#widget-services ul{
+	margin: 0;
+	padding: 0;
+}
+#widget-services ul ul{
+	margin: 0 0 0 20px;
+	padding: 0;
+}
+
+#widget-services .body ul li li{list-style:url(/webapp/my/templates/images/sidebar_bullet.png);}
+
+#widget-services .body > ul > li{
+	list-style: none;
+}
+/*--------[END go-services]---------*/
+/*--------[BEGIN go-hot-links]---------*/
+#widget-popular .body ul li{list-style:url(/webapp/my/templates/images/sidebar_bullet.png);}
+#go-sidebar .widget #popular-everyone,
+#go-sidebar .widget #popular-me{
+	margin-left: 20px;
+}
+/*--------[END go-hot-links]---------*/
+/*--------[BEGIN go-bookmarks]---------*/
+#widget-bookmarks .folder-header{}
+#widget-bookmarks .body label{float:left;font-weight:normal;width:100%;padding-top: 10px;}
+#widget-bookmarks .body label span{float:left;font-weight:bold;width:10em;text-align:left;}
+#widget-bookmarks .body label.top span{display:block;float:none;width:100%;}
+#widget-bookmarks .body .bookmark-options{float:none;padding: 0 5px 5px 5px;}
+#widget-bookmarks .body .bookmark-options li{display:inline;list-style:none;}
+#widget-bookmarks .body .bookmark-options li a{margin:0 10px 0 0;}
+#widget-bookmarks .body #add-bookmark{
+	border-bottom: 1px dotted #B3BB86;
+	display:none;
+	padding-bottom:3px;
+	overflow:auto;
+}
+#widget-bookmarks .body #add-folder{
+	border-bottom: 1px dotted #B3BB86;
+	display:none;
+	padding-bottom:3px;
+	overflow:auto;
+}
+#widget-bookmarks .body #edit-bookmark{
+  border-bottom: 1px dotted #B3BB86;
+  display:none;
+  padding-bottom:3px;
+  overflow:auto;
+}
+/*
+#widget-bookmarks #bookmark_list{
+	padding-left: 10px;
+}
+#widget-bookmarks #bookmarks{display:block;}
+#widget-bookmarks #bookmarks li{list-style:none;}
+#widget-bookmarks #bookmarks li.bookmark{list-style:inside url(/webapp/my/templates/images/sidebar_bullet.png);}
+#widget-bookmarks #bookmarks .bookmark-folder ul{display:none;}
+#widget-bookmarks #bookmarks li .bookmark-folder ul{display:none;}
+#widget-bookmarks #bookmarks .bookmark-folder-open ul{display:block;}
+#widget-bookmarks #bookmarks li .bookmark-folder-open ul{display:block;}
+#widget-bookmarks .dropOver{background:#FDF5B0;}
+#widget-bookmarks .bookmark-parent{color: #BAB8B0;padding:3px;}
+*/
+#widget-bookmarks .bookmark-trash{
+	background:#ead4d4;
+	border-bottom:1px dotted #800000;
+	border-top:1px dotted #800000;
+	display:none;
+	margin-top:15px;
+	padding:3px;
+}
+#widget-bookmarks .bookmark-trash-hover{background:#debebe;}
+#widget-bookmarks img.trash{background-position:-64px -16px;}
+/*
+#widget-bookmarks li.bookmark-folder img{background-position:-32px 0px;}
+#widget-bookmarks li li.bookmark-folder img{background-position:-32px 0px;}
+#widget-bookmarks .bookmark-parent img,#widget-bookmarks li.bookmark-folder-open img{background-position:-16px -16px;}
+#widget-bookmarks li li.bookmark-folder-open img{background-position:-16px -16px;}
+#widget-bookmarks .dropOver img.folder{background-position:-32px -16px;}
+#widget-bookmarks img.trash{background-position:-64px -16px;}
+*/
+/*--------[END go-bookmarks]---------*/
+/********[END sidebar]*******/
+/* Begin Images */
+p img {
+	padding: 0;
+	max-width: 100%;
+}
+
+/*  Using 'class="alignright"' on an image will (who would've
+thought?!) align the image to the right. And using 'class="centered',
+will of course center the image. This is much better than using
+align="center", being much more futureproof (and valid) */
+
+img.centered {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+img.alignright {
+	padding: 4px;
+	margin: 0 0 2px 7px;
+	display: inline;
+}
+
+img.alignleft {
+	padding: 4px;
+	margin: 0 7px 2px 0;
+	display: inline;
+}
+
+.alignright {
+	float: right;
+}
+
+.alignleft {
+	float: left;
+}
+/* End Images */
+
+.postmetadata{clear:both;}
+/*********[ Variable Width Styles ] ***********/
+
+@media screen and (max-width: 800px) {
+
+	.webapp-nav #tabs{width: auto;}
+
+	#go-sidebar{ 
+		display: none;
+	}
+
+	.column{
+		float: none;
+		width: 100%;
+	}
+
+	.channel .title .grid_5{width: 100%;}
+	.channel .title .options{display: none;}
+}
+
+@media screen and (max-width: 480px) {
+
+	.webapp-head .psu_logo{display:none;}
+	.webapp-head .myplymouth_logo{font-size: 1em; margin-top: 5px;}
+	.webapp-head #tab-box{ float: right; display: inline;}
+
+	.webapp-nav #tabs{
+		display: none;
+		text-align: center;
+	}
+
+	.webapp-nav #tabs li,
+	.webapp-nav #tabs a{
+		display: inline;
+		float: none;
+	}
+
+	#go-foot{
+		display: none;
+		width: 100%;
+		margin-left: 4%;
+		margin-right: 4%;
+	}
+
+	.channel { 
+		margin-bottom: 5px;
+		width: 100%; 
+	}
+}

@@ -23,7 +23,7 @@ $GLOBALS['TEMPLATES']=$GLOBALS['BASE_DIR'].'/templates';
 /*******************[End Site Constants]*****************/
 
 /*******************[Common Includes]**********************/
-require_once '/web/pscpages/webapp/my/includes/MyPortal.class.php';
+require_once PSU_BASE_DIR . '/webapp/my/includes/MyPortal.class.php';
 /*******************[End Common Includes]**********************/
 
 /*******************[Authentication Stuff]*****************/

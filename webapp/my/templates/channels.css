@@ -1,0 +1,1134 @@
+/*******************
+ *  Banner Courtyard
+ *******************/
+.banner-courtyard td{
+	text-align: center;
+}
+
+/*******************
+/* calllog channel 
+********************/
+span.updated{font-style:italic;float:right;}
+.calllog_queue{padding-bottom:10px;}
+.calllog_queue a{display:block;}
+
+/********************
+ * Career Channel
+ ********************/
+.career_container li{
+	font-size: 0.9em;
+	list-style-type: none;
+	margin-bottom: 0.5em;
+	margin-left: 0;
+}
+
+/********************
+ * Sign-Off Channel
+ ********************/
+.patch-list{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.patch-list img {
+	vertical-align: middle;
+	margin-right: 0.3em;
+}
+
+.patch-list h4{
+	font-size: 1.0em;
+	font-weight: normal;
+}
+
+.patch-list li{
+	padding: 0.5em;
+	margin: 0;
+}
+
+.patch-list .status { overflow: hidden; }
+.patch-list .actions{ text-align: center; }
+.signoff-updated { color: #ccc; }
+.signoff-updated a { color: #666; }
+
+.patch-list .selected { color: #000; font-weight: bold; }
+
+/**********************************************
+ * Game Channel 
+ **********************************************/
+ul.game-channel{list-style-type:none;margin:0;padding:0;}
+ul.game-channel li{
+	background:#F5F2E6;
+	border-bottom:1px solid #E2DFD4;
+	border-top:1px solid #E2DFD4;
+	margin: 5px 0;
+	padding:5px;
+}
+ul.game-channel li img{border:1px solid #666;margin-right:5px;vertical-align:middle;}
+
+/**** myAdvising ****/
+.channel .my-advising ul{
+	list-style-type: none;
+	margin: 0em;
+	padding: 0em;
+}
+
+.channel .my-advising fieldset{padding:5px}
+.channel .my-advising li{margin:0;padding:0;}
+
+.channel .my-advising ul.advisor ul{ padding-bottom:.7em; }
+.channel .my-advising ul.advisor ul li{ margin-left: 10em; }
+.channel .my-advising ul.advisor ul li.profile_img{ float: left; margin-left: 0em; }
+.channel .my-advising li.profile_img img{
+	border:2px solid #333;
+	margin-right: .5em;
+	margin-bottom: .5em;
+	max-width: 100px;
+	max-height: 100px;
+}
+
+.channel .my-advising label{
+	display:block;
+	float:left;
+	padding-top: 0;
+	width: 6em;
+	font-weight: bold;
+	zoom:1;
+}
+
+.channel .my-advising ul.majors label{ width: 4em;	}
+.channel .my-advising .name{ font-weight: bold; }
+.channel .my-advising a.form_link{ float: right; }
+
+/****************************************
+/* myCalendar
+****************************************/
+#calendar_div, .calendar_inline {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+	background: #ddd;
+}
+#calendar_div {
+	display: none;
+	border: 1px solid #ccc;
+	z-index: 10; /*must have*/ 
+}
+#calendar_div, .calendar_control, .calendar_links, .calendar_header, .calendar {
+	width: 200px;
+}
+.calendar_inline {
+	float: left;
+	display: block;
+	border: 0;
+}
+.calendar_dialog {
+	padding: 5px !important;
+	border: 4px ridge #ddd !important;
+}
+button.calendar_trigger {
+	width: 25px;
+}
+img.calendar_trigger {
+	margin: 2px;
+	vertical-align: middle;
+}
+.calendar_prompt {
+	float: left;
+	width: 181px;
+	padding: 2px;
+	background: #ddd;
+	color: #000;
+}
+* html .calendar_prompt {
+	width: 185px;
+}
+.calendar_control, .calendar_links, .calendar_header, .calendar {
+	clear: both;
+	float: left;
+	color: #fff;
+}
+.calendar_control, .calendar_links {
+	font-weight: bold;
+	font-size: 80%;
+	letter-spacing: 1px;
+	background: #ccc;
+}
+.calendar_links label { /* disabled links */
+	padding: 2px 5px;
+	color: #555;
+}
+.calendar_clear, .calendar_prev {
+	float: left;
+}
+.calendar_current {
+	float: left;
+	width: 35%;
+	text-align: center;
+}
+.calendar_close, .calendar_next {
+	float: right;
+}
+.calendar_header {
+	background: #ccc;
+	text-align: center;
+	font-weight: bold;
+	display:block;
+}
+.calendar_header select {
+	background: #ccc;
+	color: #000;
+	border: 0px;
+	font-weight: bold;
+}
+.calendar {
+	background: #ccc;
+	text-align: center;
+	font-size: 100%;
+}
+.calendar a {
+	display: block;
+	width: 100%;
+}
+.calendar .calendar_titleRow {
+	background: #eee;
+	color: #000 !important;
+}
+.calendar .calendar_daysRow {
+	background: #FFF;
+	color: #666;
+}
+.calendar .calendar_daysCell {
+	color: #000;
+	padding: 1px 5px;
+	border: 1px solid #ddd;
+}
+#calendar .calendar_daysCell a{
+	display: block;
+}
+.calendar .calendar_weekEndCell {
+	background: #f0f7f9;
+}
+.calendar .calendar_daysCellOver {
+	background: #fff;
+	border: 1px solid #777;
+}
+.calendar .calendar_unselectable {
+	color: #888;
+}
+.calendar_today {
+	background: #ccc !important;
+}
+.calendar_currentDay {
+	background: #f9eebe !important;
+}
+
+/* ________ CALENDAR LINKS _______
+
+** Reset link properties and then override them with !important */
+
+#calendar_div_0 {
+	border: 1px solid #B4BB88;
+}
+#calendar_div a, .calendar_inline a {
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: #000;
+}
+.calendar_inline .calendar_links a {
+	padding: 0 5px !important;
+}
+.calendar_control a, .calendar_links a {
+	padding: 2px 5px !important;
+	color: #000 !important;
+}
+.calendar_titleRow a {
+	color: #000 !important;
+}
+.calendar_control a:hover {
+	/*background: #fdd !important;*/
+	color: #333 !important;
+}
+.calendar_links a:hover, .calendar_titleRow a:hover {
+	background: #FFF !important;
+	color: #333 !important;
+}
+
+/* ___________ IE6 IFRAME FIX ________ */
+
+.calendar_cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 193px; /*must have to match width and borders*/
+    height: 200px; /*must have to match maximum height*/ 
+}
+
+/*********** CUSTOM Calendar Styles ************/
+#cal_container{
+	text-align:center;
+}
+
+#cal_container a img.zcal{
+	background-image:url(/webapp/my/templates/images/all_icons.gif);
+	background-position:-112px -64px;
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	vertical-align:middle;
+	width:16px;
+}
+
+#zcal_calendar{
+	margin: 0 auto;
+}
+#zcal_appt_text{
+	clear: both;
+	margin: 0 auto;
+	padding: 5px;
+	text-align: left;
+}
+
+#zcal_appt_text ul{
+	margin: 0;
+	padding: 0;
+}
+
+#zcal_appt_text ul li{
+	border-bottom: 1px dotted #ccc;
+	list-style: none;
+	margin: 0 0 5px 10px;
+	padding: 3px;
+}
+
+#zcal_appt_text .time{
+	padding-left: 10px;
+}
+#zcal_appt_text .location{
+	padding-left: 10px;
+}
+#zcal_appt_text .fragment{
+	padding-left: 10px;
+	overflow: hidden;
+	width: 98%;
+}
+
+.calendar_inline{
+	float: none;
+	margin: 0 auto;
+	width: 200px;
+}
+
+.calendar_inline a{
+	color: #777;
+}
+
+.calendar_inline .has_appt a{
+	color: #000;
+	font-weight:bold;
+}
+
+/**********************************************
+ * My Courses Styles
+ **********************************************/
+.channel-mycourses .body {font-size:1.0em;}
+.channel-mycourses .body a{text-decoration:none;}
+.channel-mycourses .body h1{font-size:1.2em;margin:0 0 3px 0;}
+.channel-mycourses .body h2{
+	background: #eee;
+	border-top:1px solid #ccc;
+	font-size:1.1em;
+	margin:0 0 3px 0;
+	padding:3px;
+}
+
+.channel-mycourses .body img.icon{
+	background-image:url(/webapp/my/templates/images/all_icons.gif);
+	background-repeat:no-repeat;
+	height:16px;
+	margin:0;
+	padding:0;
+	vertical-align:middle;
+	width:16px;
+}
+
+.channel-mycourses .body .mycourses-term h2 img.icon{
+	background-position: -79px -64px;
+	margin-right:3px;
+}
+
+.channel-mycourses .body .term-open h2 img.icon{ background-position: -96px -64px; }
+
+.channel-mycourses .body h3{font-size:1.0em;margin:0 0 3px 0;}
+.channel-mycourses .body ul{
+	margin:0 0 10px 0;
+	padding:0;
+}
+.channel-mycourses .body li{
+	list-style:none;
+	margin: 0;
+	padding:0;
+}
+.channel-mycourses .body  .courses{ margin: 0 0 0 15px; }
+
+.channel-mycourses .body .courses li,
+.channel-mycourses .body .mycourses-reflinks{
+	margin-bottom:10px;
+}
+
+/***********************************
+ * myfinances 
+ ***********************************/
+.my_finances .links{
+	margin: 0;
+	padding: 0;
+}
+.my_finances ul.links > li{ 
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: 0 3px;
+	margin-left: 0;
+  padding-left: 30px;
+}
+
+.my_finances form, .channel .my_finances form{
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
+
+.my_finances ul.links > li{
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: 0 3px;
+	padding-left: 30px;
+}
+
+.my_finances li.bill{
+	background-image: url(/images/icons/16x16/actions/edit-copy.png);
+}
+
+.my_finances li.financial-status{
+	background-image: url(/images/icons/16x16/misc/money-coin.png);
+}
+
+.my_finances li.learn{
+	background-image: url(/images/icons/16x16/misc/book-open.png);
+}
+
+.my_finances li.flexcash{
+	background-image: url(/images/icons/16x16/flexcash.png);
+}
+
+/***********************************
+ * myHome styling 
+ ***********************************/
+.emphasized-border{
+	background: #f3f1e6;
+	border: 1px solid #e1e1c6;
+	padding: 0.5em;
+	margin: 0 0 1em 0;
+
+	border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+}
+
+.myhome-top,
+.myhome-location h2,
+.myhome .myhome-rd{
+	text-align: center;
+}
+
+.myhome-img{
+	border: 3px solid #eee;
+	display:block;
+	width:60px;
+	height: 60px;
+	border-radius: 0.3em;
+	-moz-border-radius: 0.3em;
+	-webkit-border-radius: 0.3em;
+}
+
+.myhome-roommate{
+	margin-top: 0.5em;
+	padding: 1em;
+}
+
+.myhome-roommate ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.myhome-roommate li{margin:0;}
+
+.myhome-roommate .cell-number{
+	color: #555;
+	font-size: 0.9em;
+	padding-left: 1em;
+}
+
+.myhome-location{ float: right; }
+.myhome-location ul{ list-style-type: none; }
+.myhome .building{margin-bottom: 1em; text-decoration: center;}
+.myhome .building img{
+	margin: 0;
+	height: 80px;
+	width: 120px;
+}
+
+.myhome .myhome-rd img{ margin: 0 auto; }
+
+.myhome-news,
+.myhome-links{
+	margin-bottom: 0.5em;
+}
+/*********************************************************
+ *
+ * myMedia Styles
+ *
+ *********************************************************/
+.mymedia div{
+	display: inline-block;
+	margin-right: 1em;
+	margin-bottom: 2em;
+}
+
+.mymedia h4{
+	border-bottom: 1px dotted #ccc;
+}
+/*********************************************************
+ *
+ * myProfile Styles
+ *
+ *********************************************************/
+.channel-myprofile .body .box-inner{
+	padding: 0;
+}
+.channel-myprofile .content-tabs{
+	border-top: 1px solid #ddd;
+	padding-left: 0.45em;
+	padding-right: 0.45em;
+}
+.channel .pic_addresses,
+.channel .pic_phones,
+.channel .pic_emails{
+	margin-left: 0;
+	padding-left: 0;
+}
+.channel .pic_addresses li,
+.pic_addresses li,
+.channel .pic_phones li,
+.pic_phones li,
+.channel .pic_emails li,
+.pic_emails li{
+	clear: left;
+	list-style: none;
+	margin-left: 0;
+	padding: 0.5em;
+}
+
+.addresses,
+.phones,
+.emails{
+	padding: 0.5em;
+}
+
+.pic_addresses li a,
+.pic_phones li a,
+.pic_emails li a{
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+/*********************************************************
+ *
+ * Poll Styles
+ *
+ *********************************************************/
+
+.poll_results h2{
+	margin: 3px 0;
+	padding-bottom: 0.5em;
+}
+
+#poll_data h2{
+	border-bottom: 1px dotted #ccc;
+	color:#85360F;
+	font-size: 1.0em;
+	font-weight:bold;
+	margin: 3px 0;
+	padding-bottom:3px;
+}
+
+#poll_data ul{
+	margin:5px 0;
+	padding:0;
+}
+
+#poll_data li{
+	list-style:none;
+	margin:3px 3px 6px 3px;
+	padding:0;
+}
+
+#poll_data #form_bt_vote{
+	background: #eee;
+	border:1px solid #bbb;
+}
+#poll_data #form_bt_vote:hover{
+	background:#e3e3e3;
+}
+#poll_data label{display:block;}
+#poll_data .percentage{
+	color:#666;
+	font-size:0.9em;
+	text-align:right;
+}
+#poll_data .bar{
+	background:#AAB27C;
+	border-bottom:1px solid #3A3903;
+	border-left:1px solid #3A3903;
+	border-top:1px solid #3A3903;
+	font-size:1px;
+	height:10px;
+}
+#poll_data .no-bar{
+	background: #eee;
+	border-bottom:1px solid #ccc;
+	border-right:1px solid #ccc;
+	border-top:1px solid #ccc;
+	font-size:1px;
+	height:10px;
+}
+#poll_data table{font-size:1.0em;margin:3px 0;}
+#poll_data .votes{font-style:italic;margin: 3px 0;}
+#poll_data .answer{
+	border-bottom: 1px dotted #ccc;
+	color:#666;
+	font-size: 1.0em;
+	margin: 0 0 3px 0;
+	padding:3px;
+}
+#poll_data .provided{
+	border-top: 1px dotted #ccc;
+	color:#666;
+	font-size: 0.9em;
+	margin: 3px 0;
+	padding:3px;
+}
+#poll_data div.options{
+	display:block;
+	text-align:center;
+	width:100%;
+}
+
+/********************************
+ * RDP Channel
+ ********************************/
+.rdp ul{ list-style-type: none;}
+.rdp li{
+	margin-left: 10px;
+}
+
+/**********************************************
+ * RSS Styles
+ **********************************************/
+ul.rss,
+.channel ul.rss{
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+ul.rss li{margin: 0 0 3px 0;padding:3px;}
+
+ul.rss li.image{ float:right; }
+
+ul.rss li.image img{
+	border: 2px solid #ccc;
+	margin: 0 0 5px 5px;
+}
+
+ul.rss li.expanded{
+	border-bottom: 1px dotted #454A2C;
+	padding-bottom: 10px;
+}
+ul.rss li.expanded h3 img{
+	background-image:url(/webapp/my/templates/images/all_icons.gif);
+	background-position:-144px -64px;
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	width:16px;
+}
+ul.rss li.contracted h3 img{
+	background-image:url(/webapp/my/templates/images/all_icons.gif);
+	background-position:-128px -64px;
+	background-repeat:no-repeat;
+	height:16px;
+	margin:3px;
+	padding:0;
+	width:16px;
+}
+
+ul.rss .contracted .rss-body{ display: none; }
+ul.rss h3{font-size:1.0em;font-weight:normal;}
+ul.rss h3 a{border-bottom:1px dotted #ccc;}
+
+/**************** [toggleLink channel] *******************/
+.channel .toggle-list{
+	list-style: none;
+}
+
+.channel .toggle-list > li{
+	margin-left: 0;
+}
+
+.channel .toggle-list h2{
+	background: #eee;
+	border: 1px solid #ddd;
+	color: #000;
+	font-size: 1em;
+	font-weight: normal;
+	margin:1px 0px;
+	padding: 1px;
+	cursor: pointer;
+}
+
+.channel .toggle-list h2 a{
+	color: #000;
+	font-weight: bold;
+}
+
+.channel .toggle-list .links table{
+	border: 0px;
+}
+
+.channel .toggle-list .marker{
+	height: 7px;
+	margin-right: 5px;
+	width: 7px;
+}
+
+.channel .toggle-list .down-arrow{
+	background-image: url(/webapp/my/templates/images/toggle_down.gif);
+}
+
+.channel .toggle-list .right-arrow{
+	background-image: url(/webapp/my/templates/images/toggle_right.gif);
+}
+/**********************************************
+ * Webcam and Weather Styles
+ **********************************************/
+.channel-webcam-and-weather .body .box-inner{
+	padding: 0;
+}
+.webcam-and-weather .content-tabs{
+	border-top: 1px solid #ddd;
+	padding-left: 0.45em;
+	padding-right: 0.45em;
+}
+.webcam-and-weather .weather-section{
+	padding: 0.3em 0.5em;
+}
+.weather-temp{font-size:2.1em;font-weight:bold;}
+.weather-temp img{vertical-align:middle;}
+
+/*globals*/
+.webcam-and-weather h2.nopad{margin: 0;padding: 0 0 2px; 0;}
+.webcam-and-weather .smtext {color: #ff0000;font-size: 0.8em;}
+.webcam-and-weather p.smtext{margin:0;}
+.weather-section{
+	height: 150px;
+	text-align: center;
+}
+.webcam-and-weather .loaded{
+	height: auto;
+	text-align: left;
+}
+/*index*/
+.webcam-and-weather a.webcam-thumb{border: 3px solid #ddd;display:block;float:right;height:104px;}
+.webcam-and-weather a.webcam-thumb img{border: 1px solid #666;}
+/*weather*/
+/*fcst*/
+.webcam-and-weather .wx_fcstbox{
+	float:left;
+	height: 146px;
+	left:5px; 
+	margin:4px;
+	margin-bottom:20px
+	position:relative; 
+	top:10px;
+	width:48px; 
+}
+.webcam-and-weather .wx_fcstday{margin-top:2px;}
+.webcam-and-weather .wx_fcstelem{
+	font-weight:bold;
+	text-align:center;
+	width:48px;
+}
+.webcam-and-weather .wx_fcstterm{
+	font-weight:none;
+	text-align:center;
+	font-size:.9em;
+	width:48px;
+}
+.webcam-and-weather .wx_fcsthi{font-size:1.5em;margin-top:0px;}
+.webcam-and-weather .wx_fcstimg{margin-top:5px;}
+.webcam-and-weather .wx_fcstlo{margin-top:0px;}
+.webcam-and-weather .wx_fcstterm{margin-top:5px;}
+
+/******* Announcements Channel ********/
+.channel-announcements .announcements-filter{
+	float: right;
+	margin: 0;
+}
+.channel-announcements .announcements-filter input{ width: 100px; }
+.channel-announcements hr{ margin-bottom: 0.3em; }
+.channel-announcements .main-options{
+	border-bottom: 1px solid #CCCCCC;
+	font-size: 0.9em;
+	padding-bottom: 0.3em;
+}
+.channel-announcements .final-options{
+	border-top: 1px solid #CCCCCC;
+	font-size: 0.9em;
+}
+
+.channel-announcements .options{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.channel-announcements .options li{ margin: 0; padding: 0; }
+.channel-announcements .post h3{ font-size: 1em; }
+.channel-announcements .post-modal{ display:none; }
+.post-modal .post-head{ margin-bottom: 0.5em; }
+.post-modal .bsuite_related{display:none;}
+
+.ui-dialog .ui-dialog-content{
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.channel-announcements .post h3 a{
+	background: url(/images/icons/16x16/apps/internet-news-reader.png) no-repeat;
+	display: inline-block;
+	font-weight: normal;
+	min-height: 16px;
+	padding-left: 20px;
+}
+
+.channel-announcements .category-uncategorized h3 a{ background-image: url(/images/icons/16x16/apps/internet-news-reader.png); }
+.channel-announcements .category-service-outage h3 a{ background-image: url(/images/icons/16x16/status/dialog-warning.png); }
+.channel-announcements .category-campus-alert h3 a{ background-image: url(/images/icons/16x16/status/dialog-warning.png); }
+.channel-announcements .category-security h3 a{ background-image: url(/images/icons/16x16/devices/computer.png); }
+.channel-announcements .category-parking h3 a{ background-image: url(/images/icons/16x16/emblems/emblem-readonly.png); }
+.channel-announcements .category-academic h3 a{ background-image: url(/images/icons/16x16/book.png); }
+.channel-announcements .category-event h3 a{ background-image: url(/images/icons/16x16/mimetypes/x-office-calendar.png); }
+
+.message-outage h3{ display: inline; margin-right: 1em;}
+
+.channel-announcements .simplePagerNav li{
+	display: inline;	
+	margin-left: 5px;
+}
+
+.channel-announcements .simplePagerNav{
+	display: inline;
+	float: right;
+}
+
+/************ Email Channel ***********/
+.email-channel{padding:0 5px;}
+.email-channel .email-list{
+	border-top: 1px solid #ddd;
+	margin: 0;
+	padding: 0;
+}
+.email-channel .email-list tr{
+	background-color: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+	font-size: 0.9em;
+	list-style: none;
+	margin: 0;
+	overflow: hidden;
+	padding: 0.25em;
+}
+.email-channel .email-list td{
+	max-height: 3em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+.email-channel .email-list td a{
+	max-height: 3em;
+}
+.email-channel .contents{
+	cursor: pointer;
+	display: block;
+	overflow: hidden;
+}
+.email-channel .email-list .message-unread{
+	background-color: transparent;
+}
+.email-channel .email-list .message-unread .from{
+	font-weight:bold;
+}
+.email-channel .email-list .icon-container,
+.email-channel .email-list .date{
+	padding: 0 0.5em;
+	vertical-align: middle;
+}
+.email-channel .email-list .icon-container{
+	width: 20px;
+}
+.email-channel .more-email{
+	font-size: 0.9em;
+	font-weight:bold;
+	margin-top: 0.5em;
+	text-align: center;
+}
+.email-channel .email-status{
+	text-align: center;
+}
+.email-channel .read-messages{
+	font-weight: normal;
+	padding-right: 0.5px;
+}
+.email-channel .msgsize_text{text-align:right;}
+.email-channel .email-options{list-style-type:none;margin-top:10px;}
+.email-channel .email-options li{display:inline;padding-right:10px;}
+.email-channel .email-options li a{display: block;}
+.email-channel img.icon{
+	background-image:url(/webapp/my/templates/images/all_icons.gif);
+	background-repeat:no-repeat;
+	height:16px;
+	margin-top: 2px;
+	padding:0;
+	vertical-align:middle;
+	width:16px;	
+}
+.email-channel img.email{background-position:0px -64px;}
+.email-channel img.email-unread{background-position:-16px -64px;}
+.email-channel img.email-read{background-position:-32px -64px;}
+.email-channel img.email-attatchment{background-position:-48px -64px;}
+.email-channel img.email-compose{background-position:-64px -64px;}
+/****** Family Invite *****/
+.family-access h3{ font-size: 1.2em; }
+.family-access h4{ font-size: 1em; margin: 0; }
+.family-access .form-actions{ } 
+.family-access .relationship-options{
+	float: right;
+	font-size: 0.9em;
+	z-index: 10;
+}
+
+.family-access .send-invite,
+.family-view .relationship,
+.family-view .email{
+	display: block;
+}
+
+.family-access .description{ color: #999; font-size: 0.9em; }
+.family-access .family-view-actions,
+.family-access .send-invite{ float: right; z-index: 10; }
+
+.family-access .relationships{ margin-left: 0; padding-left: 0; }
+.family-access .relationships li{
+	border-bottom: 1px solid #eee;
+	clear: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0.5em 0;
+}
+
+.family-view .relationship{font-style: italic;}
+
+.family-view h3{ margin: 0; }
+.family-view h4{
+	border-top: 1px solid #eee;
+	margin-top: 0.5em;
+	padding: 0.5em 0;
+}
+
+.channel .family-view ul{
+	margin-bottom: 0;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+.channel .family-view li{ margin-bottom: 0.25em; }
+.channel .family-access form{ margin: 0; }
+
+.family-view .avatar{margin-top:0.25em;}
+.family-view .description{margin-bottom: 0.5em;}
+
+.family-view form{ }
+
+.family-access form ul{padding-top: 0;}
+
+.family-access .back{
+	display: block;
+	font-size: 0.9em;
+	margin-bottom: 0.25em;
+}
+
+.family-access .additional-options{
+	border-top: 1px solid #eee;
+	font-size: 0.9em;
+	padding: 0.5em 0;
+	text-align: right;
+}
+/********* End Family Invite **************/
+
+/********* Events Calendar ****************/
+.channel-events-calendar ul.upcoming {
+	list-style-type: none;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+.channel-events-calendar .upcoming li{
+	background-image: url(/images/icons/16x16/apps/office-calendar.png);
+	background-repeat: no-repeat;
+	background-position: 0 2px;
+
+	list-style-type: none;
+	margin: 0 0 1em 0;
+	padding-left: 20px;
+}
+
+.event-calendar-more-link{display: none;}
+
+/********** End Events Calendar ************/
+
+/********** Begin Important Phone Numbers ****/
+.channel-important-phone-numbers li {margin-left: 0px; list-style-type: none;}
+/********** End Important Phone Numbers ****/
+
+/********** Interrupt ***********/
+#panther-container{
+	display: none;
+	text-align: center;
+}
+#panther-interrupt{
+	margin: 0 auto;
+	text-align:left;
+	width:550px;
+}
+
+#panther-interrupt #panther-content{
+	background: transparent url(http://www.plymouth.edu/webapp/images/panther_ad.png) no-repeat;
+	color:#fff;
+	font-size: 1.1em;
+	height:240px;
+	padding: 1em 1em 1em 179px;
+}
+
+#panther-interrupt #panther-content h3{
+	color: yellow;
+}
+
+#panther-interrupt #panther-content a{
+	color: #adc4db;
+	text-decoration: underline;
+}
+
+#panther-buttons{text-align: left;}
+
+#panther-interrupt .disable{
+	color:#9cacbc;
+	float: right;
+	margin-top: 5px;
+}
+
+#panther-interrupt #panther-content #panther-vote{
+	background: #356f33;
+	border:1px solid #2e4f2d;
+	color: #fff;
+	padding: 0.5em;
+	text-decoration: none;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#panther-interrupt #panther-content #panther-vote:hover{
+	background: #498e47;
+}
+
+/**************************
+ *  Plants in Bloom Channel
+ *************************/
+.plants-date{
+	float:left;
+	padding:5px;
+	margin: 0 5px 2px 0;
+	border: 1px solid #cccccc;
+	background:#eeeeee;
+	color:#85360F;
+	font-weight:bold;
+	text-align:center;
+	width:60px;
+}
+
+.plants-info{
+	float:left;
+}
+
+.plants img{
+	width:120px;
+	height:70px;
+	margin-bottom:5px;
+	border:2px solid #cccccc;
+	display:block;
+}
+
+.plants-imgs{
+	float:right;
+	text-align:center;
+	width:120px;
+	margin-left:3px;
+}
+
+.plants-slidelink:link,
+.plants-slidelink:visited,
+.plants-slidelink:hover,
+.plants-slidelink:active,
+.plants-slidelink:focus{
+	margin-left:5px;
+	padding:2px;
+	border: 1px solid #cccccc;
+	background:#eeeeee;
+	font-weight:bold;
+	text-align:center;
+	text-decoration:none;
+	color:#85360F
+}
+
+.plants-weblinktext a:link,
+.plants-weblinktext a:visited,
+.plants-weblinktext a:hover,
+.plants-weblinktext a:active,
+.plants-weblinktext a:focus{
+	float:right;
+	font-size:0.8em;
+	padding:2px;
+	border: 1px solid #cccccc;
+	background:#eeeeee;
+	text-align:center;
+	text-decoration:none;
+	color:#85360F;
+	margin-top:5px
+}
+
