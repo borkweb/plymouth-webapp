@@ -9,7 +9,7 @@ class MobileParams implements ArrayAccess {
      const SESSION_KEY = 'webapp-psu-mobile';
 
      public function offsetExists( $key ) { 
-          return isset( $_SESSION[ self::SESSION_KEY ] );
+          return isset( $_SESSION[ self::SESSION_KEY ][ $this->key($key) ] );
      }   
 
      public function offsetGet( $key ) { 

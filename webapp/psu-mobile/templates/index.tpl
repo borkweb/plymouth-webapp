@@ -77,7 +77,7 @@
 				<li class="cordova-required" id="cordova">Native API provided by Cordova <span></span></li>
 			</ul>
 		</div>
-		<a href="{$PHP.BASE_URL}/logout/?redirect_to={$PHP.APP_URL}" id="logout-btn" data-role="button" data-ajax="false" class="{if !$params.username}hidden{/if}">
+		<a href="{$PHP.BASE_URL}/logout/?redirect_to={$PHP.APP_URL}" id="logout-btn" data-role="button" data-ajax="false" class="{if !$smarty.session.username}hidden{/if}">
 			Logout
 		</a>
 	</div>
