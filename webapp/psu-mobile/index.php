@@ -110,4 +110,10 @@ foreach( $app_routes as $base ) {
 	with( "/{$base}", $GLOBALS['BASE_DIR'] . "/routes/{$base}.php" );
 }//end foreach
 
+// Let's do some cleanup
+respond( function( $request, $response, $app ) {
+	// Remove our "back button url" session var. It was only needed for a reload.
+	unset( $app->params['back_button_url'] );
+});
+
 dispatch( $_SERVER['PATH_INFO'] );
