@@ -15,35 +15,19 @@
  * @brief <a href="group__acadexcel.html">Academic Excellence</a>
  */
 
+require_once dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
 require_once 'autoload.php';
 PSU::session_start();
 
 /*******************[Site Constants]***********************/
 
-$GLOBALS['BASE_DIR'] = dirname(__FILE__);
+$GLOBALS['BASE_DIR'] = __DIR__;
 
 // Base URL
 $GLOBALS['BASE_URL'] = 'https://'.$_SERVER['HTTP_HOST'].'/webapp/academic-excellence';
 
-// fake logout to reset ambackstrom's test stuff
-if(isset($_GET['reset']))
-{
-	$_SESSION = array();
-	header('Location: '.$GLOBALS['BASE_URL']);
-	exit;
-}
-
 // Local Includes
 $GLOBALS['LOCAL_INCLUDES'] = $GLOBALS['BASE_DIR'].'/includes';
-
-$GLOBALS['TEMPORARY_FILES'] = '/web/temp';
-
-// Directory to hold Smarty's compiled templates
-$GLOBALS['SMARTY_COMPILE'] = $GLOBALS['TEMPORARY_FILES'] . '/academic-excellence';
-if( ! is_writable($GLOBALS['SMARTY_COMPILE']) )
-{
-	mkdir($GLOBALS['SMARTY_COMPILE'], 0700);
-}
 
 /*******************[End Site Constants]*******************/
 

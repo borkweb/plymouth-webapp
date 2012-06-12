@@ -1,13 +1,11 @@
 <?php
 
-require_once('PSUTemplate.class.php');
-
 /**
  * AETemplate provides a custom PSUTemplate object for the Academic Excellence
  * application.
  * @ingroup acadexcel
  */
-class AETemplate extends PSUTemplate
+class AETemplate extends PSU\Template
 {
 	function __construct($title = null)
 	{

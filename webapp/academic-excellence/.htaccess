@@ -1,4 +1,4 @@
-php_value auto_prepend_file /web/pscpages/webapp/academic-excellence/common.php
+php_value auto_prepend_file ./common.php
 php_value auto_append_file none
 
 RewriteEngine on

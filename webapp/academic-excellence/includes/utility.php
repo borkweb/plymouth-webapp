@@ -29,11 +29,11 @@ function initializeSession()
 	$_SESSION['pidm'] = $GLOBALS['BannerIDM']->getIdentifier($_SESSION['username'], 'username', 'pidm');
 
 	if(IDMObject::authZ('permission', 'academic_excellence_admin'))
-	{   
+	{
 		$_SESSION['user_type'] = 'admin';
 	}
 	else
-	{   
+	{
 		$gpa = $GLOBALS['BannerStudent']->getOverallGPA($_SESSION['pidm']);
 		$_SESSION['gpa'] = $gpa['r_gpa'];
 		unset($gpa);

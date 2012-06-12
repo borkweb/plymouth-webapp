@@ -1,5 +1,11 @@
 <?php
 
+if( 'admin' !== $_SESSION['user_type'] )
+{
+	$_SESSION['errors'][] = 'You are not allowed to access the Academic Excellence CSV.';
+	PSU::redirect( $GLOBALS['BASE_URL'] . '/' );
+}
+
 $tpl = new AETemplate();
 
 header("Content-type: text/csv");
