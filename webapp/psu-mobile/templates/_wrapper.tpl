@@ -43,6 +43,7 @@
 		// Let's set some constants
 		var HOST = 'http{if $smarty.server.HTTPS == 'on'}s{/if}://{$smarty.server.HTTP_HOST}';
 		var BASE_URL = '{$PHP.BASE_URL}';
+
 	</script>
 
 	{if $PHP.IS_DEV}
@@ -80,6 +81,8 @@
 
 		{* The PhoneGap/Cordova script file *}
 		<script>
+			// Let's get the version of the client
+			var clientAppVersion = {$params.client_app};
 
 			// Use a try, in case the GlobalTools didn't load correctly
 			try {

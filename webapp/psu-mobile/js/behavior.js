@@ -1,6 +1,7 @@
 // Let's set some properties
 var LOGIN_URL = HOST + BASE_URL + '/login/';
 var LOGOUT_URL = HOST + BASE_URL + '/logout/';
+var UPGRADE_URL = HOST + BASE_URL + '/upgrade/';
 
 // Things to happen RIGHT AWAY (as soon as this loads)
 

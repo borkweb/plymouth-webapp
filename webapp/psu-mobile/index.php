@@ -77,7 +77,7 @@ respond( '/', function( $request, $response, $app ) {
 	// Grab a couple of the request parameters
 	$app->params['phonegap'] = $request->param('phonegap');
 	$app->params['cordova'] = $request->param('cordova');
-	$app->params['client-app'] = $request->param('client-app');
+	$app->params['client_app'] = $request->param('client-app');
 
 	// Remove the variables if they're null
 	if (is_null($app->params['phonegap'])) {
@@ -86,8 +86,8 @@ respond( '/', function( $request, $response, $app ) {
 	if (is_null($app->params['cordova'])) {
 		unset($app->params['cordova']);
 	}
-	if (is_null($app->params['client-app'])) {
-		unset($app->params['client-app']);
+	if (is_null($app->params['client_app'])) {
+		unset($app->params['client_app']);
 	}
 
 	// Show the index on a generic request

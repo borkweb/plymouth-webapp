@@ -19,6 +19,19 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 
 	// Now that the framework has loaded, let's wait for jQuery to be ready so we can do some more elegant things. :)
 	$(document).ready( function() {
+		// Function to notify the user of a new app version
+		function notifyUpgrade() {
+			// Let's get the current version of the webapp
+			var webAppVersion = $('[name=app-version]').attr('content');
+
+			// If the version of the framework that loaded the webapp is old
+			if (clientAppVersion < webAppVersion) {
+				// Use jQuery Mobile to load the new page
+				psu.log('The user\'s client is old. Loading the upgrade page.');
+				$.mobile.changePage( UPGRADE_URL );
+			}
+		}
+
 		// Let's create some plugin variables
 		var childBrowser;
 
@@ -29,6 +42,10 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 			}
 			else if (ChildBrowser !== null && ChildBrowser !== undefined) {
 				childBrowser = ChildBrowser.install(); // ChildBrowser
+			}
+			else {
+				// Hmm... the plugin didn't load. They probably don't have the newest version of the app.
+				notifyUpgrade();
 			}
 		}
 		catch (e) {
