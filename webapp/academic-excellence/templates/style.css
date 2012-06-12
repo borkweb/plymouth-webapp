@@ -1,0 +1,11 @@
+.response {
+	margin: 1ex;
+	padding: 0 1ex;
+	border: 1px solid #000;
+	background-color: #E7D2C7;
+}
+
+.default-text {
+	font-style: italic;
+	color: #888;
+}

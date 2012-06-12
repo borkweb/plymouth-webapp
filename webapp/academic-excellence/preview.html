@@ -1,0 +1,48 @@
+<?php
+
+$tpl = new AETemplate('Preview');
+$tpl->body_style_classes = 'ae-student';
+
+$editing = $_REQUEST['editing'] == '1' ? true : false;
+
+$GLOBALS['IS_SUMMER'] = $_REQUEST['summer'] == '1' ? true : false;
+
+$tpl->assign('user_type', 'aestudent');
+
+if($_REQUEST['low_gpa'])
+{
+	$tpl->assign('user_type', '');
+}
+elseif($_REQUEST['closed'])
+{
+	$GLOBALS['ACCEPTING_DATA'] = false;
+}
+else
+{
+	$tpl->assign('editing', $editing);
+	$tpl->assign('preview', true);
+
+	$student = array(
+		'full_name' => 'Joe S. Student',
+		'addr1' => '7 Elm St.',
+		'addr2' => '',
+		'city' => 'Plymouth',
+		'state' => 'NH',
+		'zip' => '03264'
+	);
+
+	if($editing)
+	{
+		$student['confirmed'] = -1;
+		$student['confirmed_cert'] = -1;
+	}
+	else
+	{
+		$student['confirmed'] = $_REQUEST['confirmed'] == '1' ? 1 : 0;
+		$student['confirmed_cert'] = $_REQUEST['confirmed_cert'] == '1' ? 1 : 0;
+	}
+
+	$tpl->assign('student', $student);
+}
+
+$tpl->display('index.tpl');
