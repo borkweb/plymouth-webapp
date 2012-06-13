@@ -1,0 +1,31 @@
+<?php
+
+$tpl = new AETemplate('Welcome');
+
+if($_SESSION['user_type'] == 'admin')
+{
+	$tpl->body_style_classes = 'ae-admin';
+
+	// get some stats
+	$sql = 'SELECT MAX(updated) AS last_update,
+		COUNT(*) AS users_visiting FROM academic_excellence WHERE term = ?';
+	$result = PSU::db('myplymouth')->GetRow($sql, array($GLOBALS['TERM']));
+	$last_update = $result['last_update'];
+	$users_visiting = $result['users_visiting'];
+
+	$sql = 'SELECT COUNT(*) FROM academic_excellence WHERE term = ? AND confirmed = 1';
+	$confirmed = PSU::db('myplymouth')->GetOne($sql, array($GLOBALS['TERM']));
+
+	$tpl->assign('last_update', $last_update);
+	$tpl->assign('users_visiting', $users_visiting);
+	$tpl->assign('confirmed', $confirmed);
+}
+else
+{
+	$tpl->body_style_classes = 'ae-student';
+
+	$tpl->assign('student', $_SESSION['student']);
+	$tpl->assign('editing', $_SESSION['editing']);
+}
+
+$tpl->display('index.tpl');

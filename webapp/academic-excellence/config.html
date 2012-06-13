@@ -1,0 +1,10 @@
+<?php
+
+if( 'admin' !== $_SESSION['user_type'] )
+{
+	$_SESSION['errors'][] = 'You are not allowed to access the configuration page.';
+	PSU::redirect( $GLOBALS['BASE_URL'] . '/' );
+}
+
+$tpl = new AETemplate('Configuration');
+$tpl->display('config.tpl');
