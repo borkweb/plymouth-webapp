@@ -44,7 +44,7 @@
 				</li>
 				<li id="mapp-schedule">
 					<a href="schedule/" data-auth="required">
-						{iconbox id="events" size="large"}
+						{iconbox id="schedule" size="large"}
 						Schedule
 					</a>
 				</li>
