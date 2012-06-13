@@ -114,7 +114,7 @@ td {
 					<li style="margin-left:0;"><label style="color:#999999;">Group:</label> {$item.group_name}</li>
 				{/if}
 			</ul>
-			{$item.comments|default:"<em>No details entered</em>"|nl2br}
+			{$item.comments|htmlentities|default:"<em>No details entered</em>"|nl2br}
 		</td>
 	</tr>
 	{/foreach}
