@@ -23,17 +23,18 @@ respond( '/', function( $request, $response, $app ) {
 });
 
 respond( '/api/person-data', function( $request, $response, $app ) {
-	$ids = $request->param( 'id' );
+	$ids = (array)$request->param( 'id' );
 
 	// This endpoint is limited to just one person, to prevent abuse
 	$valid_pidms = array(
-		50080,
-		200443,
+		46242,
 	);
 
-	if( count($ids) > count( $valid_pidms ) || ! ( in_array( $ids[0], $valid_pidms ) && in_array( $ids[1], $valid_pidms ) ) ) {
-		trigger_error( 'bad request through api/person-data', E_USER_ERROR );
-		die;
+	foreach( $ids as $id ) {
+		if( ! in_array( $id, $valid_pidms ) ) {
+			trigger_error( 'bad request through api/person-data', E_USER_ERROR );
+			die;
+		}
 	}
 
 	$response->psu_lazyload( $ids );

@@ -40,7 +40,6 @@
 &lt;ul class="psu-lazyload" data-object=person data-id=200443&gt;
 	&lt;li class="lazy-field" data-type="login_name"&gt;&lt;/li&gt;
 	&lt;li class="lazy-field" data-type="email"&gt;&lt;/li&gt;
-	&lt;li class="lazy-field" data-type="id"&gt;&lt;/li&gt;
 	&lt;li class="lazy-field" data-type="wp_id"&gt;&lt;/li&gt;
 	&lt;li class="lazy-field" data-type="first_name"&gt;&lt;/li&gt;
 	&lt;li class="lazy-field" data-type="last_name"&gt;&lt;/li&gt;
@@ -49,16 +48,16 @@
 	</div>
 	<div class="grid_4 omega">
 		<h3>What you get</h3>
-		<ul class="psu-lazyload" data-object=person data-id=200443>
+		<ul class="psu-lazyload" data-object=person data-id=46242>
 			<li class="lazy-field" data-type="login_name"></li>
 			<li class="lazy-field" data-type="email"></li>
-			<li class="lazy-field" data-type="id"></li>
 			<li class="lazy-field" data-type="wp_id"></li>
 			<li class="lazy-field" data-type="first_name"></li>
 			<li class="lazy-field" data-type="last_name"></li>
+			<li><tt>id</tt>, <tt>usnh_id</tt>, etc.</li>
 		</ul>
 		<h3>Inline example</h3>
-		<div class="psu-lazyload" data-object=person data-id=50080>
+		<div class="psu-lazyload" data-object=person data-id=46242>
 			My username is <span class="lazy-field inline-field" data-type="login_name"></span>!
 		</div>
 	</div>
