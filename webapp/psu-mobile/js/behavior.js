@@ -6,7 +6,7 @@ var UPGRADE_URL = HOST + BASE_URL + '/upgrade/';
 // Things to happen RIGHT AWAY (as soon as this loads)
 
 // Detect the device's OS
-GlobalTools.deviceOS();
+var deviceOS = GlobalTools.deviceOS();
 
 // Function to change the class of the HTML tag based on the orientation of the device
 function changeOrientationClass(orientation) {
@@ -395,7 +395,7 @@ $(document).on('vclick', '#page-events #events a', function(event) {
  *
  */
 
-// When a result is clicked
+// When the page initializes
 $(document).on('pageinit', '#page-logout-message', function(event) {
 	// Delay the page load for a second, so that we can actually show the message
 	window.setTimeout( function() {
@@ -405,4 +405,17 @@ $(document).on('pageinit', '#page-logout-message', function(event) {
 		// So let's load the logout page
 		window.location.href = LOGOUT_URL + '?redirect_to=' + redirectUrl;
 	}, 1500);
+});
+
+
+/*
+ *
+ * Upgrade Page
+ *
+ */
+
+// When the page initializes
+$(document).on('pageinit', '#page-upgrade', function(event) {
+	// Show the links/banner of the appropriate device OS
+	$('.app-store-name #app-store-' + deviceOS).show();
 });

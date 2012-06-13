@@ -82,7 +82,7 @@
 		{* The PhoneGap/Cordova script file *}
 		<script>
 			// Let's get the version of the client
-			var clientAppVersion = {$params.client_app};
+			var clientAppVersion = '{$params.client_app}';
 
 			// Use a try, in case the GlobalTools didn't load correctly
 			try {

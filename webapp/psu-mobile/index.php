@@ -104,6 +104,7 @@ $app_routes = array(
 	'login',
 	'logout',
 	'schedule',
+	'upgrade',
 );
 
 foreach( $app_routes as $base ) {
