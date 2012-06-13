@@ -219,6 +219,7 @@
 .icon-parking,
 .icon-phonebook,
 .icon-quota,
+.icon-schedule,
 .icon-secure,
 .icon-twitter-item {
   font-family: 'PSUIcons01';
@@ -277,6 +278,9 @@
 }
 .icon-quota:before {
   content: "Q";
+}
+.icon-schedule:before {
+  content: "c";
 }
 .icon-secure:before {
   content: "!";
