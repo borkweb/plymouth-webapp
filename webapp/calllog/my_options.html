@@ -9,8 +9,7 @@ $employee_id = $GLOBALS['EMPLOYEE_INFO']['call_log_user_id'];
 if($_GET['action'] == 'search_setting'){
    $setting = $_POST['search_setting'];
    $GLOBALS['user']->setSearchSetting($setting);
-   header('Location: my_options.html');
-   exit;
+   PSU::redirect('my_options.html');
 }// end if
 
 if($_POST){
@@ -40,12 +39,10 @@ foreach($group_listing as $group_id=>$group){
 }
 
 $search_setting = $GLOBALS['user']->getSearchSetting();
-if($search_setting == 'full')
-{
+if($search_setting == 'full') {
 	$tpl->assign('search_setting_full', 'checked="checked"');
 }//end if
-else
-{
+else {
 	$tpl->assign('search_setting_split', 'checked="checked"');
 }//end else
 
