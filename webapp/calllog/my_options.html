@@ -1,10 +1,8 @@
 <?php
 
-$page_name = 'my_options';
 setUpHeader($page_name, 'return', $suppressem);
-$template_file = TEMPLATE_DIR."/".$page_name.'.tpl';
-$tpl = new XTemplate($template_file);
-$employee_id = $GLOBALS['EMPLOYEE_INFO']['call_log_user_id'];
+
+$tpl = new PSUTemplate();
 
 if($_GET['action'] == 'search_setting'){
    $setting = $_POST['search_setting'];
@@ -12,43 +10,21 @@ if($_GET['action'] == 'search_setting'){
    PSU::redirect('my_options.html');
 }// end if
 
+
 if($_POST){
-	if(function_exists("delete_previous_entries")){
-		delete_previous_entries($employee_id);
-	}
-	if(function_exists("insert_new_entries")){
-		insert_new_entries($employee_id);
-	}
-}
-
-if(function_exists("display_all_groups")){
-	$group_listing = display_all_groups();
-}
-
-if(function_exists("display_my_groups")){
-	$my_groups = display_my_groups();
-}
-
-foreach($group_listing as $group_id=>$group){
-	$tpl->assign('0_is_checked', "");
-	$tpl->assign('1_is_checked', "");
-	$tpl->assign('2_is_checked', "");
-	$tpl->assign($my_groups[$group_id]['option_id'].'_is_checked', "checked");
-	$tpl->assign('group_listing', $group);
-	$tpl->parse('main.group_listing');
+	$employee_id = $GLOBALS['EMPLOYEE_INFO']['call_log_user_id'];
+	delete_previous_entries( $employee_id );
+	insert_new_entries( $employee_id );
 }
 
 $search_setting = $GLOBALS['user']->getSearchSetting();
-if($search_setting == 'full') {
-	$tpl->assign('search_setting_full', 'checked="checked"');
-}//end if
-else {
-	$tpl->assign('search_setting_split', 'checked="checked"');
-}//end else
+$tpl->assign( 'search_setting', $search_setting );
 
-$tpl->parse('main');
-$content = $tpl->text('main');
+$group_listings = display_all_groups();
+$tpl->assign( 'group_listings', $group_listings );
 
-$ptpl = new PSUTemplate();
-$ptpl->assign('content', $content);
-$ptpl->display('psu_wrapper.tpl');
+$my_groups = display_my_groups();
+$tpl->assign( 'my_groups', $my_groups );
+
+
+$tpl->display('my_options.tpl');
