@@ -6,23 +6,27 @@ setupHeader($page_name, 'return'); // Set up the header
 $template_file = TEMPLATE_DIR.'/'.$page_name.'.tpl';
 $tpl = new PSU\Template;
 
-$go_back['option'] = ($_GET['option'])?$_GET['option']:'';
-$go_back['action'] = ($_GET['action'])?$_GET['action']:(($go_back['option'])?'searchUser':'');
-$go_back['group'] = ($_GET['group'])?$_GET['group']:'none';
-$go_back['find_type'] = ($_GET['find_type'])?$_GET['find_type']:2;
-$go_back['page'] = ($_GET['page'])?$_GET['page']:'index.html';
-
-if($go_back['option'] == 'mygroup') {
-	$go_back['name'] = 'the '.$go_back['find_type'].' Group';
-} else {
-	if($go_back['option']) {
+if( $_GET['action'] || $_GET['option'] ) {
+	$go_back = array();
+	
+	$go_back['option'] = $_GET['option'] ?: '';
+	$go_back['action'] = $_GET['action'] ?: ( $go_back['option'] ? 'searchUser' : false );
+	$go_back['find_type'] = $_GET['find_type'] ?: '';
+	$go_back['group'] = $_GET['group'] ?: 'none';
+	$go_back['page'] = $_GET['page'] ? $_GET['page'] : 'index.html';
+	
+	if($go_back['option'] == 'mygroup') {
+		$go_back['name'] = 'the '.$go_back['find_type'].' Group';
+	} 
+	elseif($go_back['option']) {
 		$go_back['name'] = $go_back['option'];
-	} else {
-		$go_back['name'] = "Home";
+	} 
+	else {
+		$go_back['name'] = 'Home';
 	}//end else
-}//end else
 
-$tpl->assign('go_back', $go_back);
+	$tpl->assign('go_back', $go_back);
+}
 
 $tpl->assign('call_log_username', $_SESSION['username']);
 $tpl->assign('call_log_web_home', CALL_LOG_WEB_HOME);
