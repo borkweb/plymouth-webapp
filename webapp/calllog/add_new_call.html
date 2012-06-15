@@ -44,6 +44,6 @@ if($_POST['call_status'] != "closed"){
 	sendOpenCallMail($_POST, "its_staff");
 }
 
-$_SESSION['successes'][] = 'Thank you for Logging Ticket #'.$call_id.' on '.date('m/d/Y @ g:i a');
+$_SESSION['successes'][] = 'Thank you for Logging <a href="https://go.plymouth.edu/log/'.$call_id.'">Ticket #'.$call_id.'</a> on '.date('m/d/Y @ g:i a');
 
 PSUHTML::redirect(($_GET['redirect'] ? urldecode($_GET['redirect']) : 'index.html?new_call=passed'));
