@@ -131,8 +131,9 @@ tr:hover .muted{
 	overflow: auto;
 }
 
-.history .update {
+.history > .update {
 	border-bottom: 1px solid #ccc;
+	padding: 1em;
 }
 
 .history .update .priority-status {
@@ -143,6 +144,12 @@ tr:hover .muted{
 	border-radius: 0.3em;
 	-moz-border-radius: 0.3em;
 	-webkit-border-radius: 0.3em;
+}
+
+.update-meta {
+	position: relative;
+	padding-left: 0;
+	padding-right: 0;
 }
 
 .content-info{

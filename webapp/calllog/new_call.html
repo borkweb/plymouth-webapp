@@ -128,7 +128,7 @@ if ($_GET['call_id']) {
 	if($call_details = $db->GetAll($sql)) {
 		foreach ($call_details as $details) {
 			$details['comments'] = preg_replace("/[\*]{114}/", "____________________________________________", $details['comments']);
-			$details['comments'] = nl2br(strip_tags($details['comments']));
+			$details['comments'] = nl2br(htmlentities($details['comments']));
 			$history[] = $details;
 		}//end foreach
 	}//end if
