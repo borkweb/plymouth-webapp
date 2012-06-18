@@ -304,6 +304,22 @@ class User
 		}		
 	} // end setHighPriorityGroups
 
+	function getUserGroups()
+	{
+		$sql = "
+			SELECT group_id, subgroupName name, `group` 
+				FROM its_employee_groups, 
+				itsgroups 
+			 WHERE itsgroups.deleted = 0 
+				 AND its_employee_groups.employee_id = {$GLOBALS['EMPLOYEE_INFO']['call_log_user_id']} 
+				 AND itsgroups.itsgroupid = its_employee_groups.group_id 
+				 AND its_employee_groups.option_id != '0' 
+			 ORDER BY subgroupName ASC
+		";
+		return $this->db->GetAll( $sql );
+	} // end getUserGroups
+	
+
 	function getSearchSetting($username = '')
 	{
 		$username = ($username) ? $username : $_SESSION['username'];

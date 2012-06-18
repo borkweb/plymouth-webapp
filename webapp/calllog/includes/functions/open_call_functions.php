@@ -1,6 +1,6 @@
 <?php
 
-function returnOpenCalls($option, $caller_user_name='', $sort_by=''){
+function returnOpenCalls($option, $caller_user_name='', $sort_by='', $what='*' ){
 	global $db, $user;
 	$result = array(); 
 	
@@ -13,15 +13,15 @@ function returnOpenCalls($option, $caller_user_name='', $sort_by=''){
 		'm_rondea'	 - User name, returns all open calls for the person with the user name m_rondea,
 					   I don't know who m_rondea is, but I bet he's super cool.
 	*/
-
+	
 	if ($option == 'mygroup') {
-		$query = "SELECT * FROM call_log, call_history WHERE call_log.call_id = call_history.call_id";
+		$query = "SELECT $what FROM call_log, call_history WHERE call_log.call_id = call_history.call_id";
 	}
 	elseif ($option == 'all') {
-		$query = "SELECT * FROM call_log LEFT JOIN call_history ON call_log.call_id = call_history.call_id LEFT JOIN itsgroups ON its_assigned_group = itsgroups.itsgroupid WHERE call_history.call_status = 'open' AND (hide_in_all_calls != '1' OR hide_in_all_calls IS NULL)";
+		$query = "SELECT $what FROM call_log LEFT JOIN call_history ON call_log.call_id = call_history.call_id LEFT JOIN itsgroups ON its_assigned_group = itsgroups.itsgroupid WHERE call_history.call_status = 'open' AND (hide_in_all_calls != '1' OR hide_in_all_calls IS NULL)";
 	}
 	else {
-		$query = "SELECT * FROM call_log, call_history WHERE call_log.call_id = call_history.call_id AND call_history.call_status='open'";
+		$query = "SELECT $what FROM call_log, call_history WHERE call_log.call_id = call_history.call_id AND call_history.call_status='open'";
 	}
 
 	$person = new PSUPerson( $caller_user_name );
@@ -76,10 +76,8 @@ function returnOpenCalls($option, $caller_user_name='', $sort_by=''){
 	}
 
 	$query .= " ORDER BY $sort_by ASC";
-$db->debug=true;
-	$result = $db->GetAll($query);
-$db->debug=false;
-	return $result;
+
+	return $db->GetAll($query);
 }// end function returnOpenCalls
 
 /*
@@ -120,73 +118,64 @@ function displayOpenCalls($template_file, $level=""){
 	return $tpl->text('main'.$level.'.group');
 }
 
+function getOpenCallCount( $option, $caller_user_name='' ) {
+	$count_arr = returnOpenCalls( $option, $caller_user_name, '', 'COUNT(call_log.call_id) count' );
+	$count = isset( $count_arr[0]['count'] ) ? $count_arr[0]['count'] : 0;
+	return $count;
+}
+
 function getOpenCallGroups() {
-	global $db;
+	global $db, $user;
 	
 	$groups = array();
 
-	$my_calls = returnOpenCalls('my');
+	$my_calls = getOpenCallCount( 'my' );
 	$groups['my'] = array(
 		'id' => 0,
-		'num' => count( $my_calls ),
+		'num' => $my_calls,
 		'type' => 'my',
 		'open_call_type' => urlencode( $_SESSION['username'] ),
 		'title' => 'View Open Calls Assigned To You.',
 		'my_group_name' => 'My Calls',
 	);
 
-	$my_calls = returnOpenCalls('my_opened');
+	$my_opened = getOpenCallCount( 'my_opened' );
 	$groups['my_opened'] = array(
 		'id' => 0,
-		'num' => count( $my_calls ),
+		'num' => $my_opened,
 		'type' => 'my_opened',
 		'open_call_type' => urlencode( $_SESSION['username'] ),
 		'title' => 'View Open Calls By You.',
 		'my_group_name' => 'Active Calls I Opened',
 	);
 
-	// gets information about the user and what groups they are in, also parsing out unassigned and all calls
-	$sql = "
-		SELECT * 
-			FROM its_employee_groups, 
-			itsgroups 
-		 WHERE itsgroups.deleted = 0 
-			 AND its_employee_groups.employee_id = {$GLOBALS['EMPLOYEE_INFO']['call_log_user_id']} 
-			 AND itsgroups.itsgroupid = its_employee_groups.group_id 
-			 AND its_employee_groups.option_id != '0' 
-		 ORDER BY subgroupName ASC
-	";
+	$user_groups = $user->getUserGroups();
+	foreach( $user_groups as $group ) {
+		$group_calls = getOpenCallCount( 'mygroup', $group['group_id'] );
+		$groups[ $group['group_id'] ] = array(
+			'id' => urlencode( $group['group_id'] ),
+			'num' => $group_calls,
+			'type' => 'mygroup',
+			'open_call_type' => urlencode( $group['name'] ),
+			'title' => 'View Open Calls Assigned To Your Group.',
+			'my_group_name' => $group['name'],
+		);
+	}//end foreach
 
-	if ($results = $db->Execute( $sql ) ) {
-		foreach( $results as $row ) {
-			$groupArray = getGroupInfo($row['itsgroupid'], $loop=1);
-			$group_calls = returnOpenCalls('mygroup', $groupArray[2]);
-
-			$groups[ $row['itsgroupid'] ] = array(
-				'id' => urlencode( $row['itsgroupid'] ),
-				'num' => count( $group_calls ),
-				'type' => 'mygroup',
-				'open_call_type' => urlencode( $row['subgroupName'] ),
-				'title' => 'View Open Calls Assigned To Your Group.',
-				'my_group_name' => $row['subgroupName'],
-			);
-		}//end foreach
-	}//end if
-
-	$unassigned_calls = returnOpenCalls('unassigned');
+	$unassigned_calls = getOpenCallCount( 'unassigned' );
 	$groups['unassigned'] = array(
 		'id' => 0,
-		'num' => count( $unassigned_calls ),
+		'num' => $unassigned_calls,
 		'type' => 'unassigned',
 		'open_call_type' => 'unassigned',
 		'title' => 'View Unassigned Open Calls',
 		'my_group_name' => 'Unassigned Calls',
 	);
 
-	$open_calls = returnOpenCalls('all');
+	$open_calls = getOpenCallCount( 'all' );
 	$groups['all'] = array(
 		'id' => 0,
-		'num' => count( $open_calls ),
+		'num' => $open_calls,
 		'type' => 'all',
 		'open_call_type' => 'all',
 		'title' => 'View All Open Calls',
