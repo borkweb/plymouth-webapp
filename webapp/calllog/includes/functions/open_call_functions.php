@@ -155,7 +155,7 @@ function getOpenCallGroups() {
 		$groups[ $group['group_id'] ] = array(
 			'id' => urlencode( $group['group_id'] ),
 			'num' => $group_calls,
-			'type' => 'mygroup',
+			'type' => $group['subgroup'],
 			'open_call_type' => urlencode( $group['name'] ),
 			'title' => 'View Open Calls Assigned To Your Group.',
 			'my_group_name' => $group['name'],

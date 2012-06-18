@@ -30,7 +30,7 @@
 						<td>
 							<div class="call-title">{$row.call_title}</div>
 							<div>
-								<a href="{$PHP.BASE_URL}/ticket/{$row.call_id}/?action=view_open_calls&option={$open_call_option}&group={$group_number}&find_type={$find_type}" class="view">{$row.name_full} <em>({$row.caller_username})</em></a> 
+								<a href="{$PHP.BASE_URL}/ticket/{$row.call_id}/{if $find_in}in/{$find_in}/{/if}" class="view">{$row.name_full} <em>({$row.caller_username})</em></a> 
 							</div>
 							<div class="summary">
 								{$row.call_summary}

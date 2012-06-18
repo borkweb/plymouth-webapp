@@ -225,19 +225,55 @@ function loadingContent($loadingDiv){
 	echo "<div id='$loadingDiv' style='display: none;'><img src='{call_log_web_home}/images/loading-anim.gif' alt='Loading...'/>Loading Content Please Wait...</div>";
 }
 
-function getGroupInfo($ITSGroupNumber, $loop=''){
+function getGroupInfo( $group_id, $loop = '' ){
 	global $db;
-	$groups_query = "SELECT * FROM itsgroups WHERE itsgroupid = '$ITSGroupNumber' and itsgroups.deleted = 0";
-	$groups_result = $db->CacheExecute($groups_query);
+
+	$groups_query = "SELECT * FROM itsgroups WHERE itsgroupid = ? and itsgroups.deleted = 0";
+	$args = array( $group_id );
+	$groups_result = $db->CacheExecute($groups_query, $args);
+
 	if ($loop == 1){
 		while ($groups_row = $groups_result->FetchRow()){
-			$groups_array = array($groups_row[subgroupName], $groups_row[subgroup], $groups_row[itsgroupid]);
+			$groups_array = array($groups_row['subgroupName'], $groups_row['subgroup'], $groups_row['itsgroupid']);
 		}
 	}else{
 		$groups_row = $groups_result->FetchRow();
-		$groups_array = array($groups_row[subgroupName], $groups_row[subgroup]);
+		$groups_array = array($groups_row['subgroupName'], $groups_row['subgroup']);
 	}
 	return $groups_array;
+}
+
+function getSubgroupBySlug( $subgroup ) {
+	global $db;
+
+	$sql = "SELECT * FROM itsgroups WHERE subgroup = ? and itsgroups.deleted = 0";
+	$args = array( $subgroup );
+
+	$groups_result = $db->CacheGetRow($sql, $args);
+
+	return $groups_result;
+}
+
+function option2findtype( $option ) {
+	switch( $option ) {
+		case 'my':
+			$find_type = 'My Calls';
+			break;
+		case 'my_opened':
+			$find_type = 'Active Calls I Opened';
+			break;
+		case 'unassigned':
+			$find_type = 'Unassigned Calls';
+			break;
+		case 'all':
+			$find_type = 'All Calls';
+			break;
+		default:
+			$find_type = null;
+			break;
+	}
+
+	return $find_type;
 }
 
 function sendOpenCallMail($call_info, $action){

@@ -123,9 +123,8 @@ if($call_log_username != "" || $caller_user_name != ""){
 
 $_SESSION['user_message'] = "Thank you for Updating Ticket #".$call_id;
 
-if($_POST['option'] != 'caller' || $_POST['group'] != 0) {
-	PSU::redirect( $_GET['redirect'] ?: 'calls.html?new_call=passed&action='.$_POST['action'].'&option='.$_POST['option'].'&group='.$_POST['group'].'&find_type='.$_POST['find_type'] );
-}
-else {
-	PSU::redirect( $_GET['redirect'] ?: 'index.html?new_call=passed' );
+if( isset( $_POST['in'] ) ) {
+	PSU::redirect( $_GET['redirect'] ?: $GLOBALS['BASE_URL'] . '/calls/' . $_POST['in'] . '/' );
+} else {
+	PSU::redirect( $_GET['redirect'] ?: $GLOBALS['BASE_URL'] );
 }

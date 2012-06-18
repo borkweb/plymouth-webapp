@@ -1,10 +1,6 @@
 {box class="noprint"}
-	{if 'searchUser' == $go_back.action }
-	<a href="{$PHP.BASE_URL}/index.html?search_type={$go_back.find_type}&amp;search_string={$go_back.option}" class="btn btn-danger">&laquo; Back to {$go_back.name}</a>
-	{elseif $go_back.action != null}
-	<a href="{$PHP.BASE_URL}/calls.html?action={$go_back.action}&option={$go_back.option}&group={$go_back.group}&find_type={$go_back.find_type}" class="btn btn-danger">&laquo; Back to {$go_back.name}</a>
-	{else}
-	<a href="{$PHP.BASE_URL}/" class="btn btn-danger">&laquo; Back to Home</a>
+	{if $go_back}
+		<a href="{$go_back.url}" class="btn btn-danger">&laquo; Back to {$go_back.name}</a>
 	{/if}
 {/box}
 
@@ -12,11 +8,7 @@
 	<form name="new_call" method="post" action="{$PHP.BASE_URL}/update_call_details.html" id="edit_call" enctype="multipart/form-data">
 	<input type="hidden" name="call_history_id" value="{$call_history_id}" />
 	<input type="hidden" name="call_id" id="call_id" value="{$call_id}" />
-	<input type="hidden" name="action" id="action" value="{$go_back.action}" />
-	<input type="hidden" name="option" id="option" value="{$go_back.option}" />
-	<input type="hidden" name="group" id="group" value="{$go_back.group}" />
-	<input type="hidden" name="find_type" id="find_type" value="{$go_back.find_type}" />
-	<input type="hidden" name="page" id="page" value="{$go_back.page}" />
+	<input type="hidden" name="in" id="in" value="{$go_back.in|htmlentities}" />
 {else}
 	<form name="new_call" method="post" action="{$PHP.BASE_URL}/add_new_call.html" id="new_call" enctype="multipart/form-data">
 {/if}
