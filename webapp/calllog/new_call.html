@@ -6,26 +6,36 @@ setupHeader($page_name, 'return'); // Set up the header
 $template_file = TEMPLATE_DIR.'/'.$page_name.'.tpl';
 $tpl = new PSU\Template;
 
-if( $_GET['action'] || $_GET['option'] ) {
-	$go_back = array();
-	
-	$go_back['option'] = $_GET['option'] ?: '';
-	$go_back['action'] = $_GET['action'] ?: ( $go_back['option'] ? 'searchUser' : false );
-	$go_back['find_type'] = $_GET['find_type'] ?: '';
-	$go_back['group'] = $_GET['group'] ?: 'none';
-	$go_back['page'] = $_GET['page'] ? $_GET['page'] : 'index.html';
-	
-	if($go_back['option'] == 'mygroup') {
-		$go_back['name'] = 'the '.$go_back['find_type'].' Group';
-	} 
-	elseif($go_back['option']) {
-		$go_back['name'] = $go_back['option'];
-	} 
-	else {
-		$go_back['name'] = 'Home';
-	}//end else
+/**
+ * ticket/(\d+) -> new_call.html?call_id=$1
+ * new/(\w+)    -> new_call.html?caller=$1
+ * user/(\w+)   -> new_call.html?caller=$1
+ */
 
-	$tpl->assign('go_back', $go_back);
+if( isset( $_GET['in'] ) ) {
+	$in = $_GET['in'];
+
+	$go_back = array(
+		'url' => $GLOBALS['BASE_URL'] . '/calls.html',
+	);
+
+	$go_back_qs = array();
+
+	if( $find_type = option2findtype( $in ) ) {
+		$go_back['name'] = $find_type;
+		$go_back_qs['option'] = $in;
+	} else {
+		$group = getSubgroupBySlug($in);
+		$go_back['name'] = $group['subgroupName'];
+
+		$go_back_qs['option'] = 'mygroup';
+		$go_back_qs['group'] = $group['itsgroupid'];
+	}
+
+	$go_back['url'] .= '?' . http_build_query( $go_back_qs );
+	unset( $go_back_qs );
+
+	$tpl->assign( 'go_back', $go_back );
 }
 
 $tpl->assign('call_log_username', $_SESSION['username']);
@@ -78,20 +88,20 @@ if( isset($_GET['call_id']) ) {
 $tpl->assign('person', $person);
 $tpl->assign('caller_user_name', $caller);
 
-// Building Options Array, Consists Of building_id And building_name
-$building_options = Array();
+// Building Options array, Consists Of building_id And building_name
+$building_options = array();
 $building_options = getBuildingOptions();
 
-// Search Building Options Array, Consists Of building_id And building_name
-$Building_Info = Array();
+// Search Building Options array, Consists Of building_id And building_name
+$Building_Info = array();
 $Building_Info = searchBuildingRoom($person['phone']);
 
-// TLC Users Options Array
-$tlc_users_options = Array();
+// TLC Users Options array
+$tlc_users_options = array();
 $tlc_users_options = getTLCUsersOptions();
 
-// ITS Groups Options Array
-$its_group_options = Array();
+// ITS Groups Options array
+$its_group_options = array();
 $its_group_options = getITSGroupOptions();
 
 // If cluster_building_id isSet, get it, select that building

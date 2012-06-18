@@ -1,6 +1,10 @@
 <?php
 
-$tpl = new PSUTemplate;
+/**
+ * TODO remove new_call=passed, action=view_open_calls, find_type=* from other scripts
+ */
+
+$tpl = new PSU\Template;
 $tpl->assign('groups', getOpenCallGroups());
 $tpl->assign('blog', getNewsFeed());
 
@@ -8,7 +12,20 @@ $calls = array();
 
 $time = time();
 
-$result = returnOpenCalls($_GET['option'], $_GET['group'], $_GET['sort_by']);
+$group_id = null;
+$find_in = null;
+
+if( isset( $_GET['group'] ) && $_GET['group'] ) {
+	$group_id = (int)$_GET['group'];
+	$group = getGroupInfo($group_id);
+
+	$find_type = $group[0];
+	$find_in = $group[1];
+} elseif( $find_type = option2findtype( $_GET['option'] ) ) {
+	$find_in = $_GET['option'];
+}
+
+$result = returnOpenCalls($_GET['option'], $group_id, $_GET['sort_by']);
 $i = 0;
 if(!empty($result) && is_array($result)){
 	$call_open_time = array();
@@ -93,12 +110,11 @@ if(!empty($result) && is_array($result)){
 	if($average['seconds']) $average_string .= $average['seconds'].' seconds ';
 
 	$tpl->assign('average_open_call_time', $average_string);
-}else{
-	$tpl->assign('open_call_type', $_GET['open_call_type']);
 }
 
 $tpl->assign('open_call_type', $_GET['open_call_type']);
-$tpl->assign('find_type', $_GET['find_type']);
+$tpl->assign('find_type', $find_type);
+$tpl->assign('find_in', $find_in);
 $tpl->assign('group_number', $_GET['group']);
 $tpl->assign('open_call_option', $_GET['option']);
 

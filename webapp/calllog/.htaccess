@@ -5,6 +5,7 @@ php_value auto_prepend_file ./common.php
 RewriteBase /webapp/calllog/
 RewriteEngine on
 
+RewriteRule ^ticket/([0-9]+)/in/(\w+)/? new_call.html?call_id=$1&in=$2 [QSA,L]
 RewriteRule ^ticket/([0-9]+)$ ticket/$1/ [R=301,L]
 RewriteRule ^ticket/([0-9]+)/ new_call.html?call_id=$1 [QSA,L]
 
