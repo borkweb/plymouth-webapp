@@ -17,15 +17,17 @@
 				<th>Not Subscribed</th>
 				<th>Show Group</th>
 				<th>Show &amp; Email</th>
+				<th>High Priority</th>
 			</tr>
 		</thead>
 		<tbody>
-			{foreach from=$group_listings item=group_listing key=group_id}
+			{foreach from=$groups item=group key=group_id}
 			<tr>
-				<td>{$group_listing.subgroupName}</td>
-				<td align="center"><input type="radio" name="group[{$group_listing.itsgroupid}]" id="{$group_listing.itsgroupid}" class="radio" value="0" {if $my_groups.$group_id.option_id == 0}checked="checked"{/if} /></td>
-				<td align="center"><input type="radio" name="group[{$group_listing.itsgroupid}]" id="{$group_listing.itsgroupid}" class="radio" value="1" {if $my_groups.$group_id.option_id == 1}checked="checked"{/if} /></td>
-				<td align="center"><input type="radio" name="group[{$group_listing.itsgroupid}]" id="{$group_listing.itsgroupid}" class="radio" value="2" {if $my_groups.$group_id.option_id == 2}checked="checked"{/if} /></td>
+				<td>{$group.subgroupName}</td>
+				<td align="center"><input type="radio" name="group[{$group_id}]" id="{$group_id}" class="radio" value="0" {if $my_groups.$group_id.option_id == 0}checked="checked"{/if} /></td>
+				<td align="center"><input type="radio" name="group[{$group_id}]" id="{$group_id}" class="radio" value="1" {if $my_groups.$group_id.option_id == 1}checked="checked"{/if} /></td>
+				<td align="center"><input type="radio" name="group[{$group_id}]" id="{$group_id}" class="radio" value="2" {if $my_groups.$group_id.option_id == 2}checked="checked"{/if} /></td>
+				<td align="center"><input type="checkbox" name="high_priority[{$group_id}]" value="1" {if $high_priorities.$group_id}checked="checked"{/if} /></td>
 			</tr>
 			{/foreach}
 		</tbody>

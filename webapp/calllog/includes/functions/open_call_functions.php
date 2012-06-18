@@ -1,8 +1,9 @@
 <?php
 
-function returnOpenCalls($options, $caller_user_name='', $sort_by=""){
-	global $db;
+function returnOpenCalls($option, $caller_user_name='', $sort_by=''){
+	global $db, $user;
 	$result = array(); 
+	
 	/*
 	NOTE:
 		$options can equal the following three things:
@@ -13,11 +14,13 @@ function returnOpenCalls($options, $caller_user_name='', $sort_by=""){
 					   I don't know who m_rondea is, but I bet he's super cool.
 	*/
 
-	if ($options == "mygroup"){
+	if ($option == 'mygroup') {
 		$query = "SELECT * FROM call_log, call_history WHERE call_log.call_id = call_history.call_id";
-	}else if ($options == 'all'){
+	}
+	elseif ($option == 'all') {
 		$query = "SELECT * FROM call_log LEFT JOIN call_history ON call_log.call_id = call_history.call_id LEFT JOIN itsgroups ON its_assigned_group = itsgroups.itsgroupid WHERE call_history.call_status = 'open' AND (hide_in_all_calls != '1' OR hide_in_all_calls IS NULL)";
-	}else{
+	}
+	else {
 		$query = "SELECT * FROM call_log, call_history WHERE call_log.call_id = call_history.call_id AND call_history.call_status='open'";
 	}
 
@@ -25,7 +28,7 @@ function returnOpenCalls($options, $caller_user_name='', $sort_by=""){
 	$pidm = $person->pidm;
 	$wp_id = $person->wp_id;
 	
-	switch($options){
+	switch($option) {
 		case '':
 			break;
 		case 'none':
@@ -45,26 +48,37 @@ function returnOpenCalls($options, $caller_user_name='', $sort_by=""){
 			$query .= " AND call_history.its_assigned_group='$caller_user_name' AND call_history.call_status='open'";
 			break;
 		case 'my_opened':
-			$query .= " AND call_log.calllog_username='$_SESSION[username]' AND call_history.call_status='open'";
+			$query .= " AND call_log.calllog_username='{$_SESSION['username']}' AND call_history.call_status='open'";
+			break;
+		case 'my':
+			$query .= " AND ( call_history.tlc_assigned_to='{$_SESSION['username']}'";
+			
+			$high_priority_groups = implode( ',', $user->getHighPriorityGroups() );
+			if( $high_priority_groups ) {
+				$query .= " OR ( call_history.its_assigned_group IN ($high_priority_groups) AND call_history.call_priority = 'high' )";
+			}
+			
+			$query .= " )";
 			break;
 		default:
-			$user_name = $options;
-			$query .= " AND call_history.tlc_assigned_to='$_SESSION[username]'";
+			$query .= " AND call_history.tlc_assigned_to='{$_SESSION['username']}'";
 			break;
 
 	}// end switch
 
-	$query .= " AND current='1'";
+	$query .= " AND call_history.current='1'";
+	
 	if( !$sort_by || $sort_by == 'call_date' ) {
 		$sort_by = 'call_date, call_time';
-	} elseif( $sort_by == 'call_updated' ) {
+	} 
+	elseif( $sort_by == 'call_updated' ) {
 		$sort_by = 'date_assigned, time_assigned';
 	}
 
 	$query .= " ORDER BY $sort_by ASC";
-
+$db->debug=true;
 	$result = $db->GetAll($query);
-
+$db->debug=false;
 	return $result;
 }// end function returnOpenCalls
 

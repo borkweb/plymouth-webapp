@@ -275,6 +275,35 @@ class User
 		return null;
 	}//end getCallerPhone
 
+	function getHighPriorityGroups( $all = false )
+	{
+		$groups = display_all_groups();
+		
+		$high_priorities = array();
+		foreach( $groups as $group_id => $group ) {
+		
+			$high = $GLOBALS['go']->getUserMeta( $_SESSION['wp_id'], 'calllog.high_priority_'.$group_id );
+			
+			if( $all ) {
+				$high_priorities[$group_id] = $high;
+			}
+			elseif( $high ) {
+				$high_priorities[] = $group_id;
+			}
+		}
+		return $high_priorities;
+	} // end getHighPriorityGroups
+	
+	function setHighPriorityGroups( $groups )
+	{
+		$all_groups = display_all_groups();
+		foreach( $all_groups as $group ) {
+			$group_id = $group['itsgroupid'];
+			$groups[$group_id] = isset( $groups[ $group_id ] ) ? $groups[$group_id] : false;
+			$GLOBALS['go']->saveUserMeta( $_SESSION['wp_id'], 'calllog.high_priority_'.$group_id, $groups[$group_id] );
+		}		
+	} // end setHighPriorityGroups
+
 	function getSearchSetting($username = '')
 	{
 		$username = ($username) ? $username : $_SESSION['username'];

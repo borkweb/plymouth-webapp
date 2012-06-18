@@ -10,18 +10,25 @@ if($_GET['action'] == 'search_setting'){
    PSU::redirect('my_options.html');
 }// end if
 
+$groups = display_all_groups();
 
 if($_POST){
 	$employee_id = $GLOBALS['EMPLOYEE_INFO']['call_log_user_id'];
 	delete_previous_entries( $employee_id );
 	insert_new_entries( $employee_id );
+
+	$user->setHighPriorityGroups( $_POST['high_priority'] );
+	PSU::redirect('my_options.html');
 }
 
 $search_setting = $GLOBALS['user']->getSearchSetting();
 $tpl->assign( 'search_setting', $search_setting );
 
-$group_listings = display_all_groups();
-$tpl->assign( 'group_listings', $group_listings );
+$groups = display_all_groups();
+$tpl->assign( 'groups', $groups );
+
+$high_priorities = $user->getHighPriorityGroups( true );
+$tpl->assign( 'high_priorities', $high_priorities );
 
 $my_groups = display_my_groups();
 $tpl->assign( 'my_groups', $my_groups );

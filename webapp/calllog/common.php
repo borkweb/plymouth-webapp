@@ -105,6 +105,8 @@ $new_call = new NewCall($db); // New Call object
 IDMObject::authN();
 $GLOBALS['is_employee'] = checkEmployee();
 
+$GLOBALS['go'] = new go();
+
 if(!checkEmployee() && $_SERVER['SCRIPT_NAME'] != '/webapp/calllog/add_new_call.html' && $_SERVER['SCRIPT_NAME'] != '/webapp/calllog/update_call_details.html'){
 	exit('Not a Valid Employee');
 } elseif( $_SERVER['SCRIPT_NAME'] == '/webapp/calllog/add_new_call.html' && $_POST && ($_GET['call_source'] == 'support' || $_GET['call_source'] == 'feedback')){
