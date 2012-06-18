@@ -11,11 +11,11 @@
 			<table class="table table-striped table-condensed">
 				<thead>
 					<tr>
-						<th><a href="{$PHP.BASE_URL}/calls.html?option={$smarty.get.option}&amp;group={$smarty.get.group}&amp;open_call_type={$smarty.get.open_call_type}&amp;sort_by=call_updated" title="Activity">{icon id=clock size=tiny flat=true}</a></th>
-						<th><a href="{$PHP.BASE_URL}/calls.html?option={$smarty.get.option}&amp;group={$smarty.get.group}&amp;open_call_type={$smarty.get.open_call_type}&amp;sort_by=call_date">Ticket</a></th>
-						<th><a href="{$PHP.BASE_URL}/calls.html?option={$smarty.get.option}&amp;group={$smarty.get.group}&amp;open_call_type={$smarty.get.open_call_type}&amp;sort_by=caller_last_name">Caller</a></th>
-						<th><a href="{$PHP.BASE_URL}/calls.html?option={$smarty.get.option}&amp;group={$smarty.get.group}&amp;open_call_type={$smarty.get.open_call_type}&amp;sort_by=call_priority">Priority</a></th>
-						<th><a href="{$PHP.BASE_URL}/calls.html?option={$smarty.get.option}&amp;group={$smarty.get.group}&amp;open_call_type={$smarty.get.open_call_type}&amp;sort_by=its_assigned_group ASC, tlc_assigned_to">Assigned To</a></th>
+						<th><a href="?sort_by=call_updated" title="Activity">{icon id=clock size=tiny flat=true}</a></th>
+						<th><a href="?sort_by=call_date">Ticket</a></th>
+						<th><a href="?sort_by=caller_last_name">Caller</a></th>
+						<th><a href="?sort_by=call_priority">Priority</a></th>
+						<th><a href="?sort_by=its_assigned_group ASC, tlc_assigned_to">Assigned To</a></th>
 					</tr>
 				</thead>
 				<tbody>
