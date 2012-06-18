@@ -307,7 +307,7 @@ class User
 	function getUserGroups()
 	{
 		$sql = "
-			SELECT group_id, subgroupName name, `group` 
+			SELECT group_id, subgroupName name, `group`, subgroup
 				FROM its_employee_groups, 
 				itsgroups 
 			 WHERE itsgroups.deleted = 0 

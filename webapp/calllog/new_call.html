@@ -12,31 +12,28 @@ $tpl = new PSU\Template;
  * user/(\w+)   -> new_call.html?caller=$1
  */
 
+$go_back = null;
+
 if( isset( $_GET['in'] ) ) {
 	$in = $_GET['in'];
 
 	$go_back = array(
-		'url' => $GLOBALS['BASE_URL'] . '/calls.html',
+		'in' => $in,
+		'url' => $GLOBALS['BASE_URL'] . '/calls/',
+		'name' => null,
 	);
-
-	$go_back_qs = array();
 
 	if( $find_type = option2findtype( $in ) ) {
 		$go_back['name'] = $find_type;
-		$go_back_qs['option'] = $in;
+		$go_back['url'] .= $in . '/';
 	} else {
 		$group = getSubgroupBySlug($in);
 		$go_back['name'] = $group['subgroupName'];
-
-		$go_back_qs['option'] = 'mygroup';
-		$go_back_qs['group'] = $group['itsgroupid'];
+		$go_back['url'] .= $group['subgroup'] . '/';
 	}
-
-	$go_back['url'] .= '?' . http_build_query( $go_back_qs );
-	unset( $go_back_qs );
-
-	$tpl->assign( 'go_back', $go_back );
 }
+
+$tpl->assign( 'go_back', $go_back );
 
 $tpl->assign('call_log_username', $_SESSION['username']);
 $tpl->assign('call_log_web_home', CALL_LOG_WEB_HOME);

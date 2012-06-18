@@ -81,8 +81,8 @@ include(FUNCTIONS_DIR . "/user.class.php");
 
 require_once 'portal.class.php';
 
-if( file_exists('debug.php') ) {
-	include 'debug.php';
+if( file_exists( __DIR__ . '/debug.php') ) {
+	include __DIR__ . '/debug.php';
 }
 
 /*******************[Database Connections]*****************/
