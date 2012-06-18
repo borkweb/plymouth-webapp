@@ -34,7 +34,6 @@ if( isset( $_GET['in'] ) ) {
 }
 
 $tpl->assign( 'go_back', $go_back );
-
 $tpl->assign('call_log_username', $_SESSION['username']);
 $tpl->assign('call_log_web_home', CALL_LOG_WEB_HOME);
 $tpl->assign('JS_WEB_DIR', JS_WEB_DIR);
@@ -43,6 +42,11 @@ $tpl->assign('page_name', $page_name);
 //was a call_id provided?
 if( isset($_GET['call_id']) ) {
 	$call = $db->GetRow("SELECT * FROM call_log WHERE call_id = ?", (int)$_GET['call_id']);
+
+	if( count($call) === 0 ) {
+		$_SESSION['errors'][] = "Call #{$_GET['call_id']} does not exist.";
+		PSU::redirect( $GLOBALS['BASE_URL'] . '/' );
+	}
 
 	$caller = $call['wp_id'] ? $call['wp_id'] : ($call['pidm'] ? $call['pidm'] : $call['caller_username']);
 	$person = $GLOBALS['user']->getCallerData($caller);
