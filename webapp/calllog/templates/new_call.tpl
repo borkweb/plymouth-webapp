@@ -1,8 +1,10 @@
 {box class="noprint"}
 	{if 'searchUser' == $go_back.action }
 	<a href="{$PHP.BASE_URL}/index.html?search_type={$go_back.find_type}&amp;search_string={$go_back.option}" class="btn btn-danger">&laquo; Back to {$go_back.name}</a>
-	{else}
+	{elseif $go_back.action != null}
 	<a href="{$PHP.BASE_URL}/calls.html?action={$go_back.action}&option={$go_back.option}&group={$go_back.group}&find_type={$go_back.find_type}" class="btn btn-danger">&laquo; Back to {$go_back.name}</a>
+	{else}
+	<a href="{$PHP.BASE_URL}/" class="btn btn-danger">&laquo; Back to Home</a>
 	{/if}
 {/box}
 
