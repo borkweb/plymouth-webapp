@@ -1,32 +1,14 @@
-<style>
-.front-nav li{
-	margin-bottom: 1em;
-}
-</style>
-{box title="Welcome to the PSU Analysis and Provisioning Engine!" size=16}
+{box title="Plymouth APE" size=16 style=hero}
 	<p>
-		If you would like to analyze a specific user, search for one here:
+		APE &mdash; Analysis and Provisioning Engine
 	</p>
 	{include file="user_search.tpl"}
-	<p style="margin-top: 2em;">
-		Here are some other services in APE that you may find useful:
-	</p>
-	<ul class="front-nav">
-		<li><a href="{$PHP.BASE_URL}/authz.html">{icon id="ape-access" size="medium" boxed=true} Access Management</a></li>
-		{if $AUTHZ.oracle.reporting_security}
-			<li class="{$banner_current}"><a href="{$PHP.BASE_URL}/banner/">{icon id="ape-banner-security" size="medium" boxed=true} Banner Security</a></li>
-		{/if}
-		{if $ape->canResetPassword()}
-			<li><a href="{$PHP.BASE_URL}/password-test.html">{icon id="ape-password" size="medium" boxed=true} Password Test</a></li>
-			<li><a href="{$PHP.BASE_URL}/locks.html">{icon id="ape-lock" size="medium" boxed=true} Locked Accounts ({$ape->locks_count()})</a></li>
-		{/if}
-	</ul>	
 {/box}
 
 {box title="Connect.ply Login Errors" size=16}
 	<p>Connect.plymouth.edu logs the following events during the login process, adding them
 	together to return a code during login errors:</p>
-	<table class="grid" id="sl-error-codes">
+	<table class="table table-striped table-bordered table-condensed" id="sl-error-codes">
 		<tr>
 			<th>Value</th>
 			<th>Description</th>
