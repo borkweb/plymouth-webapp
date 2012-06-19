@@ -14,7 +14,10 @@ $jQuery(document).ready(function($){
 		$jQuery(this).remove();
 	});
 	$jQuery('#search_string').focus();
-	$jQuery('#its-group-help').colorbox();
+	$jQuery('#its-group-help').colorbox({
+		width: 1000,
+		height: 800
+	});
 
 	$jQuery(document).delegate('.print-balance a', 'click',function(){
 		$jQuery('.print-funds .error').hide();
