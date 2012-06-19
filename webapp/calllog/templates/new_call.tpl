@@ -108,7 +108,7 @@
 					<option value="0">Unassigned</option>
 					{$its_select_group_list}
 				</select>
-				(<a href="{$PHP.BASE_URL}/images/help-desk-small.png" id="its-group-help" title="ITS Group Responsibilities">?</a>)
+				(<a href="{$PHP.BASE_URL}/business-area.html?clean=1" id="its-group-help" title="ITS Group Responsibilities">?</a>)
 			</li>
 			<li class="form-actions center">
 			<button type="submit" class="btn primary">{if $call_id}Update{else}Submit{/if} Ticket</button>
