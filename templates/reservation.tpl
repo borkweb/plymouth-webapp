@@ -5,7 +5,7 @@
 <h2>There are no reservations that match that criteria.</h2>
 {else}
 
-<table class="grid">
+<table class="table table-bordered table-striped">
 	<thead>
 		<th class="header">View</th>	
 		<th class="header">Last Name</th>	

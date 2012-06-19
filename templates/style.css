@@ -1,8 +1,4 @@
-label{
-font-weight:bold;
-
-}
-.message{
+.cts-message{
 word-wrap:break-word;
 padding: 0px 0px 0px 20px;
 width: 500px;
@@ -12,9 +8,6 @@ clear:left;
 }
 .print-information h3{
 font-size:1.2em;
-}
-.center{
-text-align:center;
 }
 .note{
 font-style:italic;
@@ -38,7 +31,7 @@ font-size:2em;
 color:green;
 }
 
-select{
+.auto-select{
 width: auto;
 }
 

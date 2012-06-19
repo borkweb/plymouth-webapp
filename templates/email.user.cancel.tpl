@@ -1,4 +1,4 @@
-<h2>Your request has been cancelled!</h2>
+<h1>Your request has been cancelled!</h1>
 
 <p>Below you will see the information for the reservation.</p>
 

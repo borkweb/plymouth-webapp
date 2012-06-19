@@ -1,4 +1,4 @@
-{box title="Reservation ID: $reservation_idx"}
+{box size=16 title="Reservation ID: $reservation_idx"}
 {assign var=reserve value=$reservation[$reservation_idx]}
 	<h2>Contact Information</h2>
 

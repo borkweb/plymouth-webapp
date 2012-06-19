@@ -1,4 +1,4 @@
-{box title="Reservation ID: <a href=\"`$PHP.BASE_URL`/admin/reservation/search/id/`$item.reservation_idx`\">`$item.reservation_idx`</a>"}
+{box size=16 title="Reservation ID: <a href=\"`$PHP.BASE_URL`/admin/reservation/search/id/`$item.reservation_idx`\">`$item.reservation_idx`</a>"}
 <h2>Contact Information</h2>
 	<ul class="label-left">
 			<li><label>Name: </label>{$reservation.fname} {$reservation.lname}</li>
@@ -19,7 +19,7 @@
 	</ul>
 
 {if $reservation.equipment}
-<table class="grid" width="450">
+<table class="table table-bordered table-striped" width="450">
 	<thead>
 		<th>GLPI_ID</th>
 		<th>Type</th>

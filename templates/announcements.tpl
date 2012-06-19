@@ -1,7 +1,7 @@
-{box title="Announcements"}
+{box size = 16 title="Announcements"}
 
 <form action="{$PHP.BASE_URL}/admin/admincp/announcements/save" method="POST">
-	<table class="grid">
+	<table class="table table-bordered table-striped">
 		<thead>
 			<th>Message</th>
 			<th>Viewable</th>
@@ -32,7 +32,7 @@
 <form class="label-left" action="{$PHP.BASE_URL}/admin/admincp/announcements/add" method="POST">
 <ul>
 	<li><label class="required"><em>*</em>Message: </label><textarea rows="5" cols="50" name="message"></textarea></li>
-	<li><input type="Submit" name="submit" value="Add New"></li>
+	<li class="form-actions"><input type="Submit" name="submit" value="Add New"></li>
 </ul>
 </form>
 {/box}

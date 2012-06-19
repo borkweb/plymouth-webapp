@@ -146,7 +146,7 @@
 				<li>
 			<em>*required  </em><input type="checkbox" name="agreement"> I agree, as the individual requesting this equipment, to the terms of the <a href="{$PHP.BASE_URL}/reserve/agreement">Equipment Reservation Policy</a>.
 			</li>
-			<li>
+			<li class="form-actions">
 			    <input type="Submit" name="Submit_event" value="Proceed to Equipment Choice">
 			  </li>
  	 </ul>

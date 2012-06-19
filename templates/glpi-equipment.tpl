@@ -1,5 +1,5 @@
 {col size="4"}
-{box title="Quick Tools"}
+{box size=4 title="Quick Tools"}
 <ul class="clean">
 	<li><a href="{$PHP.BASE_URL}/admin/equipment/by-week">View Reservations by week</a></li>
 	<form action="{$PHP.BASE_URL}/admin/equipment/add-id">

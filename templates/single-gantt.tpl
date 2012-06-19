@@ -1,18 +1,4 @@
-<script>
-var startTime= new Date();
-	$(function(){
-		$( "#fromdate, #todate" ).datepicker();
-
-		$( "#fromdate" ).change(function (){
-		var startTime = ($("#fromdate").val());
-		$("#todate").datepicker('option','minDate',startTime);
-
-	});
-
-	});
-</script>
-
-{box title="Search"}
+{box size=16 title="Search"}
 	<form class="label-left" action="{$PHP.BASE_URL}/admin/equipment/item/{$glpi_id}/daterange" >
 		<ul>
 			<li><label>From: </label><input type="text" id="fromdate" name="from_date"></li>

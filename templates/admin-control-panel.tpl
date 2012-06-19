@@ -1,4 +1,4 @@
-{box title="Admin Links"}
+{box size=16 title="Admin Links"}
 	<a class="btn" href="{$PHP.BASE_URL}/admin/admincp/equipment">Equipment Form Options</a>
 	<a class="btn" href="{$PHP.BASE_URL}/admin/admincp/subitems">Subitem Form Options</a>
 	<a class="btn" href="{$PHP.BASE_URL}/admin/admincp/announcements">Announcements</a>

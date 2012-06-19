@@ -1,4 +1,4 @@
-{box title="Statistics"}
+{box size=16 title="Statistics"}
 <ul class="bullet">
 	<li><span class="stats">There have been {$statistics.count_of_reservations|number_format:0:".":","} equipment reservations.</span></li>
 	<li><span class="stats"> In the {$statistics.count_of_reservations|number_format:0:".":","} reservations there have been {$statistics.count_of_equipment|number_format:0:".":","} items reserved. </span></li>
@@ -11,7 +11,7 @@
 
 </ul>
 <h3>Item Counts</h3>
-<table class="grid">
+<table class="table table-bordered table-striped">
 	<thead>
 		<th>GLPI ID</th>
 		<th>Count</th>

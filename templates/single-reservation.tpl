@@ -91,9 +91,9 @@ $(function(){
 		<input type="radio" id="equipment" name="radio" value="0" checked="true"/>I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library
 		  </li>
 		  <li>
-			<input type="radio" id="sponsored" name="radio" value="1" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
+			<input type="radio" id="sponsred" name="radio" value="1" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
 		  </li>
-		  <li>
+		  <li clas"form-actions">
               <input type="Submit" name="Edit_event" value="Submit Changes">
             </li>
  	 </ul>
@@ -140,7 +140,7 @@ $(function(){
 			{/if}
 
 
-			{if $user_level <= 1}
+			{if $user_level <= 2}
 				<li><form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/priority"><label>Priority of Loan: </label>{html_options name="priority" options=$priority selected=$reserve.priority} <input type="submit" name="Priority" value="Change Priority"></form></li>
 			{else}
 				<li><label>Priority of Loan: </label>{html_options name="priority" options=$priority selected=$reserve.priority disabled=true}</li>
@@ -151,13 +151,13 @@ $(function(){
 	</ul>
 		<h2>Equipment Assigned</h2>
 		{if $equipment_info}
-			<table class="grid" width="450">
+			<table class="table table-bordered table-striped" width="450">
 			<thead>
 				<tr>
 					<th>GLPI ID</th>
 					<th>Type</th>
 					<th>Model</th>
-					{if $user_level <=1}
+					{if $user_level <=2}
 						<th>Remove</th>
 					{/if}
 				</tr>
@@ -170,7 +170,7 @@ $(function(){
 					<td>{$glpi_id|substr:-4}</td>
 					<td>{$equipment.type}</td>
 					<td>{$equipment.model}</td>
-					{if $user_level <= 1}
+					{if $user_level <= 2}
 						<td><a class="btn btn-danger" href="{$PHP.BASE_URL}/admin/reservation/equipment/{$reservation_idx}/remove/{$equipment.reservation_equipment_idx}">Remove</a></td>
 					{/if}
 				</tr>
@@ -192,11 +192,11 @@ $(function(){
 
 		<h3>Subitems</h3>
 		{if $subitems}
-			<table class="grid" width="300">
+			<table class="table table-bordered table-striped" width="300">
 			<thead>
 				<tr>
 					<th>Subitem</th>
-					{if $user_level <=1}
+					{if $user_level <=2}
 					<th>Remove</th>
 					{/if}
 				</tr>
@@ -205,7 +205,7 @@ $(function(){
 			{foreach from=$subitems item=subitem key=id}
 				<tr>
 					<td>{$subitem.name}</td>
-					{if $user_level <= 1}
+					{if $user_level <= 2}
 					<td><a class="btn btn-danger" href="{$PHP.BASE_URL}/admin/reservation/subitem/remove/{$id}/{$reservation_idx}">Remove</a>
 					{/if}
 				</tr>
@@ -225,10 +225,10 @@ $(function(){
 		<h2>Technician Assigned</h2>
 		<ul class="label-left clean">
 
-			{if $user_level == 0}<!--if the user is the manager -->
+			{if $user_level == 1}<!--if the user is the manager -->
 				<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/pickup"<li>{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.retrieval_user}</li>
 				<input type="submit" name="pickup" value="Assign Pickup Technician"></form></li>
-			{elseif $user_level == 1}<!--if the user is a CTS staff -->
+			{elseif $user_level == 2}<!--if the user is a CTS staff -->
 				{if $reserve.retrieval_user == NULL}
 					<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/pickup"<li><input type="hidden" value="{$user->wpid}" name="assigned_tech_pickup"></li><input type="submit" name="pickup" value="Assign Myself to Pickup"></form></li>
 
@@ -244,10 +244,10 @@ $(function(){
 
 		
 
-			{if $user_level == 0} <!--if the user is the manager -->
+			{if $user_level == 1} <!--if the user is the manager -->
 				<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/dropoff"<li>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user}</li>
 				<input type="submit" name="dropoff" value="Assign Dropoff Technician"></form></li>
-			{elseif $user_level == 1}<!--if the user is cts staff -->
+			{elseif $user_level == 2}<!--if the user is cts staff -->
 
 				{if $reserve.delivery_user == NULL}<!--if there is no delivery user, show the assign myself button -->
 					<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/dropoff"<li><input type="hidden" value="{$user->wpid}" name="assigned_tech_dropoff"></li><input type="submit" name="dropoff" value="Assign Myself to Dropoff"></form></li>
@@ -271,13 +271,13 @@ $(function(){
 			<li><input type="submit" name="submit" value="Add New Message"></li>
 
 			{foreach from=$messages item=message key=id}
-				<li><label>{$message.author} at {$message.time|date_format:$time_format} on {$message.date|date_format:$date_format}: </label><span class="message">{$message.message}</span></li>
+				<li><label>{$message.author} at {$message.time|date_format:$time_format} on {$message.date|date_format:$date_format}: </label><span class="cts-message">{$message.message}</span></li>
 			{/foreach}
 		<li>
-		{if $user_level<=1}<!--If the user is CTS staff or manager -->
+		{if $user_level<=2}<!--If the user is CTS staff or manager -->
 		<a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$reservation_idx}/edit" class="btn btn-warning">Edit Reservation</a>
 		{/if}
-		{if $user_level==0}<!--Don't show the delete button to anyone other than the manager -->
+		{if $user_level==1}<!--Don't show the delete button to anyone other than the manager -->
 		<a id="reservation_delete" href="{$PHP.BASE_URL}/admin/reservation/search/id/{$reservation_idx}/delete" class="btn btn-danger">Delete Reservation</a>
 		{/if}
 		<a href="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/print" class="btn btn-primary">Print Reservation</a></li>

@@ -1,5 +1,5 @@
 
-<h2>Reservation Index: </h2>{$insert_id}
+<h1>Reservation Index: </h1>{$insert_id}
 <h2>Submitter Contact Information</h2>
 	<ul>
 		<li><strong>Name: </strong>{$reserve.submit_first_name} {$reserve.submit_last_name}</li>
