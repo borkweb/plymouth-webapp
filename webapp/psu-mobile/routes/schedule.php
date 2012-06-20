@@ -32,7 +32,6 @@ respond( '/?', function( $request, $response, $app ){
 				),
 				array(
 					'term_code' => $term_code['term_code'],
-					'term_code' => '201230', // DEBUG/TODO: Remove this
 				)
 			);
 		}
