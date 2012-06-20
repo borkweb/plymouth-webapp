@@ -1,3 +1,0 @@
-<?php
-
-$theme->add('default');
