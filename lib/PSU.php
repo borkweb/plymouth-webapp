@@ -859,9 +859,27 @@ class PSU
 	 */
 	function current_filter() {
 		return end( self::$current_filter );
-	}
+	}//end current_filter
 
-	public static function date_diff( $time1, $time2, $format = '%1$s years, %2$s months'){
+	/**
+	 * Return the URL of the active page.
+	 * @return string The URL
+	 */
+	public function current_url()
+	{
+		$request_uri = $_SERVER['REQUEST_URI'];
+		$query_string = '';
+
+		if( false !== ( $pos = strpos( $request_uri, '?' ) ) ) {
+			$query_string = substr( $request_uri, $pos );
+			$request_uri = substr( $request_uri, 0, $pos );
+		}
+
+		$proto = isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http';
+		return $proto . '://' . $_SERVER['HTTP_HOST'] . $request_uri . $query_string;
+	}//end current_url
+
+	public static function date_diff( $time1, $time2, $format = '%1$s years, %2$s months') {
 		// If not numeric then convert texts to unix timestamps
 		if (!is_int($time1)) {
 			$time1 = strtotime($time1);
@@ -2347,6 +2365,21 @@ class PSU
 	}//end randomString
 
 	/**
+	 * Reload the current page if the active URL lacks a trailing
+	 * slash on the path.
+	 *
+	 * @param string $url URL to redirect to. Defaults to current URL.
+	 */
+	public function redirect_trailing_slash()
+	{
+		$url = self::current_url();
+
+		if( $url !== ( $slash_url = self::trailing_slash( $url ) ) ) {
+			self::redirect( $slash_url );
+		}
+	}//end redirect_trailing_slash
+
+	/**
 	 * Removes a function from a specified action hook.
 	 *
 	 * This function removes a function attached to a specified action hook. This
@@ -2994,6 +3027,29 @@ class PSU
 	{
 		return( ereg_replace('[^a-z|0-9| ]', '', strtolower( self::removeAccents( $string ))));
 	}//end stripPunct
+
+	/**
+	 * Append a trailing slash to the specified URL.
+	 *
+	 * @param string $url The URL to modify.
+	 * @return string The URL, trailing slashified.
+	 */
+	public function trailing_slash( $url )
+	{
+		$parts = parse_url( $url );
+		extract($parts, EXTR_SKIP);
+
+		// Enforce trailing slash
+		if( '/' !== substr( $path, -1 ) ) {
+			$path .= '/';
+		}
+
+		if( $query ) {
+			$query = '?' . $query;
+		}
+
+		return $scheme . '://' . $host . $path . $query;
+	}//end trailing_slash
 
 	/**
 	 * translates a year, month, day array to a Y-m-d format
