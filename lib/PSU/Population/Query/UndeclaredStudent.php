@@ -9,7 +9,6 @@ class PSU_Population_Query_UndeclaredStudent extends PSU_Population_Query {
 		$defaults = array(
 			'term_code' => null,
 			'level_code' => 'UG',
-			'incoming' => false,
 		);
 
 		$args = PSU::params( $args, $defaults );
@@ -18,26 +17,6 @@ class PSU_Population_Query_UndeclaredStudent extends PSU_Population_Query {
 			$args['term_code'] = \PSU\Student::getCurrentTerm( $args['level_code'] );
 		}
 
-		/**
-		 * The SQL below is for if this is fully adopted. It is a more acurate represenatation and always applies to current term
-		 *
-		 *	
-		$sql = "SELECT DISTINCT a.pidm
-				FROM psu.mv_curriculum a,
-					 psu.v_student_active b
-				WHERE a.pidm = b.pidm
-				AND a.majr_code = '0000' 
-				AND b.levl_code = ':level_code' 
-		";
-		
-
-		if( $args['incoming'] ) {
-			$sql .= " AND b.styp_code = 'N'";	
-		}
-
-		return PSU::db('banner')->GetCol( $sql, $args );
-		 */
-
 		$sql = "
 			SELECT DISTINCT gobsrid_sourced_id
 			FROM gobsrid, baninst1.as_student_enrollment_summary 
@@ -45,9 +24,9 @@ class PSU_Population_Query_UndeclaredStudent extends PSU_Population_Query {
 			AND majr_code1 = '0000' 
 			AND ests_code = 'EL' 
 			AND stst_code = 'AS' 
-			AND term_code_key = '201210' 
+			AND term_code_key = :term_code 
 			AND styp_code = 'N' 
-			AND levl_code = 'UG'
+			AND levl_code = :level_code
 		";
 
 		return PSU::db('banner')->GetCol( $sql, $args );
