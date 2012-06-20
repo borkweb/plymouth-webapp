@@ -642,7 +642,7 @@ respond('/reservation/subitem/remove/[i:id]/[i:key]', function( $request, $respo
 respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	//when searching for a specific reservation by ID
 	$reservation_idx=$request->id;
-	ReserveDatabaseAPI::init_all_reservation_info($app,$reservation_idx);
+	$app->tpl->init_all_reservation_info($reservation_idx);
 	$app->tpl->display( 'single-reservation.tpl' );
 
 });//end reservation/search/
@@ -650,7 +650,7 @@ respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 respond('/reservation/id/[i:id]/print' , function( $request, $response, $app){
 	//this page is just like single reservation, but has a cleaner look and no editing for easy printing
 	$reservation_idx=$request->id;
-	ReserveDatabaseAPI::init_all_reservation_info($app,$reservation_idx);
+	$app->tpl->init_all_reservation_info($reservation_idx);
 	$app->tpl->display( 'print.tpl' );
 
 });//end reservation/search/

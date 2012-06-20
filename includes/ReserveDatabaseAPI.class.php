@@ -691,39 +691,6 @@ class ReserveDatabaseAPI{
 
 	}//end function insertCategory
 
-	public function init_technicians($app){
-
-		$query=new \PSU\Population\Query\IDMAttribute('mis','permission');
-		$factory = new \PSU_Population_UserFactory_PSUPerson;
-		$population= new \PSU_Population( $query, $factory );
-		$cts_technicians=$population->query();
-		$app->tpl->assign( 'subitemlist', ReserveDatabaseAPI::get_subitems());
-		$app->tpl->assign( 'cts_technicians', array(NULL=>"Select a Technician","p5lydnqia"=>"David Allen", "poasdfe"=>"Todd Kent"));
-	//PSU::dbug($population);
-	//PSU::dbug($cts_technicians);
-	//$pop = iterator_to_array($population);
-	//PSU::dbug($pop[0]);
-
-
-	}//init_technicians
-	
-	public function init_all_reservation_info($app,$reservation_idx){
-		self::init_technicians($app);	
-				$app->tpl->assign( 'subitems', ReserveDatabaseAPI::get_reserve_subitems($reservation_idx));
-
-		$app->tpl->assign( 'messages', ReserveDatabaseAPI::get_messages($reservation_idx));
-		$app->tpl->assign( 'equipment', ReserveDatabaseAPI::get_equipment($reservation_idx));
-		$equipment=ReserveDatabaseAPI::get_equipment($reservation_idx);
-		$app->tpl->assign( 'equipment', $equipment);
-		$equipment_info=ReserveDatabaseAPI::get_equipment_info($equipment);
-		$app->tpl->assign('equipment_info',$equipment_info);
-
-		$app->tpl->assign( 'reservation_idx', $reservation_idx);
-		$app->tpl->assign( 'reservation' , ReserveDatabaseAPI::by_id($reservation_idx));
-
-
-	}//get_all_reservation_info
-
 	public function insert_subitem($name){
 		//this creates a new subitem 
 		$sql="
