@@ -1,7 +1,7 @@
 <?php
 
 // Catch all response logic. No matter what, if this route is called, do this
-respond( '[*]', function () {
+respond( function () {
 	// Authenticate the user
 	IDMObject::authN();
 });
