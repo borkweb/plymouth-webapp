@@ -36,7 +36,40 @@ respond( function( $request, $response, $app ) {
 	// assign user to template
 	$app->tpl->assign( 'user', $app->user );
 
-	ReserveDatabaseAPI::init_vars($app);
+	$hours=array();
+		//generate numbers 1 through 12 for the hours
+		for($i = 1; $i <=12; $i++){
+
+			$hours[$i]=$i;
+		}
+		$minutes=array();
+		//generate numbers 0 through 55 every 5 numbers (0,5,10,15 etc.)
+		for($x = 0;$x <=55; $x+= 5){
+			$minutes[$x]=$x;
+
+		}
+	
+		$app->tpl->assign( 'hours', $hours );
+		$app->tpl->assign( 'minutes', $minutes );	
+		$app->tpl->assign( 'ampm' , array("AM"=>"AM","PM"=>"PM"));
+
+		$app->tpl->assign( 'user', $app->user );
+
+		//assign vars that are used throughout the whole system
+		$app->tpl->assign('date_format','%m-%d-%Y');
+		$app->tpl->assign('time_format','%l:%M %p');
+		$app->tpl->assign('locations',ReserveDatabaseAPI::locations(false)); 
+		$app->tpl->assign('user_level',ReserveDatabaseAPI::user_level());//this assigns the user to a manager (0) cts staff (1) or helpdesk (2)
+		$status=array(
+			"approved"=>"approved",
+			"pending"=>"pending",
+			"loaned out"=>"loaned out",
+			"returned"=> "returned", 
+			"cancelled"=>"cancelled",
+		);
+		$app->tpl->assign('status', $status);
+		$app->tpl->assign('priority', array("normal", "high"));
+		$app->tpl->assign( 'subitemlist', ReserveDatabaseAPI::get_subitems());
 });
 
 respond( '/?', function( $request, $response, $app ) {

@@ -42,7 +42,8 @@ class ReserveDatabaseAPI{
 			";
 		$data=array(
 			$user_id,
-			$reservation_idx,);
+			$reservation_idx,
+		);
 		return PSU::db('cts')->Execute($sql,$data);
 	}//function addUserPickup
 
@@ -56,7 +57,7 @@ class ReserveDatabaseAPI{
 		$data=array(
 			$user_id,
 			$reservation_idx,
-			);
+		);
 		return PSU::db('cts')->Execute($sql,$data);
 	}
 	//function addUserDropoff
@@ -89,9 +90,9 @@ class ReserveDatabaseAPI{
 
 	}//function removeEquipment
 
-	public function add_equipment($reservation_idx, $GLPI_ID){
+	public function add_equipment($reservation_idx, $glpi_id){
 		//add a piece of equipment to a reservation	
-		$GLPI_ID=self::format_glpi($GLPI_ID);	
+		$glpi_id=self::format_glpi($glpi_id);	
 		$sql="
 			INSERT INTO cts_reservation_equipment 
 			(
@@ -107,204 +108,108 @@ class ReserveDatabaseAPI{
 
 		$data=array(
 			$reservation_idx, 
-			$GLPI_ID,
-			);
+			$glpi_id,
+		);
 
-		PSU::db('cts')->Execute($sql, $data);
+		return PSU::db('cts')->Execute($sql, $data);
 
 	}//function add_equipment
 
+	public function by($where, $args){
+		$sql="SELECT *
+	 	   FROM cts_reservation
+		  WHERE 1=1
+		    AND {$where}
+		    AND deleted=false
+	    ORDER BY start_time ASC, reservation_idx DESC
+		";
+
+	return PSU::db('cts')->GetAssoc( $sql, $args );;
+	}//function by
+	
 	public function by_date($date){
 		//filter reservation results by date
-		$sql="
-			SELECT * 
-			  FROM cts_reservation
-			 WHERE start_date = ? 
-			    OR end_date =	?
-			   AND delted = false
-		   ORDER BY reservation_idx DESC";
-		$dates=array(
-				$date,
-				$date,
-				);
-		return PSU::db('cts')->GetAssoc( $sql, $dates);
+		$args=array(
+			$date,
+			$date,
+		);
+		return self::by( "start_date = ? OR end_date = ?",$args ); 
 
 	}//end function by_date
 
 	public function by_user_date($date, $user){
 		//filter reservation results by a user and a date
-		$data=array(
+		$args=array(
 			$date,
 			$date,
 			$user,
 			$user
 			);
-		$sql="
-			SELECT * 
-			  FROM cts_reservation
-			 WHERE (start_date = ? OR end_date =?) 
-			   AND (delivery_user = ? OR retrieval_user = ?)
-			   AND deleted = false
-		   ORDER BY start_time ASC
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $data);
+		return self::by("(start_date = ? OR end_date =?)  AND (delivery_user = ? OR retrieval_user = ?)", $args);
 
 	}//end function by_date
 
 
 	public function by_start_date($date){
 		//filter reservation results by the start date
-		$sql="
-			SELECT * 
-			  FROM cts_reservation
-			 WHERE start_date = ?
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $date);
-
+		return self::by("start_date = ?", $date);
 	}//end function by_start_date
 
 	public function by_end_date($date){
 		//filter reservation results by end date
-		$sql="
-			SELECT * 
-		       FROM cts_reservation
-			 WHERE end_date = ?
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $date);
-
+		return self::by("end_date = ?", $date);
 	}//end function by_end_date
 
 	public function by_lname($lname){
 		//filter results by last name
-		$sql="
-			SELECT * 
-			  FROM cts_reservation
-			 WHERE lname = ?
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $lname);
-
+		return self::by("lname = ?", $lname);
 	}//end function by_lname
 
 	public function by_fname($fname){
 		//filter results by first name
-		$sql="
-			SELECT * 
-			  FROM cts_reservation
-			 WHERE fname = ?
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $fname);
-
+		return self::by("fname = ?", $fname);
 	}//end function by_fname
 
 	public function by_status($status){
 		//filter results by the status of the loan
-		$sql="
-			SELECT * 
-			  FROM cts_reservation
-			 WHERE status = ?
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $status);
-
+		return self::by("status = ?", $status);
 	}//end function by_status
 
 	public function by_current_status($status){
 		//filter the results by the current status of the loan
-		$sql="
-			SELECT * 
-			  FROM cts_reservation
-			 WHERE current_status = ?	
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $status);
-
+		return self::by("current_status = ?", $status);
 	}//end function by_status
 
 	public function by_title($title){
 		//filter the results by the title of the reservation
-		$sql="
-			SELECT * FROM cts_reservation
-			 WHERE title = ?
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $title);
-
+		return self::by("title = ?", $title);
 	}//end function by_status
 	
 	public function by_date_range($dates){
 		//filter results by a range of dates
-		$sql="
-			SELECT * FROM cts_reservation
-			 WHERE (start_date BETWEEN ? AND ? OR end_date BETWEEN ? AND ?)
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $dates);
-
-
+		return self::by("(start_date BETWEEN ? AND ? OR end_date BETWEEN ? AND ?)", $dates);
 	}//end function by date_range
 
 	public function by_date_range_equipment($dates){
 		//filter results by a range of dates
-		$sql="
-			SELECT * FROM cts_reservation
-			 WHERE (? BETWEEN start_date AND end_date OR ? BETWEEN start_date AND end_date)
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $dates);
-
-
+		return self::by("(? BETWEEN start_date AND end_date OR ? BETWEEN start_date AND end_date)", $dates);
 	}//end function by date_range
 
 	public function by_id($id){
-		//filter results by it's ID
-		$sql="
-			SELECT * FROM cts_reservation
-			 WHERE reservation_idx = ?
-		        AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $id);
-
+		return self::by("reservation_idx = ?", $id );
 	}//end function by_id
 
 
 	public function by_wp_id($wp_id){
 		//filter results by the wp_id, which is the user that made the reservation
-		$sql="
-			SELECT * FROM cts_reservation
-			 WHERE wp_id = ? AND NOT status = 'pending'
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $wp_id);
-
+		return self::by("wp_id = ? AND NOT status = 'pending'", $wp_id);
 	}//end function by_wp_id
 
 
 	public function by_wp_id_pending($wp_id){
 		//filter results by the wp_id and the fact that the reservation is pending
 		//this is used for the user to view their currently pending reservations
-		$sql="
-			SELECT * FROM cts_reservation
-			 WHERE wp_id = ? AND status='pending'
-			   AND deleted = false
-		   ORDER BY reservation_idx DESC	
-			";
-		return PSU::db('cts')->GetAssoc( $sql, $wp_id);
-
+		return self::by("wp_id = ? AND status = 'pending'", $wp_id);
 	}//end function by_wp_id
 
 	public function change_pickup($reservation_idx, $user){
@@ -316,7 +221,7 @@ class ReserveDatabaseAPI{
 		$data=array(
 				$user,
 				$reservation_idx,
-				);
+		);
 		return PSU::db('cts')->Execute( $sql, $data);
 
 	}//end change pickup
@@ -331,7 +236,7 @@ class ReserveDatabaseAPI{
 		$data=array(
  				$user,
 				$reservation_idx,
-				);
+		);
 		return PSU::db('cts')->Execute( $sql, $data);
 
 	}//end change dropoff
@@ -346,7 +251,7 @@ class ReserveDatabaseAPI{
 		$data=array(
 				$status,
 				$reservation_idx,
-				);
+		);
 		return PSU::db('cts')->Execute( $sql, $data);
 
 	}//end change status
@@ -360,7 +265,7 @@ class ReserveDatabaseAPI{
 		$data=array(
 				$priority,
 				$reservation_idx,
-				);
+		);
 		return PSU::db('cts')->Execute( $sql, $data);
 
 	}//end change status
@@ -388,26 +293,26 @@ class ReserveDatabaseAPI{
 	}//end function check_reservation
 
 	public function check_user_id($user_id){
-		if(filter_var($user_id, FILTER_VALIDATE_INT)){
-			if(strlen($user_id)>9){//check to make sure it is less than 9 digits
+		if( ! filter_var($user_id, FILTER_VALIDATE_INT)){
+			$_SESSION['errors'][]='User ID in incorrect format.';
+			return false;
+		}
+		
+		if(strlen($user_id)>9){//check to make sure it is less than 9 digits
 				$_SESSION['errors'][]='User ID too long.';
 				return false;
 			}else{
 				return filter_var($user_id, FILTER_SANITIZE_NUMBER_INT);
 
 			}
-		}else{
-			$_SESSION['errors'][]='User ID in incorrect format.';
-			return false;
-		}
-
 	}//end function check_user_id
 
 	public function categories(){
 		//this selects the categories that the users can select equipment from
 		//This is basically the equipment list
 		$sql="
-			SELECT categoryID, category_name 
+			SELECT categoryID, 
+				  category_name 
 			  FROM cts_form_options
 			 WHERE deleted = false";
 
@@ -509,7 +414,7 @@ class ReserveDatabaseAPI{
 		$data=array(
 				$message,
 				$announcement_id,
-				);
+		);
 		return PSU::db('cts')->Execute( $sql, $data);
 	}//end function edit_announcement
 
@@ -522,7 +427,7 @@ class ReserveDatabaseAPI{
 		$data=array(
 				$value,
 				$announcement_id,
-				);
+		);
 		return PSU::db('cts')->Execute( $sql, $data);
 	}//end function change_announcement
 
@@ -539,209 +444,210 @@ class ReserveDatabaseAPI{
 	public function search($request){
 		define('ONE_DAY', 60*60*24);//defining what one day is
 		$week=date('w');//define the current week
-		if($request->action=="nextweek"){
-			//$start_date=date('Y-m-d', strtotime("+1 week"));
-			//$end_date=date('Y-m-d', strtotime("+2 week"));
-			//this takes the current time and goes to the next week
-			$start_date=date('Y-m-d',time()- ($week - 7) * ONE_DAY);
-			$end_date=date('Y-m-d',time()- ($week - 13) * ONE_DAY);
-			$fixed_start_date=self::fix_date($start_date);
-			$fixed_end_date=self::fix_date($end_date);
+		switch($request->action){
+			case "nextweek":
+				$start_date=date('Y-m-d',time()- ($week - 7) * ONE_DAY);
+				$end_date=date('Y-m-d',time()- ($week - 13) * ONE_DAY);
+				$fixed_start_date=self::fix_date($start_date);
+				$fixed_end_date=self::fix_date($end_date);
 
-			$title="Reservations from $fixed_start_date to $fixed_end_date";
+				$title="Reservations from $fixed_start_date to $fixed_end_date";
 
-			$dates=array(
-				$start_date, 
-				$end_date, 
-				$start_date, 
-				$end_date,
-			);
-			$reservation =  self::by_date_range($dates);
-		}elseif($request->action=="thisweek"){
-			//this shows the information for this week
-			$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
-			$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
-			$dates=array(
-				$start_date, 
-				$end_date, 
-				$start_date, 
-				$end_date
-				);
-			$fixed_start_date=self::fix_date($start_date);
-			$fixed_end_date=self::fix_date($end_date);
-
-			$title="Reservations from $fixed_start_date to $fixed_end_date";
-			$reservation= self::by_date_range($dates);
-
-		}elseif($request->action=="daterange"){
-			$start_date=$request->param('from_date');
-			$start_date=date('Y-m-d',strtotime($start_date));
-
-			$end_date=$request->param('to_date');
-			$end_date=date('Y-m-d',strtotime($end_date));
-
-			$fixed_start_date=ReserveDatabaseAPI::fix_date($start_date);
-			$fixed_end_date=ReserveDatabaseAPI::fix_date($end_date);
-
-			$dates=array(
+				$dates=array(
 					$start_date, 
 					$end_date, 
 					$start_date, 
 					$end_date,
-					);
-			$title="Reservations from $fixed_start_date to $fixed_end_date";
-			$reservation=self::by_date_range($dates);
-		
-		
-		}elseif($request->action=="lastweek"){
-			//this shows the information from last week
-			$start_date=date('Y-m-d',time()- ($week + 7) * ONE_DAY);
-			$end_date=date('Y-m-d',time()- ($week + 1) * ONE_DAY);
-			$fixed_start_date=self::fix_date($start_date);
-			$fixed_end_date=self::fix_date($end_date);
-			
-			$dates=array(
-				$start_date, 
-				$end_date, 
-				$start_date, 
-				$end_date
 				);
-
-
-			$title="Reservations from $fixed_start_date to $fixed_end_date";
-			$reservation= self::by_date_range($dates);
-
-		}elseif($request->action=="today")
-		{
-			//this shows the information from today, which is default
-			
-			$start_date=date('Y-m-d');
-			$fixed_start_date=self::fix_date($start_date);
-
-			$title="Reservations for today, the $fixed_start_date";
-			$reservation= self::by_date($start_date);
-
-
-		}elseif($request->action=="yesterday")
-		{
-			//this shows the information from yesterday
-			$start_date=date('Y-m-d', strtotime("-1 day"));
-			$fixed_start_date=self::fix_date($start_date);
-
-			$title="Reservations for yesterday, the $fixed_start_date";
-			$reservation= self::by_date($start_date);
-
-
-		}elseif($request->action=="tommorrow")
-			//this shows the information from tomorrow
-		{
-			$start_date=date('Y-m-d', strtotime("+1 day"));
-			$fixed_start_date=self::fix_date($start_date);
-
-			$title="Reservations for tomorrow, the $fixed_start_date";
-			$reservation= self::by_date($start_date);
-
-		}elseif($request->action=="pending"){
-			//this shows any loans that are pending
-			$query="pending";
-
-			$title = "Pending Reservations";
-
-			$reservation = self::by_status($query);
-
-		}elseif($request->action=="loaned"){
-			//this shows any loans that are pending
-			$query="loaned out";
-
-			$title = "Loaned Reservations";
-
-			$reservation = self::by_status($query);
-		}elseif($request->action=="outstanding"){
-			//this shows any loans that are pending
-			$query="outstanding";
-
-			$title = "Outstanding Reservations";
-
-			$reservation = self::by_status($query);
-
-		}elseif($request->action=="missing"){
-			//this shows any loans that are pending
-			$query="missing";
-
-			$title = "Missing Reservations";
-
-			$reservation =  self::by_status($query);
-
-
-		}elseif($request->action=="detailed"){
-			//this searches between two dates
-			if($start_date=$request->param('from_date'))
-			{
-				$start_date=date('Y-m-d',strtotime($start_date));
-				$args['start_date'] = $start_date;
+				$reservation =  self::by_date_range($dates);
+				break;
+			case "thisweek":
+				//this shows the information for this week
+				$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
+				$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
+				$dates=array(
+					$start_date, 
+					$end_date, 
+					$start_date, 
+					$end_date
+				);
 				$fixed_start_date=self::fix_date($start_date);
-
-			}
-
-			if($end_date=$request->param('to_date')){
-				$end_date=date('Y-m-d',strtotime($end_date));
-				$args['end_date'] = $end_date;
 				$fixed_end_date=self::fix_date($end_date);
 
-			}
+				$title="Reservations from $fixed_start_date to $fixed_end_date";
+				$reservation= self::by_date_range($dates);
+				break;
+			case "daterange":
+				$start_date=$request->param('from_date');
+				$start_date=date('Y-m-d',strtotime($start_date));
 
-			if($first_name=$request->param('first_name')){
+				$end_date=$request->param('to_date');
+				$end_date=date('Y-m-d',strtotime($end_date));
 
-				$args['first_name'] = $first_name;
-			}
+				$fixed_start_date=ReserveDatabaseAPI::fix_date($start_date);
+				$fixed_end_date=ReserveDatabaseAPI::fix_date($end_date);
 
-			if($last_name=$request->param('last_name')){
-				$args['last_name'] = $last_name;
-			}
-
-			if($location=$request->param('location')){
-				$args['location'] = $location;
-			}
-
-			if($reservation_id=$request->param('reservation_id')){
-
-				$args['reservation_id'] = $reservation_id;
-			}
-			if(count($args)<1){
-				$_SESSION['errors'][]='You need to specify at least one criteria.';
-				$redirect_url = $GLOBALS['BASE_URL'] . '/admin/reservation';
-			}else{
-				$reservation=self::search_reservation($args);
-			}
-
-			if($start_date && $end_date){
-				//only change the title if there is a start and end date
-				$title = "Reservations from $fixed_start_date to $fixed_end_date";
-			}
-		}else{
-			//if there was no parameter, return the dates and reservations for this week.
-			$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
-			$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
-			$dates=array(
-				$start_date, 
-				$end_date, 
-				$start_date, 
-				$end_date
+				$dates=array(
+						$start_date, 
+						$end_date, 
+						$start_date, 
+						$end_date,
 				);
-			$fixed_start_date=self::fix_date($start_date);
-			$fixed_end_date=self::fix_date($end_date);
-
-			$title="Reservations from $fixed_start_date to $fixed_end_date";
-			$reservation= self::by_date_range($dates);
-
-		}
-		$data=array(
-				'title'=>$title,
-				'dates'=>$dates,
-				'redirect_url'=>$redirect_url,
-				'reservations'=>$reservation,
+				$title="Reservations from $fixed_start_date to $fixed_end_date";
+				$reservation=self::by_date_range($dates);
+			
+			
+			case "lastweek":
+				//this shows the information from last week
+				$start_date=date('Y-m-d',time()- ($week + 7) * ONE_DAY);
+				$end_date=date('Y-m-d',time()- ($week + 1) * ONE_DAY);
+				$fixed_start_date=self::fix_date($start_date);
+				$fixed_end_date=self::fix_date($end_date);
+				
+				$dates=array(
+						$start_date, 
+						$end_date, 
+						$start_date, 
+						$end_date
 				);
-			return $data;
+
+
+				$title="Reservations from $fixed_start_date to $fixed_end_date";
+				$reservation= self::by_date_range($dates);
+				break;
+			case "today":
+			
+				//this shows the information from today, which is default
+				
+				$start_date=date('Y-m-d');
+				$fixed_start_date=self::fix_date($start_date);
+
+				$title="Reservations for today, the $fixed_start_date";
+				$reservation= self::by_date($start_date);
+				break;
+				
+			case "yesterday":
+				//this shows the information from yesterday
+				$start_date=date('Y-m-d', strtotime("-1 day"));
+				$fixed_start_date=self::fix_date($start_date);
+
+				$title="Reservations for yesterday, the $fixed_start_date";
+				$reservation= self::by_date($start_date);
+				break;
+
+			case "tommorrow":
+				//this shows the information from tomorrow
+				$start_date=date('Y-m-d', strtotime("+1 day"));
+				$fixed_start_date=self::fix_date($start_date);
+
+				$title="Reservations for tomorrow, the $fixed_start_date";
+				$reservation= self::by_date($start_date);
+				break;
+
+			case "pending":
+				//this shows any loans that are pending
+				$query="pending";
+
+				$title = "Pending Reservations";
+
+				$reservation = self::by_status($query);
+				break;
+
+			case "loaned":
+				//this shows any loans that are pending
+				$query="loaned out";
+
+				$title = "Loaned Reservations";
+
+				$reservation = self::by_status($query);
+				break;
+			case "outstanding":
+				//this shows any loans that are pending
+				$query="outstanding";
+
+				$title = "Outstanding Reservations";
+
+				$reservation = self::by_status($query);
+				break;
+
+			case "missing":
+				//this shows any loans that are pending
+				$query="missing";
+
+				$title = "Missing Reservations";
+
+				$reservation =  self::by_status($query);
+				break;
+
+			case "detailed":
+				//this searches between two dates
+				if($start_date=$request->param('from_date'))
+				{
+					$start_date=date('Y-m-d',strtotime($start_date));
+					$args['start_date'] = $start_date;
+					$fixed_start_date=self::fix_date($start_date);
+
+				}
+
+				if($end_date=$request->param('to_date')){
+					$end_date=date('Y-m-d',strtotime($end_date));
+					$args['end_date'] = $end_date;
+					$fixed_end_date=self::fix_date($end_date);
+
+				}
+
+				if($first_name=$request->param('first_name')){
+
+					$args['first_name'] = $first_name;
+				}
+
+				if($last_name=$request->param('last_name')){
+					$args['last_name'] = $last_name;
+				}
+
+				if($location=$request->param('location')){
+					$args['location'] = $location;
+				}
+
+				if($reservation_id=$request->param('reservation_id')){
+
+					$args['reservation_id'] = $reservation_id;
+				}
+				if(count($args)<1){
+					$_SESSION['errors'][]='You need to specify at least one criteria.';
+					$redirect_url = $GLOBALS['BASE_URL'] . '/admin/reservation';
+				}else{
+					$reservation=self::search_reservation($args);
+				}
+
+				if($start_date && $end_date){
+					//only change the title if there is a start and end date
+					$title = "Reservations from $fixed_start_date to $fixed_end_date";
+				}
+			default:
+				//if there was no parameter, return the dates and reservations for this week.
+				$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
+				$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
+				$dates=array(
+					$start_date, 
+					$end_date, 
+					$start_date, 
+					$end_date
+				);
+				$fixed_start_date=self::fix_date($start_date);
+				$fixed_end_date=self::fix_date($end_date);
+
+				$title="Reservations from $fixed_start_date to $fixed_end_date";
+				$reservation= self::by_date_range($dates);
+
+		}//end switch	
+			$data=array(
+					'title'=>$title,
+					'dates'=>$dates,
+					'redirect_url'=>$redirect_url,
+					'reservations'=>$reservation,
+				);
+		return $data;
 
 
 	}//function search 
@@ -751,16 +657,16 @@ class ReserveDatabaseAPI{
 		return date( 'n-j-Y', strtotime($date));
 	}//end function fix date
 
-	public function format_glpi($GLPI_ID){
+	public function format_glpi($glpi_id){
 		//check the length of the GLPI_ID id
-		if(strlen($GLPI_ID)!=4 && strlen($GLPI_ID) !=13){
+		if(strlen($glpi_id)!=4 && strlen($glpi_id) !=13){
 		//make sure that it is either 4 or 13 characters
 			$_SESSION['errors'][]="Incorrect format.";
-		}elseif(strlen($GLPI_ID)==4){
+		}elseif(strlen($glpi_id)==4){
 			//if the length is 4, add the prepended characters for the GLPI ID
-			$GLPI_ID='PSU-0000-' . $GLPI_ID;
+			$glpi_id='PSU-0000-' . $glpi_id;
 		}
-		return $GLPI_ID;
+		return $glpi_id;
 	}//end function format_glpi
 
 
@@ -780,50 +686,10 @@ class ReserveDatabaseAPI{
 		$values=array(
 					$category, 
 					$description
-					);
+			);
 		return PSU::db('cts')->Execute( $sql, $values );
 
 	}//end function insertCategory
-
-	public function init_vars($app){
-
-		$hours=array();
-		//generate numbers 1 through 12 for the hours
-		for($i = 1; $i <=12; $i++){
-
-			$hours[$i]=$i;
-		}
-		$minutes=array();
-		//generate numbers 0 through 55 every 5 numbers (0,5,10,15 etc.)
-		for($x = 0;$x <=55; $x+= 5){
-			$minutes[$x]=$x;
-
-		}
-	
-		$app->tpl->assign( 'hours', $hours );
-		$app->tpl->assign( 'minutes', $minutes );	
-		$app->tpl->assign( 'ampm' , array("AM"=>"AM","PM"=>"PM"));
-
-		$app->tpl->assign( 'user', $app->user );
-
-		//assign vars that are used throughout the whole system
-		$app->tpl->assign('date_format','%m-%d-%Y');
-		$app->tpl->assign('time_format','%l:%M %p');
-		$app->tpl->assign('locations',ReserveDatabaseAPI::locations(false)); 
-		$app->tpl->assign('user_level',ReserveDatabaseAPI::user_level());//this assigns the user to a manager (0) cts staff (1) or helpdesk (2)
-		$status=array(
-			"approved"=>"approved",
-			"pending"=>"pending",
-			"loaned out"=>"loaned out",
-			"returned"=> "returned", 
-			"cancelled"=>"cancelled",
-		);
-		$app->tpl->assign('status', $status);
-		$app->tpl->assign('priority', array("normal", "high"));
-		$app->tpl->assign( 'subitemlist', ReserveDatabaseAPI::get_subitems());
-
-		
-	}//end function int_vars
 
 	public function init_technicians($app){
 
@@ -899,7 +765,10 @@ class ReserveDatabaseAPI{
 				?,
 				?
 			)";
-		$values=array($reservation_idx,$subitem_id);
+		$values=array(
+			$reservation_idx,
+			$subitem_id,
+		);
 		return PSU::db('cts')->Execute( $sql, $values );
 
 	}//end function insertCategory
@@ -968,8 +837,8 @@ class ReserveDatabaseAPI{
 			  FROM cts_building
 			 WHERE deleted = false";
 		$locations = PSU::db('cts')->GetAssoc( $sql );
-		if($default==false){
-			$locations=array(NULL=>'Please select a location') + $locations;
+		if( $default == false ){
+			$locations = array(NULL=>'Please select a location') + $locations;
 		}
 		return $locations;
 
@@ -1091,7 +960,12 @@ class ReserveDatabaseAPI{
 				$equipment_info[]=$parts;
 
 			}else{
-				$parts=array($glpi_id['glpi_id'] => array("model" => "N/A", "type" => "N/A", "reservation_equipment_idx" => $glpi_id['reservation_equipment_idx']));
+				$parts=array(
+						$glpi_id['glpi_id'] => array(
+										"model" => "N/A", 
+										"type" => "N/A", 
+										"reservation_equipment_idx" => $glpi_id['reservation_equipment_idx']
+				));
 				$equipment_info[]=$parts;
 
 			}
@@ -1118,22 +992,19 @@ class ReserveDatabaseAPI{
 	}//end fuction get equipment
 
 	public function user_level(){
-		
 		/*
 		if( IDMObject::authZ('permission', 'cts_admin') ) {
-			return 0;
-		}elseif( IDMObject::authZ('permission', 'cts') ){
 			return 1;
-		}elseif( IDMObject::authZ('role', 'calllog') ){
+		}elseif( IDMObject::authZ('permission', 'cts') ){
 			return 2;
-		}else{
+		}elseif( IDMObject::authZ('role', 'calllog') ){
 			return 3;
+		}else{
+			return 4;
 		}
-		*/
-		 
-		//THIS IS TO OVERRIDE FOR TESTING
-		return 0;
-
+		 */
+		return 1;
+		
 	}//end function user level
 
 	public function reservation_sanitize($request){
@@ -1246,41 +1117,43 @@ class ReserveDatabaseAPI{
 		}
 
 		if( count($_SESSION['errors'])>0 ){//if the number of errors is > 0
-			$complete=false;
-		}else{
-			$cts_admin['first_name']=$first_name;
-			$cts_admin['last_name']=$last_name;
-			$cts_admin['phone']=$phone;
-			$cts_admin['email']=$email;
-
-			$start_time = date("H:i:s", strtotime($start_time));
-			$end_time = date("H:i:s", strtotime($end_time));
-			$start_date=date("Y-m-d", strtotime($start_date));
-			$end_date=date("Y-m-d" , strtotime($end_date));
-			$cts_admin['start_date']=$start_date;
-			$cts_admin['end_date']=$end_date;
-			$cts_admin['start_time']=$start_time;
-			$cts_admin['end_time']=$end_time;
-
-			if( $comments ) {
-				$comments= filter_var($comments, FILTER_SANITIZE_STRING);
-				$cts_admin['comments']=$comments;
-			}else{
-				$comments = NULL;
-			}
-
-			$cts_admin['location']=$location;
-			$cts_admin['room']=$room;
-			$cts_admin['title']=$title;
-			$cts_admin['reserve_type']=$reserve_type;
-			$cts_admin['reservation_idx']=$reservation_idx;
-			//update the reservation with the new information
-			$complete=true;
-		}//end else
-		$data=array(
-			'complete' => $complete,
-			'cts_admin' => $cts_admin,
+			$data=array(
+				'complete' => false,
 			);
+			return data;
+		}
+
+		$cts_admin['first_name']=$first_name;
+		$cts_admin['last_name']=$last_name;
+		$cts_admin['phone']=$phone;
+		$cts_admin['email']=$email;
+
+		$start_time = date("H:i:s", strtotime($start_time));
+		$end_time = date("H:i:s", strtotime($end_time));
+		$start_date=date("Y-m-d", strtotime($start_date));
+		$end_date=date("Y-m-d" , strtotime($end_date));
+		$cts_admin['start_date']=$start_date;
+		$cts_admin['end_date']=$end_date;
+		$cts_admin['start_time']=$start_time;
+		$cts_admin['end_time']=$end_time;
+
+		if( $comments ) {
+			$comments= filter_var($comments, FILTER_SANITIZE_STRING);
+			$cts_admin['comments']=$comments;
+		}else{
+			$comments = NULL;
+		}
+
+		$cts_admin['location']=$location;
+		$cts_admin['room']=$room;
+		$cts_admin['title']=$title;
+		$cts_admin['reserve_type']=$reserve_type;
+		$cts_admin['reservation_idx']=$reservation_idx;
+		//update the reservation with the new information
+		$data=array(
+			'complete' => true,
+			'cts_admin' => $cts_admin,
+		);
 		return $data;
 
 	}//end reservation_sanitize
@@ -1338,17 +1211,15 @@ class ReserveDatabaseAPI{
 	}//end function search_reservation
 
 	public function statistics(){
-	//grab some statistics
-		$sql="
-			SELECT COUNT(reservation_idx) 
-		       FROM cts_reservation";
-		$count_of_reservations=PSU::db('cts')->GetOne( $sql );
-
-		$sql="
-			SELECT COUNT(reservation_equipment_idx) 
-			   FROM cts_reservation_equipment";
-		$count_of_equipment=PSU::db('cts')->GetOne( $sql );
-
+		//grab some statistics
+		//TODO: GET THIS TO WORK
+		$sql="SELECT
+				(SELECT COUNT( reservation_idx ) FROM cts_reservation) count_of_reservations,
+				(SELECT COUNT( reservation_equipment_idx ) FROM cts_reservation_equipment) count_of_equipment
+			FROM DUAL
+			";
+		$counts= PSU::db('cts')->GetRow( $sql );
+		
 		$sql="
 			SELECT * 
 			   FROM cts_reservation 
@@ -1369,13 +1240,13 @@ class ReserveDatabaseAPI{
 		$equipment_use=PSU::db('cts')->GetAll( $sql );
 
 		return array(
-			'count_of_reservations' => $count_of_reservations, 
-			'count_of_equipment' => $count_of_equipment,
+			'count_of_reservations' => $counts['count_of_reservations'], 
+			'count_of_equipment' => $counts['count_of_equipment'],
 			'first_reservation' => $first_reservation,
 			'last_reservation' => $last_reservation,
 			'equipment_use' => $equipment_use
 		);
-
+		
 	}//end function statistics
 
 	public function update_reservation($data){

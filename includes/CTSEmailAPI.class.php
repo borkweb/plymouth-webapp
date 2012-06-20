@@ -18,7 +18,7 @@ class CTSEmailAPI{
 				$contents=$email->fetch( $GLOBALS['TEMPLATES'] . '/email.user.tpl' );
 				//adds the headers
 				//semds the mail to the user
-				PSU::mail( $reserve['email'],'Media Request',$contents,self::headers());
+				return PSU::mail( $reserve['email'],'Media Request',$contents,self::headers());
 					
 			}
 	function email_CTS($reserve, $insert_id){
@@ -35,9 +35,7 @@ class CTSEmailAPI{
 				$title="Media Request from " . $reserve['first_name'] . " " . $reserve['last_name'];
 				//fetches the contents of the template
 				$contents=$email->fetch( $GLOBALS['TEMPLATES'] . '/email.admin.tpl' );
-				//emails CTS
-				//THIS NEEDS TO BE CHANGED TO CTS EMAIL
-				PSU::mail( "drallen1@plymouth.edu",$title,$contents,self::headers());
+				return PSU::mail( "itsmedia@plymouth.edu",$title,$contents,self::headers());
 		
 
 			}
@@ -54,7 +52,7 @@ class CTSEmailAPI{
 				$email->assign('locations', $locations);
 				$email->assign('reserve', $reservation);
 				$contents=$email->fetch( $GLOBALS['TEMPLATES'] . '/email.user.cancel.tpl' );
-				PSU::mail( $reserve[$reservation_idx]['email'],'Media Request Cancelled!',$contents,self::headers());
+				return PSU::mail( $reserve[$reservation_idx]['email'],'Media Request Cancelled!',$contents,self::headers());
 			}
 
 	function email_user_approved($reservation_idx){
@@ -70,6 +68,6 @@ class CTSEmailAPI{
 				$email->assign('locations', $locations);
 				$email->assign('reserve', $reservation);
 				$contents=$email->fetch( $GLOBALS['TEMPLATES'] . '/email.user.approve.tpl' );
-				PSU::mail( $reserve[$reservation_idx]['email'],'Media Request Approved!',$contents,self::headers());
+				return PSU::mail( $reserve[$reservation_idx]['email'],'Media Request Approved!',$contents,self::headers());
 	}
 }

@@ -1,5 +1,6 @@
 var currentTime = new Date()
 var startTime= new Date();
+var startTime2= new Date();
 
 $(function(){
 	$( "#startdate , #enddate" ).datepicker({ minDate: currentTime});
@@ -10,6 +11,14 @@ $(function(){
 		$("#enddate").datepicker('option','minDate',startTime);
 
 	});
+
+	$( "#fromdate, #todate" ).datepicker();
+
+	$( "#fromdate" ).change(function (){
+		var startTime2 = ($("#fromdate").val());
+	$("#todate").datepicker('option','minDate',startTime2);
+	});
+
 	$( 'body' ).PSUFeedback({});
 });
 

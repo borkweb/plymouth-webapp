@@ -91,9 +91,9 @@ $(function(){
 		<input type="radio" id="equipment" name="radio" value="0" checked="true"/>I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library
 		  </li>
 		  <li>
-			<input type="radio" id="sponsred" name="radio" value="1" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
+			<input type="radio" id="sponsored" name="radio" value="1" />I will need the Classrom Technology Staff to deliver and retrieve the equipment at the location specified
 		  </li>
-		  <li clas"form-actions">
+		  <li class="form-actions">
               <input type="Submit" name="Edit_event" value="Submit Changes">
             </li>
  	 </ul>

@@ -8,7 +8,7 @@ require_once $GLOBALS['BASE_DIR'] . '/includes/ReserveDatabaseAPI.class.php';
 
 respond ( function( $request, $response, $app ){
 	//this checks every admin page and makes sure the user is a manager, cts staff or helpdesk staff
-	if(ReserveDatabaseAPI::user_level() > 2){
+	if(ReserveDatabaseAPI::user_level() > 3){
 		die('You do not have permission to view this page.');
 	}
 
@@ -258,7 +258,6 @@ respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $re
 	$graph->SetDateRange($start_date,$end_date);
 
 	$equipment_reservations=CTSDatabaseAPI::equipment_by_date($dates);
-
 		
 			//iterate through the ids and check to see if they are in the equipment array
 			if($equipment_reservations[$glpi_id]){
@@ -287,8 +286,6 @@ respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $re
 			}
 		}
 
-		
-		
 		//DRAW GRAPH
 		$graph->SetDateRange($start_date,$end_date);
 
@@ -319,6 +316,7 @@ respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $re
 	$app->tpl->display('single-gantt.tpl');
 
 });//end equipment/id/item
+
 respond('/equipment/[i:id]?/item/model/[:model]/list/?/[:action]?', function( $request, $response, $app) {
 	//this is where the gantt view will be
 	if($request->id){
@@ -372,9 +370,7 @@ respond('/equipment/[i:id]?/item/model/[:model]/list/?/[:action]?', function( $r
 	$graph->SetDateRange($start_date,$end_date);
 
 	$equipment_reservations=CTSDatabaseAPI::equipment_by_date($dates);
-
-		
-
+	
 		foreach($glpi_ids as $id){
 			//iterate through the ids and check to see if they are in the equipment array
 			if($equipment_reservations[$id]){
@@ -400,8 +396,6 @@ respond('/equipment/[i:id]?/item/model/[:model]/list/?/[:action]?', function( $r
 			}
 		}
 
-		
-		
 		//DRAW GRAPH
 		$graph->SetDateRange($start_date,$end_date);
 
@@ -424,7 +418,6 @@ respond('/equipment/[i:id]?/item/model/[:model]/list/?/[:action]?', function( $r
 
 		$app->tpl->assign('gantt_chart', $gantt_chart);
 
-		//PSU::dbug($gantt_data);
 	//grab the items
 	//------------------------------------------------------------------
 	$app->tpl->assign('reservations', $reservations);
@@ -450,6 +443,7 @@ respond('/equipment/[i:id]?', function( $request, $response, $app) {
 	$app->tpl->display('glpi-equipment.tpl');
 
 });//end equipment
+
 respond( '/equipment/add-id', function( $request, $response, $app ){
 	$reservation_idx=$request->param( 'reservation_idx' );
 	$reservation_idx=filter_var($reservation_idx, FILTER_SANITIZE_NUMBER_INT);
@@ -598,15 +592,15 @@ respond('/reservation/id/[i:id]/priority', function( $request, $response, $app){
 respond('/reservation/id/[i:id]/equipment', function( $request, $response, $app){
 	//when a piece of equipment is added to a loan
 	$reservation_idx=$request->id;
-	$GLPI_ID=$request->param('GLPI_ID');
-	$GLPI_ID=filter_var($GLPI_ID, FILTER_SANITIZE_STRING);
+	$glpi_id=$request->param('GLPI_ID');
+	$glpi_id=filter_var($glpi_id, FILTER_SANITIZE_STRING);
 	
-	$GLPI_ID=ReserveDatabaseAPI::format_glpi($GLPI_ID);
+	$glpi_id=ReserveDatabaseAPI::format_glpi($glpi_id);
 
 	if(count($_SESSION['errors'])<=0){
-		if(ReserveDatabaseAPI::check_glpi($GLPI_ID)){
+		if(ReserveDatabaseAPI::check_glpi($glpi_id)){
 			//if the GLPI_ID is found then add it
-			ReserveDatabaseAPI::add_equipment($reservation_idx, $GLPI_ID);
+			ReserveDatabaseAPI::add_equipment($reservation_idx, $glpi_id);
 		}else{
 			//otherwise show an error
 			$_SESSION['errors'][]="GLPI ID not found.";
@@ -665,7 +659,7 @@ respond('/reservation/id/[i:id]/print' , function( $request, $response, $app){
 respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $response, $app){
 	//this is used to edit or delete a single reservation
 	if($request->action=="edit"){//if the action is to edit the current reservation
-		if(ReserveDatabaseAPI::user_level()>1){
+		if(ReserveDatabaseAPI::user_level()>2){
 			die('You do not have permission to edit a reservation.');
 		}
 			$editable=true;
@@ -697,10 +691,10 @@ respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $respon
 
 			$app->tpl->assign( 'reservation' , $reservation);
 			$app->tpl->display( 'single-reservation.tpl' );
-		}//edit
+	}//edit
 
 	if($request->action=="delete"){
-		if(ReserveDatabaseAPI::user_level()>0){
+		if(ReserveDatabaseAPI::user_level()>1){
 			die('You do not have permission to delete a reservation.');
 		}
 			$reservation_idx=$request->id;
