@@ -151,7 +151,7 @@ $(document).on('vclick', 'a[data-rel=back][data-force-href=true]', function(even
 	// Prevent the page from changing normally
 	event.preventDefault();
 
-	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	// Keep jQuery Mobile from removing the href (thanks for the help @borkweb)
 	event.stopImmediatePropagation();
 
 	// Grab the url of the hard-coded back button
@@ -233,7 +233,7 @@ $(document).on('vclick.webapp', 'a[data-auth=required]', function(event) {
 	// Prevent the page from changing normally
 	event.preventDefault();
 
-	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	// Keep jQuery Mobile from removing the href (thanks for the help @borkweb)
 	event.stopImmediatePropagation();
 
 	// Show the page loading message while we redirect
@@ -329,7 +329,7 @@ $(document).on('submit', '#page-directory form', function(event) {
 	// Prevent the form from submitting normally
 	event.preventDefault();
 
-	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	// Keep jQuery Mobile from removing the href (thanks for the help @borkweb)
 	event.stopPropagation();
 
 	// Get the data from the searh box and URL encode it
@@ -344,7 +344,7 @@ $(document).on('vclick', '#page-directory-results #directory-results a', functio
 	// Prevent the form from submitting normally
 	event.preventDefault();
 
-	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	// Keep jQuery Mobile from removing the href (thanks for the help @borkweb)
 	event.stopPropagation();
 
 	// Get the url from the link
@@ -372,7 +372,7 @@ $(document).on('vclick', '#page-events #events a', function(event) {
 	// Prevent the form from submitting normally
 	event.preventDefault();
 
-	// Keep jQuery Mobile from removing the href (this was a PITA to figure out. thanks for the help @borkweb)
+	// Keep jQuery Mobile from removing the href (thanks for the help @borkweb)
 	event.stopPropagation();
 
 	// Get the url from the link
