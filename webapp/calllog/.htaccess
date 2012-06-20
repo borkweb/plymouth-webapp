@@ -16,7 +16,8 @@ RewriteRule ^user/([a-zA-Z0-9\_\-\.]+)/ new_call.html?caller=$1 [QSA,L]
 
 RewriteRule ^search/ search.html [QSA,L]
 
-RewriteRule ^calls/(\w+)/ calls.html?in=$1 [QSA,L]
+RewriteRule ^calls/([^/]+)/([^/]+)/? calls.html?in=$1&target=$2 [QSA,L]
+RewriteRule ^calls/([^/]+)/? calls.html?in=$1 [QSA,L]
 
 RewriteRule ^files/([0-9]+)/(.*) view_file.html?call_id=$1&view=$2 [QSA,L]
 

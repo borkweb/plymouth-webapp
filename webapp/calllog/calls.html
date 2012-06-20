@@ -4,6 +4,8 @@
  * TODO remove new_call=passed, action=view_open_calls, find_type=* from other scripts
  */
 
+PSU::redirect_trailing_slash();
+
 $tpl = new PSU\Template;
 $tpl->assign('groups', getOpenCallGroups());
 $tpl->assign('blog', getNewsFeed());
@@ -12,17 +14,22 @@ $calls = array();
 
 $time = time();
 
-$group_id = $find_in = $find_type = null;
+$suboption = $find_in = $find_type = null;
 
 // current valid parameter
 $in = isset( $_GET['in'] ) ? $_GET['in'] : null;
+$target = isset( $_GET['target'] ) ? $_GET['target'] : null;
 
 // legacy parameters
 $group  = isset( $_GET['group'] )  ? (int)$_GET['group'] : null;
 $option = isset( $_GET['option'] ) ? $_GET['option']     : null;
 
 if( $in ) {
-	if( $find_type = option2findtype( $in ) ) {
+	// calls/for/username/
+	if( 'for' === $in ) {
+		$option = 'caller';
+		$suboption = $target;
+	} elseif( $find_type = option2findtype( $in ) ) {
 		// $in is a special name like "my" ("my calls")
 		$option = $find_in = $in;
 	} else {
@@ -36,8 +43,8 @@ if( $in ) {
 
 if( $group ) {
 	if( is_int( $group ) ) {
-		$group_id = $group;
-		$group = getGroupInfo($group_id);
+		$suboption = $group;
+		$group = getGroupInfo($suboption);
 
 		$find_type = $group[0];
 		$find_in = $group[1];
@@ -46,11 +53,11 @@ if( $group ) {
 
 		$find_type = $group['subgroupName'];
 		$find_in = $group['subgroup'];
-		$group_id = $group['itsgroupid'];
+		$suboption = $group['itsgroupid'];
 	}
 }
 
-$result = returnOpenCalls($option, $group_id, $_GET['sort_by']);
+$result = returnOpenCalls($option, $suboption, $_GET['sort_by']);
 $i = 0;
 if(!empty($result) && is_array($result)){
 	$call_open_time = array();

@@ -123,7 +123,7 @@ if($call_log_username != "" || $caller_user_name != ""){
 
 $_SESSION['user_message'] = "Thank you for Updating Ticket #".$call_id;
 
-if( isset( $_POST['in'] ) ) {
+if( isset( $_POST['in'] ) && $_POST['in'] ) {
 	PSU::redirect( $_GET['redirect'] ?: $GLOBALS['BASE_URL'] . '/calls/' . $_POST['in'] . '/' );
 } else {
 	PSU::redirect( $_GET['redirect'] ?: $GLOBALS['BASE_URL'] );
