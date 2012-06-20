@@ -184,24 +184,24 @@
 ----------------------------------*/
 .ui-widget { font-family: Arial, Helvetica, Sans Serif; font-size: 1.2em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Arial, Helvetica, Sans Serif; font-size: 1em; }
-.ui-widget-header { border: 1px solid #454A2C; background: #9EA980 url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-bg_gloss-wave_75_9EA980_500x100.png) 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
+.ui-widget-header { border: 1px solid #454A2C; background: #9EA980 url(images/ui-bg_gloss-wave_75_9EA980_500x100.png) 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
 .ui-widget-header a { color: #ffffff; }
-.ui-widget-content { border: 1px solid #909183; background: #ffffff url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-bg_inset-soft_40_ffffff_1x100.png) 50% bottom repeat-x; color: #000000; }
+.ui-widget-content { border: 1px solid #909183; background: #ffffff url(images/ui-bg_inset-soft_40_ffffff_1x100.png) 50% bottom repeat-x; color: #000000; }
 .ui-widget-content a { color: #000000; }
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default, .ui-widget-content .ui-state-default { border: 1px solid #BFBEA3; background: #F3F1E6 url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-bg_glass_10_F3F1E6_1x400.png) 50% 50% repeat-x; font-weight: bold; color: #000000; outline: none; }
+.ui-state-default, .ui-widget-content .ui-state-default { border: 1px solid #BFBEA3; background: #F3F1E6 url(images/ui-bg_glass_10_F3F1E6_1x400.png) 50% 50% repeat-x; font-weight: bold; color: #000000; outline: none; }
 .ui-state-default a { color: #000000; text-decoration: none; outline: none; }
-.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus { border: 1px solid #000000; background: #E1E0CD url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-bg_glass_20_E1E0CD_1x400.png) 50% 50% repeat-x; font-weight: bold; color: #000000; outline: none; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus { border: 1px solid #000000; background: #E1E0CD url(images/ui-bg_glass_20_E1E0CD_1x400.png) 50% 50% repeat-x; font-weight: bold; color: #000000; outline: none; }
 .ui-state-hover a { color: #000000; text-decoration: none; outline: none; }
-.ui-state-active, .ui-widget-content .ui-state-active { border: 1px solid #9c947c; background: #E1E0CD url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-bg_highlight-soft_40_E1E0CD_1x100.png) 50% 50% repeat-x; font-weight: bold; color: #000000; outline: none; }
+.ui-state-active, .ui-widget-content .ui-state-active { border: 1px solid #9c947c; background: #E1E0CD url(images/ui-bg_highlight-soft_40_E1E0CD_1x100.png) 50% 50% repeat-x; font-weight: bold; color: #000000; outline: none; }
 .ui-state-active a { color: #000000; outline: none; text-decoration: none; }
 
 /* Interaction Cues
 ----------------------------------*/
-.ui-state-highlight, .ui-widget-content .ui-state-highlight {border: 1px solid #619226; background: #add978 url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-bg_highlight-soft_20_add978_1x100.png) 50% top repeat-x; color: #000000; }
-.ui-state-error, .ui-widget-content .ui-state-error {border: 1px solid #692f2f; background: #b06f6f url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-bg_glass_15_b06f6f_1x400.png) 50% 50% repeat-x; color: #000000; }
+.ui-state-highlight, .ui-widget-content .ui-state-highlight {border: 1px solid #619226; background: #add978 url(images/ui-bg_highlight-soft_20_add978_1x100.png) 50% top repeat-x; color: #000000; }
+.ui-state-error, .ui-widget-content .ui-state-error {border: 1px solid #692f2f; background: #b06f6f url(images/ui-bg_glass_15_b06f6f_1x400.png) 50% 50% repeat-x; color: #000000; }
 .ui-state-error-text, .ui-widget-content .ui-state-error-text { color: #000000; }
 .ui-state-disabled, .ui-widget-content .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
 .ui-priority-primary, .ui-widget-content .ui-priority-primary { font-weight: bold; }
@@ -211,14 +211,14 @@
 ----------------------------------*/
 
 /* states and images */
-.ui-icon { width: 16px; height: 16px; background-image: url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-icons_222222_256x240.png); }
-.ui-widget-content .ui-icon {background-image: url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-icons_222222_256x240.png); }
-.ui-widget-header .ui-icon {background-image: url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-icons_222222_256x240.png); }
-.ui-state-default .ui-icon { background-image: url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-icons_000000_256x240.png); }
-.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-icons_222222_256x240.png); }
-.ui-state-active .ui-icon {background-image: url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-icons_000000_256x240.png); }
-.ui-state-highlight .ui-icon {background-image: url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-icons_222222_256x240.png); }
-.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-icons_222222_256x240.png); }
+.ui-icon { width: 16px; height: 16px; background-image: url(images/ui-icons_222222_256x240.png); }
+.ui-widget-content .ui-icon {background-image: url(images/ui-icons_222222_256x240.png); }
+.ui-widget-header .ui-icon {background-image: url(images/ui-icons_222222_256x240.png); }
+.ui-state-default .ui-icon { background-image: url(images/ui-icons_000000_256x240.png); }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(images/ui-icons_222222_256x240.png); }
+.ui-state-active .ui-icon {background-image: url(images/ui-icons_000000_256x240.png); }
+.ui-state-highlight .ui-icon {background-image: url(images/ui-icons_222222_256x240.png); }
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(images/ui-icons_222222_256x240.png); }
 
 /* positioning */
 .ui-icon-carat-1-n { background-position: 0 0; }
@@ -411,5 +411,5 @@
 .ui-corner-all { -moz-border-radius: 3px; -webkit-border-radius: 3px; }
 
 /* Overlays */
-.ui-widget-overlay { background: #000000 url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-bg_flat_20_000000_40x100.png) 50% 50% repeat-x; opacity: .70;filter:Alpha(Opacity=70); }
-.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #111111 url(https://www.plymouth.edu/includes/js/jquery-plugins/ui_theme/images/ui-bg_flat_0_111111_40x100.png) 50% 50% repeat-x; opacity: .80;filter:Alpha(Opacity=80); -moz-border-radius: 8px; -webkit-border-radius: 8px; }
+.ui-widget-overlay { background: #000000 url(images/ui-bg_flat_20_000000_40x100.png) 50% 50% repeat-x; opacity: .70;filter:Alpha(Opacity=70); }
+.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #111111 url(images/ui-bg_flat_0_111111_40x100.png) 50% 50% repeat-x; opacity: .80;filter:Alpha(Opacity=80); -moz-border-radius: 8px; -webkit-border-radius: 8px; }
