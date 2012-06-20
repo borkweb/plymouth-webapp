@@ -203,7 +203,7 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 				// Prevent the page from changing normally
 				event.preventDefault();
 
-				// Keep jQuery Mobile from removing the href (thanks for the help @borkweb)
+				// Keep jQuery Mobile from removing the href
 				event.stopPropagation();
 
 				// jQuery selector and class
@@ -284,7 +284,7 @@ document.addEventListener('deviceready', function () { // Don't use a jQuery eve
 				// Prevent the page from changing normally
 				event.preventDefault();
 
-				// Keep jQuery Mobile from removing the href (thanks for the help @borkweb)
+				// Keep jQuery Mobile from removing the href
 				event.stopPropagation();
 
 				// jQuery selector and class
