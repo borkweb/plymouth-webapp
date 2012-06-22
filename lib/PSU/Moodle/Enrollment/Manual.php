@@ -24,6 +24,7 @@ class Manual extends \PSU\Moodle\Enrollment {
 	public function enroll() {
 		foreach( $this->population as $id ) {
 			$insert_time = time();
+
 			$args = array(
 				0,
 				$this->enrolid,
@@ -34,7 +35,8 @@ class Manual extends \PSU\Moodle\Enrollment {
 				$insert_time,
 				$insert_time,
 			);
-			\PSU::db('moodle2')->Execute('
+
+			$sql = "
 				INSERT INTO mdl_user_enrolments (
 					status, 
 					enrolid, 
@@ -45,9 +47,18 @@ class Manual extends \PSU\Moodle\Enrollment {
 					timecreated, 
 					timemodified
 				) VALUES(
-					?,?,?,?,?,?,?,?
+					?,
+					?,
+					?,
+					?,
+					?,
+					?,
+					?,
+					?
 				) 
-				ON DUPLICATE KEY UPDATE timemodified='.$insert_time, $args);
+				ON DUPLICATE KEY UPDATE timemodified=".$insert_time;
+
+			\PSU::db('moodle2')->Execute( $sql, $args);
 		}//end foreach
 	}//end manual
 

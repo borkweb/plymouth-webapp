@@ -8,11 +8,7 @@ class Enrollment {
 	public $population;
 
 	/**
-	 * _construct
-	 *
 	 * magic constructor method
-	 *
-	 * @param    $url    Optional url parameted to post generated xml to.
 	 */
 	public function __construct( $course, $population, $args = '' ){
 
@@ -54,7 +50,7 @@ class Enrollment {
 		$sql = "
 			SELECT id
 			  FROM mdl_user 
-             WHERE idnumber = ?
+			 WHERE idnumber = ?
 		";
 
 		return \PSU::db('moodle2')->GetOne( $sql, $args );
