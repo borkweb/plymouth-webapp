@@ -1,7 +1,6 @@
 <?php
 
 namespace PSU\Moodle\Enrollment; 
-require_once 'autoload.php';
 
 class Manual extends \PSU\Moodle\Enrollment {
 
