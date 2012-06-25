@@ -8,6 +8,7 @@
 {assign var="end_date" value=$reserve.end_date|date_format:$date_format}
 {assign var="start_time" value=$reserve.start_time|date_format:$time_format}
 {assign var="end_time" value=$reserve.end_time|date_format:$time_format}
+{box size=16}
 	{col size=8}
 	<div class="grid_8 grid-internal">
 	<span class="print">Reservation {$reservation_idx} for: {$reserve.fname} {$reserve.lname} ({$type})</span> 
@@ -29,7 +30,7 @@
 	</div>
 	{/col}
 
-	<div class="grid_8 grind-internal">
+	<div class="grid_8 grid-internal">
 	<span class="print">{$start_date} at {$start_time} to {$end_date} at {$end_time}</span> 
 
 		<h3>Contact Information</h3>
@@ -89,8 +90,6 @@
 		{/if}
 	
 	</ul>
-		</div>
-	<div class="grid_8 grid-internal">
 	<h3>Messages</h3>
 	<ul class="clean">
 
@@ -99,5 +98,6 @@
 			{/foreach}
 	</ul>
 </div>
+{/box}
 
 

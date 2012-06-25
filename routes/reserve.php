@@ -37,7 +37,7 @@ respond( '/confirm/[i:id]/remove', function( $request, $response, $app){
 	//removing equipment from the confirmation page
 	$equipment_id=$request->id;
 	//if there is an equipment id or it is 0 then unset the equipment id
-	if($equipment_id ){
+	if($equipment_id || $equipment_id == 0 ){
 		unset($_SESSION['cts']['equipment'][$equipment_id]);
 	}
 
@@ -74,7 +74,7 @@ respond ( '/equipment', function( $request, $response, $app){
 		
 	}
 	$equipment_id=(int)$request->param('equipment_id');
-	if($equipment_id ){
+	if($equipment_id || $equipment_id == 0){
 		$app->tpl->assign( 'description',ReserveDatabaseAPI::item_info($equipment_id));
 	}
 	//grab all of the neccessary information
@@ -89,7 +89,7 @@ respond ( '/equipment', function( $request, $response, $app){
 respond( '/equipment/add', function ($request, $response, $app){
 	//when a piece of equipment is added by the user
 	$equipment_id=(int)$request->equipment_id;
-	if($equipment_id ){
+	if($equipment_id || $equipment_id == 0){
 		$_SESSION['cts']['equipment'][]=$equipment_id;
 	}
 
@@ -102,7 +102,7 @@ respond( '/equipment/add', function ($request, $response, $app){
 respond( '/equipment/[i:id]/remove', function ($request, $response, $app){
 	//when a piece of equipment is removed by the user
 	$equipment_id=(int)$request->id;
-	if($equipment_id ){
+	if($equipment_id || $equipment_id == 0){
 		//make sure that they aren't removing something that doesn't exist
 		unset($_SESSION['cts']['equipment'][$equipment_id]);
 	}
@@ -118,36 +118,54 @@ respond( 'POST', '/event',function( $request, $response, $app){
 	//this is where the information for the event page is inserted into the session
 
 	//grab all of the neccessary parameters
-	$data=ReserveDatabaseAPI::reservation_sanitize($request);
 
 	//first check to make sure that they accepted the agreement
 	$agreement=$request->param('agreement');
 	if( !$agreement ){
 		$_SESSION['errors'][]='You did not accept the agreement.';
 		$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
+	}else{
+		$data=ReserveDatabaseAPI::reservation_sanitize($request);
+			if( $data['complete'] == false){//if the number of errors is > 0
+				$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
+			}else{
+			//otherwise add all of the information from the request into the session
+			$_SESSION['cts']=$data['cts_admin'];
+			$_SESSION['cts']['submit_first_name']=$app->user['first_name'];
+			$_SESSION['cts']['submit_last_name']=$app->user['last_name'];
+			
+			$_SESSION['cts']['step']="1";
+
+			//assign a step variable so that we can keep track of where the user should be	
+
+			$app->tpl->assign( 'step', $_SESSION['cts']['step']);
+
+			$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
+			$app->tpl->display( 'equipment.tpl' );
+		}//end else
 
 	}
 
-	if( $data['complete'] == false){//if the number of errors is > 0
-		if( !$agreement ){
-			$_SESSION['errors'][]='You did not accept the agreement.';
-		}
-		//send the user back to the reservation page
-		$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
-	}else{
-		//otherwise add all of the information from the request into the session
-		$_SESSION['cts']=$data['cts_admin'];
-		$_SESSION['cts']['submit_first_name']=$app->user['first_name'];
-		$_SESSION['cts']['submit_last_name']=$app->user['last_name'];
-		
-		$_SESSION['cts']['step']="1";
+		if( $data['complete'] == false){//if the number of errors is > 0
+			if( !$agreement ){
+				$_SESSION['errors'][]='You did not accept the agreement.';
+			}
+			//send the user back to the reservation page
+			$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
+		}else{
+			//otherwise add all of the information from the request into the session
+			$_SESSION['cts']=$data['cts_admin'];
+			$_SESSION['cts']['submit_first_name']=$app->user['first_name'];
+			$_SESSION['cts']['submit_last_name']=$app->user['last_name'];
+			
+			$_SESSION['cts']['step']="1";
 
-		//assign a step variable so that we can keep track of where the user should be	
+			//assign a step variable so that we can keep track of where the user should be	
 
-		$app->tpl->assign( 'step', $_SESSION['cts']['step']);
+			$app->tpl->assign( 'step', $_SESSION['cts']['step']);
 
-		$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
-		$app->tpl->display( 'equipment.tpl' );
+			$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
+			$app->tpl->display( 'equipment.tpl' );
 	}//end else
 });//end event respond
 

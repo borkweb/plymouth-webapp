@@ -256,7 +256,6 @@ class CTSDatabaseAPI {
 				WHERE s.name= 'Available for Loan'
 
 			   ";
-		PSU::dbug($search);
 		if( $search ) {
 			$sql_components = self::where( $sql, $search );
 		} else {

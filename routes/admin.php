@@ -199,7 +199,6 @@ respond('/equipment/[i:id]?/filter/', function( $request, $response, $app) {
 	$app->tpl->assign( 'by_model', CTSDatabaseAPI::by_model( $_GET ));
 	$app->tpl->assign( 'models', CTSDatabaseAPI::model_keys( $_GET ));
 	$app->tpl->assign( 'types', CTSDatabaseAPI::types( $_GET ));
-	PSU::dbug(CTSDatabaseAPI::by_model( $_GET ));
 
 	$app->tpl->display('glpi-equipment.tpl');
 

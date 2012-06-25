@@ -624,6 +624,7 @@ class ReserveDatabaseAPI{
 					//only change the title if there is a start and end date
 					$title = "Reservations from $fixed_start_date to $fixed_end_date";
 				}
+				break;
 			default:
 				//if there was no parameter, return the dates and reservations for this week.
 				$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
@@ -639,6 +640,7 @@ class ReserveDatabaseAPI{
 
 				$title="Reservations from $fixed_start_date to $fixed_end_date";
 				$reservation= self::by_date_range($dates);
+				break;
 
 		}//end switch	
 			$data=array(
@@ -1087,7 +1089,7 @@ class ReserveDatabaseAPI{
 			$data=array(
 				'complete' => false,
 			);
-			return data;
+			return $data;
 		}
 
 		$cts_admin['first_name']=$first_name;
