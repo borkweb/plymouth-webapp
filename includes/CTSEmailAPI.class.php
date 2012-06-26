@@ -2,8 +2,12 @@
 class CTSEmailAPI{
 	//class that is used to email users
 	public static function headers(){
-		return 'MIME-Version: 1.0'."\r\n".'Content-type: text/html;'."\r\n".'From: Classroom Technology Office <itsmedia@plymouth.edu>'."\r\n";
+		return 'MIME-Version: 1.0'."\r\n".'Content-type: text/html;'."\r\n".'From: Classroom Technology Reservation <itsmedia@plymouth.edu>'."\r\n";
 	}
+	public static function admin_headers(){
+		return 'MIME-Version: 1.0'."\r\n".'Content-type: text/html;'."\r\n".'From: CTS RESERVATION SYSTEM'."\r\n";
+	}
+
 	public function email_user($reserve){
 				//grabs the neccessary information to display properly
 				$categories=ReserveDatabaseAPI::categories();
@@ -35,7 +39,7 @@ class CTSEmailAPI{
 				$title="Media Request from " . $reserve['first_name'] . " " . $reserve['last_name'];
 				//fetches the contents of the template
 				$contents=$email->fetch( $GLOBALS['TEMPLATES'] . '/email.admin.tpl' );
-				return PSU::mail( "itsmedia@plymouth.edu",$title,$contents,self::headers());
+				return PSU::mail( "itsmedia@plymouth.edu",$title,$contents,self::admin_headers());
 		
 
 			}
