@@ -240,9 +240,6 @@ $(function(){
 					<li><label>Dropoff: </label>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user disabled=true}</li>
 
 			{/if}
-		{/if}
-
-
 
 			{if $user_level == 1}<!--if the user is the manager -->
 				<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/pickup"<li>{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.retrieval_user}</li>
@@ -260,6 +257,7 @@ $(function(){
 					<li><label>Pickup: </label>{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.retrieval_user disabled=true}</li>
 
 			{/if}
+		{/if}
 		</ul>
 
 

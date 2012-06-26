@@ -525,7 +525,7 @@ class ReserveDatabaseAPI{
 				$start_date=date('Y-m-d');
 				$fixed_start_date=self::fix_date($start_date);
 
-				$title="Reservations for today, the $fixed_start_date";
+				$title="Reservations for today -  $fixed_start_date";
 				$reservation= self::by_date($start_date);
 				break;
 				
@@ -534,7 +534,7 @@ class ReserveDatabaseAPI{
 				$start_date=date('Y-m-d', strtotime("-1 day"));
 				$fixed_start_date=self::fix_date($start_date);
 
-				$title="Reservations for yesterday, the $fixed_start_date";
+				$title="Reservations for yesterday - $fixed_start_date";
 				$reservation= self::by_date($start_date);
 				break;
 
@@ -543,7 +543,7 @@ class ReserveDatabaseAPI{
 				$start_date=date('Y-m-d', strtotime("+1 day"));
 				$fixed_start_date=self::fix_date($start_date);
 
-				$title="Reservations for tomorrow, the $fixed_start_date";
+				$title="Reservations for tomorrow - $fixed_start_date";
 				$reservation= self::by_date($start_date);
 				break;
 
@@ -629,20 +629,12 @@ class ReserveDatabaseAPI{
 				}
 				break;
 			default:
-				//if there was no parameter, return the dates and reservations for this week.
-				$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
-				$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
-				$dates=array(
-					$start_date, 
-					$end_date, 
-					$start_date, 
-					$end_date
-				);
+				//if there was no parameter, return the dates and reservations for today
+				$start_date=date('Y-m-d');
 				$fixed_start_date=self::fix_date($start_date);
-				$fixed_end_date=self::fix_date($end_date);
 
-				$title="Reservations from $fixed_start_date to $fixed_end_date";
-				$reservation= self::by_date_range($dates);
+				$title="Reservations for today - $fixed_start_date";
+				$reservation= self::by_date($start_date);
 				break;
 
 		}//end switch	
