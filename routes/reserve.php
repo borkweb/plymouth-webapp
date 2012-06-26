@@ -121,53 +121,39 @@ respond( 'POST', '/event',function( $request, $response, $app){
 
 	//first check to make sure that they accepted the agreement
 	$agreement=$request->param('agreement');
+	$data=ReserveDatabaseAPI::reservation_sanitize($request);
+	$reserve = $data['reserve'];
+	$app->tpl->assign('reserve', $reserve);
+	
 	if( !$agreement ){
 		$_SESSION['errors'][]='You did not accept the agreement.';
-		$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
+		$app->tpl->display('event.tpl');
+
+		//$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
 	}else{
-		$data=ReserveDatabaseAPI::reservation_sanitize($request);
-			if( $data['complete'] == false){//if the number of errors is > 0
-				$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
+		if( $data['complete'] == false){//if the number of errors is > 0
+			$reserve = $data['reserve'];
+			$app->tpl->assign('reserve', $reserve);
+				$app->tpl->display('event.tpl');
+				//$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
 			}else{
-			//otherwise add all of the information from the request into the session
-			$_SESSION['cts']=$data['cts_admin'];
-			$_SESSION['cts']['submit_first_name']=$app->user['first_name'];
-			$_SESSION['cts']['submit_last_name']=$app->user['last_name'];
-			
-			$_SESSION['cts']['step']="1";
+				//otherwise add all of the information from the request into the session
+				$_SESSION['cts']=$data['cts_admin'];
+				$_SESSION['cts']['submit_first_name']=$app->user['first_name'];
+				$_SESSION['cts']['submit_last_name']=$app->user['last_name'];
+				
+				$_SESSION['cts']['step']="1";
 
-			//assign a step variable so that we can keep track of where the user should be	
+				//assign a step variable so that we can keep track of where the user should be	
 
-			$app->tpl->assign( 'step', $_SESSION['cts']['step']);
-
-			$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
-			$app->tpl->display( 'equipment.tpl' );
+				$app->tpl->assign( 'step', $_SESSION['cts']['step']);
+				$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
+				$app->tpl->display( 'equipment.tpl' );
 		}//end else
 
 	}
-
-		if( $data['complete'] == false){//if the number of errors is > 0
-			if( !$agreement ){
-				$_SESSION['errors'][]='You did not accept the agreement.';
-			}
-			//send the user back to the reservation page
-			$response->redirect( $GLOBALS['BASE_URL'] . '/reserve/' );
-		}else{
-			//otherwise add all of the information from the request into the session
-			$_SESSION['cts']=$data['cts_admin'];
-			$_SESSION['cts']['submit_first_name']=$app->user['first_name'];
-			$_SESSION['cts']['submit_last_name']=$app->user['last_name'];
-			
-			$_SESSION['cts']['step']="1";
-
-			//assign a step variable so that we can keep track of where the user should be	
-
-			$app->tpl->assign( 'step', $_SESSION['cts']['step']);
-
-			$response->redirect($GLOBALS['BASE_URL'] . '/reserve/equipment');
-			$app->tpl->display( 'equipment.tpl' );
-	}//end else
-});//end event respond
+	 
+	});//end event respond
 
 respond ('/new', function($request, $response, $app){
 	//when a user decides to do a new reservation, delete anything that is currently stored in the session

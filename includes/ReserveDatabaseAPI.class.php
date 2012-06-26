@@ -996,59 +996,75 @@ class ReserveDatabaseAPI{
 		$reservation_idx=$request->id;
 		$first_name=$request->param('first_name');
 		$first_name=filter_var($first_name, FILTER_SANITIZE_STRING);
+		$reserve['first_name'] = $first_name;
 
 		$last_name=$request->param('last_name');
 		$last_name=filter_var($last_name, FILTER_SANITIZE_STRING);
+		$reserve['last_name'] = $last_name; 
 
 		$phone=$request->param('phone');
 		$phone=filter_var($phone, FILTER_SANITIZE_STRING);
+		$reserve['phone'] = $phone;
 
 		$email=$request->param('email');
 		$email=filter_var($email, FILTER_SANITIZE_STRING);
+		$reserve['email'] = $email;
 
 		$reserve_type=$request->param('radio');
 		$reserve_type=filter_var($reserve_type, FILTER_SANITIZE_STRING);
+		$reserve['reserve_type'] = $reserve_type;
 
 		$start_date=$request->param('start_date');//request a parameter for start_date
 		$start_date=filter_var($start_date, FILTER_SANITIZE_STRING);
+		$reserve['start_date'] = $start_date;
 
 		$end_date=$request->param('end_date');//request a parameter for enddate
 		$end_date=filter_var($end_date, FILTER_SANITIZE_STRING);
+		$reserve['end_date'] = $end_date;
 
 		$title=$request->param('title');//request a parameter for title
 		$title=filter_var($title, FILTER_SANITIZE_STRING);
+		$reserve['title'] = $title;
 
 		$location=$request->param('location');//request a parameter for location
 		$location=filter_var($location, FILTER_SANITIZE_STRING);
+		$reserve['location'] = $location;
 
 		$room=$request->param('room');
 		$room=filter_var($room, FILTER_SANITIZE_STRING);
+		$reserve['room'] = $room;
 
 		$comments=$request->param('comments');
 		$comments=filter_var($comments,FILTER_SANITIZE_STRING);
-
+		$reserve['comments'] = $comments;
 
 		$starthour=$request->param('starthour');
 		$starthour=filter_var($starthour, FILTER_SANITIZE_STRING);
+		$reserve['starthour'] = $starthour;
 
 		$startminute=$request->param('startminute');
 		$startminute=filter_var($startminute, FILTER_SANITIZE_STRING);
+		$reserve['startminute'] = $startminute;
 
 		$startminute=sprintf("%02d",$startminute);
 		$startampm=$request->param('startampm');
 		$startampm=filter_var($startampm, FILTER_SANITIZE_STRING);
+		$reserve['startampm'] = $startampm;
 
 		$start_time=$starthour . ':' . $startminute . ' ' . $startampm;
 
 		$endhour=$request->param('endhour');
 		$endhour=filter_var($endhour, FILTER_SANITIZE_STRING);
+		$reserve['hour'] = $endhour;
 
 		$endminute=$request->param('endminute');
 		$endminute=filter_var($endminute, FILTER_SANITIZE_STRING);
+		$reserve['endminute'] = $endminute;
 
 		$endminute=sprintf("%02d",$endminute);
 		$endampm=$request->param('endampm');
 		$endampm=filter_var($endampm, FILTER_SANITIZE_STRING);
+		$reserve['endampm'] = $endampm;
 
 		$end_time=$endhour . ':' . $endminute . ' ' . $endampm;
 
@@ -1099,6 +1115,7 @@ class ReserveDatabaseAPI{
 		if( count($_SESSION['errors'])>0 ){//if the number of errors is > 0
 			$data=array(
 				'complete' => false,
+				'reserve' => $reserve,
 			);
 			return $data;
 		}
@@ -1133,6 +1150,7 @@ class ReserveDatabaseAPI{
 		$data=array(
 			'complete' => true,
 			'cts_admin' => $cts_admin,
+			'reserve' => $reserve,
 		);
 		return $data;
 
