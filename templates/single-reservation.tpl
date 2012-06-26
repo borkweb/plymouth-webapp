@@ -222,6 +222,7 @@ $(function(){
 		<input type="submit" name="Subitemsubmit" value="Assign Sub Item">
 		</form>
 	</ul>
+		{if $reserve.delivery_type == 1}
 		<h2>Technician Assigned</h2>
 		<ul class="label-left clean">
 			{if $user_level == 1} <!--if the user is the manager -->
@@ -239,6 +240,7 @@ $(function(){
 					<li><label>Dropoff: </label>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user disabled=true}</li>
 
 			{/if}
+		{/if}
 
 
 
