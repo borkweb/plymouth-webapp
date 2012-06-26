@@ -128,6 +128,7 @@ respond('/admincp/agreement', function( $request, $response, $app ){
 respond('/admincp/agreement/change', function( $request, $response, $app ){
 	//when the administrator is submiting the agreement for editing
 	$agreement=$request->param('agreement');
+	$agreement=stripslashes($agreement);
 	ReserveDatabaseAPI::change_reservation_agreement($agreement);
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/admincp');
 
@@ -164,32 +165,6 @@ respond('/equipment/[i:id]?/filter/', function( $request, $response, $app) {
 	if($request->id){
 		//if you are adding equipment to a reservation
 		$reservation_idx=$request->id;
-		//--------------------FOR BEST FIT---------------
-		/*
-		$reservation= ReserveDatabaseAPI::by_id($reservation_idx);
-
-		$start_date=$reservation[$reservation_idx]['start_date'];
-		$start_date=date('Y-m-d',strtotime($start_date));
-
-		$end_date=$reservation[$reservation_idx]['end_date'];
-		$end_date=date('Y-m-d',strtotime($end_date));
-		$dates=array($start_date,$end_date);
-
-		$fixed_start_date=ReserveDatabaseAPI::fix_date($start_date);
-		$fixed_end_date=ReserveDatabaseAPI::fix_date($end_date);
-		$app->tpl->assign('title',"Reservations from $fixed_start_date to $fixed_end_date");
-		$equipment_reservations=CTSDatabaseAPI::equipment_by_date($dates);
-
-		foreach($equipment_reservations as $glpi_id => $item){
-			$glpi_ids[]=$glpi_id;
-			foreach($item['reservations'] as $glpi_reservation){
-				PSU::dbug($glpi_reservation);
-			}
-		}
-
-		//----------------------------------------------------
-		 */
-
 		$_SESSION['warnings'][]='You are adding equipment to reservation index ' . '<a target="blank" href="'. $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx . '">' . $reservation_idx . '</a>';
 		$app->tpl->assign('reservation_idx', $reservation_idx);
 	}
@@ -246,11 +221,11 @@ respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $re
 	//graph code found in loan_sched.html in /cts
 	$graph = new GanttGraph(900);
 	$graph->SetFrame(true, 'darkblue', 2);
-	$graph->scale->day->SetStyle(5);
+	$graph->scale->day->SetLabelFormatString('%a %m/%e');
+	$graph->scale->day->SetStyle(DAYSTYLE_CUSTOM);
 	$graph->scale->day->SetFont(FF_FONT1,FS_BOLD,12);
 	$graph->SetMargin(-1,-1,-1,-1);
 	$graph->ShowHeaders( GANTT_HDAY );
-	$graph->scale->day->SetStyle(5);
 	$graph->hgrid->Show();
 	//$graph->scale->day->SetFont(15);
 	$graph->hgrid->SetRowFillColor( '#B5BD88@0.5');
@@ -311,6 +286,7 @@ respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $re
 	//------------------------------------------------------------------
 	$count=CTSDatabaseAPI::count($glpi_id);
 	$app->tpl->assign('count', $count);
+	$app->tpl->assign('item',ReserveDatabaseAPI::get_GLPI($glpi_id));
 	$app->tpl->assign('glpi_id', $glpi_id);	
 	$app->tpl->display('single-gantt.tpl');
 
@@ -329,7 +305,10 @@ respond('/equipment/[i:id]?/item/model/[:model]/list/?/[:action]?', function( $r
 		$response->redirect($data['redirect_url']);
 	}
 	//otherwise assign the title and reservations
-	$app->tpl->assign('title', $data['title']);
+	$subtitle = ' for ' . $request->model;
+	$title = $data['title'];
+	$app->tpl->assign('title', $title);
+	$app->tpl->assign('subtitle', $subtitle);
 	//we only need the first two dates
 	$start_date=$data['dates'][0];
 	$end_date=$data['dates'][1];
@@ -358,11 +337,11 @@ respond('/equipment/[i:id]?/item/model/[:model]/list/?/[:action]?', function( $r
 	//graph code found in loan_sched.html in /cts
 	$graph = new GanttGraph(900);
 	$graph->SetFrame(true, 'darkblue', 2);
-	$graph->scale->day->SetStyle(5);
+	$graph->scale->day->SetLabelFormatString('%a %m/%e');
+	$graph->scale->day->SetStyle(DAYSTYLE_CUSTOM);
 	$graph->scale->day->SetFont(FF_FONT1,FS_BOLD,12);
 	$graph->SetMargin(-1,-1,-1,-1);
 	$graph->ShowHeaders( GANTT_HDAY );
-	$graph->scale->day->SetStyle(5);
 	$graph->hgrid->Show();
 	//$graph->scale->day->SetFont(15);
 	$graph->hgrid->SetRowFillColor( '#B5BD88@0.5');

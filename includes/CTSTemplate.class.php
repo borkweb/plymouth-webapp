@@ -27,6 +27,12 @@ class CTSTemplate extends PSUTemplate{
 		$status=array(
 			"approved"=>"approved",
 			"pending"=>"pending",
+			"pending-pick-up"=>"pending pick-up",
+			"ready-for-pick-up" => "ready for pick-up",
+			"pending-delivery" => "pending delivery",
+			"delivered" =>"delivered",
+			"closed" => "closed",
+			"missing-equipment" => "missing equipment",
 			"loaned out"=>"loaned out",
 			"returned"=> "returned", 
 			"cancelled"=>"cancelled",

@@ -46,24 +46,24 @@
 			  </li>
 			  <li>
 				<label class="required">Event Start:<em>*</em></label>
-				<input id="startdate" type="text" name="start_date" readonly="true"> at 
+				<input id="startdate"  type="text" name="start_date" readonly="true" class="date-readonly"> at 
 
-				{html_options name=starthour options=$hours }
+				{html_options name=starthour options=$hours class="time"}
 				:
-				{html_options name=startminute options=$minutes|string_format:"%02d"}
+				{html_options name=startminute options=$minutes|string_format:"%02d" class="time"}
 			
 				-
-				{html_options name=startampm options=$ampm}
+				{html_options name=startampm options=$ampm class="time"}
 			  </li>
 			  <li>
 				<label class="required">Event End:<em>*</em></label>
-				<input id="enddate" type="text" name="end_date" readonly="true" value="{$reserve.end_date}"> at
-				{html_options name=endhour options=$hours}
+				<input id="enddate" class="date-readonly" type="text" name="end_date" readonly="true" value="{$reserve.end_date}"> at
+				{html_options name=endhour options=$hours class="time"}
 			
 				:
-				{html_options name=endminute options=$minutes|string_format:"%02d"}
+				{html_options name=endminute options=$minutes|string_format:"%02d" class="time"}
 				-
-				{html_options name=endampm options=$ampm }
+				{html_options name=endampm options=$ampm class="time"}
 
 			   </li>
 			   <li>
@@ -116,24 +116,24 @@
 			  </li>
 			  <li>
 				<label class="required">Event Start:<em>*</em></label>
-				<input id="startdate" type="text" name="start_date" readonly="true" 
+				<input id="startdate" class="date-readonly" type="text" name="start_date" readonly="true" 
 				value="{$reserve.start_date}"> at 
-				{html_options name=starthour options=$hours selected=$reserve.starthour}
+				{html_options name=starthour options=$hours selected=$reserve.starthour class="time"}
 				:
-				{html_options name=startminute options=$minutes|string_format:"%02d" selected=$reserve.startminute}
+				{html_options name=startminute options=$minutes|string_format:"%02d" selected=$reserve.startminute class="time"}
 				
 				-
-				{html_options name=startampm options=$ampm selected=$reserve.startampm}
+				{html_options name=startampm options=$ampm selected=$reserve.startampm class="time"}
 			  </li>
 			  <li>
 				<label class="required">Event End:<em>*</em></label>
-				<input id="enddate" type="text" name="end_date" readonly="true" value="{$reserve.end_date}"> at
-				{html_options name=endhour options=$hours selected=$reserve.endhour}
+				<input id="enddate" class="date-readonly" type="text" name="end_date" readonly="true" value="{$reserve.end_date}"> at
+				{html_options name=endhour options=$hours selected=$reserve.endhour class="time"}
 				
 				:
-				{html_options name=endminute options=$minutes|string_format:"%02d" selected=$reserve.endminute}
+				{html_options name=endminute options=$minutes|string_format:"%02d" selected=$reserve.endminute class="time"}
 				-
-				{html_options name=endampm options=$ampm selected=$reserve.startampm}
+				{html_options name=endampm options=$ampm selected=$reserve.startampm class="time"}
 			   </li>
 			   <li>
 			<input type="radio" id="equipment" name="radio" value="equipment" checked="true"/>I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library

@@ -70,22 +70,22 @@ $(function(){
 		  	<label class="required">Event Start:<em>*</em></label>
 		  	<input id="startdate" type="text" name="start_date"
 			value="{$reserve.start_date|date_format:'%m/%d/%Y'}"> at 
-			{html_options name=starthour options=$hours selected=$starthour}
+			{html_options name=starthour options=$hours selected=$starthour class="time"}
 			:
-			{html_options name=startminute options=$minutes|string_format:"%02d" selected=$startminute}
+			{html_options name=startminute options=$minutes|string_format:"%02d" selected=$startminute class="time"}
 			
 			-
-			{html_options name=startampm options=$ampm selected=$startampm}
+			{html_options name=startampm options=$ampm selected=$startampm class="time"}
 		  </li>
 		  <li>
 		  	<label class="required">Event End:<em>*</em></label>
 		  	<input id="enddate" type="text" name="end_date" value="{$reserve.end_date|date_format:'%m/%d/%Y'}"> at
-			{html_options name=endhour options=$hours selected=$endhour}
+			{html_options name=endhour options=$hours selected=$endhour class="time"}
 			
 			:
-			{html_options name=endminute options=$minutes|string_format:"%02d" selected=$endminute}
+			{html_options name=endminute options=$minutes|string_format:"%02d" selected=$endminute class="time"}
 			-
-			{html_options name=endampm options=$ampm selected=$endampm}
+			{html_options name=endampm options=$ampm selected=$endampm class="time"}
 		   </li>
 		   <li>
 		<input type="radio" id="equipment" name="radio" value="0" checked="true"/>I will pick up and return the equipment to the learning Commons Information Desk in Lamson Library
@@ -224,6 +224,23 @@ $(function(){
 	</ul>
 		<h2>Technician Assigned</h2>
 		<ul class="label-left clean">
+			{if $user_level == 1} <!--if the user is the manager -->
+				<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/dropoff"<li>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user}</li>
+				<input type="submit" name="dropoff" value="Assign Delivery & Support Technician"></form></li>
+			{elseif $user_level == 2}<!--if the user is cts staff -->
+
+				{if $reserve.delivery_user == NULL}<!--if there is no delivery user, show the assign myself button -->
+					<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/dropoff"<li><input type="hidden" value="{$user->wpid}" name="assigned_tech_dropoff"></li><input type="submit" name="dropoff" value="Assign Myself to Dropoff"></form></li>
+				{else}<!--If there is a delivery user, show the technician that is assigned -->
+					<li><label>Dropoff: </label>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user disabled=true}</li>
+				{/if}
+			{else}<!-- if the user is helpdesk -->
+<!--this select box is to change between Manager, CTS Staff and Helpdesk -->
+					<li><label>Dropoff: </label>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user disabled=true}</li>
+
+			{/if}
+
+
 
 			{if $user_level == 1}<!--if the user is the manager -->
 				<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/pickup"<li>{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.retrieval_user}</li>
@@ -239,24 +256,6 @@ $(function(){
 			{else}<!--if the user is helpdesk -->
 <!--this select box is to change between Manager, CTS Staff and Helpdesk -->
 					<li><label>Pickup: </label>{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.retrieval_user disabled=true}</li>
-
-			{/if}
-
-		
-
-			{if $user_level == 1} <!--if the user is the manager -->
-				<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/dropoff"<li>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user}</li>
-				<input type="submit" name="dropoff" value="Assign Dropoff Technician"></form></li>
-			{elseif $user_level == 2}<!--if the user is cts staff -->
-
-				{if $reserve.delivery_user == NULL}<!--if there is no delivery user, show the assign myself button -->
-					<form class="label-left" action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/dropoff"<li><input type="hidden" value="{$user->wpid}" name="assigned_tech_dropoff"></li><input type="submit" name="dropoff" value="Assign Myself to Dropoff"></form></li>
-				{else}<!--If there is a delivery user, show the technician that is assigned -->
-					<li><label>Dropoff: </label>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user disabled=true}</li>
-				{/if}
-			{else}<!-- if the user is helpdesk -->
-<!--this select box is to change between Manager, CTS Staff and Helpdesk -->
-					<li><label>Dropoff: </label>{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user disabled=true}</li>
 
 			{/if}
 		</ul>

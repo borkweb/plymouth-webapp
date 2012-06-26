@@ -293,7 +293,10 @@ class ReserveDatabaseAPI{
 	}//end function check_reservation
 
 	public function check_user_id($user_id){
-		if( ! filter_var($user_id, FILTER_VALIDATE_INT)){
+
+		$regex = '/^[0-9]+$/';
+		preg_match($regex,$user_id, $matches);
+		if( !$matches ){//if there are no matches
 			$_SESSION['errors'][]='User ID in incorrect format.';
 			return false;
 		}
@@ -302,7 +305,7 @@ class ReserveDatabaseAPI{
 				$_SESSION['errors'][]='User ID too long.';
 				return false;
 			}else{
-				return filter_var($user_id, FILTER_SANITIZE_NUMBER_INT);
+				return $user_id;
 
 			}
 	}//end function check_user_id
@@ -495,7 +498,7 @@ class ReserveDatabaseAPI{
 				);
 				$title="Reservations from $fixed_start_date to $fixed_end_date";
 				$reservation=self::by_date_range($dates);
-			
+				break;	
 			
 			case "lastweek":
 				//this shows the information from last week
@@ -661,12 +664,16 @@ class ReserveDatabaseAPI{
 
 	public function format_glpi($glpi_id){
 		//check the length of the GLPI_ID id
-		if(strlen($glpi_id)!=4 && strlen($glpi_id) !=13){
-		//make sure that it is either 4 or 13 characters
+		if(strlen($glpi_id)!=4 && strlen($glpi_id) !=13 && strlen($glpi_id) !=46 ){
+		//make sure that it is either 4 or 13 or 46 (which is URL) characters
 			$_SESSION['errors'][]="Incorrect format.";
 		}elseif(strlen($glpi_id)==4){
 			//if the length is 4, add the prepended characters for the GLPI ID
 			$glpi_id='PSU-0000-' . $glpi_id;
+		}elseif(strlen($glpi_id)==46){
+			//if the code is scanned
+			$glpi_id=substr($glpi_id,-13);//return the last 4 digits
+
 		}
 		return $glpi_id;
 	}//end function format_glpi
@@ -863,10 +870,13 @@ class ReserveDatabaseAPI{
 			SELECT 
 				   item.name as psu_name,
 				   `mod`.name as model,
+				    man.name as manufacturer,
 				   t.name as type
 			  FROM glpi_computers item 
 			  JOIN glpi_computermodels `mod` 
-				ON item.computermodels_id = `mod`.id 
+				ON item.computermodels_id = `mod`.id
+				JOIN glpi_manufacturers man
+				ON  item.manufacturers_id = man.id
 			  JOIN glpi_computertypes t 
 				ON item.computertypes_id = t.id 
 			 WHERE item.name = ?
@@ -874,10 +884,13 @@ class ReserveDatabaseAPI{
 			SELECT 
 				   item.name as psu_name,
 				   `mod`.name as model,
+ 				man.name as manufacturer,
 				   t.name as type
 			  FROM glpi_peripherals item 
 			  JOIN glpi_peripheralmodels `mod` 
-				ON item.peripheralmodels_id = `mod`.id 
+				ON item.peripheralmodels_id = `mod`.id
+				JOIN glpi_manufacturers man
+				ON  item.manufacturers_id = man.id
 			  JOIN glpi_peripheraltypes t 
 				ON item.peripheraltypes_id = t.id 
 			 WHERE item.name = ?
@@ -916,7 +929,8 @@ class ReserveDatabaseAPI{
 		$sql="
 			SELECT s.*,c.name 
 			  FROM cts_reservation_subitem s,cts_subitem c 
-			 WHERE s.reservation_id= ? AND c.id=s.subitem_id";
+			 WHERE s.deleted=false
+			   AND s.reservation_id= ? AND c.id=s.subitem_id";
 
 		return PSU::db('cts')->GetAssoc( $sql, $reservation_id );
 
@@ -926,7 +940,8 @@ class ReserveDatabaseAPI{
 		foreach($equipment as $glpi_id){
 
 			if($parts=self::get_GLPI($glpi_id['glpi_id'])){
-				$equipment_info[]=$parts;
+				$parts[$glpi_id['glpi_id']]['reservation_equipment_idx']=$glpi_id['reservation_equipment_idx'];
+				$equipment_info[]= $parts;
 
 			}else{
 				$parts=array(
@@ -1047,10 +1062,6 @@ class ReserveDatabaseAPI{
 		
 		if( ! $phone ){ //if there is no phone number
 			$_SESSION['errors'][]='Phone number not found'; //throw error
-		}
-		
-		if( !filter_var($phone, FILTER_VALIDATE_INT)){
-		    $_SESSION['errors'][]='Phone number incorrect';	
 		}
 		
 		if( ! $email ){
@@ -1181,7 +1192,6 @@ class ReserveDatabaseAPI{
 
 	public function statistics(){
 		//grab some statistics
-		//TODO: GET THIS TO WORK
 		$sql="SELECT
 				(SELECT COUNT( reservation_idx ) FROM cts_reservation) count_of_reservations,
 				(SELECT COUNT( reservation_equipment_idx ) FROM cts_reservation_equipment) count_of_equipment

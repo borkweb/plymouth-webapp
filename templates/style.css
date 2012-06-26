@@ -1,7 +1,14 @@
 .cts-message{
-word-wrap:break-word;
+word-wrap: break-word;
 padding: 0px 0px 0px 20px;
 width: 500px;
+}
+.time{
+width: auto;
+}
+#startdate.date-readonly, 
+#enddate.date-readonly{
+cursor: pointer;
 }
 .print-information li{
 clear:left;
@@ -17,6 +24,10 @@ font-size:1.4em;
 text-align:center;
 
 }
+.signature{
+padding-left: 200px;
+font-weight: bold;
+}
 .bullet{
 list-style-type: circle;
 }
@@ -30,9 +41,6 @@ font-weight:bold;
 font-size:2em;
 color:green;
 }
-
-.no-print{display: none !important;}
-.print_only{display: none;}
 
 .auto-select{
 width: auto;
@@ -49,8 +57,9 @@ width: auto;
 		background-image: none;
 		overflow-y: visible;
 		padding-top: 0;
+		font-size:75%;
 	}
-
+  li{clear:left;}
   img { page-break-inside: avoid; display: none;}
   pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
   p, h2, h3 { orphans: 0; widows: 0; }
@@ -72,11 +81,9 @@ width: auto;
 
 	.grid_1, .grid_2, .grid_3, .grid_4, .grid_5, .grid_6, .grid_7, .grid_8,
 	.grid_9, .grid_10, .grid_11, .grid_12, .grid_13, .grid_14, .grid_15, .grid_16 {
-		width: 100%;
+		width: auto;
 	}
-.grid_8 grid_interal{
-	width: 50%;
-}
+	.grid_8{float: left;}
 
   @page { size: landscape;
 		margin: 0.5cm; }

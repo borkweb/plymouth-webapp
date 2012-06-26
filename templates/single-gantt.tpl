@@ -1,4 +1,4 @@
-{box size=16 title="Search"}
+{box size=8 title="Search"}
 	<form class="label-left" action="{$PHP.BASE_URL}/admin/equipment/item/{$glpi_id}/daterange" >
 		<ul>
 			<li><label>From: </label><input type="text" id="fromdate" name="from_date"></li>
@@ -10,13 +10,20 @@
 		</ul>
 	</form>
 {/box}
-{box title=$title}
+{box size=8 title=`$item.$glpi_id.model`}
+<ul class="label-left">
+	<li><label>Type:</label>{$item.$glpi_id.type}</li>
+	<li><label>Model:</label>{$item.$glpi_id.model}</li>
+	<li><label>Manufacturer:</label>{$item.$glpi_id.manufacturer}</li>
+</ul>
+{/box}
+{box size=16 title=$title}
 	<a href="{$PHP.BASE_URL}/admin/equipment/item/{$glpi_id}/lastweek">Last Week</a>|
 	<a href="{$PHP.BASE_URL}/admin/equipment/item/{$glpi_id}/thisweek">This Week</a>|
 	<a href="{$PHP.BASE_URL}/admin/equipment/item/{$glpi_id}/nextweek">Next Week</a>
 
 {/box}
-{box title="Equipment Availability for `$glpi_id`"}
+{box size=16 title="Equipment Availability for `$glpi_id`"}
 	{$gantt_chart}
 {if $reservation_idx}
 <form action="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/equipment" method="POST">

@@ -9,9 +9,9 @@
 {assign var="start_time" value=$reserve.start_time|date_format:$time_format}
 {assign var="end_time" value=$reserve.end_time|date_format:$time_format}
 {box size=16}
-	{col size=8}
 	<div class="grid_8 grid-internal">
-	<span class="print">Reservation {$reservation_idx} for: {$reserve.fname} {$reserve.lname} ({$type})</span> 
+	<span class="print">Reservation {$reservation_idx} for: {$reserve.fname} {$reserve.lname} ({$type})</span>
+	<hr>
 		
 		<h3>Event Information</h3>
 		<ul class="label-left">
@@ -22,16 +22,40 @@
 				<li><label>Requested Items: </label><p>{$reserve.request_items}</p></li>
 
 		</ul>
-		<h3>Technician Assigned</h3>
-		<ul class="label-left">
-			<li><label>Pickup User:</label>{$reserve.retrieval_user}</li>
-			<li><label>Dropoff User: </label>{$reserve.delivery_user}</li>
-		</ul>
+		{if $reserve.delivery_type == 1}
+			<h3>Technician Assigned</h3>
+			<ul class="label-left">
+
+			<li><label>Dropoff: </label>
+			{if $reserve.delivery_user}
+				{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user disabled=true}
+			{else}
+				<span>No User Assigned</span>
+			{/if}
+				</li>
+
+			<li><label>Pickup: </label>
+			{if $reserve.retrieval_user}
+				{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.retrieval_user disabled=true}
+			{else}
+				<span>No User Assigned</span>
+			{/if}</li>
+
+			</ul>
+		{/if}
+		<h3>Messages</h3>
+			<ul class="clean">
+
+			{foreach from=$messages item=message key=id}
+				<li><label>{$message.author} at {$message.time|date_format:$time_format} on {$message.date|date_format:$date_format}: </label><span class="cts-message">{$message.message}</span></li>
+			{/foreach}
+			</ul>
+
 	</div>
-	{/col}
 
 	<div class="grid_8 grid-internal">
 	<span class="print">{$start_date} at {$start_time} to {$end_date} at {$end_time}</span> 
+	<hr>
 
 		<h3>Contact Information</h3>
 		<ul class="label-left">
@@ -90,14 +114,14 @@
 		{/if}
 	
 	</ul>
-	<h3>Messages</h3>
-	<ul class="clean">
-
-			{foreach from=$messages item=message key=id}
-				<li><label>{$message.author} at {$message.time|date_format:$time_format} on {$message.date|date_format:$date_format}: </label><span class="message">{$message.message}</span></li>
-			{/foreach}
-	</ul>
 </div>
+<hr>
+<ul>
+	<li><span>Pickup:</span><span class="signature">Helpdesk Signature</span><span class="signature">Loanee Signature</span></li>
+	<li><span>*</span></li>
+	<li><span >Dropoff:</span><span class="signature">Helpdesk Signature</span><span class="signature">Loanee Signature</span></li>
+	<li><span> *</span></li>
+</ul>
 {/box}
 
 

@@ -2,7 +2,7 @@
 {box size="16" title="Confirmation"}
 <form method="POST" action="{$PHP.BASE_URL}/reserve/success">
 	<h1>Your request has not been sent yet!</h1>
-	<p>Please make sure the information you have provided below is complete and accurate. Please 'Submit' below and your request will be processed for consideration. You will recieve a copy of your request via email. Classroom Technology does not recieve any information about this loan request until you press the Submit button below.</p>
+	<p>Please make sure the information you have provided below is complete and accurate. Please 'Submit' below and your request will be processed for consideration. You will receive a copy of your request via email. Classroom Technology does not receive any information about this loan request until you press the Submit button below.</p>
 
 		<h2>Your/Submitter Contact Information</h2>
 	<ul class="label-left">
