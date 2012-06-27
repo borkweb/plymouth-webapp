@@ -67,14 +67,6 @@ switch($_GET['return']) {
 		}
 	break;
 
-	case 'showAttachments':
-		
-		$get_files = $db->GetRow("SELECT * FROM attachments WHERE attach_id = {$_GET['attach_id']}");
-		header("Content-type: {$get_files['type']}");
-		echo $get_files['attachment'];
-
-	break;
-
     case 'restoreRequest': 
 		if($ajax) {
 			$restore_full_date_time = $_GET['restore_year']."-".$_GET['restore_month']."-".$_GET['restore_date']." ".$_GET['restore_hour'].":".$_GET['restore_minute'];
