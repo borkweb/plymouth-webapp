@@ -151,7 +151,7 @@ class User
 			$person['phone_number'] = ($person['phone_of']) ? $person['phone_of'] : $person['phone_vm'];
 	
 			if( $person['pidm'] ) {
-				$person['role'] = @implode(', ',$GLOBALS['portal']->getRoles($person['email']));
+				$person['role'] = @implode(', ', PSU::get('idmobject')->getAllBannerRoles( $person['identifier'] ) );
 			} else {
 				$person['role'] = 'No Roles: Family Portal Only';
 			}//end else
