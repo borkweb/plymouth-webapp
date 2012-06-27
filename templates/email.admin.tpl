@@ -29,9 +29,11 @@
 		<li><strong>Comments/Purpose: </strong>
 			<p>{$reserve.comments}</p>
 		</li>
+	</ul>
 		<h2>Equipment Requested</h2>
+		<ul>
 			{foreach from=$reserve.equipment item=equipment}
 				<li>{$categories[$equipment]}</li>
 			{/foreach}
 		
-	</ul>
+		</ul>

@@ -530,13 +530,42 @@ respond('/reservation/id/[i:id]/status', function( $request, $response, $app){
 	//when the staff member is trying to change the status of the loan
 	$reservation_idx=$request->id;
 	$status=$request->param('status');
-	if($status=="approved"){
-		CTSemailAPI::email_user_approved($reservation_idx);
-	}elseif($status=="cancelled"){
-		CTSemailAPI::email_user_cancelled($reservation_idx);
-	}
-	ReserveDatabaseAPI::change_status($reservation_idx, $status);
-	$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+	switch($status){
+		case "approved":
+			if( ReserveDatabaseAPI::user_level() > 2) {
+				$_SESSION['errors'][]='You do not have access to approve a loan.';
+				$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+
+			}else{
+				CTSEmailAPI::email_user_approved($reservation_idx);
+				ReserveDatabaseAPI::change_status($reservation_idx, $status);
+				$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);
+			}
+			break;
+		case "cancelled":
+			if( ReserveDatabaseAPI::user_level() > 2 ){
+				$_SESSION['errors'][]='You do not have access to cancel a loan.';
+				$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+			}else{
+				ReserveDatabaseAPI::change_status($reservation_idx, $status);
+				$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);
+				CTSEmailAPI::email_user_cancelled($reservation_idx);
+			}
+			break;
+		case "closed":
+			if( ReserveDatabaseAPI::user_level() > 2 ){
+				$_SESSION['errors'][]='You do not have access to close a loan.';
+				$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
+			}else{
+				ReserveDatabaseAPI::change_status($reservation_idx, $status);
+				$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);
+			}
+			break;
+		default:
+			ReserveDatabaseAPI::change_status($reservation_idx, $status);
+			$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);
+		}
+
 });//chnage status
 
 respond('/reservation/id/[i:id]/pickup', function( $request, $response, $app){
@@ -620,8 +649,13 @@ respond('/reservation/subitem/remove/[i:id]/[i:key]', function( $request, $respo
 respond('/reservation/search/id/[i:id]' , function( $request, $response, $app){
 	//when searching for a specific reservation by ID
 	$reservation_idx=$request->id;
-	$app->tpl->init_all_reservation_info($reservation_idx);
-	$app->tpl->display( 'single-reservation.tpl' );
+	if(ReserveDatabaseAPI::check_reservation($reservation_idx)){
+		$app->tpl->init_all_reservation_info($reservation_idx);
+		$app->tpl->display( 'single-reservation.tpl' );
+	}else{
+		$_SESSION['errors'][]='This reservation does not exist.';
+		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation' );
+	}
 
 });//end reservation/search/
 

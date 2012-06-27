@@ -26,6 +26,8 @@
 		<li><strong>Comments/Purpose: </strong>
 			<p>{$reserve.memo}</p>
 		</li>
+		</ul>
 		<h2>Equipment Requested</h2>
-			<p>{$reserve.request_items}</p>
-	</ul>
+			<ul>
+				<li><p>{$reserve.request_items}</p></li>
+			</ul>

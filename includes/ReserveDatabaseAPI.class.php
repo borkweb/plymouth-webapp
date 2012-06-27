@@ -119,8 +119,8 @@ class ReserveDatabaseAPI{
 		$sql="SELECT *
 	 	   FROM cts_reservation
 		  WHERE 1=1
-		    AND {$where}
-		    AND deleted=false
+		     AND (deleted = false)
+			AND {$where}
 	    ORDER BY start_time ASC, reservation_idx DESC
 		";
 
@@ -968,7 +968,7 @@ class ReserveDatabaseAPI{
 	}//end fuction get equipment
 
 	public function user_level(){
-		/*
+	/*	
 		if( IDMObject::authZ('permission', 'cts_admin') ) {
 			return 1;
 		}elseif( IDMObject::authZ('permission', 'cts') ){
@@ -978,9 +978,8 @@ class ReserveDatabaseAPI{
 		}else{
 			return 4;
 		}
-		 */
-		return 1;
-		
+	 */
+		return 4;
 	}//end function user level
 
 	public function reservation_sanitize($request){
