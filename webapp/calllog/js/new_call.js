@@ -135,7 +135,6 @@ function removeRow(id, i, totalGroups){
 
 function reorder_assign_history(order, caller_user_name, call_id){
 	new Ajax.Updater('call_assignment_history', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=assign_reorder&order='+order+'&call_id='+call_id+'&caller_user_name='+caller_user_name);
-	new Ajax.Updater('reorder-assign-state', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=change_assign_state&order='+order);
 }
 
 function restoreRequest(){

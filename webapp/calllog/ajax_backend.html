@@ -84,17 +84,23 @@ switch($_GET['return']) {
 
 				//BEGIN SEND RESTORE REQUEST EMAIL
 
-				$sql ="SELECT user_name FROM its_employee_groups,call_log_employee WHERE group_id = 3 AND employee_id = call_log_user_id AND option_id = 2 AND status = 'active'";
+				$sql ="SELECT user_name 
+					FROM its_employee_groups, 
+						call_log_employee 
+					WHERE group_id = 3 
+						AND employee_id = call_log_user_id 
+						AND option_id = 2 
+						AND status = 'active'";
 				$mail_users = $db->GetAll($sql);
 				
-				$to_users = '';
-				foreach($mail_users as $m_user)
-				{
-					$to_users .= $m_user['user_name'].'@plymouth.edu, ';
+				$to_users = array();
+				foreach($mail_users as $m_user)	{
+					$tmp_person = PSUPerson::get( $m_user['user_name'] );
+					$to_users[] = $tmp_person->wp_email;
 				}//end foreach
-				$to_users = trim($to_users,', ');
+				$to_users = implode( ',', $to_users );
 
-				$UserInfo = "User: ".$_GET['caller_first_name']." ".$_GET['caller_last_name']." (".$_GET['caller_user_name'].") has requested a restore\n";
+				$user_info = "User: ".$_GET['caller_first_name']." ".$_GET['caller_last_name']." (".$_GET['caller_user_name'].") has requested a restore\n";
 				$caller_last_name = $_GET['caller_last_name'];
 				$restore_system = "System: ".$_GET['restore_system']."\n";
 				$restore_path = "Path: ".$_GET['restore_path']."\n";
@@ -106,8 +112,16 @@ switch($_GET['return']) {
 				}
 				$restore_date = "Last Known Good Date/Time: ".$_GET['restore_month'].'/'.$_GET['restore_date'].'/'.$_GET['restore_year']." @ ".$_GET['restore_hour'].':'.$_GET['restore_minute']."\n\n";
 				$restore_details = "Additional Details: ".$_GET['restore_details']."\n";
-				$message = $UserInfo.$restore_system.$restore_path.$restore_filenames.$restore_complete_path.$restore_date.$restore_details;
-				mail($to_users, 'Backup Restore Request', $message, 'From: '.$_SESSION['full_name'].'<'.$_SESSION['username'].'@plymouth.edu>');
+				
+				$message = $user_info.$restore_system.$restore_path.$restore_filenames.$restore_complete_path.$restore_date.$restore_details;
+				
+				$person = PSUPerson::get( $_SESSION['wp_id'] );
+				$headers = array(
+					'from' => $_SESSION['full_name'] . '<' . $person->wp_email . '>'
+				);
+				
+				PSU::mail( $to_users, 'Backup Restore Request', $message, $headers );
+				
 				$call_location = $GLOBALS['new_call']->returnCallLoggedFromLocation($_SERVER['REMOTE_ADDR']);
 				$_REQUEST['call_log_username'] = $_SESSION['username']; // yours
 				$_REQUEST['caller_first_name'] = $_GET['caller_first_name'];
@@ -127,6 +141,7 @@ switch($_GET['return']) {
 				$restore_time<br/>
 				$restore_details";
 				$_REQUEST['keywords_list'] = 'restoreRequest';
+				
 				$GLOBALS['new_call']->addNewCall($_REQUEST, $call_location);
 				ob_end_clean();
 				//END SEND RESTORE REQUEST EMAIL
@@ -212,14 +227,18 @@ switch($_GET['return']) {
 	break;
 
 	case 'sendCallerEmail':
-		if($ajax){
+		if($ajax) {
 			$call_id = $_GET['call_id'];
 			$its_group = $_GET['its_group'];
 			$message = $_GET['message'];
-			if($GLOBALS['DEVELOPMENT']){
-				$to = $_SESSION['username']."@plymouth.edu";
-			}else{
-				$to = $_GET['caller_first_name']." ".$_GET['caller_last_name'] . "<".$_GET['user_name']."@plymouth.edu>";
+			
+			if($GLOBALS['DEVELOPMENT']) {
+				$person = PSUPerson::get( $_SESSION['username'] );
+				$to = $person->wp_email;
+			}
+			else {
+				$person = PSUPerson::get( $_GET['user_name'] );
+				$to = $_GET['caller_first_name'] . ' ' . $_GET['caller_last_name'] . '<'.$person->wp_email.'>';
 			}
 			$from = "Learning Commons <{$GLOBALS['HELPDESK_EMAIL']}>";
 			$reply_to = "Learning Commons <{$GLOBALS['HELPDESK_EMAIL']}>";
@@ -231,30 +250,19 @@ switch($_GET['return']) {
 			This message was created by the Learning Commons, if you did not request this email, please reply to this email and explain the situation";
 			$message = $message.$auto_append;
 			$text = $message;
+
 			$message = preg_replace("/\bhttp:\/\/[\S]+\b/", "<a href=\"$0\">$0</a>", $message);
 			$html = nl2br($message);
 
-			$boundary = md5(uniqid(time()));
-			$headers = '';
-			$headers .= 'To: ' . $to . "\r\n";
-			$headers .= 'From: ' . $from . "\r\n";
-			$headers .= 'Return-Path: ' . $from . "\r\n";
-			$headers .= 'Reply-To: '. $reply_to . "\r\n";
-			$headers .= 'Call-ID: '. $call_id . "\r\n";
-			$headers .= 'ITS-Group: '. $its_group . "\r\n";
-			$headers .= 'MIME-Version: 1.0' ."\r\n";
-			$headers .= 'Content-Type: multipart/alternative; boundary="' . $boundary . '"' . "\r\n\r\n";
-			$headers .= $text . "\r\n";
-			$headers .= '--' . $boundary . "\r\n";
-			$headers .= 'Content-Type: text/plain; charset=ISO-8859-1' ."\r\n";
-			$headers .= 'Content-Transfer-Encoding: 8bit'. "\r\n\r\n";
-			$headers .= $text . "\r\n";
-			$headers .= '--' . $boundary . "\r\n";
-			$headers .= 'Content-Type: text/HTML; charset=ISO-8859-1' ."\r\n";
-			$headers .= 'Content-Transfer-Encoding: 8bit'. "\r\n\r\n";
-			$headers .= $html . "\r\n";
-			$headers .= '--' . $boundary . "--\r\n";
-			mail('',$subject,'',$headers);
+			$headers = array();
+			$headers['from'] = $from;
+			$headers['return-path'] = $from;
+			$headers['reply-to'] = $reply_to;
+			$headers['call-id']: $call_id;
+			$headers['its-group'] = $its_group;
+			
+			PSU::mail( $to, $subject, array($text, $html), $headers );
+			
 			$tpl->parse('main.queueEmailMessage');
 			$tpl->parse('main');
 			$tpl->out('main');
@@ -274,16 +282,6 @@ switch($_GET['return']) {
 			$ptpl->assign( 'history', $history );
 			$ptpl->display( 'ticket-history.tpl', false );
 	}
-	break;
-
-	case 'change_assign_state':
-		if($ajax){
-			if($_GET['order'] == 'old'){
-				echo "Old-New";
-			}else{
-				echo "New-Old";
-			}
-		}
 	break;
 
 }
