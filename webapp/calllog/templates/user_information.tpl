@@ -2,7 +2,7 @@
 <input type="hidden" id="caller_pidm" name="caller_pidm" value="{caller.pidm}" />
 <input type="hidden" id="caller_wp_id" name="caller_wp_id" value="{caller.wp_id}" />
 <input type="hidden" id="call_log_username" name="call_log_username" value="{call_log_username}" />
-<input type="hidden" id="caller_user_name" name="caller_user_name" value="{caller.email}" />
+<input type="hidden" id="caller_user_name" name="caller_user_name" value="{caller.username}" />
 <input type="hidden" id="caller_first_name" name="caller_first_name" value="{caller.name_first}" />
 <input type="hidden" id="caller_last_name" name="caller_last_name" value="{caller.name_last}" />
 <input type="hidden" id="caller_role" name="caller_role" value="{caller.role}" />
@@ -17,12 +17,12 @@
 <!-- END: edit_call_id -->
 <ul class="user-info">
 	<li class="user">
-		{caller.name_full} 
+		<a href="mailto:{caller.email}">{caller.name_full}</a> 
 		<!-- BEGIN: ape -->
-			(<a href="https://www.plymouth.edu/webapp/ape/user/{caller.identifier}" target="_blank"><img src="https://www.plymouth.edu/images/icons/16x16/emotes/face-monkey.png" style="vertical-align: middle;"/> {caller.email}</a>)
+			(<a href="https://www.plymouth.edu/webapp/ape/user/{caller.identifier}" target="_blank"><img src="https://www.plymouth.edu/images/icons/16x16/emotes/face-monkey.png" style="vertical-align: middle;"/> {caller.username}</a>)
 		<!-- END: ape -->
 		<!-- BEGIN: no_ape -->
-			({caller.email})
+			({caller.username})
 		<!-- END: no_ape -->
 	</li>
 	<!-- BEGIN: phone -->

@@ -45,6 +45,8 @@ $GLOBALS['CSS_WEB_DIR'] = CSS_WEB_DIR;
 define('JS_WEB_DIR', $GLOBALS['BASE_URL'] . '/js');
 $GLOBALS['JS_WEB_DIR'] = JS_WEB_DIR;
 
+$GLOBALS['HELPDESK_EMAIL'] = 'helpdesk@plymouth.edu';
+
 define('INCLUDES_DIR', __DIR__ . '/includes');
 define('FUNCTIONS_DIR', INCLUDES_DIR . '/functions');
 

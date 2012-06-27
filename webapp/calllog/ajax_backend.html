@@ -221,8 +221,8 @@ switch($_GET['return']) {
 			}else{
 				$to = $_GET['caller_first_name']." ".$_GET['caller_last_name'] . "<".$_GET['user_name']."@plymouth.edu>";
 			}
-			$from = "Learning Commons <helpdesk@plymouth.edu>";
-			$reply_to = "Learning Commons <helpdesk@plymouth.edu>";
+			$from = "Learning Commons <{$GLOBALS['HELPDESK_EMAIL']}>";
+			$reply_to = "Learning Commons <{$GLOBALS['HELPDESK_EMAIL']}>";
 			$subject = "Your Helpdesk/Library Request";
 			$auto_append = "\r\n\r\n\r\n
 			Lamson Learning Commons\r\n
