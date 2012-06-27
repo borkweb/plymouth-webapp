@@ -40,33 +40,6 @@ switch($_GET['return']) {
 		}
 	break;
 
-	case 'addAttachments':
-		$file_name = $_POST['attachment_file_name'];
-		$file = $_FILES['attachment_file'];
-		$the_file = 
-		//$the_file = PHOTO_UPLOAD_DIR.'/jjrennie.gif'; //Testing File
-		$fileSize = filesize($the_file);
-		$fileHandle = fopen($the_file, "r");
-		$fileContent = addslashes(fread($fileHandle, $fileSize));
-		$_SESSION['attachment_ids'] = array();
-		if($file['error'] == 0){
-			if($_GET['call_id'] != ""){
-				$insertFile = $db->query("INSERT INTO attachments (call_id, file_name, attachment, type) VALUES ('{$_GET['call_id']}','{$file_name}','{$fileContent}', '{$file['type']}')");
-			}else{
-				$_SESSION['update_attachments'] = 'yes';
-				$insertFile = $db->query("INSERT INTO attachments (call_id, file_name, attachment, type) VALUES ('','{$file_name}','{$fileContent}', '{$file['type']}')");
-				$return_call_id = $db->Insert_ID();
-				$_SESSION['attachment_ids'] .= array($return_call_id);
-				prePrint($_SESSION);
-			}
-			$get_files = $db->GetAll("SELECT * FROM attachments WHERE call_id = '{$_GET['call_id']}'");
-			for($i=0;$i<count($get_files);$i++){
-				$j = $i+1;
-				echo $j.". ".$get_files[$i]['file_name']."<br/>";
-			}
-		}
-	break;
-
     case 'restoreRequest': 
 		if($ajax) {
 			$restore_full_date_time = $_GET['restore_year']."-".$_GET['restore_month']."-".$_GET['restore_date']." ".$_GET['restore_hour'].":".$_GET['restore_minute'];
