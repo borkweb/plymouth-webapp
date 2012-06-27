@@ -335,7 +335,7 @@ function sendOpenCallMail($call_info, $action){
 		}//end if
 
 		if($call_info['its_assigned_group'] != 0){
-			$sql = "SELECT * 
+			$sql = "SELECT email_to 
 								FROM   itsgroups
 								     , call_log 
 										 , call_history 
@@ -344,9 +344,9 @@ function sendOpenCallMail($call_info, $action){
 								 AND itsgroups.itsgroupid = ?
 			           AND call_log.call_id = ?";
 
-			$getEmailTo = $db->GetRow($sql, array( $call_info['its_assigned_group'], $call_info['call_id'] ));
+			$email_to = $db->GetOne($sql, array( $call_info['its_assigned_group'], $call_info['call_id'] ));
 
-			if($getEmailTo['email_to'] == 'all'){
+			if($email_to == 'all'){
 				$sql = "SELECT user_name
 									FROM   itsgroups
 									     , its_employee_groups
@@ -360,11 +360,11 @@ function sendOpenCallMail($call_info, $action){
 
 				$email_list = $db->GetCol($sql, array( $call_info['its_assigned_group'] ));
 			} else {
-				$email_list = explode(',', $getEmailTo['email_to']);
+				$email_list = explode(',', $email_to);
 			}//end else
 
-			foreach( (array) $email_list as $email) {
-				$user = PSUPerson::get($email);
+			foreach( (array) $email_list as $identifier) {
+				$user = PSUPerson::get($identifier);
 				$to[] = $user->wp_email;
 			}//end foreach
 		}//end if
@@ -378,24 +378,23 @@ function sendOpenCallMail($call_info, $action){
 		$subject .= ' (#' . $call_info['call_id'] . ')';
 
 		if($call_info['call_status'] == 'closed') {
-			$subject .= " [CLOSED]";
+			$subject .= ' [CLOSED]';
 
 			// always send close to the owner, if they are allowed to see the
 			// full history
-			$caller_to = $db->GetOne("SELECT calllog_username FROM call_log WHERE call_log.call_id = '{$call_info['call_id']}'");
-			$caller_email = $caller_to . '@plymouth.edu';
+			$caller_identifier = $db->GetOne("SELECT calllog_username FROM call_log WHERE call_log.call_id = '{$call_info['call_id']}'");
+			$caller_user = PSUPerson::get($caller_identifier);
 
 			if( $GLOBALS['end_user_email'] ){
-				$closing_user = $_SESSION['username'] . '@plymouth.edu';
-				if( trim( $caller_email ) == $closing_user ) {
-					$end_user_to = $closing_user;
+				
+				$closing_user = PSUPerson::get( $_SESSION['wp_id'] );
+				if( $caller_user->wp_email == $closing_user->wp_email ) {
+					$end_user_to = $closing_user->wp_email;
 				}//end if
 			} elseif( checkEmployee($caller_to) ) {
-				$to[] = $caller_email;
+				$to[] = $caller_user->wp_email;
 			}//end else
 		}
-
-		require_once 'PSUTemplate.class.php';
 
 		$sql = "SELECT * 
 							FROM   call_log
@@ -409,8 +408,8 @@ function sendOpenCallMail($call_info, $action){
 
 		foreach($call_info_query as $call_info2){
 			$group_name = getGroupInfo($call_info2['its_assigned_group']);
-			if($group_name[0] == ""){
-				$group_name = "Unassigned";
+			if($group_name[0] == ''){
+				$group_name = 'Unassigned';
 			}else{
 				$group_name = $group_name[0];
 			}
