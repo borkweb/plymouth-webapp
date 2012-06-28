@@ -476,7 +476,7 @@ respond('/reservation' , function( $request, $response, $app){
 		//if there was a redirect url in the data, redirect the user there
 		$response->redirect($data['redirect_url']);
 	}
-	//otherwise assign the title and reservations
+		//otherwise assign the title and reservations
 	$app->tpl->assign('title', $data['title']);
 	$app->tpl->assign('reservation', $data['reservations']);
 
@@ -543,7 +543,7 @@ respond('/reservation/id/[i:id]/status', function( $request, $response, $app){
 			}
 			break;
 		case "cancelled":
-			if( ReserveDatabaseAPI::user_level() > 2 ){
+			if( ReserveDatabaseAPI::user_level() > 1 ){
 				$_SESSION['errors'][]='You do not have access to cancel a loan.';
 				$response->redirect($GLOBALS['BASE_URL'] . '/admin/reservation/search/id/'.$reservation_idx);	
 			}else{
