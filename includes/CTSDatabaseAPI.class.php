@@ -72,29 +72,6 @@ class CTSDatabaseAPI {
 
 	}//end models
 
-	public function notifications( $all = false) {
-
-		$sql = "
-			SELECT r.id,
-				   r.name,
-				   r.text,
-				   r.begin,
-				   r.end,
-				   u.name as 'username'
-			  FROM glpi_reminders r,
-			       glpi_users u
-			 WHERE r.name LIKE '%Surplus%'
-			   AND r.users_id = u.id
-		";
-
-		if( !$all ) {
-			$sql .= " AND (r.begin <= NOW() OR r.begin IS NULL) AND (r.end >= NOW() OR r.end IS NULL)";
-		}
-
-		return PSU::db('glpi')->GetAll( $sql );
-	}//end notifications
-
-
 	public function reservation_information($dates){
 		//grab the reservation indexes for the specific week
 		$reservations=self::reservation_by_range_equipment($dates);
