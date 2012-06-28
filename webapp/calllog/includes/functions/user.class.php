@@ -98,7 +98,7 @@ class User
 			'pidm' => 0,
 			'wp_id' => null,
 			'identifier' => 'generic',
-			'email' => 'generic',
+			'email' => $GLOBALS['HELPDESK_EMAIL'],
 			'name_first' => 'Generic Caller',
 			'name_last' => 'Help Desk'
 		);
@@ -109,12 +109,12 @@ class User
 				$found_via = 'fake-user';
 				break;
 			case 'kiosk':
-				$caller_data['email'] = 'kiosk';
+				$caller_data['identifier'] = 'kiosk';
 				$caller_data['name_first'] = 'Kiosk';
 				$found_via = 'fake-user';
 				break;
 			case 'clusteradm':
-				$caller_data['email'] = 'clusteradm';
+				$caller_data['identifier'] = 'clusteradm';
 				$caller_data['name_first'] = 'Cluster Call';
 				$found_via = 'fake-user';
 				break;
@@ -136,7 +136,7 @@ class User
 				$person = array();
 				$person['name_full'] = $caller_person->formatName('f l');
 				$person['wp_id'] = $caller_person->wp_id;
-				$person['email'] = $caller_person->username ? $caller_person->username : $caller_person->wp_id;
+				$person['email'] = $caller_person->wp_email;
 				$person['pidm'] = $caller_person->pidm ? $caller_person->pidm : null;
 				$person['identifier'] = $caller_person->wp_email ? $caller_person->wp_id : $caller_person->pidm;
 
@@ -151,7 +151,7 @@ class User
 			$person['phone_number'] = ($person['phone_of']) ? $person['phone_of'] : $person['phone_vm'];
 	
 			if( $person['pidm'] ) {
-				$person['role'] = @implode(', ',$GLOBALS['portal']->getRoles($person['email']));
+				$person['role'] = @implode(', ', PSU::get('idmobject')->getAllBannerRoles( $person['identifier'] ) );
 			} else {
 				$person['role'] = 'No Roles: Family Portal Only';
 			}//end else
@@ -211,7 +211,7 @@ class User
 			}
 		}
 		
-		$caller_data['username'] = $caller_data['email'];
+		$caller_data['username'] = $caller_data['username'] ?: $caller_data['identifier'];
 
 		if( $found_via == null ) {
 			return false;

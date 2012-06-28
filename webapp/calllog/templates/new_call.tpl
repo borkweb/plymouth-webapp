@@ -20,7 +20,7 @@
 		</div>
 
 		<div class="center">
-			<a href=#" id="change-caller-toggle" class="replace-toggle">Re-attach Call</a>
+			<a href="#" id="change-caller-toggle" class="replace-toggle">Re-attach Call</a>
 			<div id="change_caller" style="display:none;">
 				Change Caller To: <input type="text" name="attach_to"/><br/>
 				<small><em>Enter username to re-attach this ticket</em></small>
@@ -74,17 +74,7 @@
 		<div id="keywordsList"></div>
 	{/box}
 
-	{if $history}
-		{box title="Assignment History"}
-			Re-order: 
-				<a href="javascript: reorder_assign_history('old', '{$person.username}', {$call_id});" class="btn">Old-New</a> | 
-				<a href="javascript: reorder_assign_history('new', '{$person.username}', {$call_id});" class="btn">New-Old</a>
-			<br /><br />
-			<div id="call_assignment_history">
-			{include file="ticket-history.tpl"}
-			</div>
-		{/box}
-	{/if}
+
 		
 	{box title="Ticket Information" class="noprint"}
 		<div id="call_information_div">
@@ -115,5 +105,18 @@
 			</li>
 		</ul>
 	{/box}
+	
+	{if $history}
+		{box title="Assignment History"}
+			Re-order: 
+				<a href="javascript: reorder_assign_history('old', '{$person.username}', {$call_id});" class="btn">Old-New</a> | 
+				<a href="javascript: reorder_assign_history('new', '{$person.username}', {$call_id});" class="btn">New-Old</a>
+			<br /><br />
+			<div id="call_assignment_history">
+			{include file="ticket-history.tpl"}
+			</div>
+		{/box}
+	{/if}
+		
 {/col}
 </form>

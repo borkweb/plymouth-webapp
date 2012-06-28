@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <label for="user_name">User Name: </label>
-<input type="text" name="email_user_name" id="email_user_name" size="27" value="{caller.email}"/><br/>
+<input type="text" name="email_user_name" id="email_user_name" size="27" value="{caller.identifier}"/><br/>
 <label class="label" for="last_name">Full Name: </label>
 <input type="text" name="email_full_name" id="email_full_name" size="30" value="{caller.name_full}"/>
 <label class="label" for="message">Message: </label><br/>
