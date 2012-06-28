@@ -124,7 +124,10 @@ else
 				($key == 'Travel Office/Accounts Payable' && $AUTHZ.permission.ape_checklist_employee_exit_payable) ||
 				($key == 'Residential Life' && $AUTHZ.permission.ape_checklist_employee_exit_reslife) || 
 				($key == 'Library' && $AUTHZ.permission.ape_checklist_employee_exit_library) || 
-				($key == 'Keys' && $AUTHZ.permission.ape_checklist_employee_exit_keys) || 
+				($key == "Student Account Services Office" && $AUTHZ.permission.ape_checklist_employee_exit_bursar) || 
+				($key == 'Physical Plant' && $AUTHZ.permission.ape_checklist_employee_exit_physicalplant) || 
+				($key == 'Finance' && $AUTHZ.permission.ape_checklist_employee_exit_finance) || 
+				($key == 'Supervisor of Student Employees Attribute' && $AUTHZ.permission.ape_checklist_employee_exit_student_supervisor) || 
 				($AUTHZ.permission.ape_checklist_employee_exit_hr) || 
 				($key == 'Information Technology' && $AUTHZ.permission.ape_checklist_employee_exit_infotech) ||
 				($key == 'Department' && $myuser->department == $person->department ))
