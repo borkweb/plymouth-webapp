@@ -4,7 +4,7 @@ require_once 'autoload.php';
 
 PSU::session_start(); // force ssl + start a session
 
-$GLOBALS['BASE_URL'] = '/webapp/cts-new';
+$GLOBALS['BASE_URL'] = '/webapp/cts';
 $GLOBALS['BASE_DIR'] = dirname(__FILE__);
 
 $GLOBALS['TITLE'] = 'Classroom Technology Services Toolkit';

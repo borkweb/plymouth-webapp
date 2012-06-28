@@ -806,7 +806,7 @@ class ReserveDatabaseAPI{
 			 WHERE deleted = false";
 		$locations = PSU::db('cts')->GetAssoc( $sql );
 		if( $default == false ){
-			$locations = array(NULL=>'Please select a location') + $locations;
+			$locations = array_merge( array( NULL => 'Please select a location'), $locations );
 		}
 		return $locations;
 
