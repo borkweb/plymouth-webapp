@@ -1,13 +1,13 @@
-{include file='quickfilter.tpl'}
+{include file='quick-filter.tpl'}
 
 {box size="16" title="$title"}<!--"Reservations from $fixed_start_date to $fixed_end_date"}-->
 {if $reservation == NULL}
 <h2>There are no reservations that match that criteria.</h2>
 {else}
 
-<table class="grid">
+<table class="table table-bordered table-striped">
 	<thead>
-		<th class="header">Index</th>	
+		<th class="header">View</th>	
 		<th class="header">Last Name</th>	
 		<th class="header">First Name</th>	
 		<th class="header">Start Date</th>	
@@ -22,7 +22,7 @@
 	{foreach from=$reservation item=reserve key=id}
 		<tr>
 		{if $reserve.priority=='1' || $reserve.delivery_type=='1'}
-			<td><a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
+			<td><a class="btn" href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
 			<td><strong>{$reserve.lname}</strong></td>		
 			<td><strong>{$reserve.fname}</strong></td>
 			<td><strong>{$reserve.start_date|date_format:$date_format}</strong></td>		
@@ -33,7 +33,7 @@
 			<td><strong>{$reserve.title}</strong></td>		
 			<td><strong>{$reserve.status}</strong></td>
 		{else}
-		<td><a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
+		<td><a class="btn" href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
 			<td>{$reserve.lname}</td>		
 			<td>{$reserve.fname}</td>
 			<td>{$reserve.start_date|date_format:$date_format}</td>		

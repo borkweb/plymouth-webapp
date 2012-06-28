@@ -1,79 +1,127 @@
-{box title="Reservation ID: $reservation_idx"}
-<ul class="clean">
 {assign var=reserve value=$reservation[$reservation_idx]}
-	<h2>Contact Information</h2>
-			<li><strong>Name: </strong>{$reserve.fname} {$reserve.lname}</li>
-			<li><strong>Phone: </strong>{$reserve.phone}</li>
-			{if $reserve.secondary_phone}
-				<li><strong>Secondary Phone: </strong>{$reserve.secondary_phone}</li>
-			{/if}
-			<li><strong>Email: </strong>{$reserve.email}</li>
-	<h2>Event Information</h2>
-			<li><strong>Application date: </strong>{$reserve.application_date|date_format:$date_format} <strong> at </strong> {$reserve.application_date|date_format:$time_format}</li>
-			<li><strong>Start Date: </strong>{$reserve.start_date|date_format:$date_format}</li>		
-			<li><strong>Start Time: </strong>{$reserve.start_time|date_format:$time_format}</li>		
-			<li><strong>End Date: </strong>{$reserve.end_date|date_format:$date_format}</li>		
-			<li><strong>End Time: </strong>{$reserve.end_time|date_format:$time_format}</li>		
-			<li><strong>Location: </strong>{$locations[$reserve.building_idx]} <strong>in room</strong> {$reserve.room}</li>
-			<li><strong>Title: </strong>{$reserve.title}</li>		
-			<li><strong>Status of Loan: </strong>{$reserve.status}</li>
-			<li><strong>Comments: </strong><p>{$reserve.memo}</p></li>
-			<li><strong>Requested Items: </strong><p>{$reserve.request_items}</p></li>
-
-		<h2>Equipment Assigned</h2>
-		<table class="grid" width="450">
-		<thead>
-			<tr>
-				<th>GLPI ID</th>
-				<th>CTS ID</th>
-				<th>Type</th>
-				<th>Model</th>
-			</tr>
-		</thead>
-		<tbody>
-		{foreach from=$equipment item=equipment key=id}
-			<tr>
-				<td>GLPI_ID<!--|substr:-4}--></td>
-				<td>{$equipment.equipment_idx}</td>
-				<td>Type</td>
-				<td>Model</td>
-			</tr>
-		{/foreach}
-		</tbody>
-		</table>
+{if $reserve.delivery_type=='1'}
+	{assign var="type" value="CTS Sponsored"}
+{else}
+	{assign var="type" value="Pickup"}
+{/if}
+{assign var="start_date" value=$reserve.start_date|date_format:$date_format}
+{assign var="end_date" value=$reserve.end_date|date_format:$date_format}
+{assign var="start_time" value=$reserve.start_time|date_format:$time_format}
+{assign var="end_time" value=$reserve.end_time|date_format:$time_format}
+{box size=16}
+	<div class="grid_8 grid-internal">
+	<span class="print">Reservation {$reservation_idx} for: {$reserve.fname} {$reserve.lname} ({$type})</span>
+	<hr>
 		
-		<h3>Subitems</h3>
-		<table class="grid" width="300">
-		<thead>
-			<tr>
-				<th>Subitem ID</th>
-				<th>Subitem</th>
-				<th>Remove</th>
-			</tr>
-		</thead>
-		<tbody>
-		{foreach from=$subitems item=subitem key=id}
-			<tr>
-				<td>{$subitem.subitem_id}</td>
-				<td>{$subitem.name}</td>
-				<td><a href="{$PHP.BASE_URL}/admin/reservation/subitem/remove/{$id}/{$reservation_idx}">Remove</a>
-			</tr>
-		{/foreach}
-		</tbody>
-		</table>
-	<h2>Messages</h2>
-{foreach from=$messages item=message key=id}
-				<li><strong>{$message.author} at {$message.time|date_format:$time_format} on {$message.date|date_format:$date_format}: </strong>{$message.message}<br></li>
-			{/foreach}
-		<!--
-		<script type="text/javascript">
-$(document).ready(function(){
+		<h3>Event Information</h3>
+		<ul class="label-left">
+				<li><label>Location: </label>{$locations[$reserve.building_idx]} <strong>in room</strong> {$reserve.room}</li>
+				<li><label>Title: </label>{$reserve.title}</li>
+				<li><label>Priority of Loan: </label>{if $reserve.priority == 0}Normal{else}<strong>High</strong>{/if} </li>
+				<li><label>Comments: </label><p>{$reserve.memo}</p></li>
+				<li><label>Requested Items: </label><p>{$reserve.request_items}</p></li>
 
-window.print();
-});
-</script>
--->
-<a href="javascript:window.print()" class="button">Print Reservation</a></li>
-		{/box}
+		</ul>
+		{if $reserve.delivery_type == 1}
+			<h3>Technician Assigned</h3>
+			<ul class="label-left">
+
+			<li><label>Dropoff: </label>
+			{if $reserve.delivery_user}
+				{html_options name=assigned_tech_dropoff options=$cts_technicians selected=$reserve.delivery_user disabled=true}
+			{else}
+				<span>No User Assigned</span>
+			{/if}
+				</li>
+
+			<li><label>Pickup: </label>
+			{if $reserve.retrieval_user}
+				{html_options name=assigned_tech_pickup options=$cts_technicians selected=$reserve.retrieval_user disabled=true}
+			{else}
+				<span>No User Assigned</span>
+			{/if}</li>
+
+			</ul>
+		{/if}
+		<h3>Messages</h3>
+			<ul class="clean">
+
+			{foreach from=$messages item=message key=id}
+				<li><label>{$message.author} at {$message.time|date_format:$time_format} on {$message.date|date_format:$date_format}: </label><span class="cts-message">{$message.message}</span></li>
+			{/foreach}
+			</ul>
+
+	</div>
+
+	<div class="grid_8 grid-internal">
+	<span class="print">{$start_date} at {$start_time} to {$end_date} at {$end_time}</span> 
+	<hr>
+
+		<h3>Contact Information</h3>
+		<ul class="label-left">
+			<li><label>Phone: </label>{$reserve.phone}</li>
+			{if $reserve.secondary_phone}
+				<li><label>Secondary Phone: </label>{$reserve.secondary_phone}</li>
+			{/if}
+			<li><label>Email: </label>{$reserve.email}</li>
+		</ul>
+		{if $equipment_info }
+			<h3>Equipment Assigned</h3>
+			<table class="grid" width="450">
+				<thead>
+					<tr>
+						<th>GLPI ID</th>
+						<th>Type</th>
+						<th>Model</th>
+					</tr>
+				</thead>
+				<tbody>
+				<!--need to access the data that is saved in equipment info -->
+				{foreach from=$equipment_info item=row key=id}
+					{foreach from=$equipment_info.$id item=equipment key=glpi_id}
+					<tr>
+						<td>{$glpi_id|substr:-4}</td>
+						<td>{$equipment.type}</td>
+						<td>{$equipment.model}</td>
+					</tr>
+					{/foreach}
+				{/foreach}
+				</tbody>
+			</table>
+		{else}
+			<span class="bold">There is no equipment assigned to this request.</span>
+		{/if}
+	<ul>
+		
+		{if $subitems}
+			<h3>Subitems</h3>
+			<table class="grid" width="300">
+				<thead>
+					<tr>
+						<th>Subitem</th>
+					</tr>
+				</thead>
+				<tbody>
+				{foreach from=$subitems item=subitem key=id}
+					<tr>
+						<td>{$subitem.name}</td>
+					</tr>
+				{/foreach}
+				</tbody>
+			</table>
+		{else}
+			<span class="bold"> There are no subitems assigned to this request.</span>
+		{/if}
+	
+	</ul>
+</div>
+<hr>
+<ul>
+	<li><span>Pickup:</span><span class="signature">Helpdesk Signature</span><span class="signature">Loanee Signature</span></li>
+	<li><span>*</span></li>
+	<li><span >Dropoff:</span><span class="signature">Helpdesk Signature</span><span class="signature">Loanee Signature</span></li>
+	<li><span> *</span></li>
+</ul>
+{/box}
 
 

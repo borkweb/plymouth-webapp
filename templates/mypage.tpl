@@ -1,5 +1,8 @@
 {box title="My Page"}
 <h1> Welcome {$user->first_name}&nbsp;{$user->last_name} </h1>
+{if $count}
+	<span>There are still {$count} <a target="blank" href="{$PHP.BASE_URL}/admin/reservation/search/pending">pending reservations</a>.</span>
+{/if}
 {if $reservation == NULL}
 <h2>You have no assignments for today.</h2>
 {else}
@@ -21,7 +24,7 @@
 	{foreach from=$reservation item=reserve key=id}
 		<tr>
 		{if $reserve.priority=='1' || $reserve.delivery_type=='1'}
-			<td><a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
+			<td><a class= "btn" href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
 			<td><strong>{$reserve.lname}</strong></td>		
 			<td><strong>{$reserve.fname}</strong></td>
 			<td><strong>{$reserve.start_date|date_format:$date_format}</strong></td>		
@@ -32,7 +35,7 @@
 			<td><strong>{$reserve.title}</strong></td>		
 			<td><strong>{$reserve.status}</strong></td>
 		{else}
-		<td><a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
+		<td><a class="btn" href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
 			<td>{$reserve.lname}</td>		
 			<td>{$reserve.fname}</td>
 			<td>{$reserve.start_date|date_format:$date_format}</td>		

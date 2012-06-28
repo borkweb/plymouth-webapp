@@ -1,11 +1,12 @@
-{box title="History"}
-<strong>These are loans that you have previously completed.</strong>
-<p>Click the index number in the left column to view the loan.</p>
+{box title="Pending Loans"}
+<strong>These are loans that are currently pending.</strong>
+<p>Click the index number in the left column to view the loan, or click the copy loan link in the right column to copy the loan into a new reservation.</p>
+
 {assign var="fixed_start_date" value=$start_date|date_format:$date_format}
 {assign var="fixed_end_date" value=$end_date|date_format:$date_format}
 <table class="grid">
 	<thead>
-		<th class="header">View Loan</th>	
+		<th class="header">View</th>	
 		<th class="header">Last Name</th>	
 		<th class="header">First Name</th>	
 		<th class="header">Start Date</th>	
