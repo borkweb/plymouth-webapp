@@ -59,9 +59,7 @@ class ReserveDatabaseAPI{
 			$reservation_idx,
 		);
 		return PSU::db('cts')->Execute($sql,$data);
-	}
-	//function addUserDropoff
-
+	}//function addUserDropoff
 
 	public function add_building($building_name){
 		//add a new building to the list of buildings
@@ -148,7 +146,6 @@ class ReserveDatabaseAPI{
 		return self::by("(start_date = ? OR end_date =?)  AND (delivery_user = ? OR retrieval_user = ?)", $args);
 
 	}//end function by_date
-
 
 	public function by_start_date($date){
 		//filter reservation results by the start date
@@ -705,18 +702,17 @@ class ReserveDatabaseAPI{
 
 	public function insert_announcement($message){
 		//this creates a new announcement
-		$sql=
-			'INSERT INTO cts_form_announcements 
-			 (
+		$sql = "
+			INSERT INTO cts_form_announcements (
 				message, 
 				form_viewable
-	 		 )
-			 VALUES 
-			 (
+	 		) VALUES (
 				?,
-				"yes"
-			)';
-		return PSU::db('cts')->Execute( $sql, $message );
+				'yes'
+			)
+		";
+		$results = PSU::db('cts')->Execute( $sql, array( $message ) );
+		return $results;
 
 	}//end function insert_announcement
 	
