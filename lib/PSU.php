@@ -2086,6 +2086,8 @@ class PSU
 			$var = preg_replace("~</?\s*(script|embed|object|applet)[^>]*>~si","",$var);
 			$var = preg_replace('~(<[^>]*)(onmouseover|onmouseout|onload|onclick|ondblclick|onfocus|onmousedown|onmouseup|onmousemove|onmouseenter|onmouseleave|onblur|onchange|onkeydown|onkeypress|onkeyup|onabort|ondragdrop|onerror|onload|onmove|onreset|onresize|onselect|onsubmit|onunload)=[^>]*>~si','$1>',$var);
 		}//end else
+
+		return $var;
 	}//end makeClean
 
 	/**
