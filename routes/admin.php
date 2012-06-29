@@ -707,7 +707,7 @@ respond('/reservation/search/id/[i:id]/[a:action]' , function( $request, $respon
 	}//edit
 
 	if($request->action=="delete"){
-		if(ReserveDatabaseAPI::user_level()>1){
+		if(ReserveDatabaseAPI::user_level()>2){
 			die('You do not have permission to delete a reservation.');
 		}
 			$reservation_idx=$request->id;
