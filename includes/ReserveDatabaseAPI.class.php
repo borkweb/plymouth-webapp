@@ -568,11 +568,11 @@ class ReserveDatabaseAPI{
 				break;
 			case "outstanding":
 				//this shows any loans that are pending
-				$query="outstanding";
+				$end_date=date('Y-m-d');	
 
 				$title = "Outstanding Reservations";
 
-				$reservation = self::by_outstanding($query);
+				$reservation = self::by_outstanding($end_date);
 				break;
 
 			case "missing":
