@@ -64,7 +64,7 @@
 	<span class="bold" >The new reservation system will email you if your reservation has been cancelled, if this happens to you, follow these steps:</span>
 	<li>Check your <a target ="blank" href="{$PHP.BASE_URL}/history/">Reservation History</a> to make sure that the loan is in the list.</li>
 	<span class="bold">If the loan is not in the list, simply recreate the reservation</span>
-	<li>If you loan is not in the list but you got an email that it was cancelled, email the cts staff at its@plymouth.edu.</li>
+	<li>If you loan is not in the list but you got an email that it was cancelled, email the cts staff at itsmedia@plymouth.edu.</li>
 </ul>
 
 <h3 id="new_features">New Features of the CTS Reservation System</h3>
