@@ -1,0 +1,33 @@
+#inner-accordion{
+	-moz-box-sizing:    content-box !important;
+	-webkit-box-sizing: content-box !important;
+	-ms-box-sizing:     content-box !important;
+	box-sizing:         content-box !important;
+}
+.ui-progressbar{
+	box-sizing: content-box !important;	
+}
+.txtarea{
+	display: block;
+	margin: 1em 0px 1em 0px;		
+}
+.confirm-text{
+	display: block;
+	padding: 1em 0px 1em 0px;		
+}
+.accordion{
+	margin: 1em 0px 1em 0px;		
+}
+.overall-progress{
+	margin: 1.5em 0px 1.5em 0px;		
+}
+.permission-level{
+	margin: 1.5em 0px 0.5em 0px;		
+}
+.chkbox-container{
+	cursor:pointer;
+}
+
+.ui-progressbar-value{
+	box-sizing: content-box !important;	
+}
