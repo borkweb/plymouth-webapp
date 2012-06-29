@@ -796,7 +796,7 @@ class ReserveDatabaseAPI{
 			SELECT building_idx, name  
 			  FROM cts_building
 			 WHERE deleted = false
-		    SORT BY name";
+		    ORDER BY name";
 		$locations = PSU::db('cts')->GetAssoc( $sql );
 		if( $default == false ){
 			$locations = array( NULL => 'Please select a location') + (array) $locations;
