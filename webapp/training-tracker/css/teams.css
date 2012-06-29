@@ -1,0 +1,61 @@
+.body{
+	min-height: 500px
+}
+
+.connectedSortable {
+	box-sizing: content-box;
+}
+.dropdown-box{
+	margin: 1em 0em 1em 0em;
+}
+.connectedSortable{
+	margin: 1em 0em 1em 0em;
+}
+.team{ 
+	list-style-type: none; 
+	margin: .5em 0em .5em 0em;
+	float: left; 
+	border: 1px solid #AAA; 
+	padding: 1em; 
+	width: 90%;
+}
+.ui-state-highlight{
+	margin: .5em 0em .5em .25em !important;
+	padding: 1em !important; 
+}
+.team li { 
+	margin: 5px; 
+	padding: 5px; 
+	font-size: 1.2em; 
+	width: 95%; 
+}
+.team_builder{
+	min-height: 500px;
+
+}
+.chzn-select{
+	width: 95%;
+}
+
+.styled li{
+	margin-left: 0px;
+}
+
+.styled{
+	cursor: move;
+	text-align:left;
+	margin-left: 0px;
+	padding: 5px;
+	font-size: 1.2em;
+	width: 390px;
+	border: 1px solid lightGrey;
+	background: #E6E6E6 url(/webapp/training-tracker/includes/glass_e6e6e6.png) 50% 50% repeat-x;
+	font-weight: normal;
+	color: #555;
+	list-style-type: none;
+	-moz-box-sizing:    content-box !important;
+	-webkit-box-sizing: content-box !important;
+	-ms-box-sizing:     content-box !important;
+	box-sizing:         content-box !important;	
+}
+

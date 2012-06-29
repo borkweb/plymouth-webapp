@@ -1,0 +1,49 @@
+.light {
+	border: 1px solid #AAA;
+	background: #e6e6e6;
+	color: #222;
+	font-weight: bold;
+}
+.ui-accordion{
+	-moz-box-sizing: content-box !important;
+	box-sizing: content-box !important;
+}
+.ui-accordion-content{
+	-moz-box-sizing: content-box !important;
+	box-sizing: content-box !important;
+}
+
+.smoothness{
+	background: #CCC url(/webapp/training-tracker/includes/header.png) 50% 50% repeat-x;
+	padding: 5px 4px;
+}
+
+.ui-progressbar-value{
+	background: #9F9 !important;
+	-moz-box-sizing:    content-box !important;
+	-webkit-box-sizing: content-box !important;
+	-ms-box-sizing:     content-box !important;
+	box-sizing:         content-box !important;	
+}
+
+#dialog-confirm{
+	display: none;
+}
+
+.hidden{
+	/* TODO: we might have this one declared centrally called clear */
+	visibility:hidden;
+}
+
+.highlight{
+	background: #FFFFCC;
+}
+
+.title{
+	/* TODO: don't do this shizzle here */
+	margin-bottom: .5em;
+}
+.tt-warning{
+	/* TODO: we have a warning style, I *think*.  Perhaps make this style more app specific... tt-warning */
+	background: #FAA732; 
+}
