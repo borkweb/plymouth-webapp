@@ -131,7 +131,7 @@ class ReserveDatabaseAPI{
 			$date,
 			$date,
 		);
-		return self::by( "start_date = ? OR end_date = ?",$args ); 
+		return self::by( "(start_date = ? OR end_date = ?)",$args ); 
 
 	}//end function by_date
 
