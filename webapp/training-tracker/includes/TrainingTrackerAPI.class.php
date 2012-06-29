@@ -82,7 +82,7 @@ class TrainingTracker{
 		
 		$usnh_id = $current_user->usnh_id;
 
-		$email_to = "tlferm@plymouth.edu";
+		$email_to = "satirrell@plymouth.edu";
 
 		$message = "$current_user_name (" . $current_user->username . ") has completed their current level of $level\nand would enjoy a pay raise from \$$current_pay to \$$future_pay.\n\nUSNH ID: $usnh_id \n\nSent by\n\t$active_user_name";
 
