@@ -115,7 +115,7 @@ $(function(){
 			<li><label>Event Type: </label>
 
 			{if $reserve.delivery_type==1}
-				<span class="bold">CTS Sponsored Event</span>
+				<span class="bold">CTS Supported Event</span>
 			{else}
 				<span>Equipment Pickup</span>
 			{/if}
