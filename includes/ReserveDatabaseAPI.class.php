@@ -207,6 +207,13 @@ class ReserveDatabaseAPI{
 		return self::by("wp_id = ? AND status = 'pending'", $wp_id);
 	}//end function by_wp_id
 
+	public function by_outstanding($end_date){
+		//filter results by the wp_id and the fact that the reservation is pending
+		//this is used for the user to view their currently pending reservations
+		return self::by("end_date < ? AND status = 'loaned out'", $end_date);
+	}//end function by_wp_id
+
+
 	public function change_pickup($reservation_idx, $user){
 		//this changes the pickup user
 		$sql="
@@ -565,7 +572,7 @@ class ReserveDatabaseAPI{
 
 				$title = "Outstanding Reservations";
 
-				$reservation = self::by_status($query);
+				$reservation = self::by_outstanding($query);
 				break;
 
 			case "missing":

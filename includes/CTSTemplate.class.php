@@ -34,7 +34,6 @@ class CTSTemplate extends PSUTemplate{
 			"closed" => "closed",
 			"missing-equipment" => "missing equipment",
 			"loaned out"=>"loaned out",
-			"outstanding" => "outstanding",
 			"returned"=> "returned", 
 			"cancelled"=>"cancelled",
 		);
