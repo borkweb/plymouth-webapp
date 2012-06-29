@@ -314,7 +314,8 @@ class ReserveDatabaseAPI{
 			SELECT categoryID, 
 				  category_name 
 			  FROM cts_form_options
-			 WHERE deleted = false";
+			 WHERE deleted = false
+		   ORDER BY category name";
 
 		return PSU::db('cts')->GetAssoc( $sql );
 
@@ -799,7 +800,8 @@ class ReserveDatabaseAPI{
 		$sql="
 			SELECT building_idx, name  
 			  FROM cts_building
-			 WHERE deleted = false";
+			 WHERE deleted = false
+		    SORT BY name";
 		$locations = PSU::db('cts')->GetAssoc( $sql );
 		if( $default == false ){
 			$locations = array_merge( array( NULL => 'Please select a location'), $locations );
