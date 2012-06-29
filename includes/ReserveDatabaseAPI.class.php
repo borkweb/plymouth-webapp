@@ -981,10 +981,12 @@ class ReserveDatabaseAPI{
 		$reservation_idx=$request->id;
 		$first_name=$request->param('first_name');
 		$first_name=filter_var($first_name, FILTER_SANITIZE_STRING);
+		$first_name = stripslashes($first_name);
 		$reserve['first_name'] = $first_name;
 
 		$last_name=$request->param('last_name');
 		$last_name=filter_var($last_name, FILTER_SANITIZE_STRING);
+		$last_name = stripslashes($last_name);
 		$reserve['last_name'] = $last_name; 
 
 		$phone=$request->param('phone');
@@ -1009,6 +1011,7 @@ class ReserveDatabaseAPI{
 
 		$title=$request->param('title');//request a parameter for title
 		$title=filter_var($title, FILTER_SANITIZE_STRING);
+		$title = stripslashes($title);
 		$reserve['title'] = $title;
 
 		$location=$request->param('location');//request a parameter for location
@@ -1021,6 +1024,7 @@ class ReserveDatabaseAPI{
 
 		$comments=$request->param('comments');
 		$comments=filter_var($comments,FILTER_SANITIZE_STRING);
+		$comments = stripslashes($comments);
 		$reserve['comments'] = $comments;
 
 		$starthour=$request->param('starthour');
