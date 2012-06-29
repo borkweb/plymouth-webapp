@@ -119,7 +119,7 @@ class ReserveDatabaseAPI{
 		  WHERE 1=1
 		     AND (deleted = false)
 			AND {$where}
-	    ORDER BY start_time ASC, reservation_idx DESC
+	    ORDER BY start_date ASC, start_time ASC, reservation_idx DESC
 		";
 
 	return PSU::db('cts')->GetAssoc( $sql, $args );;
@@ -311,7 +311,8 @@ class ReserveDatabaseAPI{
 			SELECT categoryID, 
 				  category_name 
 			  FROM cts_form_options
-			 WHERE deleted = false";
+			 WHERE deleted = false
+		   ORDER BY category name";
 
 		return PSU::db('cts')->GetAssoc( $sql );
 
@@ -794,7 +795,8 @@ class ReserveDatabaseAPI{
 		$sql="
 			SELECT building_idx, name  
 			  FROM cts_building
-			 WHERE deleted = false";
+			 WHERE deleted = false
+		    SORT BY name";
 		$locations = PSU::db('cts')->GetAssoc( $sql );
 		if( $default == false ){
 			$locations = array( NULL => 'Please select a location') + (array) $locations;
