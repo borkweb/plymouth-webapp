@@ -312,7 +312,7 @@ class ReserveDatabaseAPI{
 				  category_name 
 			  FROM cts_form_options
 			 WHERE deleted = false
-		   ORDER BY category name";
+		   ORDER BY category_name";
 
 		return PSU::db('cts')->GetAssoc( $sql );
 
