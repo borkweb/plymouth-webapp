@@ -21,7 +21,7 @@
 	<tbody>
 	{foreach from=$reservation item=reserve key=id}
 		<tr>
-		{if $reserve.priority=='1' || $reserve.delivery_type=='1'}
+		{if $reserve.priority=='1'}
 			<td><a class="btn" href="{$PHP.BASE_URL}/admin/reservation/search/id/{$id}">{$id}</a></td>
 			<td><strong>{$reserve.lname}</strong></td>		
 			<td><strong>{$reserve.fname}</strong></td>
