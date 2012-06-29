@@ -196,12 +196,10 @@ class ReserveDatabaseAPI{
 		return self::by("reservation_idx = ?", $id );
 	}//end function by_id
 
-
 	public function by_wp_id($wp_id){
 		//filter results by the wp_id, which is the user that made the reservation
 		return self::by("wp_id = ? AND NOT status = 'pending'", $wp_id);
 	}//end function by_wp_id
-
 
 	public function by_wp_id_pending($wp_id){
 		//filter results by the wp_id and the fact that the reservation is pending
@@ -237,7 +235,6 @@ class ReserveDatabaseAPI{
 		return PSU::db('cts')->Execute( $sql, $data);
 
 	}//end change dropoff
-
 
 	public function change_status($reservation_idx, $status){
 		//this changes the status of a loan
@@ -667,7 +664,6 @@ class ReserveDatabaseAPI{
 		return $glpi_id;
 	}//end function format_glpi
 
-
 	public function insert_form_options($category, $description){
 		//this creates a new piece of equipment in the list of availavle
 		$sql="
@@ -737,7 +733,6 @@ class ReserveDatabaseAPI{
 
 	}//end function insertCategory
 
-
 	public function insert_reservation($data){
 		//this is used to insert a reservation into the database
 
@@ -802,13 +797,12 @@ class ReserveDatabaseAPI{
 			 WHERE deleted = false";
 		$locations = PSU::db('cts')->GetAssoc( $sql );
 		if( $default == false ){
-			$locations = array_merge( array( NULL => 'Please select a location'), $locations );
+			$locations = array( NULL => 'Please select a location') + (array) $locations;
 		}
 		return $locations;
 
 	}//end function locations
 
-	
 	public function get_reservation_agreement(){
 		//this grabs the reservation agreement
 		$sql="
@@ -819,7 +813,6 @@ class ReserveDatabaseAPI{
 
 	}//end function get_announcements
 
-	
 	public function get_announcements(){
 		//this grabs the announcements
 		$sql="
@@ -840,7 +833,6 @@ class ReserveDatabaseAPI{
 		return PSU::db('cts')->GetAssoc( $sql );
 
 	}//end function get_current_announcements
-
 
 	public function get_announcement($announcement_id){
 		//this grabs a specific announcement for editing
@@ -910,7 +902,6 @@ class ReserveDatabaseAPI{
 		return PSU::db('cts')->GetAssoc( $sql );
 
 	}//end function get subitems
-
 
 	public function get_reserve_subitems($reservation_id){
 		//this grabs the information from the subitem that is in the reservation
@@ -1255,6 +1246,5 @@ class ReserveDatabaseAPI{
 		
 
 	}//end function insertReservation
-
 
 }//end class reserveDatabaseAPI
