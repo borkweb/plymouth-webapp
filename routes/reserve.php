@@ -80,7 +80,10 @@ respond ( '/equipment', function( $request, $response, $app){
 	//grab all of the neccessary information
 	$app->tpl->assign( 'step', $_SESSION['cts']['step']);
 	$app->tpl->assign( 'equipment_id', $equipment_id);
+	
 	$app->tpl->assign( 'categories', ReserveDatabaseAPI::categories());
+	
+	PSU::dbug(ReserveDatabaseAPI::categories());
 	$app->tpl->assign( 'equipment', $_SESSION['cts']['equipment']); 
 	$app->tpl->display( 'equipment.tpl' );
 

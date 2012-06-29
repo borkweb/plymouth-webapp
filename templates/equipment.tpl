@@ -1,4 +1,3 @@
-
 <nav id="webapp-nav">
   <div class="container">
   </div>
