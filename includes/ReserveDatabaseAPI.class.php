@@ -119,7 +119,7 @@ class ReserveDatabaseAPI{
 		  WHERE 1=1
 		     AND (deleted = false)
 			AND {$where}
-	    ORDER BY start_time ASC, reservation_idx DESC
+	    ORDER BY start_date ASC, start_time ASC, reservation_idx DESC
 		";
 
 	return PSU::db('cts')->GetAssoc( $sql, $args );;
