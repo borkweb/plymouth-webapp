@@ -1002,6 +1002,7 @@ class ReserveDatabaseAPI{
 
 		$title=$request->param('title');//request a parameter for title
 		$title=filter_var($title, FILTER_SANITIZE_STRING);
+		$title = stripslashes($title);
 		$reserve['title'] = $title;
 
 		$location=$request->param('location');//request a parameter for location
@@ -1014,6 +1015,7 @@ class ReserveDatabaseAPI{
 
 		$comments=$request->param('comments');
 		$comments=filter_var($comments,FILTER_SANITIZE_STRING);
+		$comments = stripslashes($comments);
 		$reserve['comments'] = $comments;
 
 		$starthour=$request->param('starthour');
