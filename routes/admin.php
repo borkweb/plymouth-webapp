@@ -76,6 +76,7 @@ respond('/admincp/announcements/add', function( $request, $response, $app ){
 	//when the administrator is trying to add a new announcement to the list of avilable
 	$message=$request->param('message');
 	$message = PSU::makeClean($message);
+	$message = stripslashes($message);
 	ReserveDatabaseAPI::insert_announcement($message);
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/admincp/announcements');
 
@@ -127,8 +128,8 @@ respond('/admincp/agreement', function( $request, $response, $app ){
 
 respond('/admincp/agreement/change', function( $request, $response, $app ){
 	//when the administrator is submiting the agreement for editing
-	$agreement=$request->param('agreement');
-	$agreement=stripslashes($agreement);
+	$agreement = $request->param('agreement');
+	$agreement = stripslashes($agreement);
 	ReserveDatabaseAPI::change_reservation_agreement($agreement);
 	$response->redirect($GLOBALS['BASE_URL'] . '/admin/admincp');
 
