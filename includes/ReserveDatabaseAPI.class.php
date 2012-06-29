@@ -974,10 +974,12 @@ class ReserveDatabaseAPI{
 		$reservation_idx=$request->id;
 		$first_name=$request->param('first_name');
 		$first_name=filter_var($first_name, FILTER_SANITIZE_STRING);
+		$first_name = stripslashes($first_name);
 		$reserve['first_name'] = $first_name;
 
 		$last_name=$request->param('last_name');
 		$last_name=filter_var($last_name, FILTER_SANITIZE_STRING);
+		$last_name = stripslashes($last_name);
 		$reserve['last_name'] = $last_name; 
 
 		$phone=$request->param('phone');
