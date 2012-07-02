@@ -1,0 +1,14 @@
+<?php
+
+$tpl = new PSUTemplate('Missing Emails');
+
+$missing = ugApplicants::appsMissingEmail();
+$tpl->assign_by_ref('missing', $missing);
+$tpl->body_style_classes[] = 'provisioning';
+
+foreach($missing as &$person) {
+	// TODO: better way than populating array with all these psuperson objects?
+	$person['psuperson'] = new PSUPerson($person['pidm']);
+}
+
+$tpl->display('provisioning.tpl');
