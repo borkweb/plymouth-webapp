@@ -1,0 +1,9 @@
+<?php
+
+$tpl = new PSUTemplate('Student List');
+$tpl->load_authz();
+
+$tpl->assign( 'roster_file', ELS::get_roster_file() );
+
+$tpl->assign('students', ELS::getStudents());
+$tpl->display('index.tpl');
