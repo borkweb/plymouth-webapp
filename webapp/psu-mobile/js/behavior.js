@@ -1,7 +1,12 @@
+// Let's set some properties
+var LOGIN_URL = HOST + BASE_URL + '/login/';
+var LOGOUT_URL = HOST + BASE_URL + '/logout/';
+var UPGRADE_URL = HOST + BASE_URL + '/upgrade/';
+
 // Things to happen RIGHT AWAY (as soon as this loads)
 
 // Detect the device's OS
-GlobalTools.deviceOS();
+var deviceOS = GlobalTools.deviceOS();
 
 // Function to change the class of the HTML tag based on the orientation of the device
 function changeOrientationClass(orientation) {
@@ -141,6 +146,21 @@ $(document).on('vclick', 'html.android h1#header-logo', function() {
 	$.mobile.changePage(backUrl, {reverse: true});
 });
 
+// Allow overriding the back button
+$(document).on('vclick', 'a[data-rel=back][data-force-href=true]', function(event) {
+	// Prevent the page from changing normally
+	event.preventDefault();
+
+	// Keep jQuery Mobile from removing the href
+	event.stopImmediatePropagation();
+
+	// Grab the url of the hard-coded back button
+	var backUrl = $('a[data-rel=back]').attr('href');
+
+	// Use jQuery Mobile's page change function to animate with transitions and load with Ajax, even if they weren't already there (that's why we're not using history.back)
+	$.mobile.changePage(backUrl, {reverse: true});
+});
+
 
 /*
  *
@@ -208,6 +228,57 @@ $(document).on('vclick', '#page-dashboard .info-button', function(event) {
 	$('footer').animate({ opacity: 'toggle'}, 1200, 'easeInExpo');
 });
 
+// When a link to an authentication required page is clicked
+$(document).on('vclick.webapp', 'a[data-auth=required]', function(event) {
+	// Prevent the page from changing normally
+	event.preventDefault();
+
+	// Keep jQuery Mobile from removing the href
+	event.stopImmediatePropagation();
+
+	// Show the page loading message while we redirect
+	$.mobile.showPageLoadingMsg();
+
+	// jQuery selector and class
+	var $htmlTag = $('html');
+	var authClass = 'authenticated';
+
+	// Let's grab the link's URL
+	var linkUrl = $(this).attr('href');
+
+	// Are we already authenticated?
+	var authStatus = $htmlTag.hasClass(authClass);
+
+	// Let's create a function to continue loading the page at the originally intended URL
+	var continueLoading = function() {
+		// Use jQuery Mobile to load the new page
+		psu.log('Ok. Loading the AUTH required page: ' + linkUrl);
+		$.mobile.changePage( linkUrl, {
+			reloadPage: "true"
+		});
+	};
+
+	// If we're already logged in
+	if (authStatus === true) {
+		// Let's just load the page
+		continueLoading();
+	}
+	// Otherwise, we need to log in... its required
+	else {
+		// Let's setup our redirect url
+		var redirectUrl = BASE_URL + '/' + linkUrl;
+
+		// So let's load the login page
+		window.location.href = LOGIN_URL + '?redirect_to=' + redirectUrl + '&came_from=' + document.URL;
+	}
+});
+
+// When the logout button is clicked
+$(document).on('vclick.webapp', '#logout-btn', function(event) {
+	// Show the page loading message while we redirect
+	$.mobile.showPageLoadingMsg();
+});
+
 
 /*
  *
@@ -258,6 +329,9 @@ $(document).on('submit', '#page-directory form', function(event) {
 	// Prevent the form from submitting normally
 	event.preventDefault();
 
+	// Keep jQuery Mobile from removing the href
+	event.stopPropagation();
+
 	// Get the data from the searh box and URL encode it
 	var query = encodeURI($('#directory-search').val());
 
@@ -269,6 +343,9 @@ $(document).on('submit', '#page-directory form', function(event) {
 $(document).on('vclick', '#page-directory-results #directory-results a', function(event) {
 	// Prevent the form from submitting normally
 	event.preventDefault();
+
+	// Keep jQuery Mobile from removing the href
+	event.stopPropagation();
 
 	// Get the url from the link
 	var url = $(this).attr('href');
@@ -295,6 +372,9 @@ $(document).on('vclick', '#page-events #events a', function(event) {
 	// Prevent the form from submitting normally
 	event.preventDefault();
 
+	// Keep jQuery Mobile from removing the href
+	event.stopPropagation();
+
 	// Get the url from the link
 	var url = $(this).attr('href');
 
@@ -306,4 +386,36 @@ $(document).on('vclick', '#page-events #events a', function(event) {
 		type: "post",
 		data: eventData
 	});
+});
+
+
+/*
+ *
+ * Logout Message
+ *
+ */
+
+// When the page initializes
+$(document).on('pageinit', '#page-logout-message', function(event) {
+	// Delay the page load for a second, so that we can actually show the message
+	window.setTimeout( function() {
+		// Let's setup our redirect url
+		var redirectUrl = HOST + BASE_URL + '/logout/logout-success/';
+
+		// So let's load the logout page
+		window.location.href = LOGOUT_URL + '?redirect_to=' + redirectUrl;
+	}, 1500);
+});
+
+
+/*
+ *
+ * Upgrade Page
+ *
+ */
+
+// When the page initializes
+$(document).on('pageinit', '#page-upgrade', function(event) {
+	// Show the links/banner of the appropriate device OS
+	$('.app-store-name #app-store-' + deviceOS).show();
 });

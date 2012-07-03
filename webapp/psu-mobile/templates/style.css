@@ -55,6 +55,9 @@ h3 {
 a, a:link {
   text-decoration: none; }
 
+.hidden {
+  display: none; }
+
 /* Header */
 header.ui-header {
   overflow: hidden;
@@ -253,6 +256,9 @@ footer.ui-footer {
     height: 100%;
     top: 0px;
     box-shadow: none; }
+  #page-dashboard #logout-btn {
+    width: 50%;
+    margin: 25px auto; }
 
 /* Newsfeed */
 #page-newsfeed ul#newsfeed li.newsfeed-item {
@@ -411,6 +417,29 @@ footer.ui-footer {
 #page-events-details div.event-content h2 {
   font-size: 16px;
   font-weight: normal; }
+
+/* Schedule */
+#page-schedule li.class h2 {
+  margin: 0px; }
+#page-schedule li.class h3 {
+  margin: 2px 0px;
+  font-size: 14px;
+  font-weight: normal; }
+#page-schedule li.class h4 {
+  margin-top: 0px;
+  font-size: 14px;
+  font-weight: normal; }
+#page-schedule li.class p {
+  margin-top: 1px;
+  margin-bottom: 0px; }
+
+/* Logout Message */
+#page-logout-message {
+  text-align: center; }
+
+/* Logout Success */
+#page-logout-success {
+  text-align: center; }
 
 /* Styles based on the device's OS */
 html.android header .ui-btn[data-rel=back] {

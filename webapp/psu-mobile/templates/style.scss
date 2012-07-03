@@ -74,6 +74,9 @@ h3 {
 a, a:link {
 	text-decoration: none;
 }
+.hidden {
+	display: none;
+}
 
 /* Header */
 header.ui-header {
@@ -344,6 +347,11 @@ footer.ui-footer {
 		top: 0px;
 		box-shadow: none;
 	}
+
+	#logout-btn {
+		width: 50%;
+		margin: 25px auto;
+	}
 }
 
 /* Newsfeed */
@@ -580,6 +588,39 @@ footer.ui-footer {
 			font-weight: normal;
 		}
 	}
+}
+
+/* Schedule */
+#page-schedule {
+	li.class {
+		h2 {
+			margin: 0px;
+		}
+		h3 {
+			margin: 2px 0px;
+			font-size: 14px;
+			font-weight: normal;
+		}
+		h4 {
+			margin-top: 0px;
+			font-size: 14px;
+			font-weight: normal;
+		}
+		p {
+			margin-top: 1px;
+			margin-bottom: 0px;
+		}
+	}
+}
+
+/* Logout Message */
+#page-logout-message {
+	text-align: center;
+}
+
+/* Logout Success */
+#page-logout-success {
+	text-align: center;
 }
 
 
