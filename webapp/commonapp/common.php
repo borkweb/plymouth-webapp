@@ -5,7 +5,7 @@
  * viewing reports of related information.
  */
 
-require_once 'PSUTools.class.php';
+require_once 'autoload.php';
 PSU::session_start();
 
 /*******************[Site Constants]*****************/
@@ -30,17 +30,6 @@ $GLOBALS['TMP'] = '/web/temp/commonapp';
 $GLOBALS['TITLE'] = 'Common Application';
 
 /*******************[End Site Constants]*****************/
-
-/*******************[Common Includes]**********************/
-require_once 'PSUPerson.class.php';
-require_once 'PSUHTML.class.php';
-require_once 'CommonApp.class.php';
-require_once 'CommonAppRecord.class.php';
-require_once 'ugApplicants.class.php';
-require_once 'PSUTemplate.class.php';
-require_once $GLOBALS['LOCAL_INCLUDES'].'/CommonAppCountries.class.php';
-require_once $GLOBALS['LOCAL_INCLUDES'].'/CAController.class.php';
-/*******************[End Common Includes]**********************/
 
 /*******************[Authentication Stuff]*****************/
 IDMObject::authN();
