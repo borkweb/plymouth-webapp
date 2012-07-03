@@ -11,7 +11,7 @@ class Webapp {
 	}
 
 	public function set_host_by_domain( $domain ) {
-		if( in_array( $domain, explode( ',', $this->config->get( 'go', 'domain', 'go.plymouth.edu,go' ) ) ) ) {
+		if( in_array( $domain, explode( ',', $this->config->get( 'go', 'domains', 'go.plymouth.edu,go' ) ) ) ) {
 			$this->host = new Webapp\GoHost( $this->config );
 		} else {
 			$this->host = new Webapp\AppHost( $this->config );

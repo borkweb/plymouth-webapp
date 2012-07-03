@@ -1,0 +1,18 @@
+#
+# This alternate app directory exists for domains that need to use
+# plymouth-webapp as the DocumentRoot, such as go.plymouth.edu.
+#
+# In production, VirtualHosts should be pointed at this directory.
+#
+# In development environments, the directory should be symlinked
+# out from a git clone. Example:
+#
+#    adam.psudev.com/
+#    go.adam.psudev.com -> adam.psudev.com/app-alternate
+#
+
+php_flag register_globals off
+
+RewriteEngine on
+RewriteBase /
+RewriteRule ^ index.php [L,QSA]
