@@ -577,7 +577,7 @@ class ReserveDatabaseAPI{
 
 			case "missing":
 				//this shows any loans that are pending
-				$query="missing";
+				$query="missing-equipment";
 
 				$title = "Missing Reservations";
 
