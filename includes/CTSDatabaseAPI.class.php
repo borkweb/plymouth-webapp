@@ -249,7 +249,7 @@ class CTSDatabaseAPI {
 		foreach( self::items( $search ) as $item ) {
 			$types[ \PSU::createSlug( $item['type'] ) ] = $item['type'];	
 		}//end foreach
-
+		sort($types);
 		return $types;
 	}//end types
 
