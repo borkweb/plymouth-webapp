@@ -1,10 +1,9 @@
-{box title="2011 Music Tech and Music Ed Career Day" size=12}
-	<p>Saturday, June 4, 2011 (9:00 AM - 12:00 PM)</p>
-	<p>Current trends in Music Technology and Music Education, with demos and open forums for discussing jobs and careers in Music Technology and Music Education.</p>
+{box title="Current Trends and Programs in Music Technology and Recording" size=12}
+	<p>Saturday, November 3, 2012 (10:00 AM - 12:00 PM) Silver Center for the Arts</p>
+	<p>Current trends in Music Technology with demos and open forums in Pro Tools, Apple's Logic, Digital Performer, Film Scoring, Mastering, using Altiverb to create recording spaces, selling your music, and online recording and music production.</p>
 	<h3>Eligibility</h3>
-	<p>High School musicians (grades 11-12) who are interested in music technology or music education as a career.</p>
-	<h3>Fee</h3>
-	<p>Registration is free, but you must register for this event to receive an entrance ticket.</p>
+	<p>High School musicians (grades 10-12) who are interested in music technology and recording</p>
+	<p>Registration is free but it is limited to ten students. You must register to attend this session. Please register early. Once we have ten students, registration will be closed.</p>
 {/box}
 
 {box title="Apply" size=4}
