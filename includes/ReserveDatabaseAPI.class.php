@@ -781,7 +781,7 @@ class ReserveDatabaseAPI{
 			?, 
 			?, 
 			?)";
-			
+		PSU::db('cts')->debug=true;	
 		PSU::db('cts')->Execute( $sql, $data);
 		return PSU::db('cts')->Insert_ID();
 			

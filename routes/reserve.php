@@ -185,6 +185,7 @@ respond ('POST','/success', function($request, $response, $app){
 			$name=$categories[$i]; 
 			$equipment .= $name . ", ";
 		}
+		die($SESSION['reserve_type']);
 		$data=array(	
 			$_SESSION['wp_id'],
 			$_SESSION['cts']['last_name'],
