@@ -23,6 +23,11 @@ uploads_dir = "/web/uploads"
 ;[psuperson]
 ;overrides = "{\"publicname\":\"backendname\",\"othername\":\"unknownname\"}"
 
+;[go]
+; comma-separated list of domains to use for the Go service (don't
+; forget to use the bare "go" name to account for the search domain)
+;domains = "go.plymouth.edu,go"
+
 [calllog]
 base_url = "https://www.plymouth.edu/webapp/calllog"
 api_appid = "YOUR_APPID"
