@@ -86,8 +86,6 @@ class CDNAPI {
 		static $sql_revs = "INSERT INTO http_resources_revs (res_id, wpid, version) VALUES (?, ?, ?)";
 		static $sql_version = "SELECT path, version FROM http_resources WHERE id = ?";
 
-		PSU::db('myplymouth')->debug = true;
-
 		foreach( (array)$files as $file ) {
 			if( is_numeric($file) || is_int($file) ) {
 				// updating
