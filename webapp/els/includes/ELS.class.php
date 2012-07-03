@@ -1,7 +1,4 @@
 <?php
-
-require_once 'BannerObject.class.php';
-
 /**
  * API for ELS application.
  */
