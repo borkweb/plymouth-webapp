@@ -1,0 +1,23 @@
+<?php
+
+require_once 'autoload.php';
+PSU::session_start(); // force ssl + start a session
+
+$GLOBALS['BASE_URL'] = '/webapp/update/this/path';
+$GLOBALS['BASE_DIR'] = dirname(__FILE__);
+
+$GLOBALS['TITLE'] = 'Update Application Title';
+$GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
+
+require_once $GLOBALS['BASE_DIR'] . '/includes/CTSController.class.php';
+require_once $GLOBALS['BASE_DIR'] . '/includes/CTSAPI.class.php';
+
+/*/
+IDMObject::authN();
+
+if( ! IDMObject::authZ('permission', 'mis') ) {
+	die('You do not have access to this application.');
+}
+//*/
+
+CTSController::delegate();
