@@ -1,0 +1,64 @@
+<?php
+
+$tpl = new PSU\Template();
+
+$faculty = new faculty();
+
+if($_SERVER['REQUEST_METHOD']=='POST') {
+	$person = $_POST['person'];
+	
+	if(preg_match('/,/',$person['department'])) {
+		$person['department'] = explode(',',str_replace(' ','',$person['department']));
+	}//end if
+	
+	$faculty->replaceFacultyMember($person);
+	$_SESSION['successes'][] = 'Update Successful!<br/><a href="index.html">Click here to continue</a>';
+}
+elseif ($_GET['cmd']=='browsedepartment') {
+	if($_GET['list'] == 'print') {
+		$list = 'print_list';
+	}
+	else {
+		$list = 'list';
+	}
+
+	$department = $faculty->getDepartment($_GET['dept_code']);
+	$tpl->assign('department',$department);
+	$tpl->assign('title','in department <strong>'.$department['name'].'</strong>');
+
+	if($list == 'list') {
+		$people = $faculty->getFacultyByDepartment($_GET['dept_code']);
+	}
+	else {
+		$people = $faculty->getFacultyByLastName('%', 'active');
+	}
+	$tpl->assign('people', $people);
+	$tpl->assign('list', $list);
+}
+elseif ($_GET['cmd']=='browseletter') {
+	$letter = $_GET['letter'][0]; // limits passed in variable to be a single character
+	$tpl->assign('title','by letter <strong>'.$letter.'</strong>');
+
+	$people = $faculty->getFacultyByLastName($letter.'%');
+	$tpl->assign('people', $people);
+
+	$tpl->assign('list', 'list');
+}
+elseif ($_GET['cmd'] == 'add_edit') {
+	$person = $faculty->getFacultyMember($_GET['uid']);
+	$tpl->assign('person',$person);
+	
+	$tpl->assign('active_status_selected_'.$person['active_status'],'checked="checked"');
+
+	$tpl->assign('faculty_form', true);
+}
+elseif($_GET['cmd'] == 'remove') {
+	$faculty->deleteFacultyMember($_GET['uid']);
+	$_SESSION['successes'][] = 'Delete Successful!<br/><a href="index.html">Click here to continue</a>';
+}
+else {
+	$departments = $faculty->getDepartments();
+	$tpl->assign('departments', $departments);
+}
+
+$tpl->display('index.tpl');
