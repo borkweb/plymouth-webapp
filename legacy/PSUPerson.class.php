@@ -265,6 +265,19 @@ class PSUPerson extends BannerObject
 		return $formatted_name;
 	}//end formatName
 
+	public function get_email_override($username){
+		static $overrides = null;
+		if ($overrides === null){
+			$config = \PSU\Config\Factory::get_config();
+			$overrides = $config->get_json( 'psuperson', 'overrides' );
+			$overrides = array_flip((array)$overrides);
+		}
+		if (isset ($overrides[$username])){
+			return $overrides[$username] . '@plymouth.edu';
+		}
+
+		return null;
+	}
 	/**
 	 * getIssues
 	 *

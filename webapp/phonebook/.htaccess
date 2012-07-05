@@ -1,0 +1,6 @@
+php_value auto_prepend_file ./common.php
+php_value auto_append_file none
+
+RewriteEngine on
+RewriteBase /webapp/phonebook/
+RewriteRule ^files/2010directory.pdf$ /webapp/banner/psc1/printed_directory/loadFacultyPDF/Printed_Directory_FacStaff.pdf [R=301,L] 

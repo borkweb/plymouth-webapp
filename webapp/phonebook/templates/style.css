@@ -1,0 +1,87 @@
+.block{
+	background: #f3f1e6;
+	border: 2px solid #bfbea3;
+	padding:5px;
+	position:relative;
+	text-align:left;
+}
+#holder {
+	background:#fff;
+	width:100%;
+	padding-top:5.9em;
+	}
+#wrapperSP{
+	width:100%;
+	background:#fff; 
+	border-left:2px solid white;
+	border-right:2px solid white;
+	font-family:Verdana, Arial, Helvetica, san-serif;
+	font-size:12px;
+	
+}
+.disclaimer{
+	background-image: url(http://www.plymouth.edu/images/gradient.gif);
+	background-position: top left;
+	background-repeat: repeat-x;
+	border:1px dotted #999;
+	display:none;
+	margin: 0px auto;
+	padding:5px;
+	text-align:left;
+	width:500px;
+}
+ .person{
+	background-image: url(http://www.plymouth.edu/images/gradient.gif);
+	background-position: top left;
+	background-repeat: repeat-x;
+	border:1px solid #ddd;
+	margin: 5px 10px; 
+	padding: 3px 5px;
+}
+.results{
+	border-bottom: 1px solid #ccc;
+	margin: 10px auto 10px auto;
+	width: 80%;
+	text-align:left;
+}
+.navlist {
+	padding: 3px 0;
+	margin-left: 0;
+	margin-bottom: 0;
+	border-bottom: 1px solid #aaa;
+	font: bold 12px Verdana, sans-serif;
+}
+
+.navlist li {
+	list-style: none;
+	margin: 0;
+	display: inline;
+}
+
+.navlist li a {
+	padding: 3px 0.5em;
+	margin-left: 3px;
+	border: 1px solid #aaa;
+	border-bottom: none;
+	background: #eee;
+	text-decoration: none;
+}
+
+.navlist li a:link { color: #448; }
+.navlist li a:visited { color: #667; }
+
+.navlist li a:hover {
+	color: #000;
+	background: #ccc;
+	border-color: #aaa;
+}
+
+.navlist li a.current {
+	background: white;
+	border-bottom: 1px solid white;
+}
+
+#department_search,#person_search{
+
+	padding:10px;
+}
