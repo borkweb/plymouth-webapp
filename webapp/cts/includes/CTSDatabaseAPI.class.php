@@ -8,14 +8,13 @@ class CTSDatabaseAPI {
 
 		$by_model = array();
 		$models = self::models( $search );
-
 		foreach( self::items( $search ) as $item ){
-			$by_model[ $item['model'] ]['machines'][] = $item;
-			$by_model[ $item['model'] ]['type'] = $item['type'];
-			$by_model[ $item['model'] ]['manufacturer'] = $item['manufacturer'];
-			$by_model[ $item['model'] ]['model'] = $item['model'];
-			$by_model[ $item['model'] ]['description'] = ( strlen($by_model[$item['model']]['description']) > 0 ? $by_model[$item['model']]['description'] : $item['description']);
-			$by_model[ $item['model'] ]['quantity'] = $models[ $item['model'] ];
+				$by_model[ $item['model'] ]['machines'][] = $item;
+				$by_model[ $item['model'] ]['type'] = $item['type'];
+				$by_model[ $item['model'] ]['manufacturer'] = $item['manufacturer'];
+				$by_model[ $item['model'] ]['model'] = $item['model'];
+				$by_model[ $item['model'] ]['description'] = ( strlen($by_model[$item['model']]['description']) > 0 ? $by_model[$item['model']]['description'] : $item['description']);
+				$by_model[ $item['model'] ]['quantity'] = $models[ $item['model'] ];
 		}//end foreach
 
 		ksort($by_model);
@@ -32,16 +31,16 @@ class CTSDatabaseAPI {
 
 	}//end count
 
-	public function get( $type, $search = null ) {
+	public function get( $search = null ) {
 
-		$query_parts = self::sql( $type, $search );
-		$items = PSU::db('glpi')->GetAll( $query_parts['sql'] , $query_parts['params']);
+		$query_parts = self::sql( $search );
+		$items = PSU::db('glpi')->GetAll( $query_parts['sql'], $query_parts['params']);
 		return (array)$items;
 
 	}
 
 	public function items( $search = null ) {
-		return self::get( 'computer', $search );
+		return self::get( $search );
 	}//end items
 
 	public function manufacturers( $search = null ) {
@@ -173,7 +172,7 @@ class CTSDatabaseAPI {
 	}//end function by date_range
 
 
-	public function sql( $item_type, $search = null) {
+	public function sql( $search = null) {
 		
 		$sql = "
 			SELECT item.id,
@@ -184,8 +183,6 @@ class CTSDatabaseAPI {
 				   `mod`.name as model,
 				   man.name as manufacturer,
 				   t.name as type,
-				   i.warranty_value as price,
-				   i.warranty_info as `condition`,
 				   i.comment as description,
 				   d.filepath
 			  FROM glpi_computers item 
@@ -201,8 +198,8 @@ class CTSDatabaseAPI {
 				ON i.items_id = item.id 
 		 LEFT JOIN glpi_documents d 
 				ON d.name = `mod`.name
-			   AND i.itemtype = 'Computer'
 				WHERE s.name= 'Available for Loan'
+			   AND i.itemtype = 'Computer'
 			UNION ALL
 				SELECT item.id,
 				   item.name as psu_name,
@@ -212,8 +209,6 @@ class CTSDatabaseAPI {
 				   `mod`.name as model,
 				   man.name as manufacturer,
 				   t.name as type,
-				   i.warranty_value as price,
-				   i.warranty_info as `condition`,
 				   i.comment as description,
 				   d.filepath
 			  FROM glpi_peripherals item 
@@ -229,8 +224,8 @@ class CTSDatabaseAPI {
 				ON i.items_id = item.id 
 		 LEFT JOIN glpi_documents d 
 				ON d.name = `mod`.name
-			   AND i.itemtype = 'Peripheral'
 				WHERE s.name= 'Available for Loan'
+			   AND i.itemtype = 'Peripheral'
 
 			   ";
 		if( $search ) {
@@ -257,18 +252,6 @@ class CTSDatabaseAPI {
 
 		$params = array();
 
-		if( isset($search['condition']) ) {
-			$params[] = $search['condition'];
-			$condition_where = "(`condition` LIKE ?";
-
-			if( $search['condition'] == 'Good' ) {
-				$condition_where .= " OR `condition` IS NULL";
-			}//end if
-
-			$condition_where .= ")";
-			$where[] = $condition_where;
-		}//end if
-
 		if( isset($search['type']) ) {
 			$types = array();
 
@@ -278,18 +261,6 @@ class CTSDatabaseAPI {
 
 			$where[] = "(
 				type IN (".implode(",", $types).")	
-			)";
-		}//end if
-
-		if( isset($search['manufacturer']) ) {
-			$manufacturers = array();
-
-			foreach( $search['manufacturer'] as $manufacturer ) {
-				$manufacturers[] = \PSU::db('glpi')->qstr( $manufacturer );	
-			}//end foreach
-
-			$where[] = "(
-				manufacturer IN (".implode(",", $manufacturers).")	
 			)";
 		}//end if
 
@@ -305,36 +276,7 @@ class CTSDatabaseAPI {
 			)";
 		}//end if
 
-		if( isset($search['price']) ) {
-			$price = explode(' - ', $search['price']);
-
-			$params[] = ltrim($price[0], '$');
-			$params[] = ltrim($price[1], '$');
-
-			$where[] = "(
-				price >= ? 
-			AND price <= ?	
-			)";
-		}//end if
-
-		if( isset($search['search_term']) && strlen( $search['search_term'] ) > 0 ) {
-
-			for( $i = 0; $i < 7; $i++ ) {
-				$params[] = $search['search_term'];
-			}//end for
-			
-			$where[] = "(
-				id LIKE ? 
-			 OR psu_name LIKE CONCAT('%',?,'%') 
-			 OR notes LIKE CONCAT('%',?,'%')
-			 OR model LIKE CONCAT('%',?,'%')
-			 OR manufacturer LIKE CONCAT('%',?,'%')
-			 OR type LIKE CONCAT('%',?,'%')
-			 OR price LIKE CONCAT('%',?,'%')
-			)";
-			
-		}//end if
-
+		
 		if( sizeof( $where ) > 1 ){
 			$where_str = "WHERE " . implode(" AND ", $where);
 		} elseif( sizeof( $where ) == 1 ) {
