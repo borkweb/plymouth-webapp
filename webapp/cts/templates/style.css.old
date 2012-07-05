@@ -1,0 +1,24 @@
+label{
+font-weight:bold;
+
+}
+.note{
+font-style:italic;
+}
+.bullet{
+list-style-type: circle;
+}
+ul{
+list-style-type: none;
+}
+.bold{
+font-weight:bold;
+}
+.good{
+font-size:2em;
+color:green;
+}
+
+select{
+width: auto;
+}
