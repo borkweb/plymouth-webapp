@@ -34,7 +34,6 @@ class CTSDatabaseAPI {
 	public function get( $search = null ) {
 
 		$query_parts = self::sql( $search );
-		PSU::dbug($query_parts);
 		$items = PSU::db('glpi')->GetAll( $query_parts['sql'], $query_parts['params']);
 		return (array)$items;
 
