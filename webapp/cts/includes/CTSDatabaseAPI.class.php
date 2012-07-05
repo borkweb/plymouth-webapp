@@ -19,7 +19,6 @@ class CTSDatabaseAPI {
 
 		ksort($by_model);
 		return $by_model;
-
 	}//end by_model
 
 
@@ -183,7 +182,6 @@ class CTSDatabaseAPI {
 				   `mod`.name as model,
 				   man.name as manufacturer,
 				   t.name as type,
-				   i.comment as description,
 				   d.filepath
 			  FROM glpi_computers item 
 			  JOIN glpi_states s 
@@ -194,12 +192,9 @@ class CTSDatabaseAPI {
 				ON item.manufacturers_id = man.id 
 			  JOIN glpi_computertypes t 
 				ON item.computertypes_id = t.id 
-			  JOIN glpi_infocoms i 
-				ON i.items_id = item.id 
 		 LEFT JOIN glpi_documents d 
 				ON d.name = `mod`.name
 				WHERE s.name= 'Available for Loan'
-			   AND i.itemtype = 'Computer'
 			UNION ALL
 				SELECT item.id,
 				   item.name as psu_name,
@@ -209,7 +204,6 @@ class CTSDatabaseAPI {
 				   `mod`.name as model,
 				   man.name as manufacturer,
 				   t.name as type,
-				   i.comment as description,
 				   d.filepath
 			  FROM glpi_peripherals item 
 			  JOIN glpi_states s 
@@ -220,12 +214,9 @@ class CTSDatabaseAPI {
 				ON item.manufacturers_id = man.id 
 			  JOIN glpi_peripheraltypes t 
 				ON item.peripheraltypes_id = t.id 
-			  JOIN glpi_infocoms i 
-				ON i.items_id = item.id 
 		 LEFT JOIN glpi_documents d 
 				ON d.name = `mod`.name
 				WHERE s.name= 'Available for Loan'
-			   AND i.itemtype = 'Peripheral'
 
 			   ";
 		if( $search ) {
