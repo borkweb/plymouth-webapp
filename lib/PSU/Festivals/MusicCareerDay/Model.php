@@ -22,8 +22,7 @@ class Model extends \Model {
 		$this->high_school_enrollment = new \FormNumber('label=Approximate Enrollment of High School:&size=5&maxlength=6');
 		$this->band_size = new \FormNumber('label=Number of Students in High School Band:&size=5&maxlength=6');
 
-		$this->director_name = new \FormText('label=Band Director\'s Name:&required=1&maxlength=75');
-		$this->director_email = new \FormText('required=1&maxlength=100');
+		$this->student_email = new \FormText('required=1&maxlength=100&label=Student Email:');
 
 		$this->comments = new \FormTextarea('label=Additional Comments (optional)');
 

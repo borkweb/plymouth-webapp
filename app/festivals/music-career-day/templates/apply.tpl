@@ -24,10 +24,9 @@
 {/box}
 
 {col size=8}
-	{box title="Director's Information" size=8 class="alpha omega"}
+	{box title="Contact Information" size=8 class="alpha omega"}
 		<ul>
-			{$form->director_name->as_li()}
-			{$form->director_email->as_li()}
+			{$form->student_email->as_li()}
 		</ul>
 	{/box}
 

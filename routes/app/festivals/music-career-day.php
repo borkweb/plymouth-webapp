@@ -5,14 +5,16 @@ respond( function( $request, $response, $app ){
 
 	$GLOBALS['BASE_URL'] = '/app/festivals/music-career-day';
 
-	$GLOBALS['TITLE'] = '2011 Music Technology and Education Career Day';
+	$app->event_year = 2012;
+
+	$GLOBALS['TITLE'] = "{$app->event_year} Music Technology and Education Career Day";
 	$GLOBALS['TEMPLATES'] = PSU_BASE_DIR . '/app/festivals/music-career-day/templates';
 
 	if( !isset($_SESSION['mtecd']) ) {
 		$_SESSION['mtecd'] = array();
 	}
 
-	$app->mail = function() {
+	$app->mail = function($id) {
 		$tpl = new PSU\Template;
 
 		$f = PSU::db('myplymouth')->GetRow("SELECT * FROM mte_career_day WHERE id_ = ?", array($id));
@@ -28,12 +30,13 @@ respond( function( $request, $response, $app ){
 			$to[0] = 'ambackstrom@plymouth.edu';
 		}
 
-		$subject = sprintf("[MTECD 2011] Application for %s %s", $form->first_name->value(), $form->last_name->value());
+		$subject = sprintf("[MTECD {$app->event_year}] Application for %s %s", $form->first_name->value(), $form->last_name->value());
 
 		PSU::mail( $to, $subject, $message, 'Content-Type: text/html' );
 	};
 
 	$app->tpl = new PSU\Template;
+	$app->tpl->assign( 'event_year', $app->event_year );
 });
 
 respond( '/apply', function( $request, $response, $app ){

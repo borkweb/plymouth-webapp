@@ -14,8 +14,7 @@
 <strong>{$form->high_school_enrollment->label}</strong>  {$form->high_school_enrollment}
 <strong>{$form->band_size->label}</strong>  {$form->band_size}
  
-<strong>{$form->director_name->label}</strong>  {$form->director_name}
-<strong>{$form->director_email->label}</strong>  {$form->director_email}
+<strong>{$form->student_email->label}</strong>  {$form->student_email}
  
 <strong>{$form->comments->label}</strong>
 
