@@ -8,8 +8,6 @@ $GLOBALS['BASE_URL'] = '/webapp/faculty';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
 $GLOBALS['TITLE'] = 'Faculty Database';
 
-require_once 'faculty.class.php';
-
 IDMObject::authN();
 
 if(!IDMObject::authZ('permission', 'faculty_admin')) {
