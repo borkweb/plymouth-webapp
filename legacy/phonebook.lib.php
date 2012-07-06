@@ -247,7 +247,8 @@
 
 		// get all public employees
 		$sql = "SELECT d.pidm, 
-									 w.wp_id,
+					   w.wp_id,
+					   w.login_name as username,
 		               d.id as psu_id, 
 		               d.first_name, 
 		               d.middle_name, 
@@ -264,7 +265,7 @@
 										ON spbpers_pidm = d.pidm
 									 LEFT OUTER JOIN spbcard
 										ON spbcard_pidm = d.pidm
-									 LEFT OUTER JOIN psu_identity.person_ext_cache w
+									 LEFT OUTER JOIN psu_identity.person_identifiers w
 										ON w.pid = d.pidm
 						 WHERE EXISTS(SELECT 1 
 		                        FROM v_employee e
