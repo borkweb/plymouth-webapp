@@ -1,8 +1,5 @@
 <?php
 
-require_once 'PSUController.class.php';
-require_once 'PSUTemplate.class.php';
-
 class CDNController extends PSUController {
 	public static function delegate( $path = null, $class = __CLASS__ ) {
 		parent::delegate( $path, $class );

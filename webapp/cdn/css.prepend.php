@@ -3,8 +3,6 @@
 header('Content-type: text/css');
 define('PSU_CDN', true);
 
-require_once 'PSUTools.class.php';
-
 if( !defined('CDN_OVERRIDE') ) {
 	define('CDN_OVERRIDE', false);
 }

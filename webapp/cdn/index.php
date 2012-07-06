@@ -3,7 +3,6 @@
 require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
 
 require_once 'autoload.php';
-require_once 'PSUTools.class.php';
 
 PSU::session_start();
 
@@ -12,7 +11,6 @@ $GLOBALS['BASE_URL'] = '/webapp/cdn';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
 $GLOBALS['TITLE'] = 'CDN Manager';
 
-require_once 'IDMObject.class.php';
 require_once 'includes/CDNController.class.php';
 require_once 'includes/CDNAPI.class.php';
 
