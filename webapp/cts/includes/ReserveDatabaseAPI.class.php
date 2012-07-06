@@ -459,10 +459,10 @@ class ReserveDatabaseAPI{
 				$title="Reservations from $fixed_start_date to $fixed_end_date";
 
 				$dates=array(
-					$start_date, 
-					$end_date, 
-					$start_date, 
-					$end_date,
+						'start_date' => $start_date, 
+						'end_date' => $end_date, 
+						'start_date2' => $start_date, 
+						'end_date2' => $end_date
 				);
 				$reservation =  self::by_date_range($dates);
 				break;
@@ -471,10 +471,10 @@ class ReserveDatabaseAPI{
 				$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
 				$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
 				$dates=array(
-					$start_date, 
-					$end_date, 
-					$start_date, 
-					$end_date
+						'start_date' => $start_date, 
+						'end_date' => $end_date, 
+						'start_date2' => $start_date, 
+						'end_date2' => $end_date
 				);
 				$fixed_start_date=self::fix_date($start_date);
 				$fixed_end_date=self::fix_date($end_date);
@@ -493,10 +493,10 @@ class ReserveDatabaseAPI{
 				$fixed_end_date=ReserveDatabaseAPI::fix_date($end_date);
 
 				$dates=array(
-						$start_date, 
-						$end_date, 
-						$start_date, 
-						$end_date,
+						'start_date' => $start_date, 
+						'end_date' => $end_date, 
+						'start_date2' => $start_date, 
+						'end_date2' => $end_date
 				);
 				$title="Reservations from $fixed_start_date to $fixed_end_date";
 				$reservation=self::by_date_range($dates);
@@ -510,10 +510,10 @@ class ReserveDatabaseAPI{
 				$fixed_end_date=self::fix_date($end_date);
 				
 				$dates=array(
-						$start_date, 
-						$end_date, 
-						$start_date, 
-						$end_date
+						'start_date' => $start_date, 
+						'end_date' => $end_date, 
+						'start_date2' => $start_date, 
+						'end_date2' => $end_date
 				);
 
 
@@ -630,13 +630,35 @@ class ReserveDatabaseAPI{
 					$title = "Reservations from $fixed_start_date to $fixed_end_date";
 				}
 				break;
+			case "thisreservation":
+				$reservation_idx = $request->id;
+				$dates = ReserveDatabaseAPI::get_dates($reservation_idx);
+				$fixed_start_date=ReserveDatabaseAPI::fix_date($dates['start_date']);
+				$fixed_end_date=ReserveDatabaseAPI::fix_date($dates['end_date']);
+				$title="Reservations from $fixed_start_date to $fixed_end_date";
+				break;
 			default:
 				//if there was no parameter, return the dates and reservations for today
-				$start_date=date('Y-m-d');
-				$fixed_start_date=self::fix_date($start_date);
+				if( $request->id ){
+					//if there is a request id, load the dates from the reservation
+					$reservation_idx = $request->id;
+					$dates = ReserveDatabaseAPI::get_dates($reservation_idx);
+					$fixed_start_date=ReserveDatabaseAPI::fix_date($dates['start_date']);
+					$fixed_end_date=ReserveDatabaseAPI::fix_date($dates['end_date']);
+					$title="Reservations from $fixed_start_date to $fixed_end_date";
+				}else{
+					//if there is not a request id, load today as the default date
+					$start_date=date('Y-m-d');
+					$end_date=date('Y-m-d');
+					$dates=array(
+							'start_date' => $start_date,
+							'end_date' => $end_date,
+						);
+					$fixed_start_date=self::fix_date($start_date);
 
-				$title="Reservations for today - $fixed_start_date";
-				$reservation= self::by_date($start_date);
+					$title="Reservations for today - $fixed_start_date";
+					$reservation= self::by_date($start_date);
+				}
 				break;
 
 		}//end switch	
@@ -851,6 +873,16 @@ class ReserveDatabaseAPI{
 		return PSU::db('cts')->GetRow( $sql,$announcement_id );
 
 	}//end function get_announcements
+
+	public function get_dates($reservation_idx){
+		$sql="
+			SELECT start_date, end_date
+			  FROM cts_reservation
+			 WHERE reservation_idx = ?
+			";
+		return PSU::db('cts')->GetRow( $sql, $reservation_idx );
+
+	}//end function get_dates
 
 	public function get_GLPI($item_id){
 		//this grabs GLPI information for a specific item

@@ -18,9 +18,10 @@
 </ul>
 {/box}
 {box size=16 title=$title}
-	<a href="{$PHP.BASE_URL}/admin/equipment/item/model/{$items.0.model}/list/lastweek">Last Week</a>|
-	<a href="{$PHP.BASE_URL}/admin/equipment/item/model/{$items.0.model}/list/thisweek">This Week</a>|
-	<a href="{$PHP.BASE_URL}/admin/equipment/item/model/{$items.0.model}/list/nextweek">Next Week</a>
+	<a href="{$PHP.BASE_URL}/admin/equipment/{$reservation_idx}/item/model/{$items.0.model}/list/lastweek">Last Week</a>|
+	<a href="{$PHP.BASE_URL}/admin/equipment/{$reservation_idx}/item/model/{$items.0.model}/list/thisweek">This Week</a>|
+	<a href="{$PHP.BASE_URL}/admin/equipment/{$reservation_idx}/item/model/{$items.0.model}/list/nextweek">Next Week</a>
+	{if $reservation_idx}|<a href="{$PHP.BASE_URL}/admin/equipment/{$reservation_idx}/item/model/{$items.0.model}/list/thisreservation">This Reservation</a>{/if}
 
 {/box}
 {box size=16 title="Equipment Availability `$subtitle`"}
