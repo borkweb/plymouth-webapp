@@ -1,0 +1,59 @@
+.condition-icon{
+	padding-left: 25px !important;
+	background-position: 5px 0px;
+}
+
+.condition-good{ background: url(/images/icons/16x16/emotes/face-smile.png) no-repeat; }
+.condition-fair{ background: url(/images/icons/16x16/emotes/face-plain.png) no-repeat; }
+.condition-poor{ background: url(/images/icons/16x16/emotes/face-sad.png) no-repeat; }
+
+.item-box .box-inner { overflow: hidden; }
+
+.item-thumb{
+	display: block;
+	float: left;
+	padding-right: 2em;
+	overflow: hidden;
+}
+
+.nav-icon{
+	padding-left: 20px !important;
+	min-height: 16px !important;
+	background-position: 0px 5px;
+}
+
+.nav-home{ background: url(/images/icons/16x16/actions/go-home.png) no-repeat; }
+.nav-help{ background: url(/images/icons/16x16/life-saver.png) no-repeat; }
+.nav-pickup{ background: url(/images/icons/16x16/places/start-here.png) no-repeat; }
+
+.webapp-head #search{
+	margin-top: 1.25em;
+	text-align: right;
+}
+.webapp-head #search input .submit{
+	text-transform: uppercase;
+}
+
+#filter-search label[for=price] {
+	float: left;
+	padding-top: .25em;
+	padding-right: .5em;
+}
+
+#filter-search #price {
+	border: 0;
+	font-weight: bold;
+}
+
+#filter-search #price-slider {
+	margin: 0 auto;
+	margin-bottom: .5em;
+	width: 85%;
+}
+
+#price-slider { clear: both; }
+#title-icon {
+	padding-left: 43px !important;
+	background: url(/images/icons/32x32/status/user-trash-full.png) no-repeat;
+	background-position: 5px -1px;
+}
