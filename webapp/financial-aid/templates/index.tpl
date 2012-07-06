@@ -20,7 +20,7 @@
 	{/if}
 	{if $finaid->awards->has_awards()}
 		<p>Contact the <a href="/office/financial-aid/contact-information/">Financial Aid Team</a>
-		if you wish to decline an award that is in accepted status. All financial aid awards are subject to
+		in writing if you wish to decline an award that is in accepted status. All financial aid awards are subject to
 		<a href="/office/financial-aid/terms-of-award/">Terms of Award</a>.</p>
 
 		<table class="grid">
