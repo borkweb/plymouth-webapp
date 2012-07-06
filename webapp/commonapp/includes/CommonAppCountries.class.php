@@ -8,8 +8,6 @@
  *
  */
 
-require_once('BannerGeneral.class.php');
-
 /**
  * CommonAppCountries.class.php
  *

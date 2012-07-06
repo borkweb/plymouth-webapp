@@ -1,7 +1,4 @@
 <?php
-
-require_once 'PSUController.class.php';
-
 class CAController extends PSUController {
 	public function duplicates() {
 		$this->display();
