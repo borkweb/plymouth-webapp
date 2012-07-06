@@ -2,7 +2,9 @@
 
 require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
 
+require_once 'autoload.php';
 require_once 'PSUTools.class.php';
+
 PSU::session_start();
 
 $GLOBALS['BASE_DIR'] = dirname(__FILE__);
