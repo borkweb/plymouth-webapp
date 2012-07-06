@@ -1,0 +1,7 @@
+.not-app td {
+	background-color: #F9ABA9 !important;
+}
+
+.provisioning .cleanup {
+	display: none;
+}
