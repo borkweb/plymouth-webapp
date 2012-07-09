@@ -214,7 +214,6 @@ respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $re
 		$app->tpl->assign('title', $data['title']);
 		$dates = $data['dates'];
 
-	//die(PSU::dbug($dates));
 	//-----------------------GANTT VIEW
 	include 'jpgraph/jpgraph.php';
 	include 'jpgraph/jpgraph_gantt.php';
