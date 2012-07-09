@@ -127,7 +127,7 @@ class PSU_Moodle_Importer {
 	}//end prepare_file
 
 	public function process_auto() {
-		$url = PSU::isdev()?'http://uranus.dev.plymouth.edu':'http://capricorn.plymouth.edu';
+		$url = PSU::isdev()?'http://uranus.dev.plymouth.edu':'http://www.plymouth.edu';
 
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $url."/webapp/courses/enrol/lmb/psu_importnow.php" );
