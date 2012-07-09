@@ -457,7 +457,8 @@ class ReserveDatabaseAPI{
 				$fixed_end_date=self::fix_date($end_date);
 
 				$title="Reservations from $fixed_start_date to $fixed_end_date";
-
+				//add the dates to the date array, four dates are needed for testing the date ranges
+				//and for proper use with adodb binding
 				$dates=array(
 						'start_date' => $start_date, 
 						'end_date' => $end_date, 
@@ -470,6 +471,8 @@ class ReserveDatabaseAPI{
 				//this shows the information for this week
 				$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
 				$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
+				//add the dates to the date array, four dates are needed for testing the date ranges
+				//and for proper use with adodb binding
 				$dates=array(
 						'start_date' => $start_date, 
 						'end_date' => $end_date, 
@@ -491,7 +494,8 @@ class ReserveDatabaseAPI{
 
 				$fixed_start_date=ReserveDatabaseAPI::fix_date($start_date);
 				$fixed_end_date=ReserveDatabaseAPI::fix_date($end_date);
-
+				//add the dates to the date array, four dates are needed for testing the date ranges
+				//and for proper use with adodb binding
 				$dates=array(
 						'start_date' => $start_date, 
 						'end_date' => $end_date, 
@@ -508,7 +512,8 @@ class ReserveDatabaseAPI{
 				$end_date=date('Y-m-d',time()- ($week + 1) * ONE_DAY);
 				$fixed_start_date=self::fix_date($start_date);
 				$fixed_end_date=self::fix_date($end_date);
-				
+				//add the dates to the date array, four dates are needed for testing the date ranges
+				//and for proper use with adodb binding
 				$dates=array(
 						'start_date' => $start_date, 
 						'end_date' => $end_date, 
@@ -653,7 +658,6 @@ class ReserveDatabaseAPI{
 							'end_date' => $end_date,
 						);
 					$fixed_start_date=self::fix_date($start_date);
-
 					$title="Reservations for today - $fixed_start_date";
 					$reservation= self::by_date($start_date);
 				}
@@ -686,7 +690,7 @@ class ReserveDatabaseAPI{
 			$glpi_id='PSU-0000-' . $glpi_id;
 		}elseif(strlen($glpi_id)==46){
 			//if the code is scanned
-			$glpi_id=substr($glpi_id,-13);//return the last 4 digits
+			$glpi_id=substr($glpi_id,-13);//return the last 13 digits
 
 		}
 		return $glpi_id;
