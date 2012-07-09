@@ -631,8 +631,7 @@ class ReserveDatabaseAPI{
 				}
 				break;
 			case "thisreservation":
-				$reservation_idx = $request->id;
-				$dates = ReserveDatabaseAPI::get_dates($reservation_idx);
+				$dates = ReserveDatabaseAPI::get_dates($request->id);
 				$fixed_start_date=ReserveDatabaseAPI::fix_date($dates['start_date']);
 				$fixed_end_date=ReserveDatabaseAPI::fix_date($dates['end_date']);
 				$title="Reservations from $fixed_start_date to $fixed_end_date";
@@ -641,8 +640,7 @@ class ReserveDatabaseAPI{
 				//if there was no parameter, return the dates and reservations for today
 				if( $request->id ){
 					//if there is a request id, load the dates from the reservation
-					$reservation_idx = $request->id;
-					$dates = ReserveDatabaseAPI::get_dates($reservation_idx);
+					$dates = ReserveDatabaseAPI::get_dates($request->id);
 					$fixed_start_date=ReserveDatabaseAPI::fix_date($dates['start_date']);
 					$fixed_end_date=ReserveDatabaseAPI::fix_date($dates['end_date']);
 					$title="Reservations from $fixed_start_date to $fixed_end_date";
