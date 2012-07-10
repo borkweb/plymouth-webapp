@@ -3,7 +3,7 @@
 $pidm = $_SESSION['pidm'];
 
 $tpl = new PSUTemplate();
-$tpl->assign('start', $start = PSU::is('matt') ? mktime(8, 0, 0, 2, 2, 2011) : mktime(8,0,0,2,14,2011));
+$tpl->assign('start', $start = PSU::is('porter') ? mktime(8, 0, 0, 2, 2, 2011) : mktime(8,0,0,2,14,2011));
 $tpl->assign('now', $now = mktime());
 $tpl->assign('end', $close_time = mktime(16,30,0,2,21,2011));
 $tpl->assign('tickets', $num_tickets = 4);
