@@ -1,0 +1,76 @@
+<?php
+
+$pidm = $_SESSION['pidm'];
+
+$tpl = new PSUTemplate();
+$tpl->assign('start', $start = PSU::is('matt') ? mktime(8, 0, 0, 2, 2, 2011) : mktime(8,0,0,2,14,2011));
+$tpl->assign('now', $now = mktime());
+$tpl->assign('end', $close_time = mktime(16,30,0,2,21,2011));
+$tpl->assign('tickets', $num_tickets = 4);
+
+$can_signup = PSU::db('raintix')->GetOne("SELECT 1 FROM valid_user WHERE pidm = ?", array($pidm));
+$signed_up = PSU::db('raintix')->GetOne("SELECT 1 FROM user_location WHERE pidm = ?", array($pidm));
+
+$tpl->assign('can_signup', $can_signup);
+$tpl->assign('signed_up', $signed_up);
+
+if($_SERVER['REQUEST_METHOD']=='POST')
+{
+	$_POST['mobility'] = $_POST['mobility'] > $num_tickets ? $num_tickets : $_POST['mobility'];
+	$_POST['num'] = $_POST['num'] ? $_POST['num'] : $num_tickets;
+
+	$location_id = 0;
+
+	$sql = "INSERT INTO user_location (
+						pidm,
+						location_id,
+						mobility,
+						assistance,
+						who,
+						details, 
+						quantity
+					) VALUES (
+						?,
+						?,
+						?,
+						?,
+						?,
+						?,
+						?
+					)";
+
+	$params = array(
+		$pidm,
+		$location_id,
+		$_POST['mobility'],
+		$_POST['assistance'], 
+		$_POST['who'],
+		$_POST['desc'],
+		$_POST['num']
+	);
+
+	PSU::db('raintix')->Execute($sql, $params);
+
+	if($_POST['mobility'] > 0 && $location_id == 3)
+	{
+		$count = PSU::db('raintix')->GetOne("SELECT SUM(mobility) FROM user_location WHERE location_id=3");
+		if($count >= $num_tickets)
+		{
+			mail('mtbatchelder@plymouth.edu','Warning: Silver','There are currently '.$count.' people listed as needing accomodations for mobility in Silver');
+		}
+	}
+
+	$location_name = PSU::db('raintix')->GetOne("SELECT name FROM location WHERE id = ?", array($location_id));
+	$user_location = PSU::db('raintix')->GetRow("SELECT * FROM user_location WHERE pidm = ?", array( $pidm ));
+
+	$tpl->assign('location_name', $location_name);
+	$tpl->assign('person', $person = new PSUPerson($pidm));
+}
+
+if($signed_up || $_POST)
+{
+	$user_location = PSU::db('raintix')->GetRow("SELECT * FROM user_location WHERE pidm = ?", array( $pidm ));
+	$tpl->assign('user_location', $user_location);
+}//end if
+
+$tpl->display('index.tpl');

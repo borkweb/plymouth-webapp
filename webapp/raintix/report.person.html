@@ -1,0 +1,150 @@
+<?php
+PSU::session_start();
+
+IDMObject::authN();
+
+if(!IDMObject::authZ('permission', 'raintix_reports'))
+{
+	exit('You do not have access to this service');
+}//end if
+$majors = array();
+$sql = "SELECT * FROM location_major";
+$results = PSU::db('raintix')->Execute($sql);
+foreach($results as $row)
+{
+	$majors[$row['major']] = $row['location_id'];
+}//end foreach
+
+$l = array(1 => 'PE', 2 => 'HUB', 3 => 'Silver');
+
+$records = array();
+$total = 0;
+$res = PSU::db('raintix')->Execute("SELECT * FROM user_location");
+while($row = $res->FetchRow())
+{
+	$person = new PSUPerson($row['pidm']);
+	$person->name = explode(':', $person->formatName('l:f:m'));
+
+	if($person->phone['RH'][0] && $person->phone['RH'][0]->unlist_ind != 'Y') {
+		$phone = $person->phone['RH'][0]->phone_area.'-'.$person->phone['RH'][0]->phone_number;
+	} elseif($person->phone['LO'][0] && $person->phone['LO'][0]->unlist_ind != 'Y') {
+		$phone = $person->phone['LO'][0]->phone_area.'-'.$person->phone['LO'][0]->phone_number;
+	} elseif($person->phone['MA'][0] && $person->phone['MA'][0]->unlist_ind != 'Y') {
+		$phone = $person->phone['MA'][0]->phone_area.'-'.$person->phone['MA'][0]->phone_number;
+	}//end if
+
+	$record = array(
+		'last_name' => $person->name[0],
+		'first_name' => $person->name[1],
+		'middle_name' => $person->name[2],
+		'id' => $person->id,
+		'email' => $person->email['CA'][0]->email_address,
+		'phone' => $phone,
+		'location' => $l[$majors[key($person->curriculum['major'])]],
+		'num_tickets' => $row['quantity'],
+		'needs_assistance' => $row['assistance'],
+		'who_needs_assistance' => $row['who'],
+		'num_needing_assistance' => $row['mobility'],
+		'assistance_details' => stripslashes($row['details']),
+	);
+	$person->destroy();
+	$records[] = $record;
+}//end while
+
+if( $_GET['xls'] ) {
+	$params = array(
+		'file_name' => 'raintix_report',
+		'headings' => array(
+			'last_name',
+			'first_name',
+			'middle_name',
+			'id',
+			'email',
+			'phone',
+			'location',
+			'num_tickets',
+			'needs_assistance',
+			'who_needs_assistance',
+			'num_needing_assistance',
+			'assistance_details',
+		),
+		'types' => array(
+			'last_name' => 'string',
+			'first_name' => 'string',
+			'middle_name' => 'string',
+			'id' => 'string',
+			'email' => 'string',
+			'phone' => 'string',
+			'location' => 'string',
+			'num_tickets' => 'number',
+			'needs_assistance' => 'string',
+			'who_needs_assistance' => 'string',
+			'num_needing_assistance' => 'number',
+			'assistance_details' => 'string',
+		),
+	);
+	PSU::xlsx( $records, $params );
+} else {
+	?>
+	<style>
+	table {
+		border-collapse: collapse;
+		border: 1px solid #999;
+	}
+	th { padding: 0.3em; background: #eee;
+		border: 1px solid #999;
+	}
+	td { padding: 0.3em;
+		border: 1px solid #999;
+	}
+	</style>
+	<a href="?xls=1">Download as Excel</a>
+	<?php
+	echo '<table>';
+	echo '<tr><th>Last Name</th>';
+	echo '<th>First Name</th>';
+	echo '<th>Middle Name</th>';
+	echo '<th>PSU ID</th>';
+	echo '<th>Email</th>';
+	echo '<th>Phone</th>';
+	echo '<th>Location</th>';
+	echo '<th>Num Tickets</th>';
+	echo '<th>Needs Assistance</th>';
+	echo '<th>Who</th>';
+	echo '<th>Num Needing Assistance</th>';
+	echo '<th>Assistance Details</th>';
+	echo '</tr>';
+	foreach( $records as $record ) {
+		echo '<tr><td nowrap>'.$record['last_name'].'</td>';
+		echo '<td nowrap>'.$record['first_name'].'</td>';
+		echo '<td nowrap>'.$record['middle_name'].'</td>';
+		echo '<td>'.$record['id'].'</td>';
+		echo '<td nowrap>'.$record['email'].'</td>';
+		echo '<td nowrap>'.$record['phone'].'</td>';
+		echo '<td>'.$record['location'].'</td>';
+		echo '<td style="text-align:center;">'.$record['num_tickets'].'</td>';
+		echo '<td>'.$record['needs_assistance'].'</td>';
+		echo '<td>'.$record['who_needs_assistance'].'</td>';
+		echo '<td>'.$record['num_needing_assistance'].'</td>';
+		echo '<td>'.$record['assistance_details'].'</td>';
+		echo '</tr>';
+	}
+
+	echo '</table>';
+	echo '<br/><br/>';
+}//end if
+/*
+echo '<table>';
+echo '<tr><td>Last Name</td><td>First Name</td><td>Middle Name</td><td>PSU ID</td><td>Location</td><td>Num Tickets</td></tr>';
+$total = 0;
+$res = $db->Execute("SELECT * FROM valid_user v WHERE not exists(select 1 from user_location l where l.pidm=v.pidm)");
+while($row = $res->FetchRow())
+{
+	$name = $idm->getName($row['pidm'],'l:f:m');
+	$row['psu_id'] = $idm->getIdentifier($row['pidm'],'pid','psu_id');
+	$row['person'] = explode(':',$name);
+	echo '<tr><td>'.$row['person'][0].'</td><td>'.$row['person'][1].'</td><td>'.$row['person'][2].'</td><td>'.$row['psu_id'].'</td><td>None Reserved</td></tr>';
+}
+
+echo '</table>';
+ */
