@@ -2752,7 +2752,8 @@ class PSU
 
 		$where_b = array();
 		$where_k = '';
-		$search_phrase_arr = explode( ' ', str_replace( '*', '%', trim( $arg['search_phrase'] )));
+		$search_phrase_simple = trim( $arg['search_phrase'] );
+		$search_phrase_arr = explode( ' ', str_replace( '*', '%', $search_phrase_simple ) );
 		foreach( $search_phrase_arr as $val )
 		{
 			$val = trim($val);
@@ -2766,7 +2767,7 @@ class PSU
 			$iterations += 1;
 
 			$phone_where = "REPLACE(REPLACE(REPLACE(REPLACE(phonebook.phone_of,' ',''),'-',''),')',''),'(','') like ".self::db('phonebook')->quote( '%'.$val )." OR REPLACE(REPLACE(REPLACE(REPLACE(phonebook.phone_vm,' ',''),'-',''),')',''),'(','') like ".self::db('phonebook')->quote( '%'.$val );
-			$where_b[] = '('.$phone_where.' OR phonebook.psu_id LIKE '.self::db('phonebook')->quote( $val ).' OR phonebook.name_last LIKE '. self::db('phonebook')->quote( $val ) .' OR phonebook.name_first LIKE '. self::db('phonebook')->quote( $val ) .' )';
+			$where_b[] = '('.$phone_where.' OR phonebook.psu_id LIKE '.self::db('phonebook')->quote( $val ).' OR phonebook.name_last LIKE '. self::db('phonebook')->quote( $val ) .' OR phonebook.name_first LIKE '. self::db('phonebook')->quote( $val ) .' OR phonebook.username = ' . self::db('phonebook')->qstr($search_phrase_simple) . ')';
 			
 			$where_k .= str_replace( '%', '*', $val .' '. metaphone( $val ) .' ');
 		}//end foreach
@@ -2775,7 +2776,7 @@ class PSU
 		if( count($where_b) == 0 ) {
 			return array();
 		}
-		
+
 		$twiddle = 20;
 		foreach( self::db('phonebook')->Execute("SELECT phonebook.*, ( CHAR_LENGTH( phonebook.name_last ) + CHAR_LENGTH( phonebook.name_first ) + CHAR_LENGTH( phonebook.username )) AS len, SUM(rank) AS rank
 			FROM phonebook AS phonebook
