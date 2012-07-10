@@ -136,8 +136,8 @@ class CTSDatabaseAPI {
 
 	function reservation_by_range_equipment($dates){
 		//filter results by a range of dates
-		$start_date=$dates[0];
-		$end_date=$dates[1];
+		$start_date=$dates['start_date'];
+		$end_date=$dates['end_date'];
 		$dates=array($start_date, $start_date, $end_date, $start_date, $end_date, $end_date);
 		$sql="
 			SELECT * FROM cts_reservation

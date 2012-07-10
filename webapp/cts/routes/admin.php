@@ -193,12 +193,7 @@ respond('/equipment/[i:id]?/item/model/[:model]/?', function( $request, $respons
 });//end equipment/filter/model
 
 respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $response, $app) {
-	if($request->id){
-		$reservation_idx=$request->id;
-		$_SESSION['warnings'][]='You are adding equipment to reservation index ' . '<a target="blank" href="'. $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx . '">' . $reservation_idx . '</a>';
-		$app->tpl->assign('reservation_idx', $reservation_idx);
-	}
-	
+		
 	$glpi_id=$request->glpi_id;
 	
 	$data = ReserveDatabaseAPI::search($request);
@@ -207,15 +202,18 @@ respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $re
 		$response->redirect($data['redirect_url']);
 	}
 	//otherwise assign the title and reservations
-	$app->tpl->assign('title', $data['title']);
 	//we only need the first two dates
-	$start_date=$data['dates'][0];
-	$end_date=$data['dates'][1];
 
-	$dates=array(
-		$start_date,
-		$end_date,
-	);
+	if($request->id){
+		$reservation_idx=$request->id;
+		$_SESSION['warnings'][]='You are adding equipment to reservation index ' . '<a target="blank" href="'. $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx . '">' . $reservation_idx . '</a>';
+		$app->tpl->assign('reservation_idx', $reservation_idx);
+	}
+		$start_date=$data['dates']['start_date'];
+		$end_date=$data['dates']['end_date'];
+		$app->tpl->assign('title', $data['title']);
+		$dates = $data['dates'];
+
 	//-----------------------GANTT VIEW
 	include 'jpgraph/jpgraph.php';
 	include 'jpgraph/jpgraph_gantt.php';
@@ -262,8 +260,6 @@ respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $re
 		}
 
 		//DRAW GRAPH
-		$graph->SetDateRange($start_date,$end_date);
-
 		$is_rendering_image = (boolean) $_GET['_jpg_csimd'];
 
 		// if jpgraph isn't rendering the image, it is instead rendering the image map.  
@@ -295,29 +291,29 @@ respond('/equipment/[i:id]?/item/[:glpi_id]/[:action]?', function( $request, $re
 
 respond('/equipment/[i:id]?/item/model/[:model]/list/?/[:action]?', function( $request, $response, $app) {
 	//this is where the gantt view will be
-	if($request->id){
-		$reservation_idx=$request->id;
-		$_SESSION['warnings'][]='You are adding equipment to reservation index ' . '<a target="blank" href="'. $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx . '">' . $reservation_idx . '</a>';
-		$app->tpl->assign('reservation_idx', $reservation_idx);
-	}
+	$glpi_id=$request->glpi_id;
+	
 	$data = ReserveDatabaseAPI::search($request);
 	if($data['redirect_url']){
 		//if there was a redirect url in the data, redirect the user there
 		$response->redirect($data['redirect_url']);
 	}
 	//otherwise assign the title and reservations
+	//we only need the first two dates
+
+	if($request->id){
+		$reservation_idx=$request->id;
+		$_SESSION['warnings'][]='You are adding equipment to reservation index ' . '<a target="blank" href="'. $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx . '">' . $reservation_idx . '</a>';
+		$app->tpl->assign('reservation_idx', $reservation_idx);
+	}
+		$start_date=$data['dates']['start_date'];
+		$end_date=$data['dates']['end_date'];
+		$app->tpl->assign('title', $data['title']);
+		$dates = $data['dates'];
+	//otherwise assign the title and reservations
 	$subtitle = ' for ' . $request->model;
-	$title = $data['title'];
-	$app->tpl->assign('title', $title);
 	$app->tpl->assign('subtitle', $subtitle);
 	//we only need the first two dates
-	$start_date=$data['dates'][0];
-	$end_date=$data['dates'][1];
-
-	$dates=array(
-		$start_date,
-		$end_date,
-	);
 
 	$items=CTSDatabaseAPI::by_model( array('model' =>array( $request->model ), ));
 	$items=$items[ $request->model]['machines'];
@@ -376,7 +372,6 @@ respond('/equipment/[i:id]?/item/model/[:model]/list/?/[:action]?', function( $r
 		}
 
 		//DRAW GRAPH
-		$graph->SetDateRange($start_date,$end_date);
 
 		$is_rendering_image = (boolean) $_GET['_jpg_csimd'];
 

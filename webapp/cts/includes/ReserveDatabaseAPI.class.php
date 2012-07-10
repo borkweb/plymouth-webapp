@@ -457,12 +457,13 @@ class ReserveDatabaseAPI{
 				$fixed_end_date=self::fix_date($end_date);
 
 				$title="Reservations from $fixed_start_date to $fixed_end_date";
-
+				//add the dates to the date array, four dates are needed for testing the date ranges
+				//and for proper use with adodb binding
 				$dates=array(
-					$start_date, 
-					$end_date, 
-					$start_date, 
-					$end_date,
+						'start_date' => $start_date, 
+						'end_date' => $end_date, 
+						'start_date2' => $start_date, 
+						'end_date2' => $end_date
 				);
 				$reservation =  self::by_date_range($dates);
 				break;
@@ -470,11 +471,13 @@ class ReserveDatabaseAPI{
 				//this shows the information for this week
 				$start_date=date('Y-m-d',time()- ($week) * ONE_DAY);
 				$end_date=date('Y-m-d',time()- ($week - 6) * ONE_DAY);
+				//add the dates to the date array, four dates are needed for testing the date ranges
+				//and for proper use with adodb binding
 				$dates=array(
-					$start_date, 
-					$end_date, 
-					$start_date, 
-					$end_date
+						'start_date' => $start_date, 
+						'end_date' => $end_date, 
+						'start_date2' => $start_date, 
+						'end_date2' => $end_date
 				);
 				$fixed_start_date=self::fix_date($start_date);
 				$fixed_end_date=self::fix_date($end_date);
@@ -491,12 +494,13 @@ class ReserveDatabaseAPI{
 
 				$fixed_start_date=ReserveDatabaseAPI::fix_date($start_date);
 				$fixed_end_date=ReserveDatabaseAPI::fix_date($end_date);
-
+				//add the dates to the date array, four dates are needed for testing the date ranges
+				//and for proper use with adodb binding
 				$dates=array(
-						$start_date, 
-						$end_date, 
-						$start_date, 
-						$end_date,
+						'start_date' => $start_date, 
+						'end_date' => $end_date, 
+						'start_date2' => $start_date, 
+						'end_date2' => $end_date
 				);
 				$title="Reservations from $fixed_start_date to $fixed_end_date";
 				$reservation=self::by_date_range($dates);
@@ -508,12 +512,13 @@ class ReserveDatabaseAPI{
 				$end_date=date('Y-m-d',time()- ($week + 1) * ONE_DAY);
 				$fixed_start_date=self::fix_date($start_date);
 				$fixed_end_date=self::fix_date($end_date);
-				
+				//add the dates to the date array, four dates are needed for testing the date ranges
+				//and for proper use with adodb binding
 				$dates=array(
-						$start_date, 
-						$end_date, 
-						$start_date, 
-						$end_date
+						'start_date' => $start_date, 
+						'end_date' => $end_date, 
+						'start_date2' => $start_date, 
+						'end_date2' => $end_date
 				);
 
 
@@ -630,13 +635,32 @@ class ReserveDatabaseAPI{
 					$title = "Reservations from $fixed_start_date to $fixed_end_date";
 				}
 				break;
+			case "thisreservation":
+				$dates = ReserveDatabaseAPI::get_dates($request->id);
+				$fixed_start_date=ReserveDatabaseAPI::fix_date($dates['start_date']);
+				$fixed_end_date=ReserveDatabaseAPI::fix_date($dates['end_date']);
+				$title="Reservations from $fixed_start_date to $fixed_end_date";
+				break;
 			default:
 				//if there was no parameter, return the dates and reservations for today
-				$start_date=date('Y-m-d');
-				$fixed_start_date=self::fix_date($start_date);
-
-				$title="Reservations for today - $fixed_start_date";
-				$reservation= self::by_date($start_date);
+				if( $request->id ){
+					//if there is a request id, load the dates from the reservation
+					$dates = ReserveDatabaseAPI::get_dates($request->id);
+					$fixed_start_date=ReserveDatabaseAPI::fix_date($dates['start_date']);
+					$fixed_end_date=ReserveDatabaseAPI::fix_date($dates['end_date']);
+					$title="Reservations from $fixed_start_date to $fixed_end_date";
+				}else{
+					//if there is not a request id, load today as the default date
+					$start_date=date('Y-m-d');
+					$end_date=date('Y-m-d');
+					$dates=array(
+							'start_date' => $start_date,
+							'end_date' => $end_date,
+						);
+					$fixed_start_date=self::fix_date($start_date);
+					$title="Reservations for today - $fixed_start_date";
+					$reservation= self::by_date($start_date);
+				}
 				break;
 
 		}//end switch	
@@ -666,7 +690,7 @@ class ReserveDatabaseAPI{
 			$glpi_id='PSU-0000-' . $glpi_id;
 		}elseif(strlen($glpi_id)==46){
 			//if the code is scanned
-			$glpi_id=substr($glpi_id,-13);//return the last 4 digits
+			$glpi_id=substr($glpi_id,-13);//return the last 13 digits
 
 		}
 		return $glpi_id;
@@ -851,6 +875,16 @@ class ReserveDatabaseAPI{
 		return PSU::db('cts')->GetRow( $sql,$announcement_id );
 
 	}//end function get_announcements
+
+	public function get_dates($reservation_idx){
+		$sql="
+			SELECT start_date, end_date
+			  FROM cts_reservation
+			 WHERE reservation_idx = ?
+			";
+		return PSU::db('cts')->GetRow( $sql, $reservation_idx );
+
+	}//end function get_dates
 
 	public function get_GLPI($item_id){
 		//this grabs GLPI information for a specific item
