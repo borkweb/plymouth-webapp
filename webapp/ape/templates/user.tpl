@@ -4,7 +4,7 @@
 	<img id="print-confidential" src="/webapp/style/templates/images/confidential_960.png"/>
 	<div class="note ticket">
 		<a href="https://www.plymouth.edu/webapp/calllog/{if $person->login_name or $person->pidm}user/{if $person->login_name}{$person->login_name}{else}{$person->pidm}{/if}/{else}new_call.html?caller=generic{/if}">create ticket</a>{*
-		*}{if $person->tickets_open}, <a href="https://www.plymouth.edu/webapp/calllog/index.html?action=view_open_calls&amp;option=caller&amp;group={$person->pidm}">open tickets ({$person->tickets_open})</a>{/if}{*
+		*}{if $person->tickets_open}, <a href="https://www.plymouth.edu/webapp/calllog/calls/for/{$person->login_name}">open tickets ({$person->tickets_open})</a>{/if}{*
 		*}{if $person->pidm}, <a href="{$PHP.BASE_URL}/audit/{$person->username|default:$person->pidm}">check logs</a>{/if}{*
 		*}{if $AUTHZ.permission.ape_hardware}, <a href="{$PHP.BASE_URL}/hardware/u/{$person->username}">hardware</a>{/if}
 		{if $has_employee_exit_checklist}
