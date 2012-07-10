@@ -210,7 +210,7 @@ if( $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_GET['ajax']==1 ){
 			$headers['from'] = $from;
 			$headers['return-path'] = $from;
 			$headers['reply-to'] = $reply_to;
-			$headers['call-id']: $call_id;
+			$headers['call-id'] = $call_id;
 			$headers['its-group'] = $its_group;
 			
 			PSU::mail( $to, $subject, array($text, $html), $headers );
