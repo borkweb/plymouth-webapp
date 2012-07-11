@@ -1,0 +1,11 @@
+<?php
+
+if(!in_array($_SESSION['username'], $valid_users)) header('Location: '.$GLOBALS['BASE_URL']);
+
+$tpl = new PSUTemplate;
+
+$sql = "SELECT CONCAT(p.email, '@plymouth.edu') FROM phonebook.phonebook p, raintix.valid_user vl WHERE vl.pidm = p.pidm AND not exists(SELECT 1 FROM raintix.user_location ul WHERE ul.pidm = vl.pidm)";
+
+$tpl->assign('emails', PSU::db('myplymouth')->GetCol($sql));
+
+$tpl->display('email_list.tpl');

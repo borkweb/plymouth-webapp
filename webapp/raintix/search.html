@@ -1,0 +1,49 @@
+<?php
+
+$tpl = new PSUTemplate();
+
+if($_GET['search'])
+{
+	$locations = array();
+	if($results = psu::db('raintix')->Execute("SELECT major, name FROM location, location_major WHERE id = location_id"))
+	{
+		foreach($results as $row)
+		{
+			$locations[$row['major']] = $row['name'];
+		}//end foreach
+	}//end if
+
+	$graduate_pidms = psu::db('raintix')->GetCol("SELECT pidm FROM valid_user");
+	$graduates = array();
+	foreach($graduate_pidms as $pidm)
+	{
+		$graduates[$pidm] = true;
+	}//end foreach
+
+	$params = array(
+		'search_phrase' => $_GET['search'],
+		'empstu' => 0,
+		'everybody' => false,
+		'count' => 1000,
+		'start' => 0
+	);
+	$results = PSU::searchPhonebook($params);
+	$people = array();
+	foreach($results as $res)
+	{
+		$people[$res['pidm']] = $res;
+	}//end foreach
+
+	$people = array_intersect_key($people, $graduates);
+
+	$results = array();
+	foreach($people as $person)
+	{
+		$p = new PSUPerson($person['pidm']);
+		$person['location'] = $locations[key($p->curriculum['major'])];
+		$results[] = $person;
+	}//end foreach
+	$tpl->assign('people', $results);
+}//end if
+
+$tpl->display('search.tpl');

@@ -1,0 +1,44 @@
+<?php
+$db = PSUDatabase::connect('mysql/raintix');
+$GLOBALS['BANNER'] = PSUDatabase::connect('oracle/psc1_psu/fixcase');
+
+$idm = new IDMObject($GLOBALS['BANNER']);
+
+IDMObject::authN();
+
+if(!IDMObject::authZ('permission', 'raintix_reports'))
+{
+	exit('You do not have access to this service');
+}//end if
+
+?>
+<style>
+table.report{
+	border-collapse: collapse;
+}
+table.report th{
+	background: #eee;
+	border: 1px solid #ccc;
+}
+table.report td{
+	background: #fbfbfb;
+	border: 1px solid #ccc;
+	padding: 3px;
+}
+</style>
+<?php
+echo '<table class="report">';
+echo '<tr><th>Last Name</th><th>First Name</th><th>Middle Name</th><th>ID</th><th>Location</th><th>Tickets</th><th>Needs Assistance</th><th>Details</th></tr>';
+$total = 0;
+$res = $db->Execute("SELECT * FROM user_location,location WHERE location_id=id AND assistance='Y' ORDER BY name ASC");
+while($row = $res->FetchRow())
+{
+	$name = $idm->getName($row['pidm'],'l:f:m');
+	$row['email'] = $idm->getIdentifier($row['pidm'],'pid','username').'@plymouth.edu';
+	$row['psu_id'] = $idm->getIdentifier($row['pidm'],'pid','psu_id');
+	$row['person'] = explode(':',$name);
+	echo '<tr><td>'.$row['person'][0].'</td><td>'.$row['person'][1].'</td><td>'.$row['person'][2].'</td><td>'.$row['email'].'</td><td nowrap="nowrap">'.$row['name'].'</td><td>'.$row['quantity'].'</td><td>'.$row['who'].'</td><td>'.$row['details'].'</td></tr>';
+}
+
+echo '</table>';
+?>
