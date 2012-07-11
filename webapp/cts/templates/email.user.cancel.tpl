@@ -16,7 +16,7 @@
 		<li><strong>End Date and Time: </strong>{$reserve.end_date|date_format:'%m-%d-%Y'} <strong>at</strong> {$reserve.end_time|date_format:'%l:%M %p'}</li>
 		<li><strong>Pickup/Dropoff Method: </strong>
 
-			{if $reserve.delivery_type == "0" }
+			{if $reserve.delivery_type == 0 }
 				I will pickup/dropoff at the helpdesk.
 			{else}
 				The CTS department will dropoff the equipment at the location specified.
