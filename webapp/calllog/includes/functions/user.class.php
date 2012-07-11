@@ -138,8 +138,8 @@ class User
 				$person['wp_id'] = $caller_person->wp_id;
 				$person['email'] = $caller_person->wp_email;
 				$person['pidm'] = $caller_person->pidm ? $caller_person->pidm : null;
-				$person['identifier'] = $caller_person->wp_email ? $caller_person->username : $caller_person->pidm;
-
+				$person['identifier'] = $caller_person->wp_email ? $caller_person->wp_id : $caller_person->pidm;
+				$person['username'] = $caller_person->username ?: $caller_person->wp_id;
 				$found_via = 'psuperson';
 			}
 		}//end if
@@ -230,7 +230,6 @@ class User
 		$tpl = new XTemplate(TEMPLATE_DIR.'/user_information.tpl');
 
 		$caller_data = $this->getCallerData($caller, $person);
-
 		$tpl->assign('call_log_username', $_SESSION['username']);		
 		$tpl->assign('caller', $caller_data);
 
