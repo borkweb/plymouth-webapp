@@ -46,6 +46,9 @@ class CDNAPI {
 	 */
 	public static function files( $path ) {
 		$fsfiles = self::fspath( $path );
+		$fsfiles2 = self::fspath( PSU_BASE_DIR, $path );
+		array_merge( $fsfiles, $fsfiles2 );
+
 		$dbfiles = self::dbpath( $path );
 
 		// tag dbfiles
