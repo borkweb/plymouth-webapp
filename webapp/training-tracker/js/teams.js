@@ -17,7 +17,6 @@ $(function(){
 			return $helper;
 		},
 		receive: function(event, ui){
-			//the number of the team it is dropping to is the last character, so this grabs the last character
 			var mentor_wpid = $(this).parent().find('select').val();
 
 			if (_.isUndefined(teams[mentor_wpid]) != true){

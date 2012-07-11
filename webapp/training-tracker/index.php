@@ -135,6 +135,9 @@ respond( '/?', function( $request, $response, $app ) {
 	foreach ($staff as $person){
 		$pidm = $person->person()->pidm;
 		
+		$person->merit = TrainingTracker::merit_get($pidm);
+		$person->demerit = TrainingTracker::demerit_get($pidm);
+
 		$type = TrainingTracker::checklist_type($person->privileges);
 		if (!TrainingTracker::checklist_exists($pidm, $type, 0)){
 			//get tybe based off of a persons privileges

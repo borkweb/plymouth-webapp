@@ -89,12 +89,16 @@ respond('POST', '/fate', function( $request, $response, $app ) {
 
 			TrainingTracker::set_user_level($wpid, $permission);
 			if (!TrainingTracker::checklist_exists($pidm, $type, 1)){
+				$checklist_id = TrainingTracker::get_checklist_id($pidm);
 				TrainingTracker::checklist_close($pidm);
 				TrainingTracker::checklist_insert($pidm, $type);
+				TrainingTracker::merit_update($checklist_id, $pidm);
 			}
 			else{
+				$checklist_id = TrainingTracker::get_checklist_id($pidm);
 				TrainingTracker::checklist_close($pidm);
 				TrainingTracker::checklist_open($pidm, $type);
+				TrainingTracker::merit_update($checklist_id, $pidm);
 			}
 		}
 	}
@@ -126,7 +130,7 @@ respond( 'GET', '/statistics/[:wpid]', function( $request, $responce, $app ) {
 
 	$wpid = $request->wpid;
 	
-	if(!TrainingTracker::valid_wpid($wpid)){
+	if(!trainingtracker::valid_wpid($wpid)){
 		$responce->redirect('../../');
 	}
 
@@ -212,3 +216,62 @@ respond( 'GET', '/statistics/[:wpid]', function( $request, $responce, $app ) {
 	$app->tpl->display('statistics.tpl');
 });
 
+
+
+respond( 'POST', '/merit/remove', function( $request, $responce, $app ) {
+	
+	$id = $request->data[0];
+	TrainingTracker::merit_remove($id);
+
+});
+
+respond( 'POST', '/merit', function( $request, $responce, $app ) {
+
+	$type = $request->data[0];
+	$comments = $request->data[1];
+	$wpid = $request->data[2];
+	if(TrainingTracker::valid_wpid($wpid)){
+		$comments = htmlentities($comments);
+		$comments = stripslashes($comments);
+		$comments = trim($comments);
+		if ($type == 'star' || $type == 'dog-house'){
+				$checklist_id = TrainingTracker::get_checklist_id($wpid);
+				if ($type == 'star'){
+					$type = 'merit';
+				}	
+				else{
+					$type = 'demerit';
+				}
+				$updated_by = $app->user->pidm;
+				$item_id = 42;
+				TrainingTracker::merit_insert($item_id, $checklist_id, $type, $comments, $updated_by);
+				$last_insert_id = TrainingTracker::last_insert_id();
+
+				$data = array(
+					'id' => $last_insert_id,
+				);
+				
+				// echoed for ajax to pickup and use.
+				echo json_encode($data);
+
+		}
+	}
+});
+
+respond( 'GET', '/merit', function( $request, $responce, $app ) {
+
+	$staff_collection = new TrainingTracker\StaffCollection();
+	$staff_collection->load();
+
+	$staff = $staff_collection->staff();
+
+	foreach ($staff as $person){
+		$merits[$person->wpid]['merits'] = TrainingTracker::merit_get($person->wpid);
+		$merits[$person->wpid]['demerits'] = TrainingTracker::demerit_get($person->wpid);
+	}
+
+	$merits = json_encode($merits);
+	$app->tpl->assign('merits', $merits);
+	$app->tpl->assign('staff', $staff);
+	$app->tpl->display('merit.tpl');
+});
