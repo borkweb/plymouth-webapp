@@ -237,10 +237,12 @@ class Bill extends \BannerObject
 
 		$record['expiration_date'] = strtotime( '+5 days', $record['entry_date'] );
 
-		\PSU::add_filter( 'transaction_skip', array( &$this, 'payment_plan_ug_skip_term_filter' ), 10, 2 );
+		\PSU::add_filter( 'transaction_term_skip', __CLASS__.'::payment_plan_ug_skip_term_filter' , 10, 3 );
+		print_r("Filter added\n");
 
 		$transaction = new \PSU\AR\Transaction\Memo( $record['pidm'], $data['contract_balance'] );
 		$transaction->billable( FALSE );
+		$transaction->level='UG';
 		$transaction->split( $record );
 		if( ! $transaction->save() ) {
 			return false;
@@ -267,14 +269,17 @@ class Bill extends \BannerObject
 	 * we want to skip terms that aren't in the current aid year
 	 */
 	public function payment_plan_ug_skip_term_filter( $value, $bill, $level ) {
+			print_r(\PSU\Student::getAidYear());
 		if( strtoupper( $level ) == 'UG' ) {
-			foreach( (array) $bill->all_term_balances as $term => $value ) {
+			foreach( (array) $bill->all_term_balances as $term => $tmp ) {
 				if( \PSU\Student::getAidYear() != \PSU\Student::getAidYear( $term ) ) {
 					$value[] = $term;
 				}//end if
 			}//end foreach
 		}//end if
 
+		print_r("value: ");
+		print_r($value);
 		return $value;
 	}//end apply_to_terms
 
