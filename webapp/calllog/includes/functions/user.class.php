@@ -211,8 +211,6 @@ class User
 			}
 		}
 		
-		$caller_data['username'] = $caller_data['username'] ?: $caller_data['identifier'];
-
 		if( $found_via == null ) {
 			return false;
 		}
