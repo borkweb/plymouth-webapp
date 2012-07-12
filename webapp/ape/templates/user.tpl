@@ -111,7 +111,7 @@
 					{elseif $person->issues.app_provision_error eq 'disallowed-email'}
 						the provided email address is a known-bad value, which the provisioning process is coded to reject. If possible, user should provide a real email address to Admissions.
 					{elseif $person->issues.app_provision_error eq 'link-required'}
-						user provided a new email address during the application process, and must complete <a href="http://www.plymouth.edu/webapp/devwiki/wiki/Undergraduate_applicants#Email_requesting_user_verify_identity_.28.22link_accounts.22.29">the challenge/response</a> we initiated via email.
+						user provided a new email address during the application process, and must complete <a href="http://www.plymouth.edu/webapp/mis/wiki/Undergraduate_applicants#Email_requesting_user_verify_identity_.28.22link_accounts.22.29">the challenge/response</a> we initiated via email.
 					{elseif $person->issues.app_provision_error eq 'email-claimed'}
 						the email address supplied by the user is already used for another person's WordPress account.
 					{elseif $person->issues.app_provision_error eq 'no-unique-ident'}
