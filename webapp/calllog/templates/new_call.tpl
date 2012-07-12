@@ -78,6 +78,7 @@
 		
 	{box title="Ticket Information" class="noprint"}
 		<div id="call_information_div">
+			<input type="hidden" id='call_status' name="call_status" value="{$call_status}" />
 			{$call_information}
 		</div>
 	{/box}
@@ -101,7 +102,8 @@
 				(<a href="{$PHP.BASE_URL}/business-area.html?clean=1" id="its-group-help" title="ITS Group Responsibilities">?</a>)
 			</li>
 			<li class="form-actions center">
-			<button type="submit" class="btn primary">{if $call_id}Update{else}Submit{/if} Ticket</button>
+			<button type="submit" class="btn primary" name='toggle' value='true'>{if $call_status eq 'open' or not $call_id}Update and Close {else if $call_status eq 'closed'}Update and Reopen{/if} call</button>
+			<button type="submit" class="btn primary" name='toggle' value='false'>{if $call_id}Update{else}Submit{/if} Ticket</button>
 			</li>
 		</ul>
 	{/box}

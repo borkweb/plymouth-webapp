@@ -13,13 +13,6 @@
 	</div>
 
 	<div class="call-information">
-		<label for="call_status" class="label">Call Status</label>
-		<select name="call_status" id="call_status">
-		{call_status_select_list}
-		</select>
-	</div>
-
-	<div class="call-information call-information-building">
 		<label for="call_location" class="label">Call Location</label>
 		<select name="call_location">
 		<option value="n/a">No Building Selected</option>

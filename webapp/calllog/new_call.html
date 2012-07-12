@@ -182,7 +182,9 @@ $tpl->assign('resnet_call', $resnet_call);
 $tpl->assign('restore_system_list', PSUHTML::getSelectOptions($restore_system_options));
 $tpl->assign('restore_request_func', $GLOBALS['restore']->restoreRequestFunc());
 
-$tpl->assign('call_information', $GLOBALS['user']->callInformation($call_status_options, $call_priority_options, $call_status, $call_priority, $building_options, $building_id, $resnet_call));
+\PSU::dbug($call_status);
+$tpl->assign('call_information', $GLOBALS['user']->callInformation($call_priority_options, $call_priority, $building_options, $building_id, $resnet_call));
+$tpl->assign('call_status', $call_status);
 if($person['identifier'] != 'generic') {
 	$tpl->assign('caller_information', $GLOBALS['user']->getCallerInformation($caller, $_REQUEST['call_id'], $person));
 
