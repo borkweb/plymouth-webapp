@@ -10,15 +10,22 @@
 //
 // See also: /app/.htaccess
 //
+
 if( 'www.dev.plymouth.edu' === $_SERVER['HTTP_HOST'] ) {
 	require dirname( __DIR__ ) . '/legacy/git-uranus.php';
 }
 
+// override include_path
 require dirname( __DIR__ ) . '/legacy/git-bootstrap.php';
 
 require 'autoload.php';
-require PSU_BASE_DIR . '/routes/routes.php';
 
-$uri = substr( $_SERVER['REQUEST_URI'], strlen( parse_url( PSU\Config\Factory::get_config()->get( 'app_url' ), PHP_URL_PATH ) ) );
+// setup the outer webapp object and its internal host config 
+$config = PSU\Config\Factory::get_config();
+$webapp = new PSU\Webapp( $config );
+$webapp->set_host_by_domain( $_SERVER['HTTP_HOST'] );
 
+require_once PSU_BASE_DIR . '/routes/routes.php';
+
+$uri = $webapp->host()->uri_for_dispatch( $_SERVER['REQUEST_URI'] );
 dispatch( $uri );

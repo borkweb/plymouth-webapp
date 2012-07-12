@@ -29,10 +29,8 @@ respond( function( $request, $response, $app ) {
 	};
 });
 
-with( '/address-verification', __DIR__ . '/address-verification.php' );
-with( '/festivals', __DIR__ . '/festivals.php' );
-with( '/style', __DIR__ . '/style.php' );
-with( '/teacher-cert', __DIR__ . '/teacher-cert.php' );
+// Load routes for this hostname
+$webapp->host()->routes();
 
 respond( '404', function( $request, $response, $app ) {
 	$response->code( 404 );

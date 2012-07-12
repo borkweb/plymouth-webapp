@@ -187,7 +187,7 @@ $tpl->assign('call_information', $GLOBALS['user']->callInformation($call_priorit
 $tpl->assign('call_status', $call_status);
 if($person['identifier'] != 'generic') {
 	$tpl->assign('caller_information', $GLOBALS['user']->getCallerInformation($caller, $_REQUEST['call_id'], $person));
-
+	
 	$tpl->assign('caller_email', $GLOBALS['user']->userEmailFunction($person['username'], $_REQUEST['call_id'], $person));
 	
 	$tpl->assign('user_quota', $GLOBALS['user']->userQuota($person['username'], $person));

@@ -1,0 +1,13 @@
+<?php
+
+$tpl = new PSUTemplate('Countries');
+
+$matches = CommonAppCountries::countMatchedCountries();
+$duplicates = CommonAppCountries::getDuplicates();
+$failures = CommonAppCountries::getFailedCountries();
+
+$tpl->assign('matches', $matches);
+$tpl->assign('duplicates', $duplicates);
+$tpl->assign('failures', $failures);
+
+$tpl->display('countries.tpl');

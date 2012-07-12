@@ -1,0 +1,46 @@
+<?php
+//$tpl->assign('content','search.tpl');
+$tpl->assign('title', 'Phonebook');
+$tpl->assign('can_see_images', $can_see_images);
+
+// go-enabled 3/24/06
+$what = ($_GET['what'])?urldecode(stripslashes($_GET['what'])):urldecode(stripslashes($_GET['go']));
+
+$empstu = ( isset( $_GET['empstu'] )) ? (int) $_GET['empstu'] : 0;
+$tpl->assign('empstu_'.$empstu, 'checked="checked"');
+
+$tpl->assign('username', $_SESSION['username']);
+$tpl->assign('login_uri', strpos( $_SERVER['REQUEST_URI'], '?') ? $_SERVER['REQUEST_URI'] . '&authme=1' : $_SERVER['REQUEST_URI'] . '?authme=1' );
+
+
+if($what) {
+	$tpl->assign('what', stripslashes($what));
+
+	if( $people = PSU::searchPhonebook( array(
+			'search_phrase' => $what,
+			'empstu' => $empstu,
+			'everybody' => FALSE,
+			'count' => $_SESSION['username'] ? 100 : 10,
+			'start' => 0
+		))) {
+		foreach($people as &$person){
+			$person['js_escaped_email'] = javascript_escape( $person['email'].'@plymouth.edu' );
+		} // end foreach
+		$tpl->assign('people', $people );
+	} // end if
+}//end if
+
+$tpl->display('search.tpl');
+
+
+// this should probably go in PSU, but for now...
+function javascript_escape($str) {
+	$new_str = '';
+
+	$str_len = strlen($str);
+	for($i = 0; $i < $str_len; $i++) {
+		$new_str .= '\\x' . dechex(ord(substr($str, $i, 1)));
+	}
+
+	return $new_str;
+}

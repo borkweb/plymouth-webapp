@@ -1,0 +1,27 @@
+<?php
+$db = PSUDatabase::connect('mysql/raintix');
+$GLOBALS['BANNER'] = PSUDatabase::connect('oracle/psc1_psu/fixcase');
+
+$idm = new IDMObject($GLOBALS['BANNER']);
+
+IDMObject::authN();
+
+if(!IDMObject::authZ('permission', 'raintix_reports'))
+{
+	exit('You do not have access to this service');
+}//end if
+
+echo '<ul>';
+$total = 0;
+$res = $db->Execute("SELECT u.location_id, l.name, COUNT(*) count FROM `user_location` u, location l WHERE u.location_id = l.id GROUP BY u.location_id");
+while($row = $res->FetchRow())
+{
+	$mobility = $db->GetOne("SELECT count(*) FROM user_location WHERE mobility=1 AND location_id={$row['location_id']}");
+	echo '<li>'.$row['name'].' - '.$row['count'].' <em>('.(int)$mobility.' special assistance)</em></li>';
+	$total+=$row['count'];
+}
+
+echo '</ul>';
+
+echo '<strong>Total</strong>: '.$total;
+?>
