@@ -90,12 +90,8 @@ $jQuery(document).ready(function($){
 		return append_text;
 	}//end get Value
 
-	$(document).on('click', '#change_call_status', function(){
-		console.log($('#call_status'));
-		
-	});
 	$('#new_call,#edit_call').bind('submit', function(){
-		console.log(event);
+
 		var append_text = '';
 		var $details = $('#problem_details');
 		var details = $details.val();
