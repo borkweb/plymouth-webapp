@@ -20,13 +20,6 @@ $attach_to = $_POST['attach_to'];
 $toggle = $_POST['toggle'];
 $_POST['updated_by'] = $call_log_username;
 
-if ($toggle == 'true'){
-	$toggle = true;
-}
-else{
-	$toggle = false;
-}
-
 if ($toggle){
 	if ($call_status == 'open'){
 		$call_status = 'closed';
