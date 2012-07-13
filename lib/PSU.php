@@ -1474,9 +1474,6 @@ class PSU
 	 */
 	public static function has_filter($tag, $function = false){
 		$has = !empty(self::$filter[ $tag ]);
-		print_r("\nFilters:");
-		print_r(self::$filter);
-		print_r("\n");
 
 		if( $function === false || $has == false ){
 			return $has;
