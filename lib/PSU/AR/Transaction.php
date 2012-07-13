@@ -67,31 +67,23 @@ abstract class Transaction {
 
 		// find the earliest unsatisfied term
 		$early_term = $this->person->bill->earliest_unsatisfied_term;
-		print_r("early_term");
-		print_r($early_term);
 
 		$only_term_types = array();
 		$pre_apply = array();
 		$skip = array();
 
 		// populate $only_term_types via filter if filter exists and level has been set
-		print_r("Do we have a transaction_term_types?\n");
 		if( \PSU::has_filter('transaction_term_types') && $this->level) {
-		print_r("Apparently we do...\n");
 			$only_term_types = \PSU::apply_filters( 'transaction_term_types', $only_term_types, $this->level );
 		}//end if
 
 		// populate $skip via filter if filter exists
-		print_r("Do we have a transaction_term_skip?\n");
 		if( \PSU::has_filter('transaction_term_skip') && $this->level ) {
-		print_r("Apparently we do...\n");
 			$skip = \PSU::apply_filters( 'transaction_term_skip', $skip, $this->person->bill, $this->level );
 		}//end if
 
 		// populate $pre_apply via filter if filter is set
-		print_r("Do we have a transaction_split_pre_apply?\n");
 		if( \PSU::has_filter('transaction_split_pre_apply') ) {
-		print_r("Apparently we do...\n");
 			$pre_apply = \PSU::apply_filters( 'transaction_split_pre_apply', $pre_apply, $this->person->bill );
 
 			// loop over terms to pre-apply payments to
@@ -103,7 +95,6 @@ abstract class Transaction {
 		$found_term = false;
 
 		// loop over term balances
-		print_r($this->person->bill->all_term_balances);
 		foreach((array) $this->person->bill->all_term_balances as $term => $value) {
 			// find the current term
 			if(!$found_term && $term != $early_term) continue;
@@ -134,19 +125,10 @@ abstract class Transaction {
 		if($this->amount_paid_remaining > 0) {
 			// default to the term specified by the bursar if there isn't a term with activity
 			$term = $this->person->bill->last_balance_term() ?: $this->bursar_term;
-			print_r("\nLast Bal: ");
-			print_r($this->person->bill->last_balance_term());
-			print_r("\nBursar Term: ");
-			print_r($this->bursar_term);
-			print_r("\nTerm: ");
-			print_r($term);
-			print_r("\n");
 		
 			$payment = $record_template;
 			$payment['term_code'] = $term;
 			$payment['amount'] = $this->amount_paid_remaining;
-			print_r($payment);
-			print_r("\n");
 
 			$this->amount_paid_remaining = 0;
 			
