@@ -31,6 +31,7 @@
 }
 
 .hidden{
+	/* TODO: we might have this one declared centrally called clear */
 	visibility:hidden;
 }
 
@@ -39,12 +40,10 @@
 }
 
 .title{
+	/* TODO: don't do this shizzle here */
 	margin-bottom: .5em;
 }
 .tt-warning{
+	/* TODO: we have a warning style, I *think*.  Perhaps make this style more app specific... tt-warning */
 	background: #FAA732; 
-}
-.merit{
-	height:1em;
-	width:1em;
 }
