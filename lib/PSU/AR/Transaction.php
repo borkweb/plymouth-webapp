@@ -113,7 +113,7 @@ abstract class Transaction {
 			// if there are values in $skip then we want to be sure
 			// we skip it.
 			if( ! empty( $skip ) ) {
-				if( ! in_array( $term, $skip ) ) {
+				if( in_array( $term, $skip ) ) {
 					continue;
 				}//end if
 			}//end if
@@ -123,8 +123,9 @@ abstract class Transaction {
 
 		// if there is STILL money needing to be posted, prep a dummy term and post
 		if($this->amount_paid_remaining > 0) {
-			// default to the term specified by the bursar if there isn't a term with activity
-			$term = $this->person->bill->last_balance_term() ?: $this->bursar_term;
+			// We don't want to find old activity, and if we are here, we have applied funds to the current ter,
+			// Target the next term specified by the bursar otherwise fall back to this term
+			$term = \PSU_AR::bursar_future_term( strtolower( $this->level ) ) ?: $this->person->bill->last_balance_term();
 		
 			$payment = $record_template;
 			$payment['term_code'] = $term;
