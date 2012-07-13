@@ -118,10 +118,15 @@ if(!empty($result) && is_array($result)){
 			// Otherwise, mark it as normal
 			$row['activity_age_status'] = 'normal';
 		}
-
 		$identifier = PSU::nvl($row['caller_username'], $row['wp_id'], $row['pidm']);
-
-		$row = array_merge($row, (array) $GLOBALS['user']->getCallerData( $identifier ));
+		//grabs the person data for the call
+		$person = (array) $GLOBALS['user']->getCallerData( $identifier );
+		//overrides the username that was saved in the call with the username that was found from PSUPerson
+		//this is to prevent ~500 calls displaying improper information
+		//that were created with wp_ids instead of usernames as the username identifier
+		$row['caller_username'] = $person['username'] ?: $person['identifier'];
+		//merges the person array and single call(row) array
+		$row = array_merge($row, $person);
 		//$row['priority'] = $call_details['call_history'][$i]['call_priority'];
 		$calls[] = $row;
 	}// end foreach
