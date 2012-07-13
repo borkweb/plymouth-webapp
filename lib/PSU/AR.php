@@ -7,6 +7,30 @@ class PSU_AR {
 		$this->db = PSU::db( $datastore );
 	}//end constructor
 
+	//determine the future term from bursar
+	public static function bursar_future_term( $level = 'ug' ) {
+
+		$term = self::bursar_term( $level );
+		$year = substr( $term, 0, -2 );
+
+		switch( substr( $term, -2 ) ) {
+			case 10:
+				return $year.'30';
+				break;
+			case 30:
+				return $year++.'10';
+				break;
+			case 91:
+				return $year.'93';
+				break;
+			case 93:
+				return $year++.'91';
+				break;
+		}//end switch
+		
+		return $term;
+	}//end bursar_future_term
+
 	// determine current bursar term
 	public static function bursar_term( $level = 'ug' ) {
 		$sql = "SELECT value FROM gxbparm WHERE param = :param_name";
