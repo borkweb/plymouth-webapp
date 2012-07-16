@@ -56,8 +56,8 @@
 			<tr>
 				{if $row.key.email}
 				<td>
-					<a href="{$PHP.BASE_URL}/user/{$row.key.email}/?option={$search.search_string}&find_type={$search.search_type}" title="Create New Call For {$row.key.email}." class="nav_link">{$row.key.name_full}</a>
-					<a href="{$PHP.BASE_URL}/calls/for/{$row.key.email}/" title="Open calls for {$row.key.email}">{$row.key.open_call}</a>
+					<a href="{$PHP.BASE_URL}/user/{$row.key.username}/?option={$search.search_string}&find_type={$search.search_type}" title="Create New Call For {$row.key.username}." class="nav_link">{$row.key.name_full}</a>
+					<a href="{$PHP.BASE_URL}/calls/for/{$row.key.username}/" title="Open calls for {$row.key.username}">{$row.key.open_call}</a>
 				</td>
 				<td>{$row.key.email}</td>
 				{else}
