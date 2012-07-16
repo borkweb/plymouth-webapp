@@ -210,9 +210,7 @@ class User
 				$caller_data['email'] = null;
 			}
 		}
-		
-		$caller_data['username'] = $caller_data['username'] ?: $caller_data['identifier'];
-
+		$caller_data['username'] = $caller_data['username'] ?: $caller_data['identifier'];	
 		if( $found_via == null ) {
 			return false;
 		}
