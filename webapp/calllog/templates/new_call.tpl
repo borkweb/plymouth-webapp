@@ -78,7 +78,7 @@
 		
 	{box title="Ticket Information" class="noprint"}
 		<div id="call_information_div">
-			<input type="hidden" id='call_status' name="call_status" value="{$call_status}" />
+			<input type="hidden" id='call_status' name="call_status" value="{$call_assignment_call_status}" />
 			{$call_information}
 		</div>
 	{/box}
