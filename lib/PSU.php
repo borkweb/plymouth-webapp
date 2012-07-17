@@ -604,6 +604,14 @@ class PSU
 		$sql = "INSERT INTO ";
 	}//end cdn_parent
 
+	/*
+	 * Converts a passed in currency to cents
+	 * Ideal for use with nelnet
+	 */
+	public static function clean_currency( $money ) {
+		return (int)( filter_var( trim( $money, '$'), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) * 100 );
+	}//end clean_currency
+
 	/**
 	 * cleanKeys Strlowers and str_replaces array values returned from Oracle
 	 *
