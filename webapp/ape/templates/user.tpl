@@ -1,5 +1,5 @@
 <div id="user_info">
-	{capture name="title"}{$person->formatname('f m l')} ({$person->id}){/capture}
+	{capture name="title"}{$person->formatName('f m l')} ({$person->id}){/capture}
 	{box title="<span class='section-title'>Identity/Access:</span> `$smarty.capture.title`" size=16}
 	<img id="print-confidential" src="/webapp/style/templates/images/confidential_960.png"/>
 	<div class="note ticket">
