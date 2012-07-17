@@ -1,5 +1,5 @@
 <div id="user_info">
-	{capture name="title"}{$person->formatName('f m l')} ({$person->id}){/capture}
+	{capture name="title"}{$person->formatname('f m l')} ({$person->id}){/capture}
 	{box title="<span class='section-title'>Identity/Access:</span> `$smarty.capture.title`" size=16}
 	<img id="print-confidential" src="/webapp/style/templates/images/confidential_960.png"/>
 	<div class="note ticket">
@@ -12,6 +12,7 @@
 		{else}
 			{*{if $person->banner_roles.employee && $AUTHZ.permission.ape_checklist_employee_exit_hr}*}, <a href="{$PHP.BASE_URL}/user/{$person->pidm}/checklist/employee-exit">employee clearance</a>{*{/if}*}
 		{/if}
+		, <a href="{$PHP.BASE_URL}/user/{$person->pidm}/notes">manage notes ({$notes_count})</a>
 	</div>
 	{if $AUTHZ.permission.ape_ssn}
 		<div class="note">Note: all requests for SSNs, Pins, Cert Numbers, etc are logged.</div>

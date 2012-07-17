@@ -69,6 +69,7 @@ IDMObject::authN();
 /*******************[Local Includes]**********************/
 require_once $GLOBALS['LOCAL_INCLUDES'].'/functions.php';    //application functions
 require_once $GLOBALS['LOCAL_INCLUDES'].'/APE.class.php';    //APE class
+require_once $GLOBALS['LOCAL_INCLUDES'].'/APENotes.class.php'; //APENotes Class
 require_once $GLOBALS['LOCAL_INCLUDES'].'/APEAuthZ.class.php';    //APE class
 require_once $GLOBALS['LOCAL_INCLUDES'].'/APESmarty.class.php';    //APE class
 /*******************[End Local Includes]**********************/

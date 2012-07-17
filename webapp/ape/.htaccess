@@ -9,6 +9,10 @@ RewriteEngine on
 RewriteRule ^banner$ banner/ [R=301,L]
 RewriteRule ^banner/$ banner_security.html [QSA,L]
 
+#notes rewrite rule
+RewriteRule ^user/([0-9]+)/notes/([^/]+)/([0-9]+)/?$ notes.html?pidm=$1&action=$2&id=$3 [QSA,L]
+RewriteRule ^user/([0-9]+)/notes/([^/]+)/?$ notes.html?pidm=$1&action=$2 [QSA,L]
+RewriteRule ^user/([0-9]+)/notes notes.html?pidm=$1 [QSA,L]
 #checklist rewrite rule
 RewriteRule ^user/([^/]+)/checklist/([^/]+)/?$ checklist.html?identifier=$1&checklist=$2 [QSA,L]
 RewriteRule ^user/([^/]+)/checklist/([^/]+)/([^/]+)/?$ checklist.html?identifier=$1&checklist=$2&pdf=$3 [QSA,L]
@@ -28,7 +32,6 @@ RewriteRule ^user/student/?$ student.html [QSA,L]
 RewriteRule ^user/([a-zA-Z0-9\._]*) user.html?username=$1 [QSA,L]
 RewriteRule ^user/([0-9]+) user.html?pidm=$1 [QSA,L]
 RewriteRule ^user/?$ /webapp/ape/user.html [R=301,QSA,L]
-
 RewriteRule ^audit/(.*) audit.html?who=$1 [QSA,L]
 
 RewriteRule ^lists$ lists/ [R=301,L]

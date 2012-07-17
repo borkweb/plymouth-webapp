@@ -1,0 +1,93 @@
+<?php
+$myuser = new PSUPerson($_SESSION['wp_id']);
+$person = new PSUPerson($_GET['pidm']);
+$status_choices = array(
+	'messages' => 'Info',
+	'successes' => 'Success',
+	'errors' => 'Error',
+	'warnings' => 'Warning',
+);
+$notes = APENotes::get_notes( $person->wp_id );
+
+$tpl = new APESmarty();
+if (isset($notes)){
+	$tpl->assign( 'notes', $notes );
+}
+$tpl->assign( 'person', $person );
+if( $_GET['action'] ) {
+	$tpl->assign( 'action', $_GET['action'] );
+}
+
+$tpl->assign( 'status_choices', $status_choices );
+//get the action of the page, edit add or delete
+switch( $_GET['action'] ){
+	case edit:
+		//needs to load edit page
+		$note = APENotes::get_note($_GET['id']);
+		$tpl->assign( 'note', $note );
+	break;
+
+	case add:
+		//adds the new note
+		$args = $_POST;
+		if(!$args['note']){
+			$_SESSION['errors'][]='Please enter a note.';
+		}else{
+			filter_var($args['note'], FILTER_SANITIZE_STRING);
+			$note = stripslashes($args['note']);
+		}
+
+		if(!$args['status']){
+			$_SESSION['errors'][]='Please select a status.';
+		}else{
+			filter_var($args['status'], FILTER_SANITIZE_STRING);
+			$note = stripslashes($args['status']);
+		
+		}
+
+
+		if(count($_SESSION['errors']) <= 0){
+			APENotes::add_note( $person->wp_id, $args['note'], $args['status']);
+			$_SESSION['successes'][]='You have successfully added a new note.';
+		}
+
+			PSUHTML::redirect( $GLOBALS['BASE_URL'] . '/user/' . $person->pidm . '/notes');
+	break;
+
+	case delete:
+		//delete the note
+		APENotes::delete_note( $_GET['id'] );
+		//redirect the user back to the page they were on
+		PSUHTML::redirect( $GLOBALS['BASE_URL'] . '/user/' . $person->pidm . '/notes');
+	break;
+
+	case change:
+		$args = $_POST;
+		if(!$args['note']){
+			$_SESSION['errors'][]='Please enter a note.';
+		}else{
+			filter_var($args['note'], FILTER_SANITIZE_STRING);
+			$note = stripslashes($args['note']);
+		}
+
+		if(!$args['status']){
+			$_SESSION['errors'][]='Please select a status.';
+		}else{
+			filter_var($args['status'], FILTER_SANITIZE_STRING);
+			$note = stripslashes($args['status']);
+		
+		}
+
+
+		if(count($_SESSION['errors']) <= 0){
+			APENotes::edit_note( $_GET['id'], $args['note'], $args['status']);
+			$_SESSION['successes'][]='You have successfully edited a note.';
+		}
+
+			PSUHTML::redirect( $GLOBALS['BASE_URL'] . '/user/' . $person->pidm . '/notes');
+
+	break;
+}//end switch
+
+$tpl->display('notes.tpl');
+

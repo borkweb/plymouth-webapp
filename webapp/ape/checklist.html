@@ -3,7 +3,6 @@ require_once 'includes/HRChecklist.class.php';
 
 $myuser = new PSUPerson($_SESSION['wp_id']);
 $person = new PSUPerson($_GET['identifier']);
-
 $list = $_GET['checklist'];
 
 $tpl = new APESmarty();
