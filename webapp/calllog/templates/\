@@ -71,28 +71,26 @@
 	{box title=$details_name class="call-form"}
 		{include file="ticket_form.tpl"}
 		<label class="label">Keywords:</label>
-		<input type="text" name="keywords_list" id="keywords_list" size="51" placeholder="Nouns related to this ticket..." value="{$call_assignment_history_keywords}"/>
+		<input type="text" name="keywords_list" id="keywords_list" size="51" value="{$call_assignment_history_keywords}"/>
 		<div id="keywordsList"></div>
 		
-		<input type="hidden" id='call_status' name="call_status" value="{$call_status}" />
+		<input type="hidden" id='call_status' name="call_status" value="{$call_assignment_call_status}" />
 		{col size=4 class="alpha omega meta"}
-			<label for="call_priority" class="label">Priority:</label>
+				<label for="call_priority" class="label">Priority:</label>
 				<select name="call_priority" id="call_priority">
 				{$call_priority_select_list}
-			</select>
-			
-			<br clear="left"/>
-			
-			<label for="call_location" class="label">Location:</label>
-			<select name="call_location">
+				</select>
+				<br clear="left"/>
+				<label for="call_location" class="label">Location:</label>
+				<select name="call_location">
 				<option value="n/a">No Building Selected</option>
 				{$building_select_list}
-			</select>
+				</select>
 		{/col}
 
 		{col size=2 class="alpha omega resnet"}
-			<label for="call_status" class="label">Resnet?</label>
-			<input type="checkbox" name="resnet_check" id="resnet_check" {$is_resnet}/>
+				<label for="call_status" class="label">Resnet?</label>
+				<input type="checkbox" name="resnet_check" id="resnet_check" {$is_resnet}/>
 		{/col}
 
 		{col size=4 class="alpha omega assignment"}
@@ -102,9 +100,7 @@
 				<option value="caller">The Caller</option>
 				{$tlc_select_list}
 			</select>
-
 			<br clear="left"/>
-			
 			<label for="its_assigned_group">Group: (<a href="{$PHP.BASE_URL}/business-area.html?clean=1" id="its-group-help" title="ITS Group Responsibilities">?</a>)</label>
 			<select name="its_assigned_group" id="its_assigned_group" onChange="change_status('its_assigned_group');" >
 				<option value="0">Unassigned</option>

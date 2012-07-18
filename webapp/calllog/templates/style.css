@@ -95,6 +95,10 @@ tr:hover .muted{
 	font-size: 0.9em;
 }
 
+.call-form label{
+	margin-top: 0.4em;
+}
+
 .assignees li {
 	text-align: center;
 	margin-left: 0;
@@ -109,16 +113,20 @@ tr:hover .muted{
 }
 
 .call-information{
-	border: hidden 1px;
+	margin-top: 1em;
 	width: auto;
-	padding: 5px;
 	float: left;
 }
 
 .call-information select {
-	width: 220px;
+	width: 210px;
 }
 
+.call-information input{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
 .call-information-building{
 	width: 99.4%;
 }
@@ -732,14 +740,14 @@ div#user_status_div .muted{color:#666;}
 	right: 0px;
 	text-align: left;
 }
-#tlc_nav_list li a,#tlc_nav_list li a:link,#tlc_nav_list li a:visited{
+#tlc_nav_list li a,#tlc_nav_list li a:link,#tlc_nav_list li a:visited {
 	background: none;
 	border: none;
 	color: #2893D5;
 	font-size: 1.0em;
 }
 
-#tlc_nav_list a:hover{
+#tlc_nav_list a:hover {
 	background: none;
 }
 
@@ -943,4 +951,20 @@ a.action:link, a.action:visited, a.action:active, input.action {
 
 #business-area-ts {
 	background: #805d78;
+}
+
+.update_ticket{
+	margin-left: 2em;
+}
+
+.submit-buttons{
+	margin-top: 2em;
+}
+
+.resnet{
+	text-align: center;
+}
+
+.resnet input[type="checkbox"]{
+	margin: auto;
 }
