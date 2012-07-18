@@ -455,7 +455,7 @@ function sendOpenCallMail($call_info, $action){
 		$to = implode(',', array_unique( $to ));
 		if( $to ) {
 			$headers['from'] = $logger->formatName('f l').' <'.$logger->wp_email.'>';
-			PSU::mail($to, $subject, array( stripslashes($text_message), stripslashes($html_message) ), $headers);
+			PSU::mail($to, $subject, array( $text_message, $html_message ), $headers);
 		}//end if
 
 		// email user
@@ -466,7 +466,7 @@ function sendOpenCallMail($call_info, $action){
 			$tpl->assign('history', array());
 			$text_message = $tpl->fetch('email.ticket.text.tpl');
 			$html_message = $tpl->fetch('email.ticket.html.tpl');
-			PSU::mail($end_user_to, $subject, array( stripslashes($text_message), stripslashes($html_message) ), $headers);
+			PSU::mail($end_user_to, $subject, array( $text_message, $html_message ), $headers);
 		}//end if
 	}
 }
