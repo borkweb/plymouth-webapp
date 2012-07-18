@@ -14,7 +14,9 @@ class Enrollment {
 
 		$this->course = $course;
 		$this->population = $population;
-		$this->population->query( $args );
+		if( is_object( $this->population ) {
+			$this->population->query( $args );
+		}
 
 	}//end __construct
 
