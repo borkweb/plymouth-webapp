@@ -17,10 +17,10 @@
 		<div class="note">Note: all requests for SSNs, Pins, Cert Numbers, etc are logged.</div>
 	{/if}
 
-	{if $person->hasIssue() || $person->lame || $person->confidential || $person->deceased}
+	{if $person->hasIssue() || $person->confidential || $person->deceased}
 	<div class="alerts">
 		{if $person->confidential}<strong style="display:block;">This account is marked as CONFIDENTIAL.</strong>{/if}
-		{* if $person->hasIssue() || $person->lame}<strong style="display:block;">There may be problems with this account:</strong>{/if*}
+		{* if $person->hasIssue()}<strong style="display:block;">There may be problems with this account:</strong>{/if*}
 		<ol>
 			{if $person->confidential}
 				<li>Confidential accounts must be kept private.  No information may be given to third parties regarding this user OR even the existence of this user's records in our system.</li>
@@ -28,10 +28,6 @@
 			{if $person->deceased}
 				<li>This person is deceased.</li>
 			{/if}			
-			{if $person->lame}
-				<li>This user is exceedingly lame.</li>
-				<li>so i herd u liek mudkips?<img src="{$PHP.BASE_URL}/templates/default/images/mudkip.gif" style="vertical-align:middle;"/></li>
-			{/if}
 			{if $person->issues.bad_oracle_account_status}
 				<li>This user's Oracle Account is {$person->oracle_account_status}.</li>
 			{/if}
@@ -393,30 +389,10 @@
 			</li>	
 			</ul>
 		</div>
-		<div id="ape_id_ods" class="ape-section {if $myuser->go_states.ape_id_ods === '0'}ape-section-hidden{/if}">
-			<h3>SSR (ODS) Information [TEST for Spring 2009]</h3>
-			<ul>
-			<li style="margin-bottom: 5px;">
-				<label>Student Profile:</label>
-				<a href="http://vega.plymouth.edu:7777/apex/f?p=101:101072:::NO::P101072_STUDENT_UID,P101072_ACADEMIC_PERIOD,P101072_ACADEMIC_PERIOD_DESC:{$person->pidm}%2C200930%2CUG%20Spring%202009" target="_blank">Student Profile</a>
-			</li>
-			<li style="margin-bottom: 5px;">
-				<label>Financial Aid Profile:</label>
-				<a href="http://vega.plymouth.edu:7777/apex/f?p=101:501012:::NO::P501012_STUDENT_UID,P501012_ACADEMIC_PERIOD,P501012_ACADEMIC_PERIOD_DESC:{$person->pidm}%2C200930%2CUG%20Spring%202009" target="_blank">Financial Aid Profile</a>
-			</li>
-			<li style="margin-bottom: 5px;">
-				<label>Advancement Profile:</label>
-				<a href="http://vega.plymouth.edu:7777/apex/f?p=101:401012:::NO::P401012_CONSTITUENT_UID:{$person->pidm}" target="_blank">Advancement Profile</a>
-			</li>		
-			</ul>
-		</div>
 		{if $AUTHZ.permission.ape_wp_meta && $person->wpid}
 		<div id="ape_id_connect" class="ape-section {if $myuser->go_states.ape_id_connect === '0'}ape-section-hidden{/if}">
 			<h3>Connect.plymouth.edu</h3>
 			<ul class="apedata">
-				{if $AUTHZ.permission.mis || $AUTHZ.permission.ape_wordpress_admin}
-				<li><label>Toggle Mercury Opt-In:</label><a href="{$PHP.BASE_URL}/actions/portalv5.php?identifier={$person->id}">Do-It</a></li>
-				{/if}
 				{foreach from=$person->wpuser_array key=wpkey item=wpvalue}
 					<li><label>{$wpkey}</label>
 					<span class="limited">

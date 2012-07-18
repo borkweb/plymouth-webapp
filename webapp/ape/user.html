@@ -66,12 +66,6 @@ if($person->system_account_exists)
 
 $tpl->assign('has_zimbra_account', $person->has_zimbra);
 
-/*********************************************************************
- *    check to see if the user is Porter :)
- *    CORRECTION - check to see if user is Trevor Suarez
- *********************************************************************/
-$person->lame = ($person->username == 'tnsuarez') ? true : false;
-
 $tpl->assign('person', $person);
 
 if($person->checkIssue('ping_support_locked'))
