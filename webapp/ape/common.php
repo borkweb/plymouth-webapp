@@ -101,12 +101,10 @@ $GLOBALS['user_roles'] = $GLOBALS['portal']->getRoles($_SESSION['username']);
 
 $path_parts = pathinfo( $_SERVER['SCRIPT_FILENAME'] );
 
-if( $path_parts['basename'] != 'portalv5.php' ) {
-	if(!IDMObject::authZ('role', 'staff') && !IDMObject::authZ('role','ape') && !APEAuthZ::infodesk() && !APEAuthZ::family() && !APEAuthZ::student() && !APEAuthZ::advancement() && !$_SESSION['impersonate'])
-	{
-		echo 'You ('.$_SESSION['username'].') do not have access to use this application.  If '.$_SESSION['username'].' is not your username, please log in to <a href="http://go.plymouth.edu/logout">myPlymouth</a> and try again.';
-		exit;
-	}//end if
+if(!IDMObject::authZ('role', 'staff') && !IDMObject::authZ('role','ape') && !APEAuthZ::infodesk() && !APEAuthZ::family() && !APEAuthZ::student() && !APEAuthZ::advancement() && !$_SESSION['impersonate'])
+{
+	echo 'You ('.$_SESSION['username'].') do not have access to use this application.  If '.$_SESSION['username'].' is not your username, please log in to <a href="http://go.plymouth.edu/logout">myPlymouth</a> and try again.';
+	exit;
 }//end if
 /*******************[End Authorization Stuff]*****************/
 
