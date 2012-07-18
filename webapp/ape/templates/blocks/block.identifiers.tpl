@@ -1,10 +1,7 @@
 	<div id="ape_identifiers" class="ape-section {if $myuser->go_states.ape_identifiers === '0'}ape-section-hidden{/if}">
 	<h3>Identifiers</h3>
 	<ul class="apedata">
-		{if $person->username == 'tnsuarez'}
-			<!--<li><img src="{$PHP.BASE_URL}/templates/default/images/porter.jpg" class="id_card" style="width:200px;height:267px;"/></li>-->
-			<iframe width="200" height="143" src="http://www.youtube.com/embed/4uLfCp5O04M" frameborder="0" class="id_card" allowfullscreen></iframe>
-		{elseif $AUTHZ.permission.ape_idcard_view}
+		{if $AUTHZ.permission.ape_idcard_view}
 			<li><img src="{$person->idcard()}" class="id_card"/></li>
 		{/if}
 		<li>
