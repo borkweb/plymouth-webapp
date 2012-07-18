@@ -15,6 +15,10 @@ $GLOBALS['HTTP_HOST'] = 'https://'.$_SERVER['HTTP_HOST'];
 PSU::get()->base_url = $GLOBALS['BASE_URL'] = $GLOBALS['HTTP_HOST'] . '/webapp/commonapp';
 
 // Common Includes
+
+require_once $GLOBALS['BASE_DIR'] . '/includes/CAController.class.php';
+require_once $GLOBALS['BASE_DIR'] . '/includes/CommonAppCountries.class.php';
+
 $GLOBALS['COMMON_INCLUDES']='/web/pscpages/includes';
 
 $GLOBALS['LOCAL_INCLUDES'] = $GLOBALS['BASE_DIR'].'/includes';
