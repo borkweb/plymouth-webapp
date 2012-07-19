@@ -2,6 +2,8 @@
 
 namespace PSU\Moodle\Enrollment; 
 
+use Exception;
+
 class MultiCourse extends \PSU\Moodle\Enrollment {
 
 	/**
@@ -13,7 +15,7 @@ class MultiCourse extends \PSU\Moodle\Enrollment {
 	 */
 	public function __construct( $course, $population, $args = '' ){
 		if( !is_array( $course ) ) {
-			die('Courses must be in an array of Moodle course ids!: '.$course);
+			throw new Exception( 'Courses must be in an array of Moodle course ids!: '.$course );
 		}//end if
 
 		parent::__construct( $course, $population, $args );

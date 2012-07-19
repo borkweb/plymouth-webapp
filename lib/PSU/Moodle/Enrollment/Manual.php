@@ -2,6 +2,8 @@
 
 namespace PSU\Moodle\Enrollment; 
 
+use Exception;
+
 class Manual extends \PSU\Moodle\Enrollment {
 
 	/**
@@ -13,7 +15,7 @@ class Manual extends \PSU\Moodle\Enrollment {
 	 */
 	public function __construct( $course, $population, $args = '' ){
 		if( !is_numeric( $course ) ) {
-			die('Courses must be in the form of a Moodle course id!: '.$course);
+			throw new Exception( 'Courses must be in the form of a Moodle course id!: '.$course );
 		}//end if
 
 		parent::__construct( $course, $population, $args );
