@@ -21,6 +21,20 @@ class Enrollment {
 	}//end __construct
 
 	/**
+	 * Return the courseid from moodle for the given course idnumber (crn.termcode) 
+	 */
+	public function courseid( $idnumber ) {
+
+		$sql = "
+			SELECT id
+			  FROM mdl_course
+			 WHERE idnumber = ? 
+		";
+
+		return \PSU::db('moodle2')->GetOne( $sql, array( $idnumber ) );
+	}//end enrolid
+
+	/**
 	 * Return the enrolid from moodle for the given course and enrollment method
 	 */
 	public function enrolid( $method = 'manual', $courseid = null) {

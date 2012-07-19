@@ -23,7 +23,8 @@ class MultiCourse extends \PSU\Moodle\Enrollment {
 	public function enroll() {
 		foreach( $this->course as $id ) {
 			$insert_time = time();
-			$enrolid = self::enrolid( 'multi_course', $id );
+			$courseid = self::courseid( $id );
+			$enrolid = self::enrolid( 'multi_course', $courseid );
 
 			$args = array(
 				0,
