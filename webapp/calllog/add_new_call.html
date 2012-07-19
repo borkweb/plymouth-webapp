@@ -1,4 +1,5 @@
 <?php
+
 if(empty($_POST)){
 	PSUHTML::redirect($_GET['redirect'] ? urldecode($_GET['redirect']) : 'index.html');
 }
@@ -21,6 +22,12 @@ if($_POST['resnet_check'] == 'on'){
 if( $_POST['tlc_assigned_to'] == 'caller' ) {
 	$_POST['tlc_assigned_to'] = $_POST['caller_user_name'];
 }//end if
+
+if ($_POST['toggle']){
+	if ($_POST['call_status'] == 'open'){
+		$_POST['call_status'] = 'closed';
+	}
+}
 
 // Insert into CallLog
 $call_location = $GLOBALS['new_call']->returnCallLoggedFromLocation($_SERVER['REMOTE_ADDR']);
