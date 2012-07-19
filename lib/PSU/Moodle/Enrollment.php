@@ -14,9 +14,25 @@ class Enrollment {
 
 		$this->course = $course;
 		$this->population = $population;
-		$this->population->query( $args );
+		if( is_object( $this->population ) ) {
+			$this->population->query( $args );
+		}
 
 	}//end __construct
+
+	/**
+	 * Return the courseid from moodle for the given course idnumber (crn.termcode) 
+	 */
+	public function courseid( $idnumber ) {
+
+		$sql = "
+			SELECT id
+			  FROM mdl_course
+			 WHERE idnumber = ? 
+		";
+
+		return \PSU::db('moodle2')->GetOne( $sql, array( $idnumber ) );
+	}//end enrolid
 
 	/**
 	 * Return the enrolid from moodle for the given course and enrollment method

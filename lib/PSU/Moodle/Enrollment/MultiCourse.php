@@ -4,7 +4,7 @@ namespace PSU\Moodle\Enrollment;
 
 use Exception;
 
-class Manual extends \PSU\Moodle\Enrollment {
+class MultiCourse extends \PSU\Moodle\Enrollment {
 
 	/**
 	 * _construct
@@ -14,23 +14,24 @@ class Manual extends \PSU\Moodle\Enrollment {
 	 * @param    $url    Optional url parameted to post generated xml to.
 	 */
 	public function __construct( $course, $population, $args = '' ){
-		if( !is_numeric( $course ) ) {
-			throw new Exception( 'Courses must be in the form of a Moodle course id!: '.$course );
+		if( !is_array( $course ) ) {
+			throw new Exception( 'Courses must be in an array of Moodle course ids!: '.$course );
 		}//end if
 
 		parent::__construct( $course, $population, $args );
 
-		$this->enrolid = self::enrolid();
 	}//end __construct
 
 	public function enroll() {
-		foreach( $this->population as $id ) {
+		foreach( $this->course as $id ) {
 			$insert_time = time();
+			$courseid = self::courseid( $id );
+			$enrolid = self::enrolid( 'multi_course', $courseid );
 
 			$args = array(
 				0,
-				$this->enrolid,
-				self::userid( $id->scalar ),
+				$enrolid,
+				self::userid( $this->population ),
 				$insert_time,
 				0,
 				0,
