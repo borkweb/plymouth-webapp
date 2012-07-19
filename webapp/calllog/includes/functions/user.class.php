@@ -13,18 +13,19 @@ class User
 		$this->db = $db;
 	}//end constructor
 
-	function callInformation($call_status_options, $call_priority_options, $call_status, $call_priority, $building_options, $building_id, $resnet_call)
+	function callInformation($call_priority_options, $call_status, $call_priority, $building_options, $building_id, $resnet_call)
 	{
-		$tpl = new XTemplate(TEMPLATE_DIR.'/call_information.tpl');
+		//$tpl = new XTemplate(TEMPLATE_DIR.'/call_information.tpl');
 		if($resnet_call == 'resnet')
 		{
 			$tpl->assign('is_resnet', 'checked');
 		}
-		$tpl->assign('call_status_select_list', PSUHTML::getSelectOptions($call_status_options, $call_status));
+
+		$tpl->assign('call_status', $call_status);
 		$tpl->assign('call_priority_select_list', PSUHTML::getSelectOptions($call_priority_options, $call_priority));
 		$tpl->assign('building_select_list', PSUHTML::getSelectOptions($building_options, $building_id));
-		$tpl->parse('main');
-		return $tpl->text('main');
+		//$tpl->parse('main');
+		//return $tpl->text('main');
 	}
 
 	function getCallDetails($call_id)

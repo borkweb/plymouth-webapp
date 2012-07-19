@@ -91,6 +91,7 @@ $jQuery(document).ready(function($){
 	}//end get Value
 
 	$('#new_call,#edit_call').bind('submit', function(){
+
 		var append_text = '';
 		var $details = $('#problem_details');
 		var details = $details.val();

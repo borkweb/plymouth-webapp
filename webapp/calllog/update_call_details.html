@@ -17,7 +17,17 @@ $location_building_id = $_POST['location_building_id'];
 $location_building_room_number = $_POST['location_building_room_number'];
 $comments = $_POST['problem_details'];
 $attach_to = $_POST['attach_to'];
+$toggle = $_POST['toggle'];
 $_POST['updated_by'] = $call_log_username;
+
+if ($toggle){
+	if ($call_status == 'open'){
+		$call_status = 'closed';
+	}
+	else{
+		$call_status = 'open';
+	}
+}
 
 if( $_POST['call_id'] ) {
 	$call = $db->GetRow("SELECT * FROM call_log WHERE call_id = ?", array($_POST['call_id']));
