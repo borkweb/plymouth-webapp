@@ -2,7 +2,7 @@
 
 namespace PSU\Moodle\Enrollment; 
 
-use Exception;
+use Enrollment\Exception;
 
 class MultiCourse extends \PSU\Moodle\Enrollment {
 
@@ -13,55 +13,20 @@ class MultiCourse extends \PSU\Moodle\Enrollment {
 	 *
 	 * @param    $url    Optional url parameted to post generated xml to.
 	 */
-	public function __construct( $course, $population, $args = '' ){
+	public function __construct( $course, $population, $role = 'student', $args = '' ){
 		if( !is_array( $course ) ) {
 			throw new Exception( 'Courses must be in an array of Moodle course ids!: '.$course );
 		}//end if
 
-		parent::__construct( $course, $population, $args );
+		parent::__construct( $course, $population, $role, $args );
 
 	}//end __construct
 
 	public function enroll() {
 		foreach( $this->course as $id ) {
-			$insert_time = time();
 			$courseid = self::courseid( $id );
-			$enrolid = self::enrolid( 'multi_course', $courseid );
-
-			$args = array(
-				0,
-				$enrolid,
-				self::userid( $this->population ),
-				$insert_time,
-				0,
-				0,
-				$insert_time,
-				$insert_time,
-			);
-
-			$sql = "
-				INSERT INTO mdl_user_enrolments (
-					status, 
-					enrolid, 
-					userid, 
-					timestart, 
-					timeend, 
-					modifierid, 
-					timecreated, 
-					timemodified
-				) VALUES(
-					?,
-					?,
-					?,
-					?,
-					?,
-					?,
-					?,
-					?
-				) 
-				ON DUPLICATE KEY UPDATE timemodified=".$insert_time;
-
-			\PSU::db('moodle2')->Execute( $sql, $args);
+			$this->enrolid = self::enrolid( 'psu_auto_enroller', $courseid );
+			self::perform_enrollment( self::userid( $this->population), $courseid );
 		}//end foreach
 	}//end manual
 
