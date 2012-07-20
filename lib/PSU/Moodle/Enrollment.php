@@ -46,7 +46,7 @@ class Enrollment {
 			'',
 		);
 
-		\PSU::db('moodle2')->Execute( $sql, $args );
+		return \PSU::db('moodle2')->Execute( $sql, $args );
 	}//end assign_role
 
 	/**
@@ -98,7 +98,6 @@ class Enrollment {
 			 WHERE courseid = ? 
 			   AND enrol = ?	
 		";
-		\PSU::db('moodle2')->debug = true;
 
 		if( $enrolid = \PSU::db('moodle2')->GetOne( $sql, $args ) ) {
 			$this->enrolid = $enrolid;
@@ -188,9 +187,12 @@ class Enrollment {
 			) 
 			ON DUPLICATE KEY UPDATE timemodified=?";
 
-		\PSU::db('moodle2')->Execute( $sql, $args);
+		if( \PSU::db('moodle2')->Execute( $sql, $args) ) {
+			return self::assign_role( $userid, $courseid );
+		}else {
+			throw new Exception( 'User with id '.$userid.' was not succesfully enrolled in course with id: '.$courseid );
+		}//end else
 
-		self::assign_role( $userid, $courseid );
 	}//end perform_enrollment
 
 	/**
