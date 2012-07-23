@@ -14,7 +14,7 @@ class Memos extends TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new \PSU\AR\Memos_ActiveFilterIterator( $it );
+		return new \PSU\AR\Memos\ActiveFilterIterator( $it );
 	}//end active_memos
 
 	/**
@@ -46,7 +46,7 @@ class Memos extends TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new \PSU\AR\Memos_BillFilterIterator( $this->active_memos( $it ) );
+		return new \PSU\AR\Memos\BillFilterIterator( $this->active_memos( $it ) );
 	}//end bill_memos
 
 	/**
@@ -103,7 +103,7 @@ class Memos extends TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new \PSU\AR\Memos_MiscFilterIterator( $this->active_memos( $it ) );
+		return new \PSU\AR\Memos\MiscFilterIterator( $this->active_memos( $it ) );
 	}//end misc_memos
 
 	/**

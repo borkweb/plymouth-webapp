@@ -70,7 +70,7 @@ abstract class TermAggregate implements \IteratorAggregate {
 			return;
 		}
 
-		$class = $this->container.'_Terms';
+		$class = $this->container.'\Terms';
 		$this->terms = new $class;
 
 		if( $rows === null ) {
@@ -107,7 +107,7 @@ abstract class TermAggregate implements \IteratorAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		$class = $this->contains.'_Sum';
+		$class = $this->contains.'\Sum';
 		return call_user_func( array( $class, 'create' ), $it );
 	}//end sum
 
