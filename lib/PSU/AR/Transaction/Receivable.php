@@ -25,10 +25,10 @@ class Receivable extends Transaction {
 	 * create an entry object for the transaction's entries
 	 */
 	protected function generate_entry( $payment ) {
-		$payment['receipt_number'] = \PSU_AR::generateReceiptNumber();
+		$payment['receipt_number'] = \PSU\AR::generateReceiptNumber();
 		$payment['balance'] = ($payment['amount'] * -1) * $this->multiplier;
 
-		$entry = new \PSU_AR_Receivable( $payment );
+		$entry = new \PSU\AR\Receivable( $payment );
 
 		return $entry;
 	}//end generate_entry
@@ -38,7 +38,7 @@ class Receivable extends Transaction {
 	 */
 	public static function next_tran_number( $pidm ) {
 		$sql = "SELECT NVL(max(tbraccd_tran_number)+1,1) FROM tbraccd WHERE tbraccd_pidm = :pidm";
-		return PSU::db('banner')->GetOne( $sql, array('pidm' => $pidm) );
+		return \PSU::db('banner')->GetOne( $sql, array('pidm' => $pidm) );
 	}//end next_tran_number
 
 	/**
@@ -51,4 +51,4 @@ class Receivable extends Transaction {
 
 		return $entry;
 	}//end prep_save
-}//end class \PSU\AR\Transaction\Receivable
+}//end class

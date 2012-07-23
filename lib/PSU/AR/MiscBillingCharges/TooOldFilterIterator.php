@@ -8,4 +8,4 @@ class TooOldFilterIterator extends \PSU_FilterIterator {
 
 		return $el->too_old();
 	}
-}//end PSU\AR\MiscBillingCharges\TooOldFilterIterator
+}//end class

@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_DetailCodes implements IteratorAggregate {
+class DetailCodes implements \IteratorAggregate {
 	public $data;
 
 	public $pidm;
@@ -16,7 +17,7 @@ class PSU_AR_DetailCodes implements IteratorAggregate {
 		$this->data = array();
 
 		foreach( $rows as $row ) {
-			$data = new PSU_AR_DetailCode( $row );
+			$data = new \PSU\AR\DetailCode( $row );
 			$this->data[ $data->detail_code ] = $data;
 		}//end foreach
 	}//end load
@@ -27,12 +28,12 @@ class PSU_AR_DetailCodes implements IteratorAggregate {
 	public function get() {
 
 		$sql = "SELECT * FROM tbbdetc";
-		$rset = PSU::db('banner')->Execute($sql);
+		$rset = \PSU::db('banner')->Execute($sql);
 
 		return $rset ? $rset : array();
 	}//end get
 
 	public function getIterator() {
-		return new ArrayIterator( $this->deposits );
+		return new \ArrayIterator( $this->deposits );
 	}//end getIterator
-}//end class PSU_AR_DetailCodes
+}//end class

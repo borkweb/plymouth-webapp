@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_Receivable extends PSU_Banner_DataObject {
+class Receivable extends \PSU_Banner_DataObject {
 	public $aliases = array(
 		'tran_number' => 'transaction_number',
 		'desc' => 'description',
@@ -18,7 +19,7 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 	public function __construct( $row = null ) {
 		if( $row ) {
 			// get rid of table name from field names
-			$row = PSU::cleanKeys('tbraccd_', '', $row);
+			$row = \PSU::cleanKeys('tbraccd_', '', $row);
 		}//end if
 
 		parent::__construct( $row );
@@ -26,6 +27,10 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 		$this->type_ind = $this->type_ind();
 		$this->detail_desc = $this->detail_desc();
 	}//end constructor
+
+	public function amount() {
+		return $this->amount;
+	}//end amount
 
 	/**
 	 * returns the bill date's timestamp
@@ -75,11 +80,11 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 				 AND (tbraccd_create_user = :create_user OR :create_user IS NULL)
 		";
 
-		PSU::db('banner')->StartTrans();
+		\PSU::db('banner')->StartTrans();
 
-		$result = PSU::db('banner')->Execute( $sql, $args );
+		$result = \PSU::db('banner')->Execute( $sql, $args );
 
-		PSU::db('banner')->CompleteTrans( $commit );
+		\PSU::db('banner')->CompleteTrans( $commit );
 
 		return $result;
 	}//end delete
@@ -88,7 +93,7 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 	 * returns the receivable's detail description
 	 */
 	public function detail_desc() {
-		return PSU_AR::detail_code( $this->detail_code )->desc;
+		return \PSU\AR::detail_code( $this->detail_code )->desc;
 	}//end detail_desc
 
 	/**
@@ -134,7 +139,7 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 		$sql_method = '_' . $method . '_sql';
 		$sql = $this->$sql_method( 'tbraccd', $fields );
 
-		return PSU::db('banner')->Execute( $sql, $args );
+		return \PSU::db('banner')->Execute( $sql, $args );
 	}//end save
 
 	/**
@@ -155,7 +160,7 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 	 * returns the receivable's type indicator
 	 */
 	public function type_ind() {
-		return PSU_AR::detail_code( $this->detail_code )->type_ind;
+		return \PSU\AR::detail_code( $this->detail_code )->type_ind;
 	}//end type_ind
 
 	/**
@@ -184,12 +189,12 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 			'term_code' => $this->term_code,
 			'detail_code' => $this->detail_code,
 			'the_user' => $this->user,
-			'entry_date' => $this->entry_date ? PSU::db('banner')->BindDate( $this->entry_date_timestamp() ) : null,
+			'entry_date' => $this->entry_date ? \PSU::db('banner')->BindDate( $this->entry_date_timestamp() ) : null,
 			'amount' => $this->amount,
 			'balance' => $this->balance,
-			'effective_date' => $this->effective_date ? PSU::db('banner')->BindDate( $this->effective_date_timestamp() ) : null,
-			'bill_date' => $this->bill_date ? PSU::db('banner')->BindDate( $this->bill_date_timestamp() ) : null,
-			'due_date' => $this->due_date ? PSU::db('banner')->BindDate( $this->due_date_timestamp() ) : null,
+			'effective_date' => $this->effective_date ? \PSU::db('banner')->BindDate( $this->effective_date_timestamp() ) : null,
+			'bill_date' => $this->bill_date ? \PSU::db('banner')->BindDate( $this->bill_date_timestamp() ) : null,
+			'due_date' => $this->due_date ? \PSU::db('banner')->BindDate( $this->due_date_timestamp() ) : null,
 			'description' => $this->desc,
 			'receipt_number' => $this->receipt_number,
 			'tran_number_paid' => $this->tran_number_paid,
@@ -199,7 +204,7 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 			'srce_code' => $this->srce_code,
 			'acct_feed_ind' => $this->acct_feed_ind,
 			'session_number' => $this->session_number,
-			'cshr_end_date' => $this->cshr_end_date ? PSU::db('banner')->BindDate( $this->cshr_end_date_timestamp() ) : null,
+			'cshr_end_date' => $this->cshr_end_date ? \PSU::db('banner')->BindDate( $this->cshr_end_date_timestamp() ) : null,
 			'crn' => $this->crn,
 			'crossref_srce_code' => $this->crossref_srce_code,
 			'loc_mdt' => $this->loc_mdt,
@@ -207,21 +212,21 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 			'rate' => $this->rate,
 			'units' => $this->units,
 			'document_number' => $this->document_number,
-			'trans_date' => $this->trans_date ? PSU::db('banner')->BindDate( $this->transaction_date_timestamp() ) : null,
+			'trans_date' => $this->trans_date ? \PSU::db('banner')->BindDate( $this->transaction_date_timestamp() ) : null,
 			'payment_id' => $this->payment_id,
 			'invoice_number' => $this->invoice_number,
-			'statement_date' => $this->statement_date ? PSU::db('banner')->BindDate( $this->statement_date_timestamp() ) : null,
+			'statement_date' => $this->statement_date ? \PSU::db('banner')->BindDate( $this->statement_date_timestamp() ) : null,
 			'inv_number_paid' => $this->inv_number_paid,
 			'curr_code' => $this->curr_code,
 			'exchange_diff' => $this->exchange_diff,
 			'foreign_amount' => $this->foreign_amount,
 			'late_dcat_code' => $this->late_dcat_code,
-			'feed_date' => $this->feed_date ? PSU::db('banner')->BindDate( $this->feed_date_timestamp() ) : null,
+			'feed_date' => $this->feed_date ? \PSU::db('banner')->BindDate( $this->feed_date_timestamp() ) : null,
 			'feed_doc_code' => $this->feed_doc_code,
 			'atyp_code' => $this->atyp_code,
 			'atyp_seqno' => $this->atyp_seqno,
 			'card_type_vr' => $this->card_type_vr,
-			'card_exp_date_vr' => $this->card_exp_date_vr ? PSU::db('banner')->BindDate( $this->card_exp_date_vr_timestamp() ) : null,
+			'card_exp_date_vr' => $this->card_exp_date_vr ? \PSU::db('banner')->BindDate( $this->card_exp_date_vr_timestamp() ) : null,
 			'card_auth_number_vr' => $this->card_auth_number_vr,
 			'crossref_dcat_code' => $this->crossref_dcat_code,
 			'orig_chg_ind' => $this->orig_chg_ind,
@@ -240,4 +245,4 @@ class PSU_AR_Receivable extends PSU_Banner_DataObject {
 
 		return $args;
 	}//end _prep_args
-}//end class PSU_AR_Receivable
+}//end class

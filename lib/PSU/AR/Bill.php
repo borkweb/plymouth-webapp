@@ -1,6 +1,6 @@
 <?php
 /**
- * PSU\AR\Bill.php
+ * \PSU\AR\Bill.php
  *
  * Billing Object
  *
@@ -135,7 +135,7 @@ class Bill extends \BannerObject
 		if(isset($this->data['receivable_balance'][$token])) {
 			$total = $this->data['receivable_balance'][$token];
 		} else {
-			$balances = new PSU_AR_Sum_Balances( $this->pidm, $params );
+			$balances = new \PSU\AR\Sum\Balances( $this->pidm, $params );
 			$balances->load();
 			
 			$total = $this->data['receivable_balance'][$token] = $balances->terms();
@@ -233,7 +233,7 @@ class Bill extends \BannerObject
 			return true;
 		}//end if
 
-		$current_term_code = \PSU_AR::bursar_term('ug');
+		$current_term_code = \PSU\AR::bursar_term('ug');
 
 		$record['expiration_date'] = strtotime( '+5 days', $record['entry_date'] );
 
@@ -253,7 +253,7 @@ class Bill extends \BannerObject
 			$record['amount'] = $data['funds_not_disbursed'];
 			$record['billing_ind'] = 'Y';	
 
-			$max_tran_number = \PSU_AR_Memos::max_tran_number( $record['pidm'] );
+			$max_tran_number = \PSU\AR\Memos::max_tran_number( $record['pidm'] );
 			$record['tran_number'] = $max_tran_number + 1;
 
 			if( ! self::updateMemo($record) ) {
@@ -283,7 +283,7 @@ class Bill extends \BannerObject
 	 * parses payment plan data and inserts/updates memos for GR
 	 */
 	public static function parsePaymentPlanGR( $record, $data ) {
-		$term_code = \PSU_AR::bursar_term('gr');
+		$term_code = \PSU\AR::bursar_term('gr');
 
 		$record['expiration_date'] = strtotime( '+5 days', $record['entry_date'] );
 
@@ -468,7 +468,7 @@ class Bill extends \BannerObject
 		// make sure amounts aren't set in the DirectDeposit record
 		unset($data['amount']);
 
-		$dird = new \PSU_AR_DirectDeposit( $data );
+		$dird = new \PSU\AR\DirectDeposit( $data );
 		return $dird->save();
 	}//end updateDirectDeposit
 
@@ -493,7 +493,7 @@ class Bill extends \BannerObject
 		// OR if only inserts are allowed and the memo
 		// doesn't already exist
 		if( !$only_insert || ( $only_insert && !$exists ) ) {
-			$memo = new \PSU_AR_Memo( $data );
+			$memo = new \PSU\AR\Memo( $data );
 			if( ! $memo->expiration_date ) {
 				$memo->expiration_date = \PSU::db('banner')->GetOne("SELECT stvterm_end_date + 90 FROM stvterm WHERE stvterm_code = :term_code", array('term_code' => $data['term_code']));
 			}//end if
@@ -547,15 +547,15 @@ class Bill extends \BannerObject
 			'create_user' => 'tms_'.$data['tms_customer_number'],
 		);
 
-		$memo = new \PSU_AR_Memo( $del_data );
+		$memo = new \PSU\AR\Memo( $del_data );
 		$memo->delete();
 
 		$del_data['detail_code'] = 'IQPQ';
 
-		$memo = new \PSU_AR_Memo( $del_data );
+		$memo = new \PSU\AR\Memo( $del_data );
 		$memo->delete();
 
-		$max_tran_number = \PSU_AR_Memos::max_tran_number( $pidm );
+		$max_tran_number = \PSU\AR\Memos::max_tran_number( $pidm );
 
 		$record['tran_number'] = $max_tran_number + 1;
 
@@ -878,7 +878,7 @@ class Bill extends \BannerObject
 	{
 		$this->data['aid'] = array();
 
-		$aid = new \PSU_AR_AidAuthorizations( $this->pidm );
+		$aid = new \PSU\AR\AidAuthorizations( $this->pidm );
 		$aid->load();
 
 		$this->data['aid'] = $aid;
@@ -891,7 +891,7 @@ class Bill extends \BannerObject
 		$this->total_positive_balances = 0;
 		$this->total_negative_balances = 0;
 
-		$balances = new \PSU_AR_Sum_Balances( $this->pidm, array_keys( (array) $this->receivables->terms->terms ) );
+		$balances = new \PSU\AR\Sum\Balances( $this->pidm, array_keys( (array) $this->receivables->terms->terms ) );
 		$balances->load();
 
 		if( $balances->terms ) {
@@ -914,7 +914,7 @@ class Bill extends \BannerObject
 	{
 		$this->data['deposits'] = array();
 
-		$deposits = new \PSU_AR_Deposits( $this->pidm );
+		$deposits = new \PSU\AR\Deposits( $this->pidm );
 		$deposits->load();
 
 		$this->data['deposits'] = $deposits;
@@ -1010,7 +1010,7 @@ class Bill extends \BannerObject
 		$this->data['memos'] = array();
 		$this->data['misc_memos'] = array();
 
-		$memos = new \PSU_AR_Memos( $this->pidm );
+		$memos = new \PSU\AR\Memos( $this->pidm );
 		$memos->load();
 
 		$this->data['misc_memos'] = $memos->misc_memos();
@@ -1046,7 +1046,7 @@ class Bill extends \BannerObject
 		$this->data['receivables'] = null;
 		$this->data['misc_charges'] = null;
 
-		$receivables = new \PSU_AR_Receivables( $this->pidm );
+		$receivables = new \PSU\AR\Receivables( $this->pidm );
 		$receivables->load();
 
 		$this->data['misc_charges'] = $receivables->misc_charges();

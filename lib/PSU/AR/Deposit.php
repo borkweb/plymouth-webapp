@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_Deposit extends PSU_DataObject {
+class Deposit extends \PSU_DataObject {
 	public $aliases = array(
 		'acct_feed_ind' => 'account_feed_indicator',
 		'auto_release_ind' => 'auto_release_indicator',
@@ -18,7 +19,7 @@ class PSU_AR_Deposit extends PSU_DataObject {
 	public function __construct( $row = null ) {
 		if( $row ) {
 			// get rid of table name from field names
-			$row = PSU::cleanKeys('tbrdepo_', '', $row);
+			$row = \PSU::cleanKeys('tbrdepo_', '', $row);
 		}//end if
 
 		parent::__construct( $row );
@@ -79,4 +80,4 @@ class PSU_AR_Deposit extends PSU_DataObject {
 	public function transaction_date_timestamp() {
 		return strtotime( $this->transaction_date );
 	}//end transaction_date_timestamp
-}//end class PSU_AR_Deposit
+}//end class

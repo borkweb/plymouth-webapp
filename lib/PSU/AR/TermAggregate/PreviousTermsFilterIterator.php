@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\TermAggregate;
 
-class PSU_AR_TermAggregate_PreviousTermsFilterIterator extends PSU_FilterIterator {
+class PreviousTermsFilterIterator extends \PSU_FilterIterator {
 	public $term_code;
 
 	public function __construct( $it, $term_code ) {
@@ -14,4 +15,4 @@ class PSU_AR_TermAggregate_PreviousTermsFilterIterator extends PSU_FilterIterato
 
 		return $el->term_code < $this->term_code;
 	}
-}//end PSU_AR_TermAggregate_PreviousTermsFilterIterator
+}//end class

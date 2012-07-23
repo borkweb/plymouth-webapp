@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\Sum;
 
-class PSU_AR_Sum_Term implements IteratorAggregate {
+class Term implements \IteratorAggregate {
 	public $data;
 	public $pidm;
 	public $params;
@@ -11,7 +12,7 @@ class PSU_AR_Sum_Term implements IteratorAggregate {
 	 */
 	public function __construct( $pidm, $term_codes, $params = null ) {
 		$this->pidm = $pidm;
-		$this->params = PSU::params($params);
+		$this->params = \PSU::params($params);
 
 		if( $term_codes && !is_array( $term_codes ) ) {
 			$term_codes = array( $term_codes );
@@ -52,20 +53,20 @@ class PSU_AR_Sum_Term implements IteratorAggregate {
 		}//end foreach
 		$sql .= "END;";
 
-		$stmt = PSU::db('banner')->PrepareSP($sql);
+		$stmt = \PSU::db('banner')->PrepareSP($sql);
 
 		// prepare the in parameters
 		foreach( $args as $key => &$value ) {
-			PSU::db('banner')->InParameter($stmt, $value, $key);
+			\PSU::db('banner')->InParameter($stmt, $value, $key);
 		}//end foreach
 
 		// prepare the out parameters
 		foreach( $this->terms as $term => &$value ) {
-			PSU::db('banner')->OutParameter($stmt, $this->terms[ $term ], 'out_term_'.$term);
+			\PSU::db('banner')->OutParameter($stmt, $this->terms[ $term ], 'out_term_'.$term);
 		}//end foreach
 
 		// execute the dml
-		return PSU::db('banner')->Execute($stmt);
+		return \PSU::db('banner')->Execute($stmt);
 	}//end get
 
 	/**
@@ -80,7 +81,7 @@ class PSU_AR_Sum_Term implements IteratorAggregate {
 	}//end load
 
 	public function getIterator() {
-		return new ArrayIterator( $this->data );
+		return new \ArrayIterator( $this->data );
 	}//end getIterator
 
 	/**
@@ -98,4 +99,4 @@ class PSU_AR_Sum_Term implements IteratorAggregate {
 	public function termcodes() {
 		return array_keys($this->terms);
 	}//end termcodes
-}//end class PSU_AR_Sum_Term
+}//end class

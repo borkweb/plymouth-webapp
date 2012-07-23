@@ -1,19 +1,20 @@
 <?php
+namespace PSU\AR\AidAuthorization;
 
 /**
  * Sum the total of all items, which must have an amount() method.
  */
-class PSU_AR_AidAuthorization_Sum {
+class Sum {
 	public $it;
 
-	public function __construct( Iterator $it ) {
+	public function __construct( \Iterator $it ) {
 		$this->it = $it;
 	}
 
 	/**
 	 * Static factory.
 	 */
-	public static function create( Iterator $it ) {
+	public static function create( \Iterator $it ) {
 		return new self( $it );
 	}
 
@@ -28,6 +29,6 @@ class PSU_AR_AidAuthorization_Sum {
 	}
 
 	public function amount_formatted() {
-		return PSU_MoneyFormatter::create()->format( $this->amount() );
+		return \PSU_MoneyFormatter::create()->format( $this->amount() );
 	}
 }

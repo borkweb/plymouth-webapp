@@ -36,7 +36,7 @@ class Memo extends Transaction {
 	protected function generate_entry( $payment ) {
 		$payment['billing_ind'] = $this->billable;
 
-		$entry = new \PSU_AR_Memo( $payment );
+		$entry = new \PSU\AR\Memo( $payment );
 
 		return $entry;
 	}//end generate_entry
@@ -46,15 +46,15 @@ class Memo extends Transaction {
 	 */
 	public static function next_tran_number( $pidm ) {
 		$sql = "SELECT NVL(max(tbraccd_tran_number)+1,1) FROM tbraccd WHERE tbraccd_pidm = :pidm";
-		return PSU::db('banner')->GetOne( $sql, array('pidm' => $pidm) );
+		return \PSU::db('banner')->GetOne( $sql, array('pidm' => $pidm) );
 	}//end next_tran_number
 
 	/**
 	 * Set memo-specific entry values
 	 */
 	protected function prep_save( $entry ) {
-		$max_number = \PSU_AR_Memos::max_tran_number( $entry->pidm );
+		$max_number = \PSU\AR\Memos::max_tran_number( $entry->pidm );
 		$entry->tran_number = $max_number + 1;
 		return $entry;
 	}//end prep_save
-}//end class \PSU\AR\Transaction\Memo
+}//end class

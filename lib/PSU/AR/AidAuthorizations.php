@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_AidAuthorizations extends PSU_AR_TermAggregate {
+class AidAuthorizations extends \PSU\AR\TermAggregate {
 	public $pidm;
 
 	public function __construct( $pidm, $term_code = null ) {
@@ -22,7 +23,7 @@ class PSU_AR_AidAuthorizations extends PSU_AR_TermAggregate {
 				AND  rfrbase_fund_code        = rprauth_fund_code
 		";
 
-		$rset = PSU::db('banner')->Execute( $sql, $args );
+		$rset = \PSU::db('banner')->Execute( $sql, $args );
 		return $rset;
 	}//end get
-}//end PSU_AR_AidAuthorizations
+}//end class

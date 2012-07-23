@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
+class MiscBillingCharge extends \PSU_Banner_DataObject {
 	public $aliases = array();
 	public $meta = null;
 	public $origin = null;
@@ -52,7 +53,7 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 	 */
 	public function adjustments() {
 		if( ( !isset( $this->num_adjustments ) || $this->num_adjustments > 0 ) && $this->adjustments === null ) {
-			$this->adjustments = new PSU_AR_MiscBillingCharges();
+			$this->adjustments = new \PSU\AR\MiscBillingCharges();
 			$this->adjustments->set('parent_id', $this->id)->load();
 
 			$this->num_adjustments = $this->adjustments->count();
@@ -96,19 +97,19 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 			'the_id' => $args['the_id'],
 		);
 
-		PSU::db('banner')->StartTrans();
+		\PSU::db('banner')->StartTrans();
 
 		$sql = "UPDATE misc_billing SET deleted = 'Y' WHERE id = :the_id";
-		$result = PSU::db('banner')->Execute( $sql, $args );
+		$result = \PSU::db('banner')->Execute( $sql, $args );
 
-		PSU::db('banner')->CompleteTrans( $commit );
+		\PSU::db('banner')->CompleteTrans( $commit );
 
 		return $result;
 	}//end delete
 
 	public static function detail_codes() {
 		return array(
-			static::$default_detail_code => \PSU_AR::detail_code( static::$default_detail_code ),
+			static::$default_detail_code => \PSU\AR::detail_code( static::$default_detail_code ),
 		);
 	}//end detail_codes
 
@@ -116,7 +117,7 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 	 * returns the charge's detail description
 	 */
 	public function detail_desc() {
-		return \PSU_AR::detail_code( $this->detail_code )->desc;
+		return \PSU\AR::detail_code( $this->detail_code )->desc;
 	}//end detail_desc
 
 	public function document_number() {
@@ -136,7 +137,7 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 
 	public static function get( $id ) {
 		$sql = "SELECT * FROM misc_billing WHERE id = :the_id";
-		$row = PSU::db('banner')->GetRow( $sql, array('the_id' => $id) );
+		$row = \PSU::db('banner')->GetRow( $sql, array('the_id' => $id) );
 
 		return new static( $row );
 	}//end get
@@ -174,7 +175,7 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 	public function insert_receivable() {
 		$template = $this->init_template();
 
-		$receivable = new PSU_AR_Receivable( $template );
+		$receivable = new \PSU\AR\Receivable( $template );
 		return $receivable->save();
 	}//end insert_receivable
 
@@ -183,7 +184,7 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 	 */
 	public function meta( $key = null ) {
 		if( $this->meta === null ) {
-			$this->meta = new PSU_AR_MiscBillingCharge_MetaContainer( $this->id );
+			$this->meta = new \PSU\AR\MiscBillingCharge\MetaContainer( $this->id );
 			$this->meta->load();
 		}//end if
 
@@ -227,25 +228,25 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 	 * returns the person associated with this record
 	 */
 	public function person() {
-		return PSUPerson::get( $this->pidm );
+		return \PSUPerson::get( $this->pidm );
 	}//end person
 
 	/**
 	 * marks a record as processed
 	 */
 	public function process( $commit = true ) {
-		PSU::db('banner')->StartTrans();
+		\PSU::db('banner')->StartTrans();
 
 		// fail out if the record is too old
 		if( $this->too_old() ) {
-			PSU::db('banner')->CompleteTrans( false );
-			throw new PSU\AR\MiscBillingCharge\TooOldException('Unable to process charges/adjustments older than ' . self::$days_too_old . ' days.');
+			\PSU::db('banner')->CompleteTrans( false );
+			throw new \PSU\AR\MiscBillingCharge\TooOldException('Unable to process charges/adjustments older than ' . self::$days_too_old . ' days.');
 		}//end if
 
 		// fail out if the the user doesn't have a valid physical address
 		if( ! $this->valid_addresses() ) {
-			PSU::db('banner')->CompleteTrans( false );
-			throw new PSU\AR\MiscBillingCharge\InvalidAddressException('Invalid Address');
+			\PSU::db('banner')->CompleteTrans( false );
+			throw new \PSU\AR\MiscBillingCharge\InvalidAddressException('Invalid Address');
 		}//end if
 
 		if( ! $this->receivable_exists() ) {
@@ -253,8 +254,8 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 
 			// fail out if the receivable record cannot be inserted
 			if( ! $this->insert_receivable() ) {
-				PSU::db('banner')->CompleteTrans( false );
-				throw new PSU\AR\MiscBillingCharge\FailedToInsertException('Failed to insert receivable record');
+				\PSU::db('banner')->CompleteTrans( false );
+				throw new \PSU\AR\MiscBillingCharge\FailedToInsertException('Failed to insert receivable record');
 			}//end if
 		}//end if
 
@@ -266,12 +267,12 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 
 			// save this mofo
 			if( $this->save() ) {
-				PSU::db('banner')->CompleteTrans( $commit );
+				\PSU::db('banner')->CompleteTrans( $commit );
 				return true;
 			}//end if
 		}//end if
 
-		PSU::db('banner')->CompleteTrans( false );
+		\PSU::db('banner')->CompleteTrans( false );
 		return false;
 	}//end process
 
@@ -290,7 +291,7 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 	}//end processed
 
 	public function receivable_exists() {
-		$receivables = new PSU_AR_Receivables( $this->pidm );
+		$receivables = new \PSU\AR\Receivables( $this->pidm );
 		$receivables->load();
 
 		$num = iterator_count( $receivables->misc_billing_charges( $this->detail_code, $this->id ) );
@@ -313,10 +314,10 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 		$sql_method = '_' . $method . '_sql';
 		$sql = $this->$sql_method( 'misc_billing', $fields );
 
-		if( $results = PSU::db('banner')->Execute( $sql, $args ) ) {
+		if( $results = \PSU::db('banner')->Execute( $sql, $args ) ) {
 			if( $this->id <= 0 ) {
 				$sql = "SELECT seq_misc_billing.currval FROM dual";
-				$this->id = PSU::db('banner')->GetOne( $sql );
+				$this->id = \PSU::db('banner')->GetOne( $sql );
 			}//end if
 
 			// if meta is already initialized, make sure that the billing_id is set
@@ -371,7 +372,7 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 			);
 
 			// create meta record
-			$this->meta->meta[ $key ] = new PSU_AR_MiscBillingCharge_Meta( $row );
+			$this->meta->meta[ $key ] = new \PSU\AR\MiscBillingCharge\Meta( $row );
 		} else {
 			$this->meta->meta[ $key ]->meta_value = $value;
 		}//end else
@@ -399,7 +400,7 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 	 * returns the charge's type indicator
 	 */
 	public function type_ind() {
-		return PSU_AR::detail_code( $this->detail_code )->type_ind;
+		return \PSU\AR::detail_code( $this->detail_code )->type_ind;
 	}//end type_ind
 
 	/**
@@ -447,8 +448,8 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 			'detail_code' => $this->detail_code,
 			'data_source' => $this->data_source,
 			'amount' => $this->amount,
-			'entry_date' => $this->entry_date ? PSU::db('banner')->BindDate( $this->entry_date_timestamp() ) : null,
-			'process_date' => $this->process_date ? PSU::db('banner')->BindDate( $this->process_date_timestamp() ) : null,
+			'entry_date' => $this->entry_date ? \PSU::db('banner')->BindDate( $this->entry_date_timestamp() ) : null,
+			'process_date' => $this->process_date ? \PSU::db('banner')->BindDate( $this->process_date_timestamp() ) : null,
 			'username' => $this->username,
 			'processed' => $this->processed,
 			'parent_id' => $this->parent_id,
@@ -458,4 +459,4 @@ class PSU_AR_MiscBillingCharge extends PSU_Banner_DataObject {
 
 		return $args;
 	}//end _prep_args
-}//end class PSU_AR_MiscBillingCharge
+}//end class

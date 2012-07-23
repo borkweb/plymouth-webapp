@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\MiscBillingCharge;
 
-class PSU_AR_MiscBillingCharge_Library extends PSU_AR_MiscBillingCharge {
+class Library extends \PSU\AR\MiscBillingCharge {
 	public $fields = array(
 		'description',
 		'damaged_lost',
@@ -20,7 +21,7 @@ class PSU_AR_MiscBillingCharge_Library extends PSU_AR_MiscBillingCharge {
 		$row['data_source'] = $row['data_source'] ?: 'library';
 		$row['detail_code'] = $row['detail_code'] ?: static::$default_detail_code;
 		$row['entry_date'] = $row['entry_date'] ?: date('Y-m-d H:i:s');
-		$row['username'] = PSU::nvl( $row['username'], $_SESSION['username'], 'script' );
+		$row['username'] = \PSU::nvl( $row['username'], $_SESSION['username'], 'script' );
 
 		parent::__construct( $row );
 
@@ -28,4 +29,4 @@ class PSU_AR_MiscBillingCharge_Library extends PSU_AR_MiscBillingCharge {
 			$this->set_meta('description', 'Library Billing Fee');
 		}//end if
 	}//end constructor
-}//end class PSU_AR_MiscBillingCharge_Library
+}//end class

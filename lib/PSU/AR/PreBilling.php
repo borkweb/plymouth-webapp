@@ -14,11 +14,11 @@ class PreBilling {
 			throw new \Exception('Pidm, term_code, date, amount, and detail_code must be specified');
 		}//end if
 
-		$detail_code = \PSU_AR::detail_code( $args->detail_code );
+		$detail_code = \PSU\AR::detail_code( $args->detail_code );
 
 		$data = array(
 			'pidm' => $args->pidm,
-			'tran_number' => \PSU_AR_Memos::max_tran_number( $args->pidm ) + 1,
+			'tran_number' => \PSU\AR\Memos::max_tran_number( $args->pidm ) + 1,
 			'term_code' => $args->term_code,
 			'detail_code' => $detail_code->detail_code,
 			'user' => 'PREBILLING',
@@ -32,7 +32,7 @@ class PreBilling {
 			'create_user' => 'PREBILLING',
 			'amount' => $args->amount,
 		);
-		$memo = new \PSU_AR_Memo( $data );
+		$memo = new \PSU\AR\Memo( $data );
 		return $memo->save();
 	}//end add_memo
 

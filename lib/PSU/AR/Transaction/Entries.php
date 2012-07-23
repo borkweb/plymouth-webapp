@@ -11,7 +11,7 @@ abstract class Entries implements \IteratorAggregate {
 	/**
 	 * add an item to the collection
 	 *
-	 * @param $item \b PSU_AR_Receivable record to add to the entry collection
+	 * @param $item \b PSU\AR\Receivable record to add to the entry collection
 	 */
 	public function add( $item ) {
 		$this->data[] = $item;
@@ -79,4 +79,4 @@ abstract class Entries implements \IteratorAggregate {
 
 		return $this->sum_factory( $it );
 	}//end sum
-}//end class PSU\AR\Transaction\Entries
+}//end class

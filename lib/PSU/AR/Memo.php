@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_Memo extends PSU_Banner_DataObject {
+class Memo extends \PSU_Banner_DataObject {
 	public $aliases = array(
 		'tran_number' => 'transaction_number',
 		'billing_ind' => 'billing_indicator',
@@ -20,7 +21,7 @@ class PSU_AR_Memo extends PSU_Banner_DataObject {
 	public function __construct( $row = null ) {
 		if( $row ) {
 			// get rid of table name from field names
-			$row = PSU::cleanKeys('tbrmemo_', '', $row);
+			$row = \PSU::cleanKeys('tbrmemo_', '', $row);
 		}//end if
 
 		parent::__construct( $row );
@@ -72,14 +73,14 @@ class PSU_AR_Memo extends PSU_Banner_DataObject {
 				 AND (tbrmemo_create_user = :create_user OR :create_user IS NULL)
 		";
 
-		return PSU::db('banner')->Execute( $sql, $args );
+		return \PSU::db('banner')->Execute( $sql, $args );
 	}//end delete
 
 	/**
 	 * returns the receivable's detail description
 	 */
 	public function detail_desc() {
-		return PSU_AR::detail_code( $this->detail_code )->desc;
+		return \PSU\AR::detail_code( $this->detail_code )->desc;
 	}//end detail_desc
 
 	/**
@@ -135,14 +136,14 @@ class PSU_AR_Memo extends PSU_Banner_DataObject {
 		$sql_method = '_' . $method . '_sql';
 		$sql = $this->$sql_method( 'tbrmemo', $fields );
 
-		return PSU::db('banner')->Execute( $sql, $args );
+		return \PSU::db('banner')->Execute( $sql, $args );
 	}//end save
 
 	/**
 	 * returns the receivable's type indicator
 	 */
 	public function type_ind() {
-		return PSU_AR::detail_code( $this->detail_code )->type_ind;
+		return \PSU\AR::detail_code( $this->detail_code )->type_ind;
 	}//end type_ind
 
 	/**
@@ -171,12 +172,12 @@ class PSU_AR_Memo extends PSU_Banner_DataObject {
 			'detail_code' => $this->detail_code,
 			'amount' => $this->amount,
 			'the_user' => $this->user,
-			'entry_date' => $this->entry_date ? PSU::db('banner')->BindDate( $this->entry_date_timestamp() ) : null,
+			'entry_date' => $this->entry_date ? \PSU::db('banner')->BindDate( $this->entry_date_timestamp() ) : null,
 			'billing_ind' => $this->billing_ind,
 			'description' => $this->detail_desc,
-			'release_date' => $this->release_date ? PSU::db('banner')->BindDate( $this->release_date_timestamp() ) : null,
-			'expiration_date' => $this->expiration_date ? PSU::db('banner')->BindDate( $this->expiration_date_timestamp() ) : null,
-			'effective_date' => $this->effective_date ? PSU::db('banner')->BindDate( $this->effective_date_timestamp() ) : null,
+			'release_date' => $this->release_date ? \PSU::db('banner')->BindDate( $this->release_date_timestamp() ) : null,
+			'expiration_date' => $this->expiration_date ? \PSU::db('banner')->BindDate( $this->expiration_date_timestamp() ) : null,
+			'effective_date' => $this->effective_date ? \PSU::db('banner')->BindDate( $this->effective_date_timestamp() ) : null,
 			'srce_code' => $this->srce_code,
 			'crossref_pidm' => $this->crossref_pidm,
 			'crossref_number' => $this->crossref_number,
@@ -190,9 +191,9 @@ class PSU_AR_Memo extends PSU_Banner_DataObject {
 			'aidy_code' => $this->aidy_code,
 		);
 
-		$args['entry_date'] = $args['entry_date'] !== 'null' ? $args['entry_date'] : PSU::db('banner')->BindDate( time() );
-		$args['effective_date'] = $args['effective_date'] !== 'null' ? $args['effective_date'] : PSU::db('banner')->BindDate( time() );
+		$args['entry_date'] = $args['entry_date'] !== 'null' ? $args['entry_date'] : \PSU::db('banner')->BindDate( time() );
+		$args['effective_date'] = $args['effective_date'] !== 'null' ? $args['effective_date'] : \PSU::db('banner')->BindDate( time() );
 
 		return $args;
 	}//end _prep_args
-}//end class PSU_AR_Memo
+}//end class

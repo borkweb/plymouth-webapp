@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\MiscBillingCharge;
 
-class PSU_AR_MiscBillingCharge_Meta extends PSU_Banner_DataObject {
+class Meta extends \PSU_Banner_DataObject {
 	public $aliases = array();
 	public $children = null;
 	public $parent = null;
@@ -24,7 +25,7 @@ class PSU_AR_MiscBillingCharge_Meta extends PSU_Banner_DataObject {
 
 	public function children() {
 		if( $this->children === null ) {
-			$this->children = new PSU_AR_MiscBillingCharge_MetaContainer( $this->billing_id, $this->id );
+			$this->children = new \PSU\AR\MiscBillingCharge\MetaContainer( $this->billing_id, $this->id );
 			$this->children->load();
 		}//end if
 
@@ -46,19 +47,19 @@ class PSU_AR_MiscBillingCharge_Meta extends PSU_Banner_DataObject {
 			'id' => $args['id'],
 		);
 
-		PSU::db('banner')->StartTrans();
+		\PSU::db('banner')->StartTrans();
 
 		$sql = "DELETE FROM misc_billing_meta WHERE id = :id";
-		$result = PSU::db('banner')->Execute( $sql, $args );
+		$result = \PSU::db('banner')->Execute( $sql, $args );
 
-		PSU::db('banner')->CompleteTrans( $commit );
+		\PSU::db('banner')->CompleteTrans( $commit );
 
 		return $result;
 	}//end delete
 
 	public static function get( $id ) {
 		$sql = "SELECT * FROM misc_billing_meta WHERE id = :id";
-		$row = PSU::db('banner')->GetRow( $sql, array('id' => $id) );
+		$row = \PSU::db('banner')->GetRow( $sql, array('id' => $id) );
 
 		return new self( $row );
 	}//end get
@@ -90,10 +91,10 @@ class PSU_AR_MiscBillingCharge_Meta extends PSU_Banner_DataObject {
 		$sql_method = '_' . $method . '_sql';
 		$sql = $this->$sql_method( 'misc_billing_meta', $fields );
 
-		if( $results = PSU::db('banner')->Execute( $sql, $args ) ) {
+		if( $results = \PSU::db('banner')->Execute( $sql, $args ) ) {
 			if( $this->id <= 0 ) {
 				$sql = "SELECT seq_misc_billing_meta.currval FROM dual";
-				$this->id = PSU::db('banner')->GetOne( $sql );
+				$this->id = \PSU::db('banner')->GetOne( $sql );
 			}//end if
 
 			return $this->id;
@@ -133,4 +134,4 @@ class PSU_AR_MiscBillingCharge_Meta extends PSU_Banner_DataObject {
 
 		return $args;
 	}//end _prep_args
-}//end class PSU_AR_MiscBillingCharge_Meta
+}//end class

@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_DirectDeposit extends PSU_Banner_DataObject {
+class DirectDeposit extends \PSU_Banner_DataObject {
 	public $aliases = array(
 		'bank_acct_num' => 'bank_account_number',
 		'bank_rout_num' => 'bank_routing_number',
@@ -15,7 +16,7 @@ class PSU_AR_DirectDeposit extends PSU_Banner_DataObject {
 	public function __construct( $row = null ) {
 		if( $row ) {
 			// get rid of table name from field names
-			$row = PSU::cleanKeys('gxrdird_', '', $row);
+			$row = \PSU::cleanKeys('gxrdird_', '', $row);
 		}//end if
 
 		parent::__construct( $row );
@@ -52,7 +53,7 @@ class PSU_AR_DirectDeposit extends PSU_Banner_DataObject {
 		   WHERE gxrdird_pidm = :pidm
 		";
 
-		return PSU::db('banner')->Execute( $sql, $args );
+		return \PSU::db('banner')->Execute( $sql, $args );
 	}//end delete
 
 	/**
@@ -61,7 +62,7 @@ class PSU_AR_DirectDeposit extends PSU_Banner_DataObject {
 	public static function get_by_pidm( $pidm, $db = 'banner' ) {
 		$sql = "SELECT * FROM gxrdird WHERE gxrdird_pidm = :pidm";
 
-		if( $data = PSU::db( $db )->GetRow( $sql, array('pidm' => $pidm) ) ) {
+		if( $data = \PSU::db( $db )->GetRow( $sql, array('pidm' => $pidm) ) ) {
 			return new self( $data );
 		}//end if
 
@@ -81,14 +82,14 @@ class PSU_AR_DirectDeposit extends PSU_Banner_DataObject {
 		$sql_method = '_' . $method . '_sql';
 		$sql = $this->$sql_method( 'gxrdird', $fields );
 
-		return PSU::db('banner')->Execute( $sql, $args );
+		return \PSU::db('banner')->Execute( $sql, $args );
 	}//end save
 
 	/**
 	 * validates fields
 	 */
 	public function validate() {
-		$table = new PSU_Oracle_Table( 'gxrdird' );
+		$table = new \PSU_Oracle_Table( 'gxrdird' );
 		$table->validate( get_object_vars( $this ), 'gxrdird_' );
 
 		$alpha_numeric_filter = array(
@@ -125,14 +126,14 @@ class PSU_AR_DirectDeposit extends PSU_Banner_DataObject {
 		// enforce alpha numeric
 		foreach( $alpha_numeric as $field ) {
 			if( isset( $this->$field ) && filter_var( $this->$field, FILTER_VALIDATE_REGEXP, $alpha_numeric_filter ) === false ) {
-				throw new Exception('Direct Deposit '.$field.' field must be alpha numeric');
+				throw new \Exception('Direct Deposit '.$field.' field must be alpha numeric');
 			}//end if
 		}//end foreach
 
 		// enforce alpha numeric PLUS .-_
 		foreach( $extended_alpha_numeric as $field ) {
 			if( isset( $this->$field ) && filter_var( $this->$field, FILTER_VALIDATE_REGEXP, $extended_alpha_numeric_filter ) === false ) {
-				throw new Exception('Direct Deposit '.$field.' field must be a valid username');
+				throw new \Exception('Direct Deposit '.$field.' field must be a valid username');
 			}//end if
 		}//end foreach
 
@@ -179,4 +180,4 @@ class PSU_AR_DirectDeposit extends PSU_Banner_DataObject {
 
 		return $args;
 	}//end _prep_args
-}//end class PSU_AR_DirectDeposit
+}//end class

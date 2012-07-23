@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_Receivables extends PSU_AR_TermAggregate {
+class Receivables extends \PSU\AR\TermAggregate {
 	public function __construct( $pidm, $term_code = null ) {
 		parent::__construct( __CLASS__, $pidm, $term_code );
 	}//end __construct
@@ -14,7 +15,7 @@ class PSU_AR_Receivables extends PSU_AR_TermAggregate {
 		);
 
 		$sql = "SELECT * FROM tbraccd WHERE tbraccd_pidm = :pidm";
-		$rset = PSU::db('banner')->Execute($sql, $args);
+		$rset = \PSU::db('banner')->Execute($sql, $args);
 
 		return $rset ? $rset : array();
 	}//end get
@@ -38,7 +39,7 @@ class PSU_AR_Receivables extends PSU_AR_TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_Receivables_ExcludeWriteOffFilterIterator( $it );
+		return new \PSU\AR\Receivables\ExcludeWriteOffFilterIterator( $it );
 	}//end exclude_write_off_memos
 
 	public function exclude_non_bill_entries( $it = null ) {
@@ -57,7 +58,7 @@ class PSU_AR_Receivables extends PSU_AR_TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_Receivables_MiscBillingRecordIterator( $it, $detail_code, $payment_id );
+		return new \PSU\AR\Receivables\MiscBillingRecordIterator( $it, $detail_code, $payment_id );
 	}//end misc_billing_charges
 
 	/**
@@ -68,7 +69,7 @@ class PSU_AR_Receivables extends PSU_AR_TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_Receivables_MiscChargesFilterIterator( $it );
+		return new \PSU\AR\Receivables\MiscChargesFilterIterator( $it );
 	}//end misc_charges
 
 	/**
@@ -91,4 +92,4 @@ class PSU_AR_Receivables extends PSU_AR_TermAggregate {
 	public function misc_charges_previous_terms( $term_code ) {
 		return $this->misc_charges( $this->previous_terms( $term_code ) );
 	}//end misc_charges_previous_terms
-}//end class PSU_AR_Receivables
+}//end class

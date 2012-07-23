@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\MiscBillingCharge;
 
-class PSU_AR_MiscBillingCharge_Infirmary extends PSU_AR_MiscBillingCharge {
+class Infirmary extends \PSU\AR\MiscBillingCharge {
 	public $external_data;
 	public $blank_external = array(
 		'description' => null,
@@ -17,7 +18,7 @@ class PSU_AR_MiscBillingCharge_Infirmary extends PSU_AR_MiscBillingCharge {
 		$row['data_source'] = $row['data_source'] ?: 'infirmary';
 		$row['detail_code'] = $row['detail_code'] ?: 'IYIC';
 		$row['entry_date'] = $row['entry_date'] ?: date('Y-m-d H:i:s');
-		$row['username'] = PSU::nvl( $row['username'], $_SESSION['username'], 'script' );
+		$row['username'] = \PSU::nvl( $row['username'], $_SESSION['username'], 'script' );
 
 		parent::__construct( $row );
 
@@ -29,7 +30,7 @@ class PSU_AR_MiscBillingCharge_Infirmary extends PSU_AR_MiscBillingCharge {
 			$sql = "SELECT * FROM misc_billing_infirmary WHERE charge_id = :charge_id";
 			$charge_id = $this->parent_id ?: $this->id;
 			
-			$this->external_data = PSU::db('banner')->GetRow( $sql, array('charge_id' => $charge_id) );
+			$this->external_data = \PSU::db('banner')->GetRow( $sql, array('charge_id' => $charge_id) );
 		}//end if
 
 		if( ! $this->external_data['charge_id'] ) {
@@ -95,6 +96,6 @@ class PSU_AR_MiscBillingCharge_Infirmary extends PSU_AR_MiscBillingCharge {
 				)
 		";
 
-		PSU::db('banner')->Execute( $sql, $this->external_data() );
+		\PSU::db('banner')->Execute( $sql, $this->external_data() );
 	}//end save_external_data
-}//end class PSU_AR_MiscBillingCharge_Infirmary
+}//end class

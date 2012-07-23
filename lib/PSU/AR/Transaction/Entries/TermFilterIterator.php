@@ -16,4 +16,4 @@ class TermFilterIterator extends \PSU_FilterIterator {
 
 		return $data->term_code == $this->term_code;
 	}//end accept
-}//end PSU\AR\Transaction\Entries\TermFilterIterator
+}//end class

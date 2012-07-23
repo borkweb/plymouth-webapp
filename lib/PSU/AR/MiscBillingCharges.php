@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_MiscBillingCharges implements IteratorAggregate {
+class MiscBillingCharges implements \IteratorAggregate {
 	public $charges = array();
 	public $ignore_adjustments = true;
 
@@ -61,13 +62,13 @@ class PSU_AR_MiscBillingCharges implements IteratorAggregate {
 			 WHERE 1 = 1 {$where} 
 			 ORDER BY UPPER(spriden_last_name), UPPER(spriden_first_name), spriden_mi, term_code, id";
 
-		$results = PSU::db('banner')->Execute( $sql, $args );
+		$results = \PSU::db('banner')->Execute( $sql, $args );
 
 		return $results ? $results : array();
 	}//end get
 
 	public function getIterator() {
-		return new ArrayIterator( $this->charges );
+		return new \ArrayIterator( $this->charges );
 	}//end getIterator
 
 	/**
@@ -89,7 +90,7 @@ class PSU_AR_MiscBillingCharges implements IteratorAggregate {
 		$this->charges = array();
 
 		foreach( $rows as $row ) {
-			$class = 'PSU_AR_MiscBillingCharge_'.ucwords( $row['data_source'] );
+			$class = '\PSU\AR\MiscBillingCharge\\'.ucwords( $row['data_source'] );
 			$data = new $class( $row );
 			$this->charges[] = $data;
 		}//end foreach
@@ -121,7 +122,7 @@ class PSU_AR_MiscBillingCharges implements IteratorAggregate {
 						 a.data_source,                                                                                                                                                                                                                                                
 						 a.term_code DESC
 		";
-		return PSU::db('banner')->GetAll( $sql, array('term_window' => $window) );
+		return \PSU::db('banner')->GetAll( $sql, array('term_window' => $window) );
 	}//end report
 
 	public function set( $var, $val ) {
@@ -174,4 +175,4 @@ class PSU_AR_MiscBillingCharges implements IteratorAggregate {
 
 		return $this->too_old( $this->unprocessed( $it ) );
 	}//end unprocessed_too_old
-}//end class PSU_AR_MiscBillingCharges
+}//end class

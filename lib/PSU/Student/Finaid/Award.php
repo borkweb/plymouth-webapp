@@ -30,7 +30,7 @@ class PSU_Student_Finaid_Award implements ArrayAccess {
 	 * returns the receivable's detail description
 	 */
 	public function detail_desc() {
-		return PSU_AR::detail_code( $this->detail_code )->desc;
+		return \PSU\AR::detail_code( $this->detail_code )->desc;
 	}//end detail_desc
 
 	public function has_message() {
@@ -96,6 +96,6 @@ class PSU_Student_Finaid_Award implements ArrayAccess {
 	 * returns the receivable's type indicator
 	 */
 	public function type_ind() {
-		return PSU_AR::detail_code( $this->detail_code )->type_ind;
+		return \PSU\AR::detail_code( $this->detail_code )->type_ind;
 	}//end type_ind
 }//end class PSU_Student_Finaid_Award

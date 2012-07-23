@@ -1,11 +1,14 @@
 <?php
 
-class PSU_AR_PaymentPlan_Disbursements implements IteratorAggregate {
-	public $disbursements;
+namespace PSU\AR\PaymentPlan;
 
-	public function count() {
-		return sizeof( (array) $this->disbursements );
-	}//end count
+class Disbursements extends \PSU\Collection {
+	public static $child = '\PSU\AR\PaymentPlan\Disbursement';
+	public $file_id = null;
+
+	public function __construct( $file_id = null ) {
+		$this->file_id = null;
+	}//end constructor
 
 	/**
 	 * retrieve disbursements
@@ -20,13 +23,18 @@ class PSU_AR_PaymentPlan_Disbursements implements IteratorAggregate {
 
 		if( $this->processed ) {
 			$where .= " AND d.date_processed IS NOT NULL";
-		} else {
+		} elseif( ! $this->include_processed ) {
 			$where .= " AND d.date_processed IS NULL";
 		}//end if
 
 		if( $this->num_rows ) {
 			$where .= " AND rownum <= :num_rows";
 			$args['num_rows'] = $this->num_rows;
+		}//end if
+
+		if( $this->file_id ) {
+			$where .= " AND d.file_id = :file_id";
+			$args['file_id'] = $this->file_id;
 		}//end if
 
 		$sql = "
@@ -44,27 +52,10 @@ class PSU_AR_PaymentPlan_Disbursements implements IteratorAggregate {
 			 WHERE 1 = 1 {$where} 
 			 ORDER BY UPPER(spriden_last_name), UPPER(spriden_first_name), spriden_mi, file_id, d.id";
 
-		$results = PSU::db('banner')->Execute( $sql, $args );
+		$results = \PSU::db('banner')->Execute( $sql, $args );
 
 		return $results ? $results : array();
 	}//end get
-
-	public function getIterator() {
-		return new ArrayIterator( $this->disbursements );
-	}//end getIterator
-
-	public function load( $rows = null ) {
-		if( $rows === null ) {
-			$rows = $this->get();
-		}//end if
-
-		$this->disbursements = array();
-
-		foreach( $rows as $row ) {
-			$data = new PSU_AR_PaymentPlan_Disbursement( $row );
-			$this->disbursements[] = $data;
-		}//end foreach
-	}//end load
 
 	public function set( $var, $val ) {
 		$this->$var = $val;
@@ -81,4 +72,4 @@ class PSU_AR_PaymentPlan_Disbursements implements IteratorAggregate {
 
 		return $total;
 	}//end total
-}//end class PSU_AR_PaymentPlan_Disbursements
+}//end class

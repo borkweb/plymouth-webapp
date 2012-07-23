@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_Memos extends PSU_AR_TermAggregate {
+class Memos extends TermAggregate {
 	public function __construct( $pidm, $term_code = null ) {
 		parent::__construct( __CLASS__, $pidm, $term_code );
 	}//end __construct
@@ -13,7 +14,7 @@ class PSU_AR_Memos extends PSU_AR_TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_Memos_ActiveFilterIterator( $it );
+		return new \PSU\AR\Memos_ActiveFilterIterator( $it );
 	}//end active_memos
 
 	/**
@@ -45,7 +46,7 @@ class PSU_AR_Memos extends PSU_AR_TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_Memos_BillFilterIterator( $this->active_memos( $it ) );
+		return new \PSU\AR\Memos_BillFilterIterator( $this->active_memos( $it ) );
 	}//end bill_memos
 
 	/**
@@ -78,7 +79,7 @@ class PSU_AR_Memos extends PSU_AR_TermAggregate {
 		);
 
 		$sql = "SELECT * FROM tbrmemo WHERE tbrmemo_pidm = :pidm";
-		$rset = PSU::db('banner')->Execute($sql, $args);
+		$rset = \PSU::db('banner')->Execute($sql, $args);
 
 		return $rset ? $rset : array();
 	}//end get
@@ -91,7 +92,7 @@ class PSU_AR_Memos extends PSU_AR_TermAggregate {
 	 */
 	public static function max_tran_number( $pidm ) {
 		$sql = "SELECT max(tbrmemo_tran_number) FROM tbrmemo WHERE tbrmemo_pidm = :pidm";
-		return PSU::db('banner')->GetOne( $sql, array( 'pidm' => $pidm ) ) ?: 0;
+		return \PSU::db('banner')->GetOne( $sql, array( 'pidm' => $pidm ) ) ?: 0;
 	}//end max_tran_number
 
 	/**
@@ -102,7 +103,7 @@ class PSU_AR_Memos extends PSU_AR_TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_Memos_MiscFilterIterator( $this->active_memos( $it ) );
+		return new \PSU\AR\Memos_MiscFilterIterator( $this->active_memos( $it ) );
 	}//end misc_memos
 
 	/**
@@ -125,4 +126,4 @@ class PSU_AR_Memos extends PSU_AR_TermAggregate {
 	public function misc_memos_previous_terms( $term_code ) {
 		return $this->misc_memos( $this->previous_terms( $term_code ) );
 	}//end misc_memos_previous_terms
-}//end class PSU_AR_Memos
+}//end class
