@@ -26,7 +26,7 @@ class Receivable extends Transaction {
 	 */
 	protected function generate_entry( $payment ) {
 		$payment['receipt_number'] = \PSU\AR::generateReceiptNumber();
-		$payment['balance'] = ($payment['amount'] * -1) * $this->multiplier;
+		$payment['balance'] = $payment['amount'] * $this->multiplier;
 
 		$entry = new \PSU\AR\Receivable( $payment );
 

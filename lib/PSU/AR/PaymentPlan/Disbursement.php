@@ -20,7 +20,7 @@ class Disbursement extends \PSU_Banner_DataObject {
 		$this->trans_date = $this->effective_date = date('Y-m-d');
 
 		\PSU::add_filter( 'transaction_term_types', array( &$this, 'apply_to_terms' ), 10, 2 );
-		\PSU::add_filter( 'transaction_skip', array( &$this, 'apply_skip_terms' ), 10, 2 );
+		\PSU::add_filter( 'transaction_term_skip', array( &$this, 'apply_skip_terms' ), 10, 3 );
 	}//end constructor
 
 	public function amount() {
@@ -45,9 +45,7 @@ class Disbursement extends \PSU_Banner_DataObject {
 
 		$applied = \PSU::db('banner')->GetOne( $sql, $args ) ?: 0;
 
-		$amount = $this->amount * $this->multiplier;
-
-		return $amount == $applied;
+		return $this->amount == $applied;
 	}//end applied
 
 	/**
@@ -182,7 +180,6 @@ class Disbursement extends \PSU_Banner_DataObject {
 
 		if( $amount < 0 ) {
 			$this->multiplier = -1;
-			$amount = $amount * $this->multiplier;
 		}//end if
 
 		$this->transaction = new \PSU\AR\Transaction\Receivable( $this->person(), $amount, $this->multiplier );
