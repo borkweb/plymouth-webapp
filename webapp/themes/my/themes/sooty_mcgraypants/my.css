@@ -15,7 +15,6 @@ html, body{
 	background-color: #5b5b5b;
 	background-image: none;
 	border-bottom: none;
-	height: 135px;
 }
 
 #webapp-head .container{
@@ -24,12 +23,10 @@ html, body{
 	background-position: top center;
 }
 
-#webapp-head .webapp-head{height: 135px;padding-top:0;}
 
 #webapp-head .webapp-head #search,
 .webapp-head h1{
 	color: #000;
-	margin-top: 50px;
 }
 
 .webapp-head h1{
@@ -42,7 +39,6 @@ html, body{
 	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/sooty_mcgraypants/images/my_logo.png');
 	background-repeat: none;
 	width: 443px;
-	height: 112px;
 	margin-top: 10px;
 	margin-left: 0px;
 	text-indent: -9999px;
