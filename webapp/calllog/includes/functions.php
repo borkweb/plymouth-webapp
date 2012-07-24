@@ -84,7 +84,7 @@ function phonebookSearch($search_string, $search_type = 'all')
 		$input = array(
 			'search_phrase' => $search_string,
 			'everybody' => true,
-			'count' => 50
+			'count' => 100 
 		);
 		return PSU::searchPhonebook($input);
 	}//end if
