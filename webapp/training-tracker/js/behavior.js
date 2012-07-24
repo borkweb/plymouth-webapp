@@ -116,9 +116,19 @@ var TrainingTracker = {
 
 	recaculateProgress: function (e){
 		var $el = $(this).closest('.inner-goals');
+		var divisor = $el.data('divisor');
 		var checked = $el.find('input:checked').length;
 		var all = $el.find('input').length;
+
+		if (!_.isUndefined(divisor)){
+			all = divisor;
+		}
+
 		var newProgress = Math.round(((checked / all)*100)*100)/100;
+
+		if (newProgress > 100){
+			newProgress = 100;
+		}
 
 		var $progress = $el.prev();
 		var $progressbar = $progress.find('.progressbar');
