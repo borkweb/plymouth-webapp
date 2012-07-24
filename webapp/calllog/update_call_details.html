@@ -29,6 +29,8 @@ if ($toggle){
 	}
 }
 
+$_POST['call_status'] = $call_status;
+
 if( $_POST['call_id'] ) {
 	$call = $db->GetRow("SELECT * FROM call_log WHERE call_id = ?", array($_POST['call_id']));
 	$_POST['title'] = $_POST['title'] ? stripslashes($_POST['title']) : $call['title']; // magic_quotes_gpc

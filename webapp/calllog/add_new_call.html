@@ -4,9 +4,10 @@ if(empty($_POST)){
 	PSUHTML::redirect($_GET['redirect'] ? urldecode($_GET['redirect']) : 'index.html');
 }
 
-//checks to see if the call was assigned to anyone and if so, the call status defaults to open
-if($_POST['tlc_assigned_to'] != 'unassigned' || $_POST['its_assigned_group'] != 0){
-	$_POST['call_status'] = 'open';
+if ($_POST['toggle']){
+	if ($_POST['call_status'] == 'open'){
+		$_POST['call_status'] = 'closed';
+	}
 }
 
 if($_POST['call_status'] == 'closed'){
@@ -23,11 +24,7 @@ if( $_POST['tlc_assigned_to'] == 'caller' ) {
 	$_POST['tlc_assigned_to'] = $_POST['caller_user_name'];
 }//end if
 
-if ($_POST['toggle']){
-	if ($_POST['call_status'] == 'open'){
-		$_POST['call_status'] = 'closed';
-	}
-}
+
 
 // Insert into CallLog
 $call_location = $GLOBALS['new_call']->returnCallLoggedFromLocation($_SERVER['REMOTE_ADDR']);
