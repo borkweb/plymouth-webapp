@@ -30,7 +30,7 @@ class TermContainer {
 
 	/**
 	 * Sum all the items in a term.
-	 * @return \PSU\AR\item\Sum
+	 * @return \PSU\AR\{item}\Sum
 	 */
 	public function sum( $term = null ) {
 		$items = $this->get( $term );
