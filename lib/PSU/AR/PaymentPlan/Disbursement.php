@@ -52,8 +52,12 @@ class Disbursement extends \PSU_Banner_DataObject {
 	 * we want to skip terms that aren't in the current aid year
 	 */
 	public function apply_skip_terms( $value, $bill, $level ) {
+		if( ! $value ) {
+			$value = array();
+		}//end if
+
 		if( strtoupper( $level ) == 'UG' ) {
-			foreach( (array) $bill->all_term_balances as $term => $value ) {
+			foreach( (array) $bill->all_term_balances as $term => $amount ) {
 				if( \PSU\Student::getAidYear() != \PSU\Student::getAidYear( $term ) ) {
 					$value[] = $term;
 				}//end if
