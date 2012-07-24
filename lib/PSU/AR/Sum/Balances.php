@@ -12,7 +12,7 @@ class Balances implements \IteratorAggregate {
 	 */
 	public function __construct( $pidm, $term_codes, $params = null ) {
 		$this->pidm = $pidm;
-		$this->params = PSU::params($params);
+		$this->params = \PSU::params($params);
 
 		if( $term_codes && !is_array( $term_codes ) ) {
 			$term_codes = array( $term_codes );
