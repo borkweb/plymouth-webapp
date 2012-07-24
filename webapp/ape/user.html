@@ -43,18 +43,13 @@ if($title_log['source'] == 'ape')
 /*********************************************************************
  *    Retrieve Notes
  *********************************************************************/
-$notes = APENotes::get_notes( $person->wp_id );
-//grab the notes for the user
-if( !isset($notes) ){
-	//if there are no notes, set the count to 0
-	$notes_count = 0;
-}else{
-	$notes_count = APENotes::note_count( $person->wp_id );
-}
-$tpl->assign( 'notes_count', $notes_count );
+//grab the user notes
+$notes = new \PSU\Person\Notes($person->wp_id);
+$notes->load();
+//LEGACY NOTES
 //add the notes to the session
 foreach( $notes as $note ){
-	$_SESSION[$note['status']][]=$note['note'];
+	$_SESSION[$note->status][]=$note->note;
 }
 $tpl->assign( 'notes', $notes );	
 /*********************************************************************
