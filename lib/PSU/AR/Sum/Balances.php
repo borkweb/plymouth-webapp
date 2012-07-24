@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\Sum;
 
-class PSU_AR_Sum_Balances implements IteratorAggregate {
+class Balances implements \IteratorAggregate {
 	public $data;
 	public $pidm;
 	public $params;
@@ -32,7 +33,7 @@ class PSU_AR_Sum_Balances implements IteratorAggregate {
 			'pidm' => $this->pidm,
 		);
 
-		$args = PSU::params($args, $this->params);
+		$args = \PSU::params($args, $this->params);
 
 		if( ! $this->terms ) {
 			return 0;
@@ -70,7 +71,7 @@ class PSU_AR_Sum_Balances implements IteratorAggregate {
 		$sql = substr( $sql, 0, -2 );
 		$sql .= " FROM dual";
 
-		$results = PSU::db('banner')->GetRow( $sql, $args );
+		$results = \PSU::db('banner')->GetRow( $sql, $args );
 		return $results;
 	}//end get
 
@@ -92,7 +93,7 @@ class PSU_AR_Sum_Balances implements IteratorAggregate {
 	}//end load
 
 	public function getIterator() {
-		return new ArrayIterator( $this->data );
+		return new \ArrayIterator( $this->data );
 	}//end getIterator
 
 	/**
@@ -110,4 +111,4 @@ class PSU_AR_Sum_Balances implements IteratorAggregate {
 	public function termcodes() {
 		return array_keys($this->terms);
 	}//end termcodes
-}//end class PSU_AR_Sum_Balances
+}//end class

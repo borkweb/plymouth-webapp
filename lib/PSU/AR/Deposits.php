@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_Deposits extends PSU_AR_TermAggregate {
+class Deposits extends \PSU\AR\TermAggregate {
 	public function __construct( $pidm, $term_code = null ) {
 		parent::__construct( __CLASS__, $pidm, $term_code );
 	}//end __construct
@@ -14,7 +15,7 @@ class PSU_AR_Deposits extends PSU_AR_TermAggregate {
 		);
 
 		$sql = "BEGIN :c_cursor := tb_deposit.f_query_all(:pidm); END;";
-		$rset = PSU::db('banner')->ExecuteCursor($sql, 'c_cursor', $args);
+		$rset = \PSU::db('banner')->ExecuteCursor($sql, 'c_cursor', $args);
 
 		return $rset ? $rset : array();
 	}//end get_deposits
@@ -27,7 +28,7 @@ class PSU_AR_Deposits extends PSU_AR_TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_Deposits_ReleasedFilterIterator( $it );
+		return new \PSU\AR\Deposits\ReleasedFilterIterator( $it );
 	}//end released
 
 	/**
@@ -59,6 +60,6 @@ class PSU_AR_Deposits extends PSU_AR_TermAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_Deposits_UnexpiredFilterIterator( $it );
+		return new \PSU\AR\Deposits\UnexpiredFilterIterator( $it );
 	}//end unexpired
-}//end class PSU_AR_Deposits
+}//end class

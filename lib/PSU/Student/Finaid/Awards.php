@@ -71,14 +71,14 @@ class PSU_Student_Finaid_Awards implements IteratorAggregate {
 	 * all receivables from the current term
 	 */
 	public function current_term( $term_code ) {
-		return new PSU_AR_TermAggregate_CurrentTermFilterIterator( $this->getIterator(), $term_code );
+		return new \PSU\AR\TermAggregate\CurrentTermFilterIterator( $this->getIterator(), $term_code );
 	}//end current_term
 
 	/**
 	 * all receivables from future terms
 	 */
 	public function future_terms( $term_code ) {
-		return new PSU_AR_TermAggregate_FutureTermsFilterIterator( $this->getIterator(), $term_code );
+		return new \PSU\AR\TermAggregate\FutureTermsFilterIterator( $this->getIterator(), $term_code );
 	}//end future_terms
 
 	public function load( $award_rows = null ) {
@@ -126,7 +126,7 @@ class PSU_Student_Finaid_Awards implements IteratorAggregate {
 	 * all receivables from the previous term
 	 */
 	public function previous_terms( $term_code ) {
-		return new PSU_AR_TermAggregate_PreviousTermsFilterIterator( $this->getIterator(), $term_code );
+		return new \PSU\AR\TermAggregate\PreviousTermsFilterIterator( $this->getIterator(), $term_code );
 	}//end previous_terms
 
 	public function sum( $it = null ) {

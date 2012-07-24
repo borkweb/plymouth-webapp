@@ -8,4 +8,4 @@ class InvalidAddressFilterIterator extends \PSU_FilterIterator {
 
 		return ! $el->valid_addresses();
 	}
-}//end PSU\AR\MiscBillingCharges\InvalidAddressFilterIterator
+}//end class

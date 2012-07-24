@@ -8,4 +8,4 @@ class UnprocessedFilterIterator extends \PSU_FilterIterator {
 
 		return ! $el->processed();
 	}
-}//end PSU\AR\MiscBillingCharges\UnprocessedFilterIterator
+}//end class

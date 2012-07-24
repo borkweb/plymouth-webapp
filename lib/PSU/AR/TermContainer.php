@@ -1,9 +1,10 @@
 <?php
+namespace PSU\AR;
 
 /**
  * A container for all items, grouped by term.
  */
-class PSU_AR_TermContainer {
+class TermContainer {
 	/**
 	 * Terms we know about.
 	 */
@@ -29,7 +30,7 @@ class PSU_AR_TermContainer {
 
 	/**
 	 * Sum all the items in a term.
-	 * @return PSU_AR_item_Sum
+	 * @return \PSU\AR\{item}\Sum
 	 */
 	public function sum( $term = null ) {
 		$items = $this->get( $term );
@@ -40,7 +41,7 @@ class PSU_AR_TermContainer {
 	/**
 	 * @return Iterable
 	 */
-	public function filter( Iterator $items, $term_code ) {
+	public function filter( \Iterator $items, $term_code ) {
 		$matches = array();
 
 		foreach( $items as $item ) {
@@ -49,7 +50,7 @@ class PSU_AR_TermContainer {
 			}
 		}
 
-		return new ArrayIterator( $matches );
+		return new \ArrayIterator( $matches );
 	}
 
 	/**
@@ -58,7 +59,7 @@ class PSU_AR_TermContainer {
 	 * @return Iterator
 	 */
 	public function get( $term = null ) {
-		return new ArrayIterator( $this->terms[$term] );
+		return new \ArrayIterator( $this->terms[$term] );
 	}//end get
 
 	/**
@@ -68,10 +69,10 @@ class PSU_AR_TermContainer {
 	 */
 	public function terms() {
 		if( empty($this->terms) ) {
-			return new EmptyIterator;
+			return new \EmptyIterator;
 		}
 
-		return new ArrayIterator( $this->terms );
+		return new \ArrayIterator( $this->terms );
 	}//end terms
 
 	/**
@@ -81,9 +82,9 @@ class PSU_AR_TermContainer {
 	 */
 	public function termcodes() {
 		if( empty($this->terms) ) {
-			return new EmptyIterator;
+			return new \EmptyIterator;
 		}
 
-		return new ArrayIterator( $this->term_desc );
+		return new \ArrayIterator( $this->term_desc );
 	}//end termcodes
-}//end class PSU_AR_TermContainer
+}//end class

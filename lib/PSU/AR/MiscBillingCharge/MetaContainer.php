@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\MiscBillingCharge;
 
-class PSU_AR_MiscBillingCharge_MetaContainer implements IteratorAggregate {
+class MetaContainer implements \IteratorAggregate {
 	public $billing_id;
 	public $parent_id;
 	public $meta;
@@ -25,13 +26,13 @@ class PSU_AR_MiscBillingCharge_MetaContainer implements IteratorAggregate {
 
 		$sql = "SELECT * FROM misc_billing_meta WHERE billing_id = :billing_id {$where}";
 
-		$results = PSU::db('banner')->Execute( $sql, $args );
+		$results = \PSU::db('banner')->Execute( $sql, $args );
 
 		return $results ? $results : array();
 	}//end get
 
 	public function getIterator() {
-		return new ArrayIterator( $this->meta );
+		return new \ArrayIterator( $this->meta );
 	}//end getIterator
 
 	public function load( $rows = null ) {
@@ -42,7 +43,7 @@ class PSU_AR_MiscBillingCharge_MetaContainer implements IteratorAggregate {
 		$this->meta = array();
 
 		foreach( $rows as $row ) {
-			$data = new PSU_AR_MiscBillingCharge_Meta( $row );
+			$data = new \PSU\AR\MiscBillingCharge\Meta( $row );
 			$this->meta[ $row['meta_key'] ] = $data;
 		}//end foreach
 	}//end load
@@ -50,4 +51,4 @@ class PSU_AR_MiscBillingCharge_MetaContainer implements IteratorAggregate {
 	public function value( $key ) {
 		return isset( $this->meta[ $key ] ) ? $this->meta[ $key ] : null ;
 	}//end value
-}//end class PSU_AR_MiscBillingCharge_MetaContainer
+}//end class

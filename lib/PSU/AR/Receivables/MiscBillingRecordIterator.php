@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\Receivables;
 
-class PSU_AR_Receivables_MiscBillingRecordIterator extends PSU_FilterIterator {
+class MiscBillingRecordIterator extends \PSU_FilterIterator {
 	public $payment_id;
 	public $detail_code;
 
@@ -16,4 +17,4 @@ class PSU_AR_Receivables_MiscBillingRecordIterator extends PSU_FilterIterator {
 
 		return $el->detail_code == $this->detail_code && ( $this->payment_id === null || $el->payment_id == $this->payment_id );
 	}
-}//end PSU_AR_Receivables_MiscBillingRecordIterator
+}//end class

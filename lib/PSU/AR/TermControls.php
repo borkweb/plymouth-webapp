@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_TermControls extends PSU_DataObject {
+class TermControls extends \PSU_DataObject {
 	public function __construct( $term_code = null, $data = null ) {
 		if( ! $data ) {
 			$data = self::load( $term_code );
@@ -16,9 +17,9 @@ class PSU_AR_TermControls extends PSU_DataObject {
 		}//end if
 
 		$sql = "SELECT * FROM tbbterm WHERE tbbterm_term_code = :term_code";
-		$data = PSU::db('banner')->GetRow($sql, array( 'term_code' => $term_code ));
-		$data = PSU::cleanKeys('tbbterm_', '', $data);
+		$data = \PSU::db('banner')->GetRow($sql, array( 'term_code' => $term_code ));
+		$data = \PSU::cleanKeys('tbbterm_', '', $data);
 
 		return $data;
 	}//end load
-}//end class PSU_AR_TermControls
+}//end class

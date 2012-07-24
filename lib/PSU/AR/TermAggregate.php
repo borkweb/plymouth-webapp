@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-abstract class PSU_AR_TermAggregate implements IteratorAggregate {
+abstract class TermAggregate implements \IteratorAggregate {
 	public $data;
 	public $pidm;
 	public $terms;
@@ -35,7 +36,7 @@ abstract class PSU_AR_TermAggregate implements IteratorAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_TermAggregate_CurrentTermFilterIterator( $it, $term_code );
+		return new \PSU\AR\TermAggregate\CurrentTermFilterIterator( $it, $term_code );
 	}//end current_term
 
 	/**
@@ -46,7 +47,7 @@ abstract class PSU_AR_TermAggregate implements IteratorAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		return new PSU_AR_TermAggregate_ExcludeTermFilterIterator( $it, $term_code );
+		return new \PSU\AR\TermAggregate\ExcludeTermFilterIterator( $it, $term_code );
 	}//end exclude_term
 
 
@@ -58,7 +59,7 @@ abstract class PSU_AR_TermAggregate implements IteratorAggregate {
 			$it = $this->getIterator();
 		}//end if
 		
-		return new PSU_AR_TermAggregate_FutureTermsFilterIterator( $it, $term_code );
+		return new \PSU\AR\TermAggregate\FutureTermsFilterIterator( $it, $term_code );
 	}//end future_terms
 
 	/**
@@ -69,7 +70,7 @@ abstract class PSU_AR_TermAggregate implements IteratorAggregate {
 			return;
 		}
 
-		$class = $this->container.'_Terms';
+		$class = $this->container.'\Terms';
 		$this->terms = new $class;
 
 		if( $rows === null ) {
@@ -87,7 +88,7 @@ abstract class PSU_AR_TermAggregate implements IteratorAggregate {
 	}//end load
 
 	public function getIterator() {
-		return new ArrayIterator( $this->data );
+		return new \ArrayIterator( $this->data );
 	}//end getIterator
 
 	/**
@@ -98,7 +99,7 @@ abstract class PSU_AR_TermAggregate implements IteratorAggregate {
 			$it = $this->getIterator();
 		}//end if
 		
-		return new PSU_AR_TermAggregate_PreviousTermsFilterIterator( $it, $term_code );
+		return new \PSU\AR_TermAggregate_PreviousTermsFilterIterator( $it, $term_code );
 	}//end previous_terms
 
 	public function sum( $it = null ) {
@@ -106,7 +107,7 @@ abstract class PSU_AR_TermAggregate implements IteratorAggregate {
 			$it = $this->getIterator();
 		}//end if
 
-		$class = $this->contains.'_Sum';
+		$class = $this->contains.'\Sum';
 		return call_user_func( array( $class, 'create' ), $it );
 	}//end sum
 
@@ -125,4 +126,4 @@ abstract class PSU_AR_TermAggregate implements IteratorAggregate {
 	public function termcodes() {
 		return $this->terms->termcodes();
 	}//end termcodes
-}//end class PSU_AR_TermAggregate
+}//end class

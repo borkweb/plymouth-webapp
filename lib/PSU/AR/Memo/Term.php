@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\Memo;
 
-class PSU_AR_Memo_Term extends PSU_DataObject {
+class Term extends \PSU_DataObject {
 	public $aliases = array(
 		'tran_number' => 'transaction_number',
 		'billing_ind' => 'billing_indicator',
@@ -20,7 +21,7 @@ class PSU_AR_Memo_Term extends PSU_DataObject {
 	public function __construct( $row = null ) {
 		if( $row ) {
 			// get rid of table name from field names
-			$row = PSU::cleanKeys('tbrmemo_', '', $row);
+			$row = \PSU::cleanKeys('tbrmemo_', '', $row);
 		}//end if
 
 		parent::__construct( $row );
@@ -46,4 +47,4 @@ class PSU_AR_Memo_Term extends PSU_DataObject {
 	public function expiration_date_timestamp() {
 		return strtotime( $this->expiration_date );
 	}//end expiration_date_timestamp
-}//end class PSU_AR_Memo_Term
+}//end class

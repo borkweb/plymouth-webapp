@@ -125,7 +125,7 @@ abstract class Transaction {
 		if($this->amount_paid_remaining > 0) {
 			// We don't want to find old activity, and if we are here, we have applied funds to the current ter,
 			// Target the next term specified by the bursar otherwise fall back to this term
-			$term = \PSU_AR::bursar_future_term( strtolower( $this->level ) ) ?: $this->person->bill->last_balance_term();
+			$term = \PSU\AR::bursar_future_term( strtolower( $this->level ) ) ?: $this->person->bill->last_balance_term();
 		
 			$payment = $record_template;
 			$payment['term_code'] = $term;
@@ -173,7 +173,7 @@ abstract class Transaction {
 
 		// throw an error if this person doesn't have a pidm
 		if( ! $this->person->pidm ) {
-			throw new Exception('The Person with an identifier of '.$ident.' does not have a pidm');
+			throw new \Exception('The Person with an identifier of '.$ident.' does not have a pidm');
 		}//end if
 	}//end _init_person
 
@@ -188,6 +188,6 @@ abstract class Transaction {
 			$level = 'ug';
 		}//end if
 
-		$this->term_code = \PSU_AR::bursar_term( $level );
+		$this->term_code = \PSU\AR::bursar_term( $level );
 	}//end _init_term
 }//end class \PSU\AR\Transaction

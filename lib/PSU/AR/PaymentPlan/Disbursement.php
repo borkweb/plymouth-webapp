@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR\PaymentPlan;
 
-class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
+class Disbursement extends \PSU_Banner_DataObject {
 	public $aliases = array();
 	public $meta = null;
 	public $origin = null;
@@ -18,9 +19,13 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 		$this->entry_date = $this->activity_date = date('Y-m-d H:i:s');
 		$this->trans_date = $this->effective_date = date('Y-m-d');
 
-		PSU::add_filter( 'transaction_term_types', array( &$this, 'apply_to_terms' ), 10, 2 );
-		PSU::add_filter( 'transaction_skip', array( &$this, 'apply_skip_terms' ), 10, 2 );
+		\PSU::add_filter( 'transaction_term_types', array( &$this, 'apply_to_terms' ), 10, 2 );
+		\PSU::add_filter( 'transaction_skip', array( &$this, 'apply_skip_terms' ), 10, 2 );
 	}//end constructor
+
+	public function amount() {
+		return $this->amount;
+	}//end amount
 
 	public function applied() {
 		$sql = "
@@ -38,7 +43,7 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 			'payment_id' => $this->id,
 		);
 
-		$applied = PSU::db('banner')->GetOne( $sql, $args ) ?: 0;
+		$applied = \PSU::db('banner')->GetOne( $sql, $args ) ?: 0;
 
 		$amount = $this->amount * $this->multiplier;
 
@@ -105,12 +110,12 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 			'the_id' => $args['the_id'],
 		);
 
-		PSU::db('banner')->StartTrans();
+		\PSU::db('banner')->StartTrans();
 
 		$sql = "DELETE FROM payment_plan_disbursement WHERE id = :the_id";
-		$result = PSU::db('banner')->Execute( $sql, $args );
+		$result = \PSU::db('banner')->Execute( $sql, $args );
 
-		PSU::db('banner')->CompleteTrans( $commit );
+		\PSU::db('banner')->CompleteTrans( $commit );
 
 		return $result;
 	}//end delete
@@ -123,7 +128,7 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 	 * returns the detail description
 	 */
 	public function detail_desc() {
-		return PSU_AR::detail_code( $this->detail_code() )->desc;
+		return \PSU\AR::detail_code( $this->detail_code() )->desc;
 	}//end detail_desc
 
 	public function document_number() {
@@ -132,9 +137,9 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 
 	public static function get( $id ) {
 		$sql = "SELECT * FROM payment_plan_disbursement WHERE id = :the_id";
-		$row = PSU::db('banner')->GetRow( $sql, array('the_id' => $id) );
+		$row = \PSU::db('banner')->GetRow( $sql, array('the_id' => $id) );
 
-		return new PSU_AR_PaymentPlan_Disbursement( $row );
+		return new self( $row );
 	}//end get
 
 	public function init_template() {
@@ -161,7 +166,7 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 	 * returns the person associated with this record
 	 */
 	public function person() {
-		return PSUPerson::get( $this->psu_id );
+		return \PSUPerson::get( $this->psu_id );
 	}//end person
 
 	public function process() {
@@ -169,7 +174,7 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 			return true;
 		}//end if
 
-		PSU::db('banner')->StartTrans();
+		\PSU::db('banner')->StartTrans();
 		$success = false;
 
 		$amount = $this->amount;
@@ -183,7 +188,7 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 		$this->transaction = new \PSU\AR\Transaction\Receivable( $this->person(), $amount, $this->multiplier );
 		// set the level of the Disbursement (UG/GR).  UG avoids applying to winter and summer terms
 		// via the apply_to_terms method assigned to the transaction_term_types filter used in 
-		// PSU_AR_Transaction
+		// \PSU\AR\Transaction
 		$this->transaction->level = $this->type();
 		$receivable_template = $this->init_template();
 		$this->transaction->split( $receivable_template );
@@ -201,7 +206,7 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 			$results = false;
 		}//end else
 
-		PSU::db('banner')->CompleteTrans( $success );
+		\PSU::db('banner')->CompleteTrans( $success );
 
 		return $results;
 	}//end process
@@ -220,14 +225,14 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 		$sql_method = '_' . $method . '_sql';
 		$sql = $this->$sql_method( 'payment_plan_disbursement', $fields, false );
 
-		if( $results = PSU::db('banner')->Execute( $sql, $args ) ) {
+		if( $results = \PSU::db('banner')->Execute( $sql, $args ) ) {
 			$sql = "SELECT max(id) FROM payment_plan_disbursement WHERE psu_id = :psu_id AND file_id = :file_id AND plan_type = :plan_type";
 			$select_args = array(
 				'psu_id' => $args['psu_id'],
 				'file_id' => $args['file_id'],
 				'plan_type' => $args['plan_type'],
 			);
-			return $this->id = PSU::db('banner')->GetOne( $sql, $select_args );
+			return $this->id = \PSU::db('banner')->GetOne( $sql, $select_args );
 		}//end if
 	}//end save
 
@@ -259,11 +264,11 @@ class PSU_AR_PaymentPlan_Disbursement extends PSU_Banner_DataObject {
 			'amount' => $this->amount,
 			'plan_type' => $this->plan_type,
 			'file_id' => $this->file_id,
-			'date_attempted' => $this->date_attempted ? PSU::db('banner')->BindDate( $this->date_attempted_timestamp() ) : null,
-			'date_parsed' => $this->date_parsed ? PSU::db('banner')->BindDate( $this->date_parsed_timestamp() ) : null,
-			'date_processed' => $this->date_processed ? PSU::db('banner')->BindDate( $this->date_processed_timestamp() ) : null,
+			'date_attempted' => $this->date_attempted ? \PSU::db('banner')->BindDate( $this->date_attempted_timestamp() ) : null,
+			'date_parsed' => $this->date_parsed ? \PSU::db('banner')->BindDate( $this->date_parsed_timestamp() ) : null,
+			'date_processed' => $this->date_processed ? \PSU::db('banner')->BindDate( $this->date_processed_timestamp() ) : null,
 		);
 
 		return $args;
 	}//end _prep_args
-}//end class PSU_AR_PaymentPlan_Disbursement
+}//end class

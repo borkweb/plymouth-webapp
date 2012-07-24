@@ -1,10 +1,11 @@
 <?php
+namespace PSU\AR\AidAuthorizations;
 
 /**
  * A container for all receivables, grouped by term.
  */
-class PSU_AR_AidAuthorizations_Terms extends PSU_AR_TermContainer {
+class Terms extends \PSU\AR\TermContainer {
 	public function __construct() {
-		parent::__construct( 'PSU_AR_AidAuthorizations_Sum' );	
+		parent::__construct( 'PSU\AR\AidAuthorizations\Sum' );	
 	}//end constructor
-}//end class PSU_AR_AidAuthorizations_Terms
+}//end class

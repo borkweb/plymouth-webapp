@@ -1,6 +1,7 @@
 <?php
+namespace PSU\AR;
 
-class PSU_AR_DetailCode extends PSU_DataObject {
+class DetailCode extends \PSU_DataObject {
 	public $aliases = array(
 	);
 
@@ -12,9 +13,9 @@ class PSU_AR_DetailCode extends PSU_DataObject {
 	public function __construct( $row = null ) {
 		if( $row ) {
 			// get rid of table name from field names
-			$row = PSU::cleanKeys('tbbdetc_', '', $row);
+			$row = \PSU::cleanKeys('tbbdetc_', '', $row);
 		}//end if
 
 		parent::__construct( $row );
 	}//end constructor
-}//end class PSU_AR_DetailCode
+}//end class

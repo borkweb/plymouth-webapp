@@ -1,10 +1,11 @@
 <?php
+namespace PSU\AR\Memos;
 
 /**
  * A container for all memos, grouped by term.
  */
-class PSU_AR_Memos_Terms extends PSU_AR_TermContainer {
+class Terms extends \PSU\AR\TermContainer {
 	public function __construct() {
-		parent::__construct( 'PSU_AR_Memo_Sum' );	
+		parent::__construct( 'PSU\AR\Memo\Sum' );	
 	}//end constructor
-}//end class PSU_AR_Memos_Terms
+}//end class
