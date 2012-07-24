@@ -16,9 +16,6 @@ class Notes extends \PSU\Collection{
 		self::load_notes();
 	}//end __construct
 
-	/**
-	 *
-	 */
 	public function count() {
 	\PSU::db('banner')->debug=true;
 		$sql = "SELECT COUNT(1) FROM  {$this->_table} WHERE wp_id = :wp_id AND deleted = 0";
@@ -29,10 +26,6 @@ class Notes extends \PSU\Collection{
 		return $count;
 	}//end count
 
-	
-	/**
-	 * @sa _get_sql()
-	 */
 	public function get() {
 	\PSU::db('banner')->debug=true;
 		$sql = "SELECT * FROM {$this->_table} WHERE wp_id = :wp_id AND deleted = 0";
@@ -42,13 +35,6 @@ class Notes extends \PSU\Collection{
 		return \PSU::db('banner')->GetAll($sql, $data);
 	}//end get
 
-	public function load_notes(){
-		$notes = self::get();
-		foreach( $notes as $note ){
-			$this->notes[] = new Note( $note['id'], $this->_wp_id, $note['note'], $note['status']);
-
-		}
-	}//end create_notes
 	public function sort( $callback ) {
 		$this->load();
 		usort( $this->children, $callback );
