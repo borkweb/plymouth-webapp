@@ -50,7 +50,6 @@ abstract class TermAggregate implements \IteratorAggregate {
 		return new \PSU\AR\TermAggregate\ExcludeTermFilterIterator( $it, $term_code );
 	}//end exclude_term
 
-
 	/**
 	 * all receivables from future terms
 	 */
@@ -99,7 +98,7 @@ abstract class TermAggregate implements \IteratorAggregate {
 			$it = $this->getIterator();
 		}//end if
 		
-		return new \PSU\AR_TermAggregate_PreviousTermsFilterIterator( $it, $term_code );
+		return new \PSU\AR\TermAggregate\PreviousTermsFilterIterator( $it, $term_code );
 	}//end previous_terms
 
 	public function sum( $it = null ) {
