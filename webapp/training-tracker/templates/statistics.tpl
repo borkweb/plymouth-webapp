@@ -20,7 +20,8 @@
 		<div id="goals"> 
 			{foreach from=$checklist_item_sub_cat item=sub_category}
 				<h3><a href="#">{$sub_category.name} progress: <span class = "progress">{$sub_category.stat}</span>%<div id="{$sub_category.id}" data-progress="{$sub_category.stat}" class="progressbar"></div></a></h3>
-				<div class="inner-goals"> {*  foreach category look at each sub category and add every item per sub category *}
+				{*  foreach category look at each sub category and add every item per sub category *}
+				<div class="inner-goals" {if $sub_category.slug == "mpc-skills"}data-divisor="2"{elseif $sub_category.slug == "at-skill"}data-divisor="1"{/if}> 
 				{foreach from=$checklist_items item=item}
 					{if $item.category_id eq $sub_category.id}
 						<label class="chkbox-container" for="{$item.id}" {if isset($item.updated_by)}title="Last modified by - {$item.updated_by} on {$item.updated_time}."{else}title="This item hasn't been updated yet."{/if}><input class="chkbox" type="checkbox" {if $item.checked}checked="true" {/if} id="{$item.id}" > {$item.description}</label>
