@@ -33,17 +33,17 @@ class Note implements \PSU\ActiveRecord{
 
 	public function save( $method = NULL ){
 		//this function will save notes
-		if( $method == 'edit' || isset($this->id) ){
+		if( $method == "update" || isset($this->id) ){
 			$sql = "UPDATE psu_identity.person_notes SET  note = :note, status = :status WHERE id = :note_id";
-			$data = array(
+			$args = array(
 				'note' => $this->note,
 				'status' => $this->status,		
 				'note_id' => $this->id,
 		
 			);
-		}elseif( $method == 'new' || !isset($this->id)){
+		}elseif( $method == "insert" || !isset($this->id)){
 			$sql = "INSERT INTO psu_identity.person_notes (wp_id, note, status, deleted) VALUES (:wp_id, :note, :status, :deleted)";
-			$data = array(
+			$args = array(
 				'wp_id' => $this->wp_id,
 				'note' => $this->note,
 				'status' => $this->status,
@@ -52,12 +52,12 @@ class Note implements \PSU\ActiveRecord{
 
 		}
 		
-		return \PSU::db('banner')->Execute( $sql, $data );
+		return \PSU::db('banner')->Execute( $sql, $args );
 
 	}//end function save
 
 	public function edit( $args = NULL){
-		//thos function will edit existing notes
+		//this function will edit existing notes
 		$this->wp_id = filter_var( $args['wp_id'], FILTER_SANITIZE_STRING );
 		$this->note = filter_var( $args['note'], FILTER_SANITIZE_STRING );
 		$this->status = filter_var( $args['status'], FILTER_SANITIZE_STRING );

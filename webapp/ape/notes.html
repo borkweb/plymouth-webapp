@@ -71,6 +71,7 @@ switch( $_GET['action'] ){
 
 	case change:
 		//grabs the arguments and filters them
+		$note = \PSU\Person\Note::get( $_GET['id'] );
 		$args = $_POST;
 		if(!$args['note']){
 			$_SESSION['errors'][]='Please enter a note.';
