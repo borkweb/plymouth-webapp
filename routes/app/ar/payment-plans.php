@@ -47,7 +47,7 @@ respond('/process/[contract|disbursement:script]', function( $request, $response
 		$command ='/usr/local/bin/php ~'.$user.'/scripts/payment_plan_'.$script.'.php --instance='.strtolower( PSU::db('banner')->database ) . ' &';
 	}//end else
 
-	echo shell_exec( $command );
+	exec( $command );
 	
 	$_SESSION['successes'][] = 'The Payment Plan '.ucwords( $script ).' processing script has begun.  Please check back shortly.';
 
