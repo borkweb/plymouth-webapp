@@ -463,16 +463,14 @@ class PSUReport{
 			$this->_chart_data[ 'psuchart_total' ]++;
 		}//end if	
 
+		// KendoUI does not like the word "class" as a field name.  If there is one, rename it to class_
+		if( isset( $row['class'] ) ) {
+			$row['class_'] = $row['class'];
+			unset( $row['class'] );
+		}//end if
+
 		// Determine max length of values in column 
 		foreach( $row as $field=>$data ) {
-			// KendoUI does not like the word "class" as a field name.  If there is one, rename it to class_
-			if( 'class' == $field ) {
-				$row['class_'] = $data;
-				unset( $row['class'] );
-
-				$field = 'class_';
-			}//end if
-
 			$field_length = $this->getTextWidth( $data ); 
 			if( $field_length > $this->data_length[ $field ] ) { 
 				$this->data_length[ $field ] = $field_length;
