@@ -33,7 +33,7 @@
 </form>
 {/box}
 {/if}
-{if $notes->count() > 0}
+{if $person->notes->count() > 0}
 	<table class="table table-bordered table-striped">
 		<thead>
 			<th>Note ID</th>
@@ -43,7 +43,7 @@
 			<th>Edit</th>
 		</thead>
 		<tbody>
-	{foreach from=$notes item=note}
+	{foreach from=$person->notes item=note}
 			<tr>
 				<td>{$note->id}</td>
 				<td>{$note->status}</td>

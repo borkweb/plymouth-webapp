@@ -10,14 +10,10 @@ $status_choices = array(
 	'warnings' => 'Warning',
 );
 //load all of the notes for the person
-$notes = new \PSU\Person\Notes( $person->wp_id );
-$notes->load();
+//$tpl->assign('notes', $person->notes );
 //create a new template
 $tpl = new APESmarty();
 //if the notes are set, display them to the user
-if (isset($notes)){
-	$tpl->assign( 'notes', $notes );
-}
 $tpl->assign( 'person', $person );
 if( $_GET['action'] ) {
 	$tpl->assign( 'action', $_GET['action'] );
