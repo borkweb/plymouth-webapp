@@ -38,6 +38,13 @@ class Memo extends \PSU_Banner_DataObject {
 	}//end activity_date_timestamp
 
 	/**
+	 * returns the memo amount
+	 */
+	public function amount() {
+		return $this->amount;
+	}//end amount
+
+	/**
 	 * deletes the memo record
 	 *
 	 * minimum required fields are:

@@ -2,8 +2,8 @@
 
 namespace PSU\AR\PaymentPlan;
 
-class Disbursements extends \PSU\Collection {
-	public static $child = '\PSU\AR\PaymentPlan\Disbursement';
+class Contracts extends \PSU\Collection {
+	public static $child = '\PSU\AR\PaymentPlan\Contract';
 	public $file_id = null;
 
 	public function __construct( $file_id = null ) {
@@ -11,20 +11,20 @@ class Disbursements extends \PSU\Collection {
 	}//end constructor
 
 	/**
-	 * retrieve disbursements
+	 * retrieve contracts
 	 */
 	public function get() {
 		$args = array();
 
 		if( $this->psu_id ) {
 			$args['psu_id'] = $this->psu_id;
-			$where .= " AND d.psu_id = :psu_id";
+			$where .= " AND c.psu_id = :psu_id";
 		}//end if
 
 		if( $this->processed ) {
-			$where .= " AND d.date_processed IS NOT NULL";
+			$where .= " AND c.date_processed IS NOT NULL";
 		} elseif( ! $this->include_processed ) {
-			$where .= " AND d.date_processed IS NULL";
+			$where .= " AND c.date_processed IS NULL";
 		}//end if
 
 		if( $this->num_rows ) {
@@ -33,25 +33,25 @@ class Disbursements extends \PSU\Collection {
 		}//end if
 
 		if( $this->file_id ) {
-			$where .= " AND d.file_id = :file_id";
+			$where .= " AND c.file_id = :file_id";
 			$args['file_id'] = $this->file_id;
 		}//end if
 
 		$sql = "
-			SELECT d.*, 
+			SELECT c.*, 
 			       b.pidm,
 		         f.file_name,
 		         f.file_type,
 						 f.file_sub_type,
 						 f.file_date
-				FROM payment_plan_disbursement d
+				FROM payment_plan_contract c
 						 JOIN payment_plan_feed f
-			         ON f.id = d.file_id
+			         ON f.id = c.file_id
 		         LEFT JOIN v_bio b
 			         ON b.id = psu_id
 							AND REGEXP_LIKE( b.id, '[0-9]{9}' )
 			 WHERE 1 = 1 {$where} 
-			 ORDER BY UPPER(b.last_name), UPPER(b.first_name), b.middle_name, file_id, d.id";
+			 ORDER BY UPPER(b.last_name), UPPER(b.first_name), b.middle_name, file_id, c.id";
 
 		$results = \PSU::db('banner')->Execute( $sql, $args );
 

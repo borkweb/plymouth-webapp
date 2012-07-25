@@ -1,0 +1,14 @@
+.unequal-amounts .expected,
+.unequal-amounts .processed {
+	color: red;
+}
+
+.old td,
+.old .expected,
+.old .processed {
+	color: #aaa;
+}
+
+.danger {
+	color: red;
+}
