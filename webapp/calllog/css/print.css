@@ -11,8 +11,12 @@ body{
 	display: none;
 }
 
-.noprint{display:none;}
-
+.noprint{
+	display:none;
+}
+.printonly{
+	display: block !important;
+}
 #call_assignment_history_hidden_div label,
 #call_assignment_history_hidden_div label em,
 #call_assignment_history_hidden_div .label,
