@@ -211,6 +211,10 @@ class PSUReport{
 				$cols = array_keys(current($this->data));
 				$this->cols = array();
 				foreach( $cols as $col ) {
+					if( 'class' == $col ) {
+						$col = 'class_';
+					}//end if
+
 					$this->cols[$col] = (object) array('name' => $col);
 				}//end foreach
 			}//end if
@@ -461,6 +465,14 @@ class PSUReport{
 
 		// Determine max length of values in column 
 		foreach( $row as $field=>$data ) {
+			// KendoUI does not like the word "class" as a field name.  If there is one, rename it to class_
+			if( 'class' == $field ) {
+				$row['class_'] = $data;
+				unset( $row['class'] );
+
+				$field = 'class_';
+			}//end if
+
 			$field_length = $this->getTextWidth( $data ); 
 			if( $field_length > $this->data_length[ $field ] ) { 
 				$this->data_length[ $field ] = $field_length;
