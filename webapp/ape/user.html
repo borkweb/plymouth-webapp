@@ -43,15 +43,11 @@ if($title_log['source'] == 'ape')
 /*********************************************************************
  *    Retrieve Notes
  *********************************************************************/
-//grab the user notes
-$notes = new \PSU\Person\Notes($person->wp_id);
-$notes->load();
-//LEGACY NOTES
+//load turntable 
 //add the notes to the session
-foreach( $notes as $note ){
+foreach( $person->notes as $note ){
 	$_SESSION[$note->status][]=$note->note;
 }
-$tpl->assign( 'notes', $notes );	
 /*********************************************************************
  *    Set Workflow Permissions
  *********************************************************************/
