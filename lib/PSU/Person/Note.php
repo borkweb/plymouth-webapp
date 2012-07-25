@@ -34,7 +34,10 @@ class Note implements \PSU\ActiveRecord{
 	public function save( $method = NULL ){
 		//this function will save notes
 		if( $method == "update" || isset($this->id) ){
-			$sql = "UPDATE psu_identity.person_notes SET  note = :note, status = :status WHERE id = :note_id";
+			$sql = "UPDATE psu_identity.person_notes 
+				      SET  note = :note,
+					      status = :status 
+				    WHERE id = :note_id";
 			$args = array(
 				'note' => $this->note,
 				'status' => $this->status,		
@@ -42,7 +45,12 @@ class Note implements \PSU\ActiveRecord{
 		
 			);
 		}elseif( $method == "insert" || !isset($this->id)){
-			$sql = "INSERT INTO psu_identity.person_notes (wp_id, note, status, deleted) VALUES (:wp_id, :note, :status, :deleted)";
+			$sql = "INSERT INTO psu_identity.person_notes 
+				        (wp_id,
+					     note, 
+						status, 
+					    deleted) 
+				   VALUES (:wp_id, :note, :status, :deleted)";
 			$args = array(
 				'wp_id' => $this->wp_id,
 				'note' => $this->note,
@@ -65,7 +73,9 @@ class Note implements \PSU\ActiveRecord{
 
 	public function delete(){
 		//this function will delete a note
-	 	$sql = "UPDATE psu_identity.person_notes SET deleted=1 WHERE id = :note_id";
+		$sql = "UPDATE psu_identity.person_notes 
+				 SET deleted=1 
+                   WHERE id = :note_id";
 		$data = array(
 				'note_id' => $this->id,
 		);

@@ -13,7 +13,10 @@ class Notes extends \PSU\Collection{
 	}//end __construct
 
 	public function count() {
-		$sql = "SELECT COUNT(1) FROM  {$this->_table} WHERE wp_id = :wp_id AND deleted = 0";
+		$sql = "SELECT COUNT(1) 
+			     FROM  {$this->_table} 
+		         WHERE wp_id = :wp_id 
+			      AND deleted = 0";
 		$data = array(
 			'wp_id' => $this->_wp_id,
 			);
@@ -23,7 +26,10 @@ class Notes extends \PSU\Collection{
 
 	
 	public function get() {
-		$sql = "SELECT * FROM {$this->_table} WHERE wp_id = :wp_id AND deleted = 0";
+		$sql = "SELECT * 
+			     FROM {$this->_table} 
+		         WHERE wp_id = :wp_id 
+			      AND deleted = 0";
 		$data = array(
 			'wp_id' => $this->_wp_id,
 		);
