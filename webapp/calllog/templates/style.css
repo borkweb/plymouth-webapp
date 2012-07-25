@@ -474,7 +474,7 @@ tr:hover .muted{
 	list-style-type: none;
 }
 
-#tlc_nav_list a:link, #tlc_nav_list a:visited{
+#tlc_nav_list a:link, #tlc_nav_list a:visited {
 	font-family: verdana, arial, helvectica;
 	font-size: 8pt;
 	line-height: 14px;
@@ -485,7 +485,7 @@ tr:hover .muted{
 	text-decoration: none;
 }
 
-#tlc_nav_list a:link.active, #tlc_nav_list a:visited.active{
+#tlc_nav_list a:link.active, #tlc_nav_list a:visited.active {
 	border-bottom: 1px solid;
 }
 
@@ -497,9 +497,6 @@ tr:hover .muted{
 
 #media_loans_div, #dashboard_div, #main-table-right-inside, #assign_to_div, #call_assignment_history_hidden_div, #cluster_printers_div, #restore_request_div, #keywordsList, .hidden {
 	display: none;
-}
-
-#assign-to {
 }
 
 a.action:link, a.action:visited, a.action:active, input.action {
@@ -663,14 +660,18 @@ div#user_status_div .muted{color:#666;}
 	border-color: #476542;
 	padding: 5px;
 }
-
-.clear { clear: both; }
+.printonly{
+	display: none;
+}
+.clear { 
+	clear: both; 
+}
 
 .call{
 	cursor: pointer;
 }
 
-.call a.view, .call a.view:hover{
+.call a.view, .call a.view:hover {
 	color: #000;
 }
 

@@ -9,18 +9,21 @@
 
 {col size=6 id="call-information"}
 
+	<h3 class="printonly">{$title|escape}</h3>
+
 	{if $go_back}
 		{box class="noprint"}
 			<a href="{$go_back.url}" class="btn btn-danger">&laquo; Back to {$go_back.name}</a>
 		{/box}
 	{/if}
 
+
 	{box title="Caller Information"}
 		<div id="caller_information_div">
 			{$caller_information}
 		</div>
 
-		<div class="center">
+		<div class="center noprint">
 			<a href="#" id="change-caller-toggle" class="replace-toggle">Re-attach Call</a>
 			<div id="change_caller" style="display:none;">
 				Change Caller To: <input type="text" name="attach_to"/><br/>
@@ -68,7 +71,7 @@
 {/col}
 
 {col size=10}
-	{box title=$details_name class="call-form"}
+	{box title=$details_name class="call-form noprint"}
 		{include file="ticket_form.tpl"}
 		<label class="label">Keywords:</label>
 		<input type="text" name="keywords_list" id="keywords_list" size="51" placeholder="Nouns related to this ticket..." value="{$call_assignment_history_keywords}"/>
@@ -121,10 +124,12 @@
 
 	{if $history}
 		{box title="Assignment History" class="grid_10"}
+			<div class="noprint">
 			Re-order: 
 				<a href="javascript: reorder_assign_history('old', '{$person.username}', {$call_id});" class="btn">Old-New</a> | 
 				<a href="javascript: reorder_assign_history('new', '{$person.username}', {$call_id});" class="btn">New-Old</a>
 			<br /><br />
+			</div>
 			<div id="call_assignment_history">
 			{include file="ticket-history.tpl"}
 			</div>
