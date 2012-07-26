@@ -42,6 +42,13 @@ if($title_log['source'] == 'ape')
 }//end if
 
 /*********************************************************************
+ *    Retrieve Notes
+ *********************************************************************/
+//add the notes to the session
+foreach( $person->notes as $note ){
+	$_SESSION[$note->status][]=$note->note;
+}
+/*********************************************************************
  *    Set Workflow Permissions
  *********************************************************************/
 if(IDMObject::authZ('permission', 'ape_workflow'))

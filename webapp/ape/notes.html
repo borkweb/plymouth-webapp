@@ -1,0 +1,99 @@
+<?php
+//grabs the user and person the user is looking at
+$myuser = new PSUPerson($_SESSION['wp_id']);
+$person = new PSUPerson($_GET['pidm']);
+//array of choices for the form
+$status_choices = array(
+	'messages' => 'Info',
+	'successes' => 'Success',
+	'errors' => 'Error',
+	'warnings' => 'Warning',
+);
+//load all of the notes for the person
+//create a new template
+$tpl = new APESmarty();
+//if the notes are set, display them to the user
+$tpl->assign( 'person', $person );
+if( $_GET['action'] ) {
+	$tpl->assign( 'action', $_GET['action'] );
+}
+
+$tpl->assign( 'status_choices', $status_choices );
+//get the action of the page, edit add or delete
+switch( $_GET['action'] ){
+	case edit:
+		//needs to load edit page
+		$note = \PSU\Person\Note::get( $_GET['id'] );
+		$tpl->assign( 'note', $note );
+		break;
+
+	case add:
+		//adds the new note
+		$args = $_POST;
+		if(!$args['note']){
+			$_SESSION['errors'][]='Please enter a note.';
+		}else{
+			filter_var($args['note'], FILTER_SANITIZE_STRING);
+			$args['note'] = stripslashes($args['note']);
+		}
+
+		if(!$args['status']){
+			$_SESSION['errors'][]='Please select a status.';
+		}else{
+			filter_var($args['status'], FILTER_SANITIZE_STRING);
+			$args['status'] = stripslashes($args['status']);
+		
+		}
+
+
+		if(count($_SESSION['errors']) <= 0){
+			//creates a new note object
+			$note = new \PSU\Person\Note( $args );
+			$note->save();
+			$_SESSION['successes'][]="New {$note->status} note added to user {$person->username}.";
+		}
+
+			PSUHTML::redirect( $GLOBALS['BASE_URL'] . '/user/' . $person->pidm . '/notes');
+		break;
+
+	case delete:
+		//grabs the note you are trying to deleted
+		$note = \PSU\Person\Note::get( $_GET['id'] );
+		//and deletes it
+		$note->delete();
+		PSUHTML::redirect( $GLOBALS['BASE_URL'] . '/user/' . $person->pidm . '/notes');
+		break;
+
+	case change:
+		//grabs the arguments and filters them
+		$note = \PSU\Person\Note::get( $_GET['id'] );
+		$args = $_POST;
+		if(!$args['note']){
+			$_SESSION['errors'][]='Please enter a note.';
+		}else{
+			filter_var($args['note'], FILTER_SANITIZE_STRING);
+			$args['note'] = stripslashes($args['note']);
+		}
+
+		if(!$args['status']){
+			$_SESSION['errors'][]='Please select a status.';
+		}else{
+			filter_var($args['status'], FILTER_SANITIZE_STRING);
+			$args['status'] = stripslashes($args['status']);
+		
+		}
+
+		//if there were no errors
+		if(count($_SESSION['errors']) <= 0){
+			//edit the note and save it
+			$note->edit( $args );
+			$note->save();
+			$_SESSION['successes'][]="Edited {$note->status} note for user {$person->username}.";
+		}
+
+			PSUHTML::redirect( $GLOBALS['BASE_URL'] . '/user/' . $person->pidm . '/notes');
+
+}//end switch
+//display the manage notes template
+$tpl->display('notes.tpl');
+

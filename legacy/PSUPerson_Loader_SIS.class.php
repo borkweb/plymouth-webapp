@@ -1066,6 +1066,18 @@ class PSUPerson_Loader_SIS extends PSUPerson_Loader implements PSUPerson_Loader_
 	}//end _load_has_zimbra
 
 	/**
+	 *_load_notes
+	 *
+	 *Loads the notes attached to the person
+	 *
+	 */
+	function _load_notes(){
+		$notes = new \PSU\Person\Notes( $this->person->data['wp_id'] );
+		$notes->load();
+		$this->person->data['notes']  = $notes;
+		$this->person->notes = $notes; 
+	}//end _load_notes
+	/**
 	 * _load_mahara
 	 *
 	 * loads the information about a user in Mahara
