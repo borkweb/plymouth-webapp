@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -15,7 +15,6 @@
         Widget = kendo.ui.Widget,
         keys = kendo.keys,
         FOCUSSELECTOR =  ">*",
-        CHANGE = "change",
         REQUESTSTART = "requestStart",
         ERROR = "error",
         FOCUSED = "k-state-focused",
@@ -23,9 +22,10 @@
         SELECTED = "k-state-selected",
         KEDITITEM = "k-edit-item",
         STRING = "string",
-        CLICK = "click",
         EDIT = "edit",
         REMOVE = "remove",
+        SAVE = "save",
+        CLICK = "click",
         proxy = $.proxy,
         progress = kendo.ui.progress,
         DataSource = kendo.data.DataSource;
@@ -34,7 +34,7 @@
         init: function(element, options) {
             var that = this;
 
-            options = $.isArray(options) ? { data: options } : options;
+            options = $.isArray(options) ? { dataSource: options } : options;
 
             Widget.fn.init.call(that, element, options);
 
@@ -54,6 +54,10 @@
 
             that._selectable();
 
+            that._pageable();
+
+            that._crudHandlers();
+
             if (that.options.autoBind){
                 that.dataSource.fetch();
             }
@@ -66,12 +70,15 @@
             DATABINDING,
             DATABOUND,
             EDIT,
-            REMOVE
+            REMOVE,
+            SAVE
         ],
 
         options: {
             name: "ListView",
             autoBind: true,
+            selectable: false,
+            navigatable: false,
             template: "",
             altTemplate: "",
             editTemplate: ""
@@ -85,7 +92,9 @@
             this.options.dataSource = dataSource;
             this._dataSource();
 
-            dataSource.fetch();
+            if (this.options.autoBind) {
+                dataSource.fetch();
+            }
         },
 
         _dataSource: function() {
@@ -121,14 +130,32 @@
 
         refresh: function(e) {
             var that = this,
-                data = that.dataSource.view(),
+                view = that.dataSource.view(),
+                data,
+                items,
+                item,
                 html = "",
                 idx,
                 length,
                 template = that.template,
                 altTemplate = that.altTemplate;
 
-            if (e && e.action === "itemchange" && that.editable) {
+            if (e && e.action === "itemchange") {
+                if (!that.editable) {
+                    data = e.items[0];
+                    idx = view.indexOf(data);
+
+                    if (idx >= 0) {
+                        item = $(template(data));
+                        that.items().eq(idx).replaceWith(item);
+
+                        that.trigger("itemChange", {
+                            item: item,
+                            data: data
+                        });
+                    }
+                }
+
                 return;
             }
 
@@ -136,17 +163,39 @@
 
             that._destroyEditable();
 
-            for (idx = 0, length = data.length; idx < length; idx++) {
+            for (idx = 0, length = view.length; idx < length; idx++) {
                 if (idx % 2) {
-                    html += altTemplate(data[idx]);
+                    html += altTemplate(view[idx]);
                 } else {
-                    html += template(data[idx]);
+                    html += template(view[idx]);
                 }
             }
 
             that.element.html(html);
 
+            items = that.items();
+            for (idx = 0, length = view.length; idx < length; idx++) {
+                items.eq(idx).attr(kendo.attr("uid"), view[idx].uid);
+            }
+
             that.trigger(DATABOUND);
+        },
+
+        _pageable: function() {
+            var that = this,
+                pageable = that.options.pageable,
+                settings,
+                pagerId;
+
+            if ($.isPlainObject(pageable)) {
+                pagerId = pageable.pagerId;
+                settings = $.extend({}, pageable, {
+                    dataSource: that.dataSource,
+                    pagerId: null
+                });
+
+                $("#" + pagerId).kendoPager(settings);
+            }
         },
 
         _selectable: function() {
@@ -285,9 +334,15 @@
        _destroyEditable: function() {
            var that = this;
            if (that.editable) {
-               that.editable.distroy();
+               that.editable.destroy();
                delete that.editable;
            }
+       },
+
+       _modelFromElement: function(element) {
+           var uid = element.attr(kendo.attr("uid"));
+
+           return this.dataSource.getByUid(uid);
        },
 
        _closeEditable: function(validate) {
@@ -303,8 +358,8 @@
                }
 
                if (valid) {
-                   data = that.dataSource.view()[editable.element.index()],
-                   container = $(that.template(data))
+                   data = that._modelFromElement(editable.element);
+                   container = $(that.template(data)).attr(kendo.attr("uid"), data.uid);
                    that._destroyEditable();
                    editable.element.replaceWith(container);
                }
@@ -315,10 +370,11 @@
 
        edit: function(item) {
            var that = this,
-               data = that.dataSource.view()[item.index()],
+               data = that._modelFromElement(item),
                container = $(that.editTemplate(data)).addClass(KEDITITEM);
 
             that.cancel();
+            container.attr(kendo.attr("uid"), data.uid);
             item.replaceWith(container);
             that.editable = container.kendoEditable({ model: data, clearContainer: false, errorTemplate: false }).data("kendoEditable");
 
@@ -326,15 +382,19 @@
        },
 
        save: function() {
-           if (this._closeEditable(true)) {
-               this.dataSource.sync();
+           var that = this,
+               editable = that.editable.element,
+               model = that._modelFromElement(editable);
+
+           if (!that.trigger(SAVE, { model: model, item: editable }) && that._closeEditable(true)) {
+               that.dataSource.sync();
            }
        },
 
        remove: function(item) {
            var that = this,
                dataSource = that.dataSource,
-               data = dataSource.view()[item.index()];
+               data = that._modelFromElement(item);
 
            if (!that.trigger(REMOVE, { model: data, item: item })) {
                item.hide();
@@ -359,22 +419,41 @@
 
        cancel: function() {
            var that = this,
-               dataSource = that.dataSource,
-               data,
-               index = -1;
+               dataSource = that.dataSource;
 
            if (that.editable) {
-               index = that.editable.element.index();
-           }
-
-           if (index != -1) {
-               data = dataSource.view()[index];
-               dataSource.cancelChanges(data);
+               dataSource.cancelChanges(that._modelFromElement(that.editable.element));
                that._closeEditable(false);
            }
-       }
+       },
 
+       _crudHandlers: function() {
+           var that = this;
+
+           that.element.on(CLICK, ".k-edit-button", function(e) {
+               var item = $(this).closest("[" + kendo.attr("uid") + "]");
+               that.edit(item);
+               e.preventDefault();
+           });
+
+           that.element.on(CLICK, ".k-delete-button", function(e) {
+               var item = $(this).closest("[" + kendo.attr("uid") + "]");
+               that.remove(item);
+               e.preventDefault();
+           });
+
+           that.element.on(CLICK, ".k-update-button", function(e) {
+               that.save();
+               e.preventDefault();
+           });
+
+           that.element.on(CLICK, ".k-cancel-button", function(e) {
+               that.cancel();
+               e.preventDefault();
+           });
+       }
     });
 
     kendo.ui.plugin(ListView);
 })(jQuery);
+;

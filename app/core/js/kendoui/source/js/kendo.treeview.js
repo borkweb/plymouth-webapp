@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -91,16 +91,17 @@
      * @example
      * var item = {
      *     text: "Item text",
-     *     imageUrl: "/images/icon.png", // renders a <img class="k-image" src="/images/icon.png" />
-     *     spriteCssClass: "icon save",  // renders a <span class="k-sprite icon save" />
-     *     items: [
-     *         // child items
-     *     ]
-     * }
      *
-     * @section
-     * <h3>Configuring TreeView Behavior</h3>
-     * <p>
+     *     // renders a <img class="k-image" src="/images/icon.png" />
+     *     imageUrl: "/images/icon.png",
+     *
+     *     // renders a <span class="k-sprite icon save" />
+     *     spriteCssClass: "icon save",
+     *
+     *     // specifies whether the node text should be encoded or not
+     *     // useful when rendering node-specific HTML
+     *     encoded: false,
+     *
      *  A number of <strong>TreeView</strong> behaviors can be easily controlled by simple configuration properties,
      *  such as animation behaviors and drag-and-drop behaviors.
      * </p>
@@ -130,34 +131,67 @@
      */
     var kendo = window.kendo,
         ui = kendo.ui,
+        data = kendo.data,
         extend = $.extend,
         template = kendo.template,
+        isArray = $.isArray,
         Widget = ui.Widget,
+        HierarchicalDataSource = data.HierarchicalDataSource,
         proxy = $.proxy,
         SELECT = "select",
         EXPAND = "expand",
+        CHANGE = "change",
         COLLAPSE = "collapse",
         DRAGSTART = "dragstart",
         DRAG = "drag",
-        NODEDRAGCANCELLED = "nodeDragCancelled",
         DROP = "drop",
         DRAGEND = "dragend",
         CLICK = "click",
         VISIBILITY = "visibility",
-        TSTATEHOVER = "k-state-hover",
-        TTREEVIEW = "k-treeview",
-        TITEM = "k-item",
+        KSTATEHOVER = "k-state-hover",
+        KTREEVIEW = "k-treeview",
         VISIBLE = ":visible",
         NODE = ".k-item",
-        SUBGROUP = ">.k-group,>.k-animation-container>.k-group",
-        NODECONTENTS = SUBGROUP + ",>.k-content,>.k-animation-container>.k-content",
-        templates, rendering, TreeView;
+        templates, rendering, TreeView,
+        subGroup, nodeContents,
+        bindings = {
+            text: "dataTextField",
+            url: "dataUrlField",
+            spriteCssClass: "dataSpriteCssClassField",
+            imageUrl: "dataImageUrlField"
+        },
+        isDomElement = function (o){
+            return (
+                typeof HTMLElement === "object" ? o instanceof HTMLElement : //DOM2
+                o && typeof o === "object" && o.nodeType === 1 && typeof o.nodeName === "string"
+            );
+        };
+
+    function contentChild(filter) {
+        return function(node) {
+            var result = node.children(".k-animation-container");
+
+            if (!result.length) {
+                result = node;
+            }
+
+            return result.children(filter);
+        };
+    }
+
+    function treeviewFromNode(node) {
+        return $(node).closest("[data-role=treeview]").data("kendoTreeView");
+    }
+
+    subGroup = contentChild(".k-group");
+    nodeContents = contentChild(".k-group,.k-content");
 
     function updateNodeHtml(node) {
-        var wrapper = node.find(">div"),
-            subGroup = node.find(">ul"),
-            toggleButton = wrapper.find(">.k-icon"),
-            innerWrapper = wrapper.find(">.k-in");
+        var wrapper = node.children("div"),
+            group = node.children("ul"),
+            toggleButton = wrapper.children(".k-icon"),
+            innerWrapper = wrapper.children(".k-in"),
+            currentNode, tmp;
 
         if (node.hasClass("k-treeview")) {
             return;
@@ -167,11 +201,11 @@
             wrapper = $("<div />").prependTo(node);
         }
 
-        if (!toggleButton.length && subGroup.length) {
+        if (!toggleButton.length && group.length) {
             toggleButton = $("<span class='k-icon' />").prependTo(wrapper);
-        } else if (!subGroup.length || !subGroup.children().length) {
+        } else if (!group.length || !group.children().length) {
             toggleButton.remove();
-            subGroup.remove();
+            group.remove();
         }
 
         if (!innerWrapper.length) {
@@ -195,27 +229,23 @@
     }
 
     function updateNodeClasses(node, groupData, nodeData) {
-        var wrapper = node.find(">div"),
-            subGroup = node.find(">ul")
+        var wrapper = node.children("div"),
+            group = node.children("ul");
 
         if (node.hasClass("k-treeview")) {
             return;
         }
 
-        if (!nodeData) {
-            nodeData = {
-                expanded: !(subGroup.css("display") == "none"),
-                index: node.index(),
-                enabled: !wrapper.find(">.k-in").hasClass("k-state-disabled")
-            };
-        }
+        nodeData = extend({
+            expanded: group.css("display") != "none",
+            index: node.index(),
+            enabled: !wrapper.children(".k-in").hasClass("k-state-disabled")
+        }, nodeData);
 
-        if (!groupData) {
-            groupData = {
-                firstLevel: node.parent().parent().hasClass(TTREEVIEW),
-                length: node.parent().children().length
-            };
-        }
+        groupData = extend({
+            firstLevel: node.parent().parent().hasClass(KTREEVIEW),
+            length: node.parent().children().length
+        }, groupData);
 
         // li
         node.removeClass("k-first k-last")
@@ -225,12 +255,16 @@
         wrapper.removeClass("k-top k-mid k-bot")
                .addClass(rendering.cssClass(groupData, nodeData));
 
+        // span
+        wrapper.children(".k-in").removeClass("k-in k-state-default k-state-disabled")
+            .addClass(rendering.textClass(nodeData));
+
         // toggle button
-        if (subGroup.length) {
-            wrapper.find(">.k-icon").removeClass("k-plus k-minus k-plus-disabled k-minus-disabled")
+        if (group.length) {
+            wrapper.children(".k-icon").removeClass("k-plus k-minus k-plus-disabled k-minus-disabled")
                 .addClass(rendering.toggleButtonClass(nodeData));
 
-            subGroup.addClass("k-group");
+            group.addClass("k-group");
         }
     }
 
@@ -238,39 +272,10 @@
     templates = {
         dragClue: template("<div class='k-header k-drag-clue'><span class='k-icon k-drag-status'></span>#= text #</div>"),
         group: template(
-            "<ul class='#= groupCssClass(group) #'#= groupAttributes(group) #>" +
+            "<ul class='#= r.groupCssClass(group) #'#= r.groupAttributes(group) #>" +
                 "#= renderItems(data) #" +
             "</ul>"
-        ),
-        itemWrapper: template(
-            "<div class='#= cssClass(group, item) #'>" +
-                "#= toggleButton(data) #" +
-                "#= checkbox(data) #" +
-                "<#= tag(item) # class='#= textClass(item) #'#= textAttributes(item) #>" +
-                    "#= image(item) ##= sprite(item) #" +
-                    "#= treeview.template ? template(treeview, item) : text(item) #" +
-                "</#= tag(item) #>" +
-            "</div>"
-        ),
-        item: template(
-            "<li class='#= wrapperCssClass(group, item) #'>" +
-                "#= itemWrapper(data) #" +
-                "# if (item.items) { #" +
-                "#= subGroup(treeview, group, item) #" +
-                "# } #" +
-            "</li>"
-        ),
-        checkbox: template(
-            "# if (treeview.checkboxTemplate) { #" +
-                "<span class='k-checkbox'>" +
-                    "#= checkboxTemplate(treeview, group, item) #" +
-                "</span>" +
-            "# } #"
-        ),
-        image: template("<img class='k-image' alt='' src='#= imageUrl #' />"),
-        toggleButton: template("<span class='#= toggleButtonClass(item) #'></span>"),
-        sprite: template("<span class='k-sprite #= spriteCssClass #'></span>"),
-        empty: template("")
+        )
     };
 
     TreeView = Widget.extend(/** @lends kendo.ui.TreeView.prototype */ {
@@ -281,7 +286,7 @@
          * @constructs
          * @extends kendo.ui.Widget
          *
-         * @param {DomElement} element DOM element
+         * @param {Element} element DOM element
          * @param {Object} options Configuration options.
          *
          * @option {Array} [dataSource]
@@ -298,7 +303,7 @@
          *             duration: 200,
          *             hide: true,
          *             show: false
-         *         }
+         *         },
          *         collapse: {
          *             duration: 200,
          *             effects: "expandVertical",
@@ -389,40 +394,112 @@
          *         "]' value='true' />"
          *     )
          * });
+         *
+         * @option {Boolean} [loadOnDemand] <true> Indicates whether the child datasources should be fetched
+         * lazily, when parent groups get expanded. Setting this to false causes all child dataSources to
+         * be loaded at initialization time. Note: when initializing a TreeView from array (rather than from a
+         * HierarchicalDataSource instance), the default value of this option is false.
+         *
+         * @option {String} [dataTextField] <null> Sets the field of the data item that provides
+         * the text content of the treeview nodes.
+         * _example
+         * var items = [ { id: 1, ProductName: "Tea" }, { id: 2, ProductName: "Coffee"} ];
+         * $("#treeview").kendoTreeView({
+         *     dataSource: items,
+         *     dataTextField: "ProductName"
+         * });
+         *
+         * @option {String} [dataUrlField] <null> Sets the field of the data item that provides
+         * the link URL of the treeview nodes.
+         * _example
+         * var items = [
+         *     { id: 1, text: "Tea", LinksTo: "http://tea.example.com" },
+         *     { id: 2, text: "Coffee", LinksTo: "http://coffee.example.com" }
+         * ];
+         *
+         * $("#treeview").kendoTreeView({
+         *     dataSource: items,
+         *     dataUrlField: "LinksTo"
+         * });
+         *
+         * @option {String} [dataSpriteCssClassField] <null> Sets the field of the data item that provides
+         * the sprite CSS class of the treeview nodes.
+         * _example
+         * var items = [
+         *     { id: 1, text: "Tea", sprite: "icon-tea" },
+         *     { id: 2, text: "Coffee", sprite: "icon-coffee" }
+         * ];
+         *
+         * $("#treeview").kendoTreeView({
+         *     dataSource: items,
+         *     dataSpriteCssClassField: "sprite"
+         * });
+         *
+         * @option {String} [dataImageUrlField] <null> Sets the field of the data item that provides
+         * the image URL of the treeview nodes.
+         * _example
+         * var items = [
+         *     { id: 1, text: "Tea", image: "tea.png" },
+         *     { id: 2, text: "Coffee", image: "coffee.png" }
+         * ];
+         *
+         * $("#treeview").kendoTreeView({
+         *     dataSource: items,
+         *     dataImageUrlField: "image"
+         * });
          */
         init: function (element, options) {
             var that = this,
                 clickableItems = ".k-in:not(.k-state-selected,.k-state-disabled)",
                 MOUSEENTER = "mouseenter",
-                dataInit;
+                dataInit,
+                inferred = false;
 
-            options = $.isArray(options) ? (dataInit = true, { dataSource: options }) : options;
+            if (isArray(options)) {
+                dataInit = true;
+                options = { dataSource: options };
+            }
+
+            if (options && typeof options.loadOnDemand == "undefined" && isArray(options.dataSource)) {
+                options.loadOnDemand = false;
+            }
 
             Widget.prototype.init.call(that, element, options);
 
             element = that.element;
             options = that.options;
 
+            inferred = element.is("ul") || element.hasClass(KTREEVIEW);
+
+            if (inferred) {
+                options.dataSource.list = element.is("ul") ? element : element.children("ul");
+            }
+
             that._animation();
+
+            that._accessors();
 
             if (options.template && typeof options.template == "string") {
                 options.template = template(options.template);
+            } else if (!options.template) {
+                options.template = that._textTemplate();
             }
 
+            if (options.checkboxTemplate && typeof options.checkboxTemplate == "string") {
+                options.checkboxTemplate = template(options.checkboxTemplate);
+            }
+
+            that.templates = {
+                item: that._itemTemplate(),
+                loading: that._loadingTemplate()
+            };
+
             // render treeview if it's not already rendered
-            if (!element.hasClass(TTREEVIEW)) {
+            if (!element.hasClass(KTREEVIEW)) {
                 that._wrapper();
 
-                if (!that.root.length) { // treeview initialized from empty element
-                    that.root = that.wrapper.html(TreeView.renderGroup({
-                        items: options.dataSource,
-                        group: {
-                            firstLevel: true,
-                            expanded: true
-                        },
-                        treeview: options
-                    })).children("ul");
-                } else {
+                if (inferred) {
+                    that.root = element;
                     that._group(that.wrapper);
                 }
             } else {
@@ -431,10 +508,12 @@
                 that.root = element.children("ul").eq(0);
             }
 
+            that._dataSource(inferred);
+
             that.wrapper
                 .on(MOUSEENTER, ".k-in.k-state-selected", function(e) { e.preventDefault(); })
-                .on(MOUSEENTER, clickableItems, function () { $(this).addClass(TSTATEHOVER); })
-                .on("mouseleave", clickableItems, function () { $(this).removeClass(TSTATEHOVER); })
+                .on(MOUSEENTER, clickableItems, function () { $(this).addClass(KSTATEHOVER); })
+                .on("mouseleave", clickableItems, function () { $(this).removeClass(KSTATEHOVER); })
                 .on(CLICK, clickableItems, proxy(that._nodeClick, that))
                 .on("dblclick", "div:not(.k-state-disabled) .k-in", proxy(that._toggleButtonClick, that))
                 .on(CLICK, ".k-plus,.k-minus", proxy(that._toggleButtonClick, that));
@@ -442,6 +521,31 @@
             if (options.dragAndDrop) {
                 that.dragging = new TreeViewDragAndDrop(that);
             }
+
+            if (!inferred) {
+                if (options.autoBind) {
+                    that._progress(true);
+                    that.dataSource.read();
+                }
+            } else {
+                that._attachUids();
+            }
+        },
+
+        _attachUids: function(root, dataSource) {
+            var that = this,
+                data,
+                uidAttr = kendo.attr("uid");
+
+            root = root || that.root;
+            dataSource = dataSource || that.dataSource;
+
+            data = dataSource.view();
+
+            root.children("li").each(function(index, item) {
+                item = $(item).attr(uidAttr, data[index].uid);
+                that._attachUids(item.children("ul"), data[index].children);
+            });
         },
 
         _animation: function() {
@@ -453,6 +557,47 @@
                     collapse: { hide: true, effects: {} }
                 };
             }
+        },
+
+        _dataSource: function(silentRead) {
+            var that = this,
+                options = that.options,
+                dataSource = options.dataSource;
+
+            function recursiveRead(data) {
+                for (var i = 0; i < data.length; i++) {
+                    data[i].children.read();
+
+                    recursiveRead(data[i].children.view());
+                }
+            }
+
+            dataSource = isArray(dataSource) ? { data: dataSource } : dataSource;
+
+            if (that.dataSource && that._refreshHandler) {
+                that.dataSource.unbind(CHANGE, that._refreshHandler);
+            } else {
+                that._refreshHandler = proxy(that.refresh, that);
+            }
+
+            if (!dataSource.fields) {
+                dataSource.fields = [
+                    { field: "text" },
+                    { field: "url" },
+                    { field: "spriteCssClass" },
+                    { field: "imageUrl" }
+                ];
+            }
+
+            that.dataSource = HierarchicalDataSource.create(dataSource);
+
+            if (silentRead) {
+                that.dataSource.read();
+
+                recursiveRead(that.dataSource.view());
+            }
+
+            that.dataSource.bind(CHANGE, that._refreshHandler);
         },
 
         events: [
@@ -491,13 +636,13 @@
             * @param {Node} e.sourceNode
             * The node that is being dragged.
             *
-            * @param {DomElement} e.dropTarget
+            * @param {Element} e.dropTarget
             * The element that the node is placed over.
             *
-            * @param {Integer} e.pageX
+            * @param {Number} e.pageX
             * The x coordinate of the mouse.
             *
-            * @param {Integer} e.pageY
+            * @param {Number} e.pageY
             * The y coordinate of the mouse.
             *
             * @param {String} e.statusClass
@@ -558,18 +703,18 @@
             * @param {Function} e.setValid
             * Allows the drop to be prevented.
             *
-            * @param {DomElement} e.dropTarget
+            * @param {Element} e.dropTarget
             * The element that the node is placed over.
             *
             * @param {String} e.dropPosition
-            * Shows where the new sourceLocation would be.
+            * Shows where the source will be dropped. One of the values <strong>over</strong>, <strong>before</strong>, or <strong>after</strong>.
             *
             */
             DROP,
 
             /**
             *
-            * Triggered after a node is has been dropped.
+            * Triggered after a node has been dropped.
             *
             * @name kendo.ui.TreeView#dragend
             * @event
@@ -583,7 +728,7 @@
             * The node that the sourceNode is being dropped upon.
             *
             * @param {String} e.dropPosition
-            * Shows where the new sourceLocation would be.
+            * Shows where the source has been dropped. One of the values <strong>over</strong>, <strong>before</strong>, or <strong>after</strong>.
             *
             */
             DRAGEND,
@@ -641,12 +786,118 @@
                     effects: "expand:vertical",
                     duration: 200,
                     show: true
-                },
-                collapse: {
+                }, collapse: {
                     duration: 100
                 }
             },
-            dragAndDrop: false
+            dragAndDrop: false,
+            autoBind: true,
+            loadOnDemand: true
+        },
+
+        _accessors: function() {
+            var that = this,
+                options = that.options,
+                i, field, textField,
+                element = that.element;
+
+            for (i in bindings) {
+                field = options[bindings[i]];
+                textField = element.attr(kendo.attr(i + "-field"));
+
+                if (textField) {
+                    field = textField;
+                }
+
+                if (!field) {
+                    field = i;
+                }
+
+                if (!isArray(field)) {
+                    field = [field];
+                }
+
+                options[bindings[i]] = field;
+            }
+        },
+
+        _fieldFor: function(fieldName) {
+            var fieldBindings = this.options[bindings[fieldName]],
+                count = fieldBindings.length;
+
+            if (count === 0) {
+                return "'" + fieldName + "'";
+            } else if (count == 1) {
+                return "'" + fieldBindings[0] + "'";
+            } else {
+                // generates ['foo', 'bar'][item.level() < 3 ? item.level() : 2]
+                return "['" + fieldBindings.join("','") + "']" +
+                       "[item.level() < " + count + " ? item.level() : " + (count-1) + "]";
+            }
+        },
+
+        _textTemplate: function() {
+            var that = this,
+                field = function(fieldName) {
+                    return "item[" + that._fieldFor(fieldName) + "]";
+                },
+                templateText =
+                    "# var text = " + field("text") + "; #" +
+                    "# if (typeof item.encoded != 'undefined' && item.encoded === false) {#" +
+                        "#= text #" +
+                    "# } else { #" +
+                        "#: text #" +
+                    "# } #";
+
+            return template(templateText);
+        },
+
+        _loadingTemplate: function() {
+            return template("<div class='k-icon k-loading' /> Loading...");
+        },
+
+        _itemTemplate: function() {
+            var that = this,
+                field = function(fieldName) {
+                    return "item[" + that._fieldFor(fieldName) + "]";
+                },
+                templateText =
+                    "<li class='#= r.wrapperCssClass(group, item) #'" +
+                        " " + kendo.attr("uid") + "='#= item.uid #'" +
+                    ">" +
+                        "<div class='#= r.cssClass(group, item) #'>" +
+                            "# if (item.hasChildren) { #" +
+                                "<span class='#= r.toggleButtonClass(item) #'></span>" +
+                            "# } #" +
+
+                            "# if (treeview.checkboxTemplate) { #" +
+                                "<span class='k-checkbox'>" +
+                                    "#= treeview.checkboxTemplate(data) #" +
+                                "</span>" +
+                            "# } #" +
+
+                            "# var url = " + field("url") + "; #" +
+                            "# var tag = url ? 'a' : 'span'; #" +
+                            "# var textAttr = url ? ' href=\\'' + url + '\\'' : ''; #" +
+
+                            "<#=tag# class='#= r.textClass(item) #'#= textAttr #>" +
+
+                                "# var imageUrl = " + field("imageUrl") + "; #" +
+                                "# if (imageUrl) { #" +
+                                    "<img class='k-image' alt='' src='#= imageUrl #'>" +
+                                "# } #" +
+
+                                "# var spriteCssClass = " + field("spriteCssClass") + "; #" +
+                                "# if (spriteCssClass) { #" +
+                                    "<span class='k-sprite #= spriteCssClass #'></span>" +
+                                "# } #" +
+
+                                "#= treeview.template(data) #" +
+                            "</#=tag#>" +
+                        "</div>" +
+                    "</li>";
+
+            return template(templateText);
         },
 
         setOptions: function(options) {
@@ -674,7 +925,7 @@
         _nodeClick: function (e) {
             var that = this,
                 node = $(e.target),
-                contents = node.closest(NODE).find(NODECONTENTS),
+                contents = nodeContents(node.closest(NODE)),
                 href = node.attr("href"),
                 shouldNavigate;
 
@@ -713,12 +964,12 @@
 
         _group: function(item) {
             var that = this,
-                firstLevel = item.hasClass(TTREEVIEW),
+                firstLevel = item.hasClass(KTREEVIEW),
                 group = {
                     firstLevel: firstLevel,
-                    expanded: firstLevel || item.attr(kendo.attr("expanded")) === "true"
+                    expanded: firstLevel || that._expanded(item)
                 },
-                groupElement = item.find("> ul");
+                groupElement = item.children("ul");
 
             groupElement
                 .addClass(rendering.groupCssClass(group))
@@ -729,7 +980,7 @@
 
         _nodes: function(groupElement, groupData) {
             var that = this,
-                nodes = groupElement.find("> li"),
+                nodes = groupElement.children("li"),
                 nodeData;
 
             groupData = extend({ length: nodes.length }, groupData);
@@ -737,7 +988,7 @@
             nodes.each(function(i, node) {
                 node = $(node);
 
-                nodeData = { index: i, expanded: node.attr(kendo.attr("expanded")) === "true" };
+                nodeData = { index: i, expanded: that._expanded(node) };
 
                 updateNodeHtml(node);
 
@@ -753,6 +1004,149 @@
             that.element.find(nodes).each(function(index, item) {
                 callback.call(that, index, $(item).closest(NODE));
             });
+        },
+
+        /**
+         *
+         * Returns the dataItem that corresponds to a TreeView node
+         *
+         */
+        dataItem: function(node) {
+            var uid = $(node).closest(NODE).attr(kendo.attr("uid")),
+                dataSource = this.dataSource;
+
+            return dataSource && dataSource.getByUid(uid);
+        },
+
+        _insertNode: function(nodeData, index, parentNode, insertCallback, collapsed) {
+            var that = this,
+                group = subGroup(parentNode),
+                updatedGroupLength = group.children().length + 1,
+                childrenData,
+                groupData = {
+                    firstLevel: parentNode.hasClass(KTREEVIEW),
+                    expanded: !collapsed,
+                    length: updatedGroupLength
+                }, node, i, item, nodeHtml = "",
+                append = function(item, group) {
+                    item.appendTo(group);
+                };
+
+            for (i = 0; i < nodeData.length; i++) {
+                item = nodeData[i];
+
+                item.index = index + i;
+
+                nodeHtml += that._renderItem({
+                    group: groupData,
+                    item: item
+                });
+            }
+
+            node = $(nodeHtml);
+
+            if (!node.length) {
+                return;
+            }
+
+            if (!group.length) {
+                group = $(that._renderGroup({
+                    group: groupData
+                })).appendTo(parentNode);
+            }
+
+            insertCallback(node, group);
+
+            if (parentNode.hasClass("k-item")) {
+                updateNodeHtml(parentNode);
+                updateNodeClasses(parentNode);
+            }
+
+            updateNodeClasses(node.prev());
+            updateNodeClasses(node.next());
+
+
+            // render sub-nodes
+            for (i = 0; i < nodeData.length; i++) {
+                item = nodeData[i];
+
+                childrenData = item.children.data();
+
+                if (childrenData.length) {
+                    that._insertNode(childrenData, item.index, node.eq(i), append, !that._expanded(node.eq(i)));
+                }
+            }
+
+            return node;
+        },
+
+        refresh: function(e) {
+            var that = this,
+                parentNode = that.wrapper,
+                node = e.node,
+                action = e.action,
+                items = e.items,
+                index = e.index,
+                loadOnDemand = that.options.loadOnDemand,
+                i;
+
+            function append(items, parentNode, collapsed) {
+                var group = subGroup(parentNode),
+                    children = group.children();
+
+                if (typeof index == "undefined") {
+                    index = children.length;
+                }
+
+                that._insertNode(items, index, parentNode, function(item, group) {
+                    // insert node into DOM
+                    if (index == children.length) {
+                        item.appendTo(group);
+                    } else {
+                        item.insertBefore(children.eq(index));
+                    }
+                }, collapsed);
+            }
+
+            if (e.field) {
+                return;
+            }
+
+            if (node) {
+                parentNode = that.findByUid(node.uid);
+                that._progress(parentNode, false);
+            }
+
+            if (action == "add") {
+                append(items, parentNode);
+            } else if (action == "remove") {
+                that._remove(that.findByUid(items[0].uid), false);
+            } else {
+                if (node) {
+                    subGroup(parentNode).empty();
+
+                    append(items, parentNode, true);
+
+                    if (that._expanded(parentNode)) {
+                        updateNodeClasses(parentNode, {}, { expanded: true });
+                        subGroup(parentNode).css("display", "block");
+                    }
+                } else {
+                    that.root = that.wrapper.html(that._renderGroup({
+                        items: items,
+                        group: {
+                            firstLevel: true,
+                            expanded: true
+                        }
+                    })).children("ul");
+                }
+            }
+
+            if (!loadOnDemand) {
+                for (i = 0; i < items.length; i++) {
+                    items[i].load();
+                }
+            }
         },
 
         /**
@@ -774,7 +1168,7 @@
          */
         expand: function (nodes) {
             this._processNodes(nodes, function (index, item) {
-                var contents = item.find(NODECONTENTS);
+                var contents = nodeContents(item);
 
                 if (contents.length > 0 && !contents.is(VISIBLE)) {
                     this.toggle(item);
@@ -801,7 +1195,7 @@
          */
         collapse: function (nodes) {
             this._processNodes(nodes, function (index, item) {
-                var contents = item.find(NODECONTENTS);
+                var contents = nodeContents(item);
 
                 if (contents.length > 0 && contents.is(VISIBLE)) {
                     this.toggle(item);
@@ -833,23 +1227,14 @@
             enable = arguments.length == 2 ? !!enable : true;
 
             this._processNodes(nodes, function (index, item) {
-                var isCollapsed = !item.find(NODECONTENTS).is(VISIBLE);
+                var isCollapsed = !nodeContents(item).is(VISIBLE);
 
                 if (!enable) {
                     this.collapse(item);
                     isCollapsed = true;
                 }
 
-                item.find(">div")
-                        .find(">.k-in")
-                            .toggleClass("k-state-default", enable)
-                            .toggleClass("k-state-disabled", !enable)
-                        .end()
-                        .find(">.k-icon")
-                            .toggleClass("k-plus", isCollapsed && enable)
-                            .toggleClass("k-plus-disabled", isCollapsed && !enable)
-                            .toggleClass("k-minus", !isCollapsed && enable)
-                            .toggleClass("k-minus-disabled", !isCollapsed && !enable);
+                updateNodeClasses(item, {}, { enabled: enable, expanded: !isCollapsed });
             });
         },
 
@@ -877,7 +1262,7 @@
         select: function (node) {
             var element = this.element;
 
-            if (arguments.length == 0) {
+            if (!arguments.length) {
                 return element.find(".k-state-selected").closest(NODE);
             }
 
@@ -906,35 +1291,34 @@
         toggle: function (node) {
             node = $(node);
 
-            if (node.find(".k-minus,.k-plus").length == 0) {
-                return;
-            }
-
-            if (node.find("> div > .k-state-disabled").length) {
+            if (!node.find(">div>.k-icon").is(".k-minus,.k-plus,.k-minus-disabled,.k-plus-disabled")) {
                 return;
             }
 
             var that = this,
-                contents = node.find(NODECONTENTS),
+                contents = nodeContents(node),
                 isExpanding = !contents.is(VISIBLE),
-                animationSettings = that.options.animation || {},
+                options = that.options,
+                animationSettings = options.animation || {},
                 animation = animationSettings.expand,
                 collapse = extend({}, animationSettings.collapse),
-                hasCollapseAnimation = collapse && "effects" in collapse;
+                hasCollapseAnimation = collapse && "effects" in collapse,
+                dataItem = that.dataItem(node);
 
-            if (contents.data("animating"))
+            if (contents.data("animating")) {
                 return;
+            }
 
             if (!isExpanding) {
                 animation = extend( hasCollapseAnimation ? collapse
                                     : extend({ reverse: true }, animation), { show: false, hide: true });
             }
 
-            if (contents.children().length > 0) {
-                if (!that._trigger(isExpanding ? "expand" : "collapse", node)) {
-                    node.find("> div > .k-icon")
-                        .toggleClass("k-minus", isExpanding)
-                        .toggleClass("k-plus", !isExpanding);
+            if (!that._trigger(isExpanding ? "expand" : "collapse", node)) {
+                that._expanded(node, isExpanding);
+
+                if (contents.children().length > 0) {
+                    updateNodeClasses(node, {}, { expanded: isExpanding });
 
                     if (!isExpanding) {
                         contents.css("height", contents.height()).css("height");
@@ -947,7 +1331,48 @@
                             }
                         }
                     }));
+                } else if (dataItem) {
+                    if (options.loadOnDemand) {
+                        that._progress(node, true);
+                    }
+
+                    dataItem.load();
                 }
+            }
+        },
+
+        _expanded: function(node, value) {
+            var expandedAttr = kendo.attr("expanded"),
+                dataItem = this.dataItem(node);
+
+            if (arguments.length == 1) {
+                return node.attr(expandedAttr) === "true" || (dataItem && dataItem.expanded);
+            }
+
+            if (dataItem) {
+                dataItem.set("expanded", value);
+            }
+
+            if (value) {
+                node.attr(expandedAttr, "true");
+            } else {
+                node.removeAttr(expandedAttr);
+            }
+        },
+
+        _progress: function(node, showProgress) {
+            var element = this.element;
+
+            if (arguments.length == 1) {
+                showProgress = node;
+
+                if (showProgress) {
+                    element.html(this.templates.loading);
+                } else {
+                    element.empty();
+                }
+            } else {
+                node.find("> div > .k-icon").toggleClass("k-loading", showProgress);
             }
         },
 
@@ -971,67 +1396,48 @@
             return $(node).closest(NODE).find(">div>.k-in").text();
         },
 
-        _insertNode: function(nodeData, index, parentNode, group, insertCallback) {
+        _dataSourceMove: function(nodeData, group, parentNode, callback) {
             var that = this,
-                updatedGroupLength = group.children().length + 1,
-                isArrayData = $.isArray(nodeData),
-                fromNodeData = isArrayData || $.isPlainObject(nodeData),
-                groupData = {
-                    firstLevel: parentNode.hasClass(TTREEVIEW),
-                    expanded: true,
-                    length: updatedGroupLength
-                }, node, i, nodeHtml = "";
+                srcTreeView = treeviewFromNode(nodeData),
+                srcDataSource,
+                dataItem,
+                referenceDataItem, i,
+                destTreeview = treeviewFromNode(parentNode || group),
+                destDataSource = destTreeview.dataSource;
 
-            if (fromNodeData) {
-                if (isArrayData) {
-                    for (i = 0; i < nodeData.length; i++) {
-                        nodeHtml += TreeView.renderItem({
-                            group: groupData,
-                            item: extend(nodeData[i], { index: index + i })
-                        });
-                    }
+            if (parentNode) {
+                referenceDataItem = destTreeview.dataItem(parentNode);
 
-                } else {
-                    nodeHtml = TreeView.renderItem({
-                        group: groupData,
-                        item: extend(nodeData, { index: index })
-                    });
+                if (!referenceDataItem.loaded()) {
+                    referenceDataItem.load();
+                    that._expanded(parentNode, true);
                 }
 
-                node = $(nodeHtml);
+                if (parentNode != that.root) {
+                    destDataSource = referenceDataItem.children;
+                }
+            }
+
+            if (nodeData instanceof $ || isDomElement(nodeData)) {
+                // move node within or between treeviews
+                nodeData = $(nodeData);
+                srcDataSource = srcTreeView.dataSource;
+                dataItem = srcDataSource.getByUid(nodeData.attr(kendo.attr("uid")));
+
+                dataItem = srcDataSource.remove(dataItem);
+
+                dataItem = callback(destDataSource, dataItem);
+            } else if (isArray(nodeData) || nodeData instanceof data.ObservableArray){
+                // insert array of nodes
+                for (i = 0; i < nodeData.length; i++) {
+                    dataItem = callback(destDataSource, nodeData[i]);
+                }
             } else {
-                node = $(nodeData);
-
-                if (group.children()[index - 1] == node[0]) {
-                    return node;
-                }
-
-                if (node.closest(".k-treeview")[0] == that.wrapper[0]) {
-                    that.detach(node);
-                }
+                // insert single node from data
+                dataItem = callback(destDataSource, nodeData);
             }
 
-            if (!group.length) {
-                group = $(TreeView.renderGroup({
-                    group: groupData
-                })).appendTo(parentNode);
-            }
-
-            insertCallback(node, group);
-
-            if (parentNode.hasClass("k-item")) {
-                updateNodeHtml(parentNode);
-                updateNodeClasses(parentNode);
-            }
-
-            if (!fromNodeData) {
-                updateNodeClasses(node);
-            }
-
-            updateNodeClasses(node.prev());
-            updateNodeClasses(node.next());
-
-            return node;
+            return that.findByUid(dataItem.uid);
         },
 
         /**
@@ -1045,10 +1451,10 @@
          * @param {Node} referenceNode
          * The node that will be preceed the newly-appended node.
          *
-         * @exampleTitle Insert a node with the text, "Y U NO insert node?" after the node with ID, firstItem
+         * @exampleTitle Insert a node with the text, "JavaScript" after the node with ID, firstItem
          * @example
          * var treeView = $("#treeView").data("kendoTreeView");
-         * treeView.insertAfter({ text: "Y U NO insert node?" }, $("#firstItem"));
+         * treeView.insertAfter({ text: "JavaScript" }, $("#firstItem"));
          *
          * @exampleTitle Moves a node with ID, secondNode after a node with ID, firstItem
          * @example
@@ -1057,10 +1463,15 @@
          *
          */
         insertAfter: function (nodeData, referenceNode) {
-            var group = referenceNode.parent();
+            var group = referenceNode.parent(),
+                parentNode;
 
-            return this._insertNode(nodeData, referenceNode.index() + 1, group.parent(), group, function(item, group) {
-                item.insertAfter(referenceNode);
+            if (group.parent().is("li")) {
+                parentNode = group.parent();
+            }
+
+            return this._dataSourceMove(nodeData, group, parentNode, function (dataSource, model) {
+                return dataSource.insert(referenceNode.index() + 1, model);
             });
         },
 
@@ -1075,10 +1486,10 @@
          * @param {Node} referenceNode
          * The node that follows the inserted node.
          *
-         * @exampleTitle Inserts a new node with the text, "It's over 9000!" before the node with ID, firstItem
+         * @exampleTitle Inserts a new node with the text, "CSS3" before the node with ID, firstItem
          * @example
          * var treeView = $("#treeView").data("kendoTreeView");
-         * treeView.insertBefore({ text: "It's over 9000!" }, $("#firstItem"));
+         * treeView.insertBefore({ text: "CSS3" }, $("#firstItem"));
          *
          * @exampleTitle Moves the node with ID, secondNode before the node with ID, firstItem
          * @example
@@ -1087,10 +1498,15 @@
          *
          */
         insertBefore: function (nodeData, referenceNode) {
-            var group = referenceNode.parent();
+            var group = referenceNode.parent(),
+                parentNode;
 
-            return this._insertNode(nodeData, referenceNode.index(), group.parent(), group, function(item, group) {
-                item.insertBefore(referenceNode);
+            if (group.parent().is("li")) {
+                parentNode = group.parent();
+            }
+
+            return this._dataSourceMove(nodeData, group, parentNode, function (dataSource, model) {
+                return dataSource.insert(referenceNode.index(), model);
             });
         },
 
@@ -1106,10 +1522,10 @@
          * The node that will contain the newly appended node. If not specified, the new node will be appended to the
          * root group of the TreeView.
          *
-         * @exampleTitle Append a new node with the text, "Meanwhile, in HTML5..." to the node with ID, firstItem
+         * @exampleTitle Append a new node with the text, "HTML5" to the node with ID, firstItem
          * @example
          * var treeView = $("#treeView").data("kendoTreeView");
-         * treeView.append({ text: "Meanwhile, in HTML5..." }, $("#firstItem"));
+         * treeView.append({ text: "HTML5" }, $("#firstItem"));
          *
          * @exampleTitle Moves the node with ID, secondNode as a last child of the node with ID, firstItem
          * @example
@@ -1118,12 +1534,19 @@
          *
          */
         append: function (nodeData, parentNode) {
-            parentNode = parentNode || this.element;
+            var that = this,
+                group = that.root;
 
-            var group = parentNode.find(SUBGROUP);
+            if (parentNode) {
+                group = subGroup(parentNode);
+            }
 
-            return this._insertNode(nodeData, group.children().length, parentNode, group, function(item, group) {
-                item.appendTo(group);
+            return that._dataSourceMove(nodeData, group, parentNode, function (dataSource, model) {
+                if (parentNode) {
+                    that._expanded(parentNode, true);
+                }
+
+                return dataSource.add(model);
             });
         },
 
@@ -1164,7 +1587,10 @@
          *
          */
         remove: function (node) {
-            return this._remove(node, false);
+            var dataItem = this.dataItem(node);
+            if (dataItem) {
+                this.dataSource.remove(dataItem);
+            }
         },
 
         /**
@@ -1174,7 +1600,7 @@
          * @param {Selector} node
          * The node that is to be detached.
          *
-         * @returns {jQueryObject}
+         * @returns {jQuery}
          * The node that has been detached.
          *
          * @exampleTitle Remove the node with ID, firstItem
@@ -1197,7 +1623,7 @@
          * @param {String} text
          * The text that is being searched for.
          *
-         * @returns {jQueryObject}
+         * @returns {jQuery}
          * All nodes that have the text.
          *
          * @exampleTitle Search a TreeView for the item that has the text, "CSS3 is da bomb!"
@@ -1210,6 +1636,66 @@
             return $(this.element).find(".k-in").filter(function(i, element) {
                 return $(element).text() == text;
             }).closest(NODE);
+        },
+
+        /**
+         *
+         * Searches a TreeView for a node with the given unique identifier.
+         * Applicable when the widget is bound to a HierarchicalDataSource.
+         *
+         * @param {String} text
+         * The text that is being searched for.
+         *
+         * @returns {jQueryObject}
+         * All nodes that have the text.
+         *
+         * @exampleTitle Search a TreeView for the item that has the text, "CSS3 is da bomb!"
+         * @example
+         * var treeView = $("#treeView").data("kendoTreeView");
+         * var foundNode = treeView.findByText("CSS3 is da bomb!");
+         *
+         */
+        findByUid: function(uid) {
+            return this.element.find(".k-item[" + kendo.attr("uid") + "=" + uid + "]");
+        },
+
+        _renderItem: function (options) {
+            if (!options.group) {
+                options.group = {};
+            }
+
+            options.treeview = this.options;
+
+            options.r = rendering;
+
+            return this.templates.item(options);
+        },
+
+        _renderGroup: function (options) {
+            var that = this;
+
+            options.renderItems = function(options) {
+                    var html = "",
+                        i = 0,
+                        items = options.items,
+                        len = items ? items.length : 0,
+                        group = options.group;
+
+                    group.length = len;
+
+                    for (; i < len; i++) {
+                        options.group = group;
+                        options.item = items[i];
+                        options.item.index = i;
+                        html += that._renderItem(options);
+                    }
+
+                    return html;
+                };
+
+            options.r = rendering;
+
+            return templates.group(options);
         }
     });
 
@@ -1292,7 +1778,7 @@
                     insertOnBottom = (itemTop + itemHeight - delta) < e.pageY;
                     addChild = itemContent.length > 0 && !insertOnTop && !insertOnBottom;
 
-                    itemContent.toggleClass(TSTATEHOVER, addChild);
+                    itemContent.toggleClass(KSTATEHOVER, addChild);
                     that.dropHint.css(VISIBILITY, addChild ? "hidden" : "visible");
 
                     if (addChild) {
@@ -1303,7 +1789,7 @@
 
                         that.dropHint
                             .css(hoveredItemPos)
-                            [insertOnTop ? "prependTo" : "appendTo"](dropTarget.closest(NODE).find("> div:first"));
+                            [insertOnTop ? "prependTo" : "appendTo"](dropTarget.closest(NODE).children("div:first"));
 
                         if (insertOnTop && hoveredItem.hasClass("k-top")) {
                             statusClass = "k-insert-top";
@@ -1324,10 +1810,12 @@
                 pageY: e.pageY,
                 pageX: e.pageX,
                 statusClass: statusClass.substring(2),
-                setStatusClass: function (value) { statusClass = value }
+                setStatusClass: function (value) {
+                    statusClass = value;
+                }
             });
 
-            if (statusClass.indexOf("k-insert") != 0) {
+            if (statusClass.indexOf("k-insert") !== 0) {
                 that.dropHint.css(VISIBILITY, "hidden");
             }
 
@@ -1395,61 +1883,13 @@
 
     // client-side rendering
 
-    extend(TreeView, {
-        renderItem: function (options) {
-            options = extend({ treeview: {}, group: {} }, options);
-
-            var empty = templates.empty,
-                item = options.item,
-                treeview = options.treeview;
-
-            return templates.item(extend(options, {
-                image: item.imageUrl ? templates.image : empty,
-                sprite: item.spriteCssClass ? templates.sprite : empty,
-                itemWrapper: templates.itemWrapper,
-                toggleButton: item.items ? templates.toggleButton : empty,
-                checkbox: treeview.checkboxTemplate ? templates.checkbox : empty,
-                subGroup: function(treeview, group, item) {
-                    return TreeView.renderGroup({
-                        items: item.items,
-                        treeview: treeview,
-                        group: {
-                           expanded: item.expanded
-                        }
-                    });
-                }
-            }, rendering));
-        },
-
-        renderGroup: function (options) {
-            return templates.group(extend({
-                renderItems: function(options) {
-                    var html = "",
-                        i = 0,
-                        items = options.items,
-                        len = items ? items.length : 0,
-                        group = extend({ length: len }, options.group);
-
-                    for (; i < len; i++) {
-                        html += TreeView.renderItem(extend(options, {
-                            group: group,
-                            item: extend({ index: i }, items[i])
-                        }));
-                    }
-
-                    return html;
-                }
-            }, options, rendering));
-        }
-    });
-
     rendering = /** @ignore */{
         wrapperCssClass: function (group, item) {
             var result = "k-item",
                 index = item.index;
 
-            if (group.firstLevel && index == 0) {
-                result += " k-first"
+            if (group.firstLevel && index === 0) {
+                result += " k-first";
             }
 
             if (index == group.length-1) {
@@ -1463,11 +1903,11 @@
                 index = item.index,
                 groupLength = group.length - 1;
 
-            if (group.firstLevel && index == 0) {
+            if (group.firstLevel && index === 0) {
                 result += "k-top ";
             }
 
-            if (index == 0 && index != groupLength) {
+            if (index === 0 && index != groupLength) {
                 result += "k-top";
             } else if (index == groupLength) {
                 result += "k-bot";
@@ -1490,9 +1930,6 @@
 
             return result;
         },
-        textAttributes: function(item) {
-            return item.url ? " href='" + item.url + "'" : "";
-        },
         toggleButtonClass: function(item) {
             var result = "k-icon";
 
@@ -1507,22 +1944,6 @@
             }
 
             return result;
-        },
-        text: function(item) {
-            return item.encoded === false ? item.text : kendo.htmlEncode(item.text);
-        },
-        template: function(treeview, item) {
-            return treeview.template(extend({ item: item }, rendering));
-        },
-        checkboxTemplate: function(treeview, group, item) {
-            return treeview.checkboxTemplate(extend({
-                treeview: treeview,
-                group: group,
-                item: item
-            }, rendering));
-        },
-        tag: function(item) {
-            return item.url ? "a" : "span";
         },
         groupAttributes: function(group) {
             return group.expanded !== true ? " style='display:none'" : "";
@@ -1540,3 +1961,4 @@
 
     ui.plugin(TreeView);
 })(jQuery);
+;

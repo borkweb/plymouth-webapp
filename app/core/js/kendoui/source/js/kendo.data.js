@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -30,8 +30,6 @@
         DESTROY = "destroy",
         CHANGE = "change",
         GET = "get",
-        MULTIPLE = "multiple",
-        SINGLE = "single",
         ERROR = "error",
         REQUESTSTART = "requestStart",
         crud = [CREATE, READ, UPDATE, DESTROY],
@@ -64,33 +62,62 @@
             that.wrapAll(array, that);
         },
 
+        toJSON: function() {
+            var idx, length = this.length, value, json = new Array(length);
+
+            for (idx = 0; idx < length; idx++){
+                value = this[idx];
+
+                if (value instanceof ObservableObject) {
+                    value = value.toJSON();
+                }
+
+                json[idx] = value;
+            }
+
+            return json;
+        },
+
+        parent: noop,
+
         wrapAll: function(source, target) {
-            var idx, length;
+            var that = this,
+                idx,
+                length,
+                parent = function() {
+                    return that;
+                };
 
             target = target || [];
 
             for (idx = 0, length = source.length; idx < length; idx++) {
-                target[idx] = this.wrap(source[idx]);
+                target[idx] = that.wrap(source[idx], parent);
             }
 
             return target;
         },
 
-        wrap: function(object) {
-            var that = this;
+        wrap: function(object, parent) {
+            var that = this,
+                observable;
 
             if (object !== null && toString.call(object) === "[object Object]") {
-                var observable = object instanceof that.type || object instanceof Model;
+                observable = object instanceof that.type || object instanceof Model;
+
                 if (!observable) {
                     object = object instanceof ObservableObject ? object.toJSON() : object;
                     object = new that.type(object);
                 }
 
+                object.parent = parent;
+
                 object.bind(CHANGE, function(e) {
                     that.trigger(CHANGE, {
                         field: e.field,
-                        items: [this],
-                        action: "itemchange"
+                        node: e.node,
+                        index: e.index,
+                        items: e.items || [this],
+                        action: e.action || "itemchange"
                     });
                 });
             }
@@ -134,7 +161,7 @@
 
         splice: function(index, howMany, item) {
             var items = this.wrapAll(slice.call(arguments, 2)),
-                result;
+                result, i, len;
 
             result = splice.apply(this, [index, howMany].concat(items));
 
@@ -144,6 +171,12 @@
                     index: index,
                     items: result
                 });
+
+                for (i = 0, len = result.length; i < len; i++) {
+                    if (result[i].children) {
+                        result[i].unbind(CHANGE);
+                    }
+                }
             }
 
             if (item) {
@@ -204,6 +237,9 @@
             var that = this,
                 member,
                 field,
+                parent = function() {
+                    return that;
+                },
                 type;
 
             Observable.fn.init.call(this);
@@ -213,7 +249,7 @@
                 if (field.charAt(0) != "_") {
                     type = toString.call(member);
 
-                    member = that.wrap(member, field);
+                    member = that.wrap(member, field, parent);
                 }
                 that[field] = member;
             }
@@ -222,37 +258,36 @@
         },
 
         shouldSerialize: function(field) {
-            return this.hasOwnProperty(field) && field !== "_events" && typeof this[field] !== FUNCTION
-            && field !== "uid";
+            return this.hasOwnProperty(field) && field !== "_events" && typeof this[field] !== FUNCTION && field !== "uid";
         },
 
         toJSON: function() {
-            var result = {}, field;
+            var result = {}, value, field;
 
             for (field in this) {
                 if (this.shouldSerialize(field)) {
-                    result[field] = this[field];
+                    value = this[field];
+
+                    if (value instanceof ObservableObject || value instanceof ObservableArray) {
+                        value = value.toJSON();
+                    }
+
+                    result[field] = value;
                 }
             }
 
             return result;
         },
 
-        get: function(field, call) {
-            var that = this, result, getter;
+        get: function(field) {
+            var that = this, result;
 
             that.trigger(GET, { field: field });
 
             if (field === "this") {
                 result = that;
             } else {
-                getter = kendo.getter(field, true);
-
-                result = getter(that);
-
-                if (call && typeof result === FUNCTION) {
-                    result = result.call(that);
-                }
+                result = kendo.getter(field, true)(that);
             }
 
             return result;
@@ -281,26 +316,31 @@
         set: function(field, value) {
             var that = this,
                 current = that[field],
-                setter;
+                parent = function() { return that; };
 
-            if (current != value) {
+            if (current !== value) {
                 if (!that.trigger("set", { field: field, value: value })) {
 
-                    that._set(field, that.wrap(value, field));
+                    that._set(field, that.wrap(value, field, parent));
 
                     that.trigger(CHANGE, { field: field });
                 }
             }
         },
 
-        wrap: function(object, field) {
-            var that = this,
-                type = toString.call(object);
+        parent: noop,
 
-            if (object !== null && type === "[object Object]" && !(object instanceof DataSource)) {
+        wrap: function(object, field, parent) {
+            var that = this,
+                type = toString.call(object),
+                isObservableArray = object instanceof ObservableArray;
+
+            if (object !== null && type === "[object Object]" && !(object instanceof DataSource) && !isObservableArray) {
                 if (!(object instanceof ObservableObject)) {
                     object = new ObservableObject(object);
                 }
+
+                object.parent = parent;
 
                 (function(field) {
                     object.bind(GET, function(e) {
@@ -313,15 +353,22 @@
                         that.trigger(CHANGE, e);
                     });
                 })(field);
-            } else if (object !== null && type === "[object Array]") {
-                object = new ObservableArray(object);
+            } else if (object !== null && (type === "[object Array]" || isObservableArray)) {
+                if (!isObservableArray) {
+                    object = new ObservableArray(object);
+                }
+                object.parent = parent;
 
                 (function(field) {
                     object.bind(CHANGE, function(e) {
                         that.trigger(CHANGE, { field: field, index: e.index, items: e.items, action: e.action});
                     });
                 })(field);
+            } else if (object !== null && object instanceof DataSource) {
+                object._parent = parent; // assign parent to the DataSource if part of observable object
             }
+
+
             return object;
         }
     });
@@ -363,7 +410,7 @@
             if (typeof value === STRING) {
                 var date = dateRegExp.exec(value);
                 if (date) {
-                    return new Date(parseInt(date[1]));
+                    return new Date(parseInt(date[1], 10));
                 }
             }
             return kendo.parseDate(value);
@@ -391,7 +438,7 @@
         "date": new Date(),
         "boolean": false,
         "default": ""
-    }
+    };
 
     var Model = ObservableObject.extend({
         init: function(data) {
@@ -415,10 +462,7 @@
         },
 
         shouldSerialize: function(field) {
-            return ObservableObject.fn.shouldSerialize.call(this, field)
-            && field !== "uid"
-            && !(this.idField !== "id" && field === "id")
-            && field !== "dirty" && field !== "_accessors";
+            return ObservableObject.fn.shouldSerialize.call(this, field) && field !== "uid" && !(this.idField !== "id" && field === "id") && field !== "dirty" && field !== "_accessors";
         },
 
         _parse: function(field, value) {
@@ -448,8 +492,8 @@
                 value = that._parse(field, value);
 
                 if (!equal(value, that.get(field))) {
-                    ObservableObject.fn.set.call(that, field, value, initiator);
                     that.dirty = true;
+                    ObservableObject.fn.set.call(that, field, value, initiator);
                 }
             }
         },
@@ -470,9 +514,18 @@
         }
     });
 
-    Model.define = function(options) {
+    Model.define = function(base, options) {
+        if (options === undefined) {
+            options = base;
+            base = Model;
+        }
+
         var model,
             proto = extend({}, { defaults: {} }, options),
+            name,
+            field,
+            type,
+            value,
             id = proto.id;
 
         if (id) {
@@ -487,12 +540,12 @@
             proto.defaults[id] = proto._defaultId = "";
         }
 
-        for (var name in proto.fields) {
-            var field = proto.fields[name],
-            type = field.type || "default",
+        for (name in proto.fields) {
+            field = proto.fields[name];
+            type = field.type || "default";
             value = null;
 
-            name = field.field || name;
+            name = typeof (field.field) === STRING ? field.field : name;
 
             if (!field.nullable) {
                 value = proto.defaults[name] = field.defaultValue !== undefined ? field.defaultValue : defaultValues[type.toLowerCase()];
@@ -507,7 +560,10 @@
             field.parse = field.parse || parsers[type];
         }
 
-        model = Model.extend(proto);
+        model = base.extend(proto);
+        model.define = function(options) {
+            return Model.define(model, options);
+        };
 
         if (proto.fields) {
             model.fields = proto.fields;
@@ -515,7 +571,7 @@
         }
 
         return model;
-    }
+    };
 
     var Comparer = {
         selector: function(field) {
@@ -543,29 +599,25 @@
         },
 
         create: function(descriptor) {
-            return Comparer[descriptor.dir.toLowerCase()](descriptor.field);
+            return this[descriptor.dir.toLowerCase()](descriptor.field);
         },
 
         combine: function(comparers) {
             return function(a, b) {
                 var result = comparers[0](a, b),
-                idx,
-                length;
+                    idx,
+                    length;
 
                 for (idx = 1, length = comparers.length; idx < length; idx ++) {
                     result = result || comparers[idx](a, b);
                 }
 
                 return result;
-            }
+            };
         }
     };
 
-    var PositionComparer = {
-        selector: function(field) {
-            return isFunction(field) ? field : getter(field);
-        },
-
+    var PositionComparer = extend({}, Comparer, {
         asc: function(field) {
             var selector = this.selector(field);
             return function (a, b) {
@@ -591,26 +643,8 @@
 
                 return valueA < valueB ? 1 : (valueA > valueB ? -1 : 0);
             };
-        },
-
-        create: function(descriptor) {
-            return PositionComparer[descriptor.dir.toLowerCase()](descriptor.field);
-        },
-
-        combine: function(comparers) {
-             return function(a, b) {
-                 var result = comparers[0](a, b),
-                     idx,
-                     length;
-
-                 for (idx = 1, length = comparers.length; idx < length; idx ++) {
-                     result = result || comparers[idx](a, b);
-                 }
-
-                 return result;
-             }
         }
-    };
+    });
 
     map = function (array, callback) {
         var idx, length = array.length, result = new Array(length);
@@ -631,7 +665,7 @@
         function operator(op, a, b, ignore) {
             var date;
 
-            if (b != undefined) {
+            if (b != null) {
                 if (typeof b === STRING) {
                     b = quote(b);
                     date = dateRegExp.exec(b);
@@ -639,7 +673,7 @@
                         b = new Date(+date[1]);
                     } else if (ignore) {
                         b = "'" + b.toLowerCase() + "'";
-                        a = a + ".toLowerCase()";
+                        a = "(" + a + " || '').toLowerCase()";
                     } else {
                         b = "'" + b + "'";
                     }
@@ -704,7 +738,7 @@
             },
             contains: function(a, b, ignore) {
                 if (ignore) {
-                    a = a + ".toLowerCase()";
+                    a = "(" + a + " || '').toLowerCase()";
                     if (b) {
                         b = b.toLowerCase();
                     }
@@ -714,7 +748,21 @@
                     b = quote(b);
                 }
 
-                return a + ".indexOf('" + b + "') >= 0"
+                return a + ".indexOf('" + b + "') >= 0";
+            },
+            doesnotcontain: function(a, b, ignore) {
+                if (ignore) {
+                    a = "(" + a + " || '').toLowerCase()";
+                    if (b) {
+                        b = b.toLowerCase();
+                    }
+                }
+
+                if (b) {
+                    b = quote(b);
+                }
+
+                return a + ".indexOf('" + b + "') == -1";
             }
         };
     })();
@@ -723,20 +771,18 @@
         this.data = data || [];
     }
 
-    Query.normalizeFilter = normalizeFilter;
-
     Query.filterExpr = function(expression) {
         var expressions = [],
-        logic = { and: " && ", or: " || " },
-        idx,
-        length,
-        filter,
-        expr,
-        fieldFunctions = [],
-        operatorFunctions = [],
-        field,
-        operator,
-        filters = expression.filters;
+            logic = { and: " && ", or: " || " },
+            idx,
+            length,
+            filter,
+            expr,
+            fieldFunctions = [],
+            operatorFunctions = [],
+            field,
+            operator,
+            filters = expression.filters;
 
         for (idx = 0, length = filters.length; idx < length; idx++) {
             filter = filters[idx];
@@ -816,7 +862,8 @@
         ">=": "gte",
         isgreaterthanorequalto: "gte",
         greaterthanequal: "gte",
-        ge: "gte"
+        ge: "gte",
+        notsubstringof: "doesnotcontain"
     };
 
     function normalizeOperator(expression) {
@@ -846,7 +893,7 @@
                 expression = {
                     logic: "and",
                     filters: isArray(expression) ? expression : [expression]
-                }
+                };
             }
 
             normalizeOperator(expression);
@@ -855,8 +902,10 @@
         }
     }
 
+    Query.normalizeFilter = normalizeFilter;
+
     function normalizeAggregate(expressions) {
-        return expressions = isArray(expressions) ? expressions : [expressions];
+        return isArray(expressions) ? expressions : [expressions];
     }
 
     function normalizeGroup(field, dir) {
@@ -968,7 +1017,7 @@
                         items: descriptors.length > 1 ? new Query(group.items).group(descriptors.slice(1), data.toArray()).toArray() : group.items,
                         hasSubgroups: descriptors.length > 1,
                         aggregates: data.aggregate(descriptor.aggregates)
-                    }
+                    };
                 });
             }
             return result;
@@ -1042,7 +1091,7 @@
             }
             return result;
         }
-    }
+    };
 
     function groupValueComparer(a, b) {
         if (a && a.getTime && b && b.getTime) {
@@ -1056,7 +1105,6 @@
         var idx,
         aggr,
         functionName,
-        fieldAccumulator,
         len = aggregates.length;
 
         for (idx = 0; idx < len; idx++) {
@@ -1070,7 +1118,7 @@
 
     var functions = {
         sum: function(accumulator, item, accessor) {
-            return accumulator = (accumulator || 0) + accessor.get(item);
+            return (accumulator || 0) + accessor.get(item);
         },
         count: function(accumulator, item, accessor) {
             return (accumulator || 0) + 1;
@@ -1083,16 +1131,20 @@
             return accumulator;
         },
         max: function(accumulator, item, accessor) {
-            var accumulator =  (accumulator || 0),
-            value = accessor.get(item);
+            var value = accessor.get(item);
+
+            accumulator = accumulator || 0;
+
             if(accumulator < value) {
                 accumulator = value;
             }
             return accumulator;
         },
         min: function(accumulator, item, accessor) {
-            var value = accessor.get(item),
-            accumulator = (accumulator || value)
+            var value = accessor.get(item);
+
+            accumulator = (accumulator || value);
+
             if(accumulator > value) {
                 accumulator = value;
             }
@@ -1111,14 +1163,15 @@
     }
 
     function process(data, options) {
+        options = options || {};
+
         var query = new Query(data),
-        options = options || {},
-        group = options.group,
-        sort = normalizeGroup(group || []).concat(normalizeSort(options.sort || [])),
-        total,
-        filter = options.filter,
-        skip = options.skip,
-        take = options.take;
+            group = options.group,
+            sort = normalizeGroup(group || []).concat(normalizeSort(options.sort || [])),
+            total,
+            filter = options.filter,
+            skip = options.skip,
+            take = options.take;
 
         if (filter) {
             query = query.filter(filter);
@@ -1148,14 +1201,16 @@
     }
 
     function calculateAggregates(data, options) {
+        options = options || {};
+
         var query = new Query(data),
-        options = options || {},
-        aggregates = options.aggregate,
-        filter = options.filter;
+            aggregates = options.aggregate,
+            filter = options.filter;
 
         if(filter) {
             query = query.filter(filter);
         }
+
         return query.aggregate(aggregates);
     }
 
@@ -1193,7 +1248,7 @@
             that.cache = options.cache? Cache.create(options.cache) : {
                 find: noop,
                 add: noop
-            }
+            };
 
             parameterMap = options.parameterMap;
 
@@ -1265,10 +1320,10 @@
             var that = this,
                 parameters,
                 operation = that.options[type],
-                data = isFunction(operation.data) ? operation.data() : operation.data;
+                data = isFunction(operation.data) ? operation.data(options.data) : operation.data;
 
             options = extend(true, {}, operation, options);
-            parameters = extend(data, options.data);
+            parameters = extend(true, {}, data, options.data);
 
             options.data = that.parameterMap(parameters, type);
 
@@ -1277,6 +1332,26 @@
             }
 
             return options;
+        }
+    });
+
+    var Cache = Class.extend({
+        init: function() {
+            this._store = {};
+        },
+        add: function(key, data) {
+            if(key !== undefined) {
+                this._store[stringify(key)] = data;
+            }
+        },
+        find: function(key) {
+            return this._store[stringify(key)];
+        },
+        clear: function() {
+            this._store = {};
+        },
+        remove: function(key) {
+            delete this._store[stringify(key)];
         }
     });
 
@@ -1294,32 +1369,58 @@
         }
 
         return store[options]();
-    }
+    };
 
-    function Cache() {
-        this._store = {};
-    }
+    function convertRecords(data, getters, modelInstance) {
+        var record,
+            getter,
+            idx,
+            length;
 
-    Cache.prototype = /** @ignore */ {
-        add: function(key, data) {
-            if(key !== undefined) {
-                this._store[stringify(key)] = data;
+        for (idx = 0, length = data.length; idx < length; idx++) {
+            record = data[idx];
+            for (getter in getters) {
+                record[getter] = modelInstance._parse(getter, getters[getter](record));
             }
-        },
-        find: function(key) {
-            return this._store[stringify(key)];
-        },
-        clear: function() {
-            this._store = {};
-        },
-        remove: function(key) {
-            delete this._store[stringify(key)];
         }
+    }
+
+    function convertGroup(data, getters, modelInstance) {
+        var record,
+            idx,
+            length;
+
+        for (idx = 0, length = data.length; idx < length; idx++) {
+            record = data[idx];
+            record.value = modelInstance._parse(record.field, record.value);
+
+            if (record.hasSubgroups) {
+                convertGroup(record.items, getters, modelInstance);
+            } else {
+                convertRecords(record.items, getters, modelInstance);
+            }
+        }
+    }
+
+    function wrapDataAccess(originalFunction, model, converter, getters) {
+        return function(data) {
+            data = originalFunction(data);
+
+            if (data && !isEmptyObject(getters)) {
+                if (toString.call(data) !== "[object Array]" && !(data instanceof ObservableArray)) {
+                    data = [data];
+                }
+
+                converter(data, getters, new model());
+            }
+
+            return data || [];
+        };
     }
 
     var DataReader = Class.extend({
         init: function(schema) {
-            var that = this, member, get, model;
+            var that = this, member, get, model, base;
 
             schema = schema || {};
 
@@ -1329,11 +1430,14 @@
                 that[member] = typeof get === STRING ? getter(get) : get;
             }
 
-            if (isPlainObject(that.model)) {
-                that.model = model = kendo.data.Model.define(that.model);
+            base = schema.modelBase || Model;
 
-                var dataFunction = that.data,
-                getters = {};
+            if (isPlainObject(that.model)) {
+                that.model = model = base.define(that.model);
+
+                var dataFunction = proxy(that.data, that),
+                    groupsFunction = proxy(that.groups, that),
+                    getters = {};
 
                 if (model.fields) {
                     each(model.fields, function(field, value) {
@@ -1345,27 +1449,12 @@
                     });
                 }
 
-                that.data = function(data) {
-                    var record,
-                        getter,
-                        idx,
-                        length,
-                        modelInstance = new that.model();
-
-                    data = dataFunction(data);
-
-                    if (!isEmptyObject(getters)) {
-                        for (idx = 0, length = data.length; idx < length; idx++) {
-                            record = data[idx];
-                            for (getter in getters) {
-                                record[getter] = modelInstance._parse(getter, getters[getter](record));
-                            }
-                        }
-                    }
-
-                    return data;
-                }
+                that.data = wrapDataAccess(dataFunction, model, convertRecords, getters);
+                that.groups = wrapDataAccess(groupsFunction, model, convertGroup, getters);
             }
+        },
+        errors: function(data) {
+            return data ? data.errors : null;
         },
         parse: identity,
         data: identity,
@@ -1381,9 +1470,120 @@
         }
     });
 
+    function flattenGroups(data) {
+        var idx, length, result = [];
+
+        for (idx = 0, length = data.length; idx < length; idx++) {
+            if (data[idx].hasSubgroups) {
+                result = result.concat(flattenGroups(data[idx].items));
+            } else {
+                result = result.concat(data[idx].items.slice());
+            }
+        }
+        return result;
+    }
+    function wrapGroupItems(data, model) {
+        var idx, length, group, items;
+        if (model) {
+            for (idx = 0, length = data.length; idx < length; idx++) {
+                group = data[idx];
+                items = group.items;
+
+                if (group.hasSubgroups) {
+                    wrapGroupItems(items, model);
+                } else if (items.length && !(items[0] instanceof model)) {
+                    items.type = model;
+                    items.wrapAll(items, items);
+                }
+            }
+        }
+    }
+
+    function eachGroupItems(data, func) {
+        var idx, length;
+
+        for (idx = 0, length = data.length; idx < length; idx++) {
+            if (data[idx].hasSubgroups) {
+                if (eachGroupItems(data[idx].items, func)) {
+                    return true;
+                }
+            } else {
+                if (func(data[idx].items, data[idx])) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    function removeModel(data, model) {
+        var idx, length;
+
+        for (idx = 0, length = data.length; idx < length; idx++) {
+            if (data[idx].uid == model.uid) {
+                model = data[idx];
+                data.splice(idx, 1);
+                return model;
+            }
+        }
+    }
+
+    function wrapInEmptyGroup(groups, model) {
+        var parent,
+            group,
+            idx,
+            length;
+
+        for (idx = groups.length-1, length = 0; idx >= length; idx--) {
+            group = groups[idx];
+            parent = {
+                value: model.get(group.field),
+                field: group.field,
+                items: parent ? [parent] : [model],
+                hasSubgroups: !!parent,
+                aggregates: {}
+            };
+        }
+
+        return parent;
+    }
+
+    function indexOfPristineModel(data, model) {
+        if (model) {
+            return indexOf(data, function(item) {
+                return item[model.idField] === model.id;
+            });
+        }
+        return -1;
+    }
+
+    function indexOfModel(data, model) {
+        if (model) {
+            return indexOf(data, function(item) {
+                return item.uid == model.uid;
+            });
+        }
+        return -1;
+    }
+
+    function indexOf(data, comparer) {
+        var idx, length;
+
+        for (idx = 0, length = data.length; idx < length; idx++) {
+            if (comparer(data[idx])) {
+                return idx;
+            }
+        }
+
+        return -1;
+    }
+
     var DataSource = Observable.extend({
         init: function(options) {
-            var that = this, id, model, transport;
+            var that = this, model, transport, data;
+
+            if (options) {
+                data = options.data;
+            }
 
             options = that.options = extend({}, that.options, options);
 
@@ -1400,7 +1600,8 @@
                 _sort: normalizeSort(options.sort),
                 _filter: normalizeFilter(options.filter),
                 _group: normalizeGroup(options.group),
-                _aggregate: options.aggregate
+                _aggregate: options.aggregate,
+                _total: options.total
             });
 
             Observable.fn.init.call(that);
@@ -1411,11 +1612,18 @@
                 transport.read = typeof transport.read === STRING ? { url: transport.read } : transport.read;
 
                 if (options.type) {
-                    transport = extend(true, {}, kendo.data.transports[options.type], transport);
+                    if (kendo.data.transports[options.type] && !isPlainObject(kendo.data.transports[options.type])) {
+                       that.transport = new kendo.data.transports[options.type](extend(transport, { data: data }));
+                    } else {
+                        transport = extend(true, {}, kendo.data.transports[options.type], transport);
+                    }
+
                     options.schema = extend(true, {}, kendo.data.schemas[options.type], options.schema);
                 }
 
-                that.transport = isFunction(transport.read) ? transport: new RemoteTransport(transport);
+                if (!that.transport) {
+                    that.transport = isFunction(transport.read) ? transport: new RemoteTransport(transport);
+                }
             } else {
                 that.transport = new LocalTransport({ data: options.data });
             }
@@ -1426,20 +1634,14 @@
 
             that._data = that._observe(that._data);
 
-            id = model.id;
-
-            if (id) {
-                that.id = function(record) {
-                    return id(record);
-                };
-            }
-
             that.bind([ERROR, CHANGE, REQUESTSTART], options);
         },
 
         options: {
             data: [],
-            schema: {},
+            schema: {
+               modelBase: Model
+            },
             serverSorting: false,
             serverPaging: false,
             serverFiltering: false,
@@ -1449,8 +1651,15 @@
             batch: false
         },
 
+        _flatData: function(data) {
+            if (this.options.serverGrouping && this.group().length) {
+                return flattenGroups(data);
+            }
+            return data;
+        },
+
         get: function(id) {
-            var idx, length, data = this._data;
+            var idx, length, data = this._flatData(this._data);
 
             for (idx = 0, length = data.length; idx < length; idx++) {
                 if (data[idx].id == id) {
@@ -1460,7 +1669,7 @@
         },
 
         getByUid: function(id) {
-            var idx, length, data = this._data;
+            var idx, length, data = this._flatData(this._data);
 
             for (idx = 0, length = data.length; idx < length; idx++) {
                 if (data[idx].uid == id) {
@@ -1471,12 +1680,12 @@
 
         sync: function() {
             var that = this,
-            idx,
-            length,
-            created = [],
-            updated = [],
-            destroyed = that._destroyed,
-            data = that._data;
+                idx,
+                length,
+                created = [],
+                updated = [],
+                destroyed = that._destroyed,
+                data = that._flatData(that._data);
 
             if (!that.reader.model) {
                 return;
@@ -1496,36 +1705,42 @@
             promises.push.apply(promises ,that._send("destroy", destroyed));
 
             $.when.apply(null, promises)
-            .then(function() {
-                var idx,
-                length;
+                .then(function() {
+                    var idx,
+                    length;
 
-                for (idx = 0, length = arguments.length; idx < length; idx++){
-                    that._accept(arguments[idx]);
-                }
+                    for (idx = 0, length = arguments.length; idx < length; idx++){
+                        that._accept(arguments[idx]);
+                    }
 
-                that._change();
-            });
-
+                    that._change();
+                });
         },
 
         _accept: function(result) {
             var that = this,
-            models = result.models,
-            response = result.response,
-            idx = 0,
-            pristine = that.reader.data(that._pristine),
-            type = result.type,
-            length;
+                models = result.models,
+                response = result.response,
+                idx = 0,
+                serverGroup = that.options.serverGrouping && that.group() && that.group().length,
+                pristine = that.reader.data(that._pristine),
+                type = result.type,
+                length;
 
             if (response) {
-                response = that.reader.data(that.reader.parse(response));
+                response = that.reader.parse(response);
+
+                if (that._handleCustomErrors(response)) {
+                    return;
+                }
+
+                response = that.reader.data(response);
+
+                if (!$.isArray(response)) {
+                    response = [response];
+                }
             } else {
                 response = $.map(models, function(model) { return model.toJSON(); } );
-            }
-
-            if (!$.isArray(response)) {
-                response = [response];
             }
 
             if (type === "destroy") {
@@ -1537,21 +1752,29 @@
                     models[idx].accept(response[idx]);
 
                     if (type === "create") {
-                        pristine.push(models[idx]);
+                        pristine.push(serverGroup ? wrapInEmptyGroup(that.group(), models[idx]) : models[idx]);
                     } else if (type === "update") {
-                        extend(pristine[that._pristineIndex(models[idx])], response[idx]);
+                        if (serverGroup) {
+                            that._updatePristineGroupModel(models[idx], response[idx]);
+                        } else {
+                            extend(pristine[that._pristineIndex(models[idx])], response[idx]);
+                        }
                     }
                 } else {
-                    pristine.splice(that._pristineIndex(models[idx]), 1);
+                    if (serverGroup) {
+                        that._removePristineGroupModel(models[idx]);
+                    } else {
+                        pristine.splice(that._pristineIndex(models[idx]), 1);
+                    }
                 }
             }
         },
 
         _pristineIndex: function(model) {
             var that = this,
-            idx,
-            length,
-            pristine = that.reader.data(that._pristine);
+                idx,
+                length,
+                pristine = that.reader.data(that._pristine);
 
             for (idx = 0, length = pristine.length; idx < length; idx++) {
                 if (pristine[idx][model.idField] === model.id) {
@@ -1561,6 +1784,33 @@
             return -1;
         },
 
+        _updatePristineGroupModel: function(model, values) {
+            var pristineData = this.reader.groups(this._pristine),
+                index;
+
+            eachGroupItems(pristineData,
+                function(items, group) {
+                    index = indexOfPristineModel(items, model);
+                    if (index > -1) {
+                        extend(true, items[index], values);
+                        return true;
+                    }
+                });
+        },
+
+        _removePristineGroupModel: function(model) {
+            var pristineData = this.reader.groups(this._pristine),
+                index;
+
+            eachGroupItems(pristineData,
+                function(items, group) {
+                    index = indexOfPristineModel(items, model);
+                    if (index > -1) {
+                        items.splice(index, 1);
+                        return true;
+                    }
+                });
+        },
         _promise: function(data, models, type) {
             var that = this,
             transport = that.transport;
@@ -1585,10 +1835,9 @@
 
         _send: function(method, data) {
             var that = this,
-            idx,
-            length,
-            promises = [],
-            transport = that.transport;
+                idx,
+                length,
+                promises = [];
 
             if (that.options.batch) {
                 if (data.length) {
@@ -1621,7 +1870,11 @@
                 }
             }
 
-            this._data.splice(index, 0, model);
+            if (this.options.serverGrouping && this.group() && this.group().length) {
+                this._data.splice(index, 0, wrapInEmptyGroup(this.group(), model));
+            } else {
+                this._data.splice(index, 0, model);
+            }
 
             return model;
         },
@@ -1629,20 +1882,27 @@
         cancelChanges: function(model) {
             var that = this,
                 pristineIndex,
-                pristine = that.reader.data(that._pristine),
+                serverGroup = that.options.serverGrouping && that.group() && that.group().length,
+                read = !serverGroup ? that.reader.data : that.reader.groups,
+                pristine = read(that._pristine),
                 index;
 
             if (model instanceof kendo.data.Model) {
-                index = that.indexOf(model);
-                pristineIndex = that._pristineIndex(model);
-                if (index != -1) {
-                    if (pristineIndex != -1 && !model.isNew()) {
-                        extend(true, that._data[index], pristine[pristineIndex]);
-                    } else {
-                        that._data.splice(index, 1);
+                if (serverGroup) {
+                    that._cancelGroupModel(model);
+                } else {
+                    index = that.indexOf(model);
+                    pristineIndex = that._pristineIndex(model);
+                    if (index != -1) {
+                        if (pristineIndex != -1 && !model.isNew()) {
+                            extend(true, that._data[index], pristine[pristineIndex]);
+                        } else {
+                            that._data.splice(index, 1);
+                        }
                     }
                 }
             } else {
+                that._destroyed = [];
                 that._data = that._observe(pristine);
                 that._change();
             }
@@ -1662,17 +1922,36 @@
             });
         },
 
-        indexOf: function(model) {
-            var idx, length, data = this._data;
+        _cancelGroupModel: function(model) {
+            var pristineData = this.reader.groups(this._pristine),
+                pristine,
+                idx;
 
-            if (model) {
-                for (idx = 0, length = data.length; idx < length; idx++) {
-                    if (data[idx].uid == model.uid) {
-                        return idx;
+            eachGroupItems(pristineData,
+                function(items, group) {
+                    idx = indexOfPristineModel(items, model);
+                    if (idx > -1) {
+                        pristine = items[idx];
+                        return true;
                     }
-                }
+                });
+
+            if (idx > -1) {
+                eachGroupItems(this._data, function(items, group) {
+                    idx = indexOfModel(items, model);
+                    if (idx > -1) {
+                        if (!model.isNew()) {
+                            extend(true, items[idx], pristine);
+                        } else {
+                            items.splice(idx, 1);
+                        }
+                    }
+                });
             }
-            return -1;
+        },
+
+        indexOf: function(model) {
+            return indexOfModel(this._data, model);
         },
 
         _params: function(data) {
@@ -1717,34 +1996,60 @@
         },
 
         remove: function(model) {
-            var idx, length, data = this._data;
+            var data = this._data;
 
-            for (idx = 0, length = data.length; idx < length; idx++) {
-                if (data[idx].uid == model.uid) {
-                    model = data[idx];
-                    data.splice(idx, 1);
-                    return model;
-                }
+            if (this.options.serverGrouping && this.group() && this.group().length) {
+                return this._removeGroupItem(data, model);
             }
+            return removeModel(data, model);
+        },
+
+        _removeGroupItem: function(data, model) {
+            var result;
+
+            eachGroupItems(data, function(items, group) {
+                result = removeModel(items, model);
+                if (result) {
+                    return true;
+                }
+            });
+            return model;
         },
 
         error: function(xhr, status, errorThrown) {
+            this._dequeueRequest();
             this.trigger(ERROR, { xhr: xhr, status: status, errorThrown: errorThrown });
         },
 
+        _handleCustomErrors: function(response) {
+            if (this.reader.errors) {
+                var errors = this.reader.errors(response);
+                if (errors) {
+                    this.trigger(ERROR, { xhr: null, status: "customerror", errorThrown: "custom error", errors: errors });
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        _parent: noop,
+
         success: function(data) {
             var that = this,
-            options = {},
-            result,
-            hasGroups = that.options.serverGrouping === true && that._group && that._group.length > 0;
+                options = that.options,
+                hasGroups = options.serverGrouping === true && that._group && that._group.length > 0;
 
             data = that.reader.parse(data);
+
+            if (that._handleCustomErrors(data)) {
+                return;
+            }
 
             that._pristine = isPlainObject(data) ? $.extend(true, {}, data) : data.slice(0);
 
             that._total = that.reader.total(data);
 
-            if (that._aggregate && that.options.serverAggregates) {
+            if (that._aggregate && options.serverAggregates) {
                 that._aggregateResult = that.reader.aggregates(data);
             }
 
@@ -1782,6 +2087,11 @@
                 }
             } else {
                 data = new ObservableArray(data, that.reader.model);
+                data.parent = function() { return that._parent(); };
+            }
+
+            if (that.group() && that.group().length && that.options.serverGrouping) {
+                wrapGroupItems(data, model);
             }
 
             return data.bind(CHANGE, proxy(that._change, that));
@@ -1811,15 +2121,15 @@
                 }
 
                 that._total = total;
+
                 that._process(that._data, e);
             }
         },
 
         _process: function (data, e) {
             var that = this,
-            options = {},
-            result,
-            hasGroups = that.options.serverGrouping === true && that._group && that._group.length > 0;
+                options = {},
+                result;
 
             if (that.options.serverPaging !== true) {
                 options.skip = that._skip;
@@ -1854,6 +2164,10 @@
             if (result.total !== undefined && !that.options.serverFiltering) {
                 that._total = result.total;
             }
+
+            e = e || {};
+
+            e.items = e.items || that._view;
 
             that.trigger(CHANGE, e);
         },
@@ -1920,7 +2234,7 @@
                 }
             }
 
-            if (remote || (that._data === undefined || that._data.length == 0)) {
+            if (remote || (that._data === undefined || that._data.length === 0)) {
                 that.read(options);
             } else {
                 that.trigger(REQUESTSTART);
@@ -1936,7 +2250,7 @@
 
                 that._view = result.data;
                 that._aggregateResult = calculateAggregates(that._data, options);
-                that.trigger(CHANGE);
+                that.trigger(CHANGE, { items: result.data });
             }
         },
 
@@ -1963,6 +2277,40 @@
             }, options));
         },
 
+        next: function() {
+            var that = this,
+                page = that.page(),
+                total = that.total();
+
+            if (!page) {
+                return;
+            }
+
+            if (total) {
+                that.page(page + 1);
+            } else {
+                that._skip = page * that.take();
+                that._query({ page: page + 1 });
+            }
+        },
+
+        prev: function() {
+            var that = this,
+                page = that.page(),
+                total = that.total();
+
+            if (!page || page === 1) {
+                return;
+            }
+
+            if (total) {
+                that.page(page - 1);
+            } else {
+                that._skip = that._skip - that.take();
+                that._query({ page: page - 1});
+            }
+        },
+
         page: function(val) {
             var that = this,
             skip;
@@ -1981,7 +2329,7 @@
             var that = this;
 
             if(val !== undefined) {
-                that._query({ pageSize: val });
+                that._query({ pageSize: val, page: 1 });
                 return;
             }
 
@@ -2076,6 +2424,9 @@
                 try {
                     that.options.serverPaging = true;
                     that.options.serverSorting = true;
+                    if (paging) {
+                        that._data = data = that._observe(data);
+                    }
                     that._process(data);
                 } finally {
                     that.options.serverPaging = paging;
@@ -2282,7 +2633,7 @@
         dataSource.data = data;
 
         return dataSource instanceof DataSource ? dataSource : new DataSource(dataSource);
-    }
+    };
 
     function inferSelect(select, fields) {
         var options = $(select)[0].children,
@@ -2350,12 +2701,246 @@
         return data;
     }
 
+    var Node = Model.define({
+        init: function(value) {
+            var that = this,
+                hasChildren = that.hasChildren || value.hasChildren,
+                data = "items",
+                children = {};
+
+            kendo.data.Model.fn.init.call(that, value);
+
+            if (typeof that.children === STRING) {
+               data = that.children;
+            }
+
+            children = extend({
+                schema: {
+                    data: data,
+                    model: {
+                        hasChildren: hasChildren
+                    }
+                }
+            }, that.children, { data: value });
+
+            if (!hasChildren) {
+                hasChildren = children.schema.data;
+            }
+
+            if (typeof hasChildren === STRING) {
+                hasChildren = kendo.getter(hasChildren);
+            }
+
+            if (isFunction(hasChildren)) {
+                that.hasChildren = !!hasChildren.call(that, that);
+            }
+
+            that.children = new HierarchicalDataSource(children);
+            that.children._parent = function(){
+                return that;
+            };
+
+            that.children.bind(CHANGE, function(e){
+                e.node = e.node || that;
+                that.trigger(CHANGE, e);
+            });
+
+            that._loaded = !!(value && value[data]);
+        },
+
+        hasChildren: false,
+
+        level: function() {
+            var parentNode = this.parentNode(),
+                level = 0;
+
+            while (parentNode) {
+                level++;
+                parentNode = parentNode.parentNode();
+            }
+
+            return level;
+        },
+
+        load: function() {
+            var that = this, options = {};
+
+            options[that.idField || "id"] = that.id;
+
+            if (!that._loaded) {
+                that.children._data = undefined;
+            }
+
+            that.children.one(CHANGE, function() {
+                that._loaded = true;
+            }).query(options);
+        },
+
+        parentNode: function() {
+            var array = this.parent();
+
+            return array.parent();
+        },
+
+        loaded: function(value) {
+            if (value !== undefined) {
+                this._loaded = value;
+            } else {
+                return this._loaded;
+            }
+        },
+
+        shouldSerialize: function(field) {
+            return Model.fn.shouldSerialize.call(this, field) && field !== "children" && field !== "_loaded" && field !== "hasChildren";
+        }
+    });
+
+    var HierarchicalDataSource = DataSource.extend({
+        init: function(options) {
+            var node = Node.define({
+                children: options
+            });
+
+            DataSource.fn.init.call(this, extend(true, {}, { schema: { modelBase: node, model: node } }, options));
+        },
+
+        remove: function(node){
+            var parentNode = node.parentNode(),
+                dataSource = this,
+                result;
+
+            if (parentNode) {
+                dataSource = parentNode.children;
+            }
+
+            result = DataSource.fn.remove.call(dataSource, node);
+
+            if (parentNode && !dataSource.data().length) {
+                parentNode.hasChildren = false;
+            }
+
+            return result;
+        },
+
+        insert: function(index, model) {
+            var parentNode = this._parent();
+
+            if (parentNode) {
+                parentNode.hasChildren = true;
+            }
+
+            return DataSource.fn.insert.call(this, index, model);
+        },
+
+        getByUid: function(uid) {
+            var idx, length, node, data;
+
+            node = DataSource.fn.getByUid.call(this, uid);
+
+            if (node) {
+                return node;
+            }
+
+            data = this._flatData(this.data());
+
+            for (idx = 0, length = data.length; idx < length; idx++) {
+                node = data[idx].children.getByUid(uid);
+                if (node) {
+                    return node;
+                }
+            }
+        }
+    });
+
+    function inferList(list, fields) {
+        var items = $(list).children(),
+            idx,
+            length,
+            data = [],
+            record,
+            textField = fields[0].field,
+            urlField = fields[1] && fields[1].field,
+            spriteCssClassField = fields[2] && fields[2].field,
+            imageUrlField = fields[3] && fields[3].field,
+            item,
+            id,
+            textChild,
+            className,
+            children;
+
+        for (idx = 0, length = items.length; idx < length; idx++) {
+            record = {};
+            item = items.eq(idx);
+
+            textChild = item[0].firstChild;
+            children = item.children();
+            list = children.filter("ul");
+            children = children.filter(":not(ul)");
+
+            id = item.attr("data-id");
+
+            if (id) {
+                record.id = id;
+            }
+
+            if (textChild) {
+                record[textField] = textChild.nodeType == 3 ? textChild.nodeValue : children.text();
+            }
+
+            if (urlField) {
+                record[urlField] = children.find("a").attr("href");
+            }
+
+            if (imageUrlField) {
+                record[imageUrlField] = children.find("img").attr("src");
+            }
+
+            if (spriteCssClassField) {
+                className = children.find(".k-sprite").prop("className");
+                record[spriteCssClassField] = className && $.trim(className.replace("k-sprite", ""));
+            }
+
+            if (list.length) {
+                record.items = inferList(list.eq(0), fields);
+            }
+
+            if (item.attr("data-hasChildren") == "true") {
+                record.hasChildren = true;
+            }
+
+            data.push(record);
+        }
+
+        return data;
+    }
+
+    HierarchicalDataSource.create = function(options) {
+        options = options && options.push ? { data: options } : options;
+
+        var dataSource = options || {},
+            data = dataSource.data,
+            fields = dataSource.fields,
+            list = dataSource.list;
+
+        if (!data && fields && !dataSource.transport) {
+            if (list) {
+                data = inferList(list, fields);
+            }
+        }
+
+        dataSource.data = data;
+
+        return dataSource instanceof HierarchicalDataSource ? dataSource : new HierarchicalDataSource(dataSource);
+    };
+
     extend(true, kendo.data, /** @lends kendo.data */ {
         readers: {
             json: DataReader
         },
         Query: Query,
         DataSource: DataSource,
+        HierarchicalDataSource: HierarchicalDataSource,
+        Node: Node,
         ObservableObject: ObservableObject,
         ObservableArray: ObservableArray,
         LocalTransport: LocalTransport,
@@ -2365,3 +2950,4 @@
         Model: Model
     });
 })(jQuery);
+;

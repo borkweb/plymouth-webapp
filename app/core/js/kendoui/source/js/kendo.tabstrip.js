@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -54,11 +54,31 @@
      *     $("#tabstrip").kendoTabStrip({
      *         dataTextField: "text",
      *         dataContentField: "content",
+     *         dataUrlField: "url",
+     *         dataImageUrlField: "imageUrl",
+     *         dataSpriteCssClass: "spriteCssClass",
+     *         dataContentUrlField: "contentUrl",
      *         dataSource:
-     *         [
-     *             { text: "Tab 1", content: "Tab 1 content" },
-     *             { text: "Tab 2", content: "Tab 2 content" }
-     *         ]
+     *         [{
+     *             text: "Item 1",
+     *             url: "http://www.kendoui.com"               // Link URL if navigation is needed, optional.
+     *         },
+     *         {
+     *             text: "Item 2",
+     *             content: "text"                             // Content for the content element
+     *         },
+     *         {
+     *             text: "Item 3",
+     *             contentUrl: "partialContent.html"           // From where to load the item content
+     *         },
+     *         {
+     *             text: "Item 4",
+     *             imageUrl: "http://www.kendoui.com/test.jpg" // Item image URL, optional.
+     *         },
+     *         {
+     *             text: "Item 5",
+     *             spriteCssClass: "imageClass3"               // Item image sprite CSS class, optional.
+     *         }]
      *     });
      * });
      *
@@ -71,7 +91,8 @@
      * <p>
      *  While any valid technique for loading AJAX content can be used, a <strong>TabStrip</strong> supports loading
      *  content from URLs in an asynchronous manner. These URLs should return HTML fragments that can be loaded in a
-     *  TabStrip content area.
+     *  TabStrip content area. Content DIVs are not required and if present should be completely empty for AJAX loading
+     *  to work.
      * </p>
      *
      * @exampleTitle Loading Tab content asynchronously
@@ -228,8 +249,8 @@
                     result += " k-state-default";
                 }
 
-                if (index == 0) {
-                    result += " k-first"
+                if (index === 0) {
+                    result += " k-first";
                 }
 
                 if (index == group.length-1) {
@@ -275,7 +296,8 @@
             .removeAttr("disabled");
 
         tabs.filter(":not([class*=k-state])")
-            .children("a:focus")
+            .children("a")
+            .filter(":focus")
             .parent()
             .addClass(ACTIVESTATE + " " + TABONTOP);
 
@@ -510,7 +532,7 @@
             var selectedItems = that.wrapper.find("li." + ACTIVESTATE),
                 content = $(that.contentElement(selectedItems.parent().children().index(selectedItems)));
 
-            if (content.length > 0 && content[0].childNodes.length == 0) {
+            if (content.length > 0 && content[0].childNodes.length === 0) {
                 that.activateTab(selectedItems.eq(0));
             }
 
@@ -544,7 +566,6 @@
 
         refresh: function(e) {
             var that = this,
-                html = "",
                 options = that.options,
                 text = kendo.getter(options.dataTextField),
                 content = kendo.getter(options.dataContentField),
@@ -818,7 +839,7 @@
         select: function (element) {
             var that = this;
 
-            if (arguments.length == 0) {
+            if (arguments.length === 0) {
                 return that.wrapper.find("li." + ACTIVESTATE);
             }
 
@@ -921,7 +942,8 @@
          *         url: "http://www.kendoui.com"               // Link URL if navigation is needed, optional.
          *     },
          *     {
-         *         text: "Item 2",
+         *         text: "<b>Item 2</b>",
+         *         encoded: false,                             // Allows use of HTML for item text
          *         content: "text"                             // Content for the content element
          *     },
          *     {
@@ -975,7 +997,8 @@
          *         url: "http://www.kendoui.com"               // Link URL if navigation is needed, optional.
          *     },
          *     {
-         *         text: "Item 2",
+         *         text: "<b>Item 2</b>",
+         *         encoded: false,                             // Allows use of HTML for item text
          *         content: "text"                             // Content for the content element
          *     },
          *     {
@@ -1030,7 +1053,8 @@
          *         url: "http://www.kendoui.com"               // Link URL if navigation is needed, optional.
          *     },
          *     {
-         *         text: "Item 2",
+         *         text: "<b>Item 2</b>",
+         *         encoded: false,                             // Allows use of HTML for item text
          *         content: "text"                             // Content for the content element
          *     },
          *     {
@@ -1191,8 +1215,7 @@
 
             that.tabGroup.find(".k-item").each(function(idx) {
                 var currentContent = contentElements.eq(idx),
-                    id = tabStripID + "-" + (idx+1),
-                    href = $(this).children("." + LINK).attr(HREF);
+                    id = tabStripID + "-" + (idx+1);
 
                 if (!currentContent.length && contentUrls[idx]) {
                     $("<div id='"+ id +"' class='" + CONTENT + "'/>").appendTo(that.wrapper);
@@ -1203,7 +1226,7 @@
 
             that.contentElements = that.contentAnimators = that.wrapper.children("div"); // refresh the contents
 
-            if (kendo.support.touch) {
+            if (kendo.support.touch && kendo.mobile.ui.Scroller) {
                 kendo.touchScroller(that.contentElements);
                 that.contentElements = that.contentElements.children(".km-scroll-container");
             }
@@ -1336,7 +1359,7 @@
             // handle content elements
             var contentAnimators = that.contentAnimators;
 
-            if (contentAnimators.length == 0) {
+            if (contentAnimators.length === 0) {
                 oldTab.removeClass(TABONTOP);
                 item.addClass(TABONTOP) // change these directly to bring the tab on top.
                     .css("z-index");
@@ -1353,7 +1376,7 @@
             // find associated content element
             var content = $(that.contentElement(itemIndex));
 
-            if (content.length == 0) {
+            if (content.length === 0) {
                 visibleContents
                     .removeClass( ACTIVESTATE )
                     .kendoStop(true, true)
@@ -1391,11 +1414,12 @@
                     if (!isAjaxContent) {
                         showContentElement();
                         that.trigger("change");
-                    } else
+                    } else {
                         that.ajaxRequest(item, content, function () {
                             showContentElement();
                             that.trigger("change");
                         });
+                    }
                 };
 
             visibleContents
@@ -1430,7 +1454,9 @@
          *
          */
         contentElement: function (itemIndex) {
-            if (isNaN(itemIndex - 0)) return;
+            if (isNaN(itemIndex - 0)) {
+                return;
+            }
 
             var contentElements = this.contentElements,
                 idTest = new RegExp("-" + (itemIndex + 1) + "$");
@@ -1444,15 +1470,16 @@
 
         ajaxRequest: function (element, content, complete, url) {
             element = this.tabGroup.find(element);
-            if (element.find(".k-loading").length)
+            if (element.find(".k-loading").length) {
                 return;
+            }
 
             var that = this,
                 link = element.find("." + LINK),
                 data = {},
                 statusIcon = null,
                 loadingIconTimeout = setTimeout(function () {
-                    statusIcon = $("<span class='k-icon k-loading'/>").prependTo(link)
+                    statusIcon = $("<span class='k-icon k-loading'/>").prependTo(link);
                 }, 100);
 
             element.attr("data-in-request", true);
@@ -1499,8 +1526,7 @@
             options = extend({ tabStrip: {}, group: {} }, options);
 
             var empty = templates.empty,
-                item = options.item,
-                tabStrip = options.tabStrip;
+                item = options.item;
 
             return templates.item(extend(options, {
                 image: item.imageUrl ? templates.image : empty,
@@ -1517,3 +1543,4 @@
     kendo.ui.plugin(TabStrip);
 
 })(jQuery);
+;

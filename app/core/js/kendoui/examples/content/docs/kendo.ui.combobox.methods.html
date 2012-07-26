@@ -10,9 +10,7 @@
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Closes the drop-down list.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to instance of the Kendo UI ComboBox
-var combobox = $("#comboBox").data("kendoComboBox");
-combobox.close();</code></pre></div>
+                    <div class="desc">Closes the drop-down list.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to instance of the Kendo UI ComboBoxvar combobox = $("#comboBox").data("kendoComboBox");combobox.close();</code></pre></div>
 
                     
 
@@ -28,13 +26,7 @@ combobox.close();</code></pre></div>
                     : <span class="type">Object</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Returns the raw data record at the specified index. If the index is not specified, the selected index will be used.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");
-
-// get the dataItem corresponding to the selectedIndex.
-var dataItem = combobox.dataItem();
-
-// get the dataItem corresponding to the passed index.
-var dataItem = combobox.dataItem(1);</code></pre></div>
+                    <div class="desc">Returns the raw data record at the specified index. If the index is not specified, the selected index will be used.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");// get the dataItem corresponding to the selectedIndex.var dataItem = combobox.dataItem();// get the dataItem corresponding to the passed index.var dataItem = combobox.dataItem(1);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -81,10 +73,7 @@ var dataItem = combobox.dataItem(1);</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Enables/disables the combobox widget</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to instance of the Kendo UI ComboBox
-var combobox = $("#comboBox").data("kendoComboBox");
-// disables the combobox
-combobox.enable(false);</code></pre></div>
+                    <div class="desc">Enables/disables the combobox widget</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to instance of the Kendo UI ComboBoxvar combobox = $("#comboBox").data("kendoComboBox");// disables the comboboxcombobox.enable(false);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -113,9 +102,7 @@ combobox.enable(false);</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Opens the drop-down list.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to instance of the Kendo UI ComboBox
-var combobox = $("#comboBox").data("kendoComboBox");
-combobox.open();</code></pre></div>
+                    <div class="desc">Opens the drop-down list.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to instance of the Kendo UI ComboBoxvar combobox = $("#comboBox").data("kendoComboBox");combobox.open();</code></pre></div>
 
                     
 
@@ -131,10 +118,7 @@ combobox.open();</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Re-render the items of the drop-down list.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a referenence to the Kendo UI ComboBox
-var combobox = $("#combobox").data("kendoComboBox");
-// re-render the items of the drop-down list.
-combobox.refresh();</code></pre></div>
+                    <div class="desc">Re-render the items of the drop-down list.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a referenence to the Kendo UI ComboBoxvar combobox = $("#combobox").data("kendoComboBox");// re-render the items of the drop-down list.combobox.refresh();</code></pre></div>
 
                     
 
@@ -150,10 +134,7 @@ combobox.refresh();</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Filters dataSource using the provided parameter and rebinds drop-down list.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");
-
-// Searches for item which has "In" in the name.
-combobox.search("In");</code></pre></div>
+                    <div class="desc">Filters dataSource using the provided parameter and rebinds drop-down list.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");// Searches for item which has "In" in the name.combobox.search("In");</code></pre></div>
 
                     
                     <div class="details-list">
@@ -179,21 +160,10 @@ combobox.search("In");</code></pre></div>
                     <div class="detailCollapsed"></div>
                     <a name="select"><code>select</code></a> (li)
 
-                    : <span class="type">Integer</span>
+                    : <span class="type">Number</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Selects drop-down list item and sets the value and the text of the combobox.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");
-
-// selects by jQuery object
-combobox.select(combobox.ul.children().eq(0));
-
-// selects by index
-combobox.select(1);
-
-// selects item if its text is equal to "test" using predicate function
-combobox.select(function(dataItem) {
-    return dataItem.text === "test";
-});</code></pre></div>
+                    <div class="desc">Selects drop-down list item and sets the value and the text of the combobox.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");// selects by jQuery objectcombobox.select(combobox.ul.children().eq(0));// selects by indexcombobox.select(1);// selects item if its text is equal to "test" using predicate functioncombobox.select(function(dataItem) {    return dataItem.text === "test";});</code></pre></div>
 
                     
                     <div class="details-list">
@@ -201,7 +171,7 @@ combobox.select(function(dataItem) {
                         <dl>
                         
                             <dt>
-                                <code>li</code><span class="light fixedFont">: jQueryObject | Number | Function</span> 
+                                <code>li</code><span class="light fixedFont">: jQuery | Number | Function</span> 
                                 
                             </dt>
                             <dd>LI element or index of the item or predicate function, which defines the item that should be selected.</dd>
@@ -219,7 +189,7 @@ combobox.select(function(dataItem) {
                             
                                 <dt class="heading">Returns</dt>
                                 
-                                    <dd><span class="light fixedFont">Integer</span> The index of the selected LI element.</dd>
+                                    <dd><span class="light fixedFont">Number</span> The index of the selected LI element.</dd>
                                 
                             
 
@@ -240,13 +210,7 @@ combobox.select(function(dataItem) {
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Forces a suggestion onto the text of the ComboBox.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// note that this suggest is not the same as the configuration method
-// suggest which enables/disables auto suggesting for the ComboBox
-//
-// get a referenence to the Kendo UI ComboBox
-var combobox = $("#combobox").data("kendoComboBox");
-// force a suggestion to the item with the name "Inception"
-combobox.suggest("Inception");</code></pre></div>
+                    <div class="desc">Forces a suggestion onto the text of the ComboBox.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// note that this suggest is not the same as the configuration method// suggest which enables/disables auto suggesting for the ComboBox//// get a referenence to the Kendo UI ComboBoxvar combobox = $("#combobox").data("kendoComboBox");// force a suggestion to the item with the name "Inception"combobox.suggest("Inception");</code></pre></div>
 
                     
                     <div class="details-list">
@@ -275,10 +239,7 @@ combobox.suggest("Inception");</code></pre></div>
                     : <span class="type">String</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Gets/Sets the text of the ComboBox.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");
-
-// get the text of the combobox.
-var text = combobox.text();</code></pre></div>
+                    <div class="desc">Gets/Sets the text of the ComboBox.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");// get the text of the combobox.var text = combobox.text();</code></pre></div>
 
                     
                     <div class="details-list">
@@ -325,10 +286,7 @@ var text = combobox.text();</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Toggles the drop-down list between opened and closed state.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");
-
-// toggles the open state of the drop-down list.
-combobox.toggle();</code></pre></div>
+                    <div class="desc">Toggles the drop-down list between opened and closed state.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");// toggles the open state of the drop-down list.combobox.toggle();</code></pre></div>
 
                     
                     <div class="details-list">
@@ -357,13 +315,7 @@ combobox.toggle();</code></pre></div>
                     : <span class="type">String</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Gets/Sets the value of the combobox. If the value is undefined, text of the data item will be used.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");
-
-// get the value of the combobox.
-var value = combobox.value();
-
-// set the value of the combobox.
-combobox.value("1"); //looks for item which has value "1"</code></pre></div>
+                    <div class="desc">Gets/Sets the value of the combobox. If the value is undefined, text of the data item will be used.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var combobox = $("#combobox").data("kendoComboBox");// get the value of the combobox.var value = combobox.value();// set the value of the combobox.combobox.value("1"); //looks for item which has value "1"</code></pre></div>
 
                     
                     <div class="details-list">

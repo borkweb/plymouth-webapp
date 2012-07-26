@@ -2,14 +2,17 @@
 <html>
 <head>
     <title>Events</title>
+
+    <link href="../../content/shared/styles/examples-offline.css" rel="stylesheet">
+    <link href="../../../styles/kendo.common.min.css" rel="stylesheet">
+    <link href="../../../styles/kendo.default.min.css" rel="stylesheet">
+
     <script src="../../../js/jquery.min.js"></script>
     <script src="../../../js/kendo.web.min.js"></script>
     <script src="../../content/shared/js/console.js"></script>
-    <link href="../../../styles/kendo.common.min.css" rel="stylesheet" />
-    <link href="../../../styles/kendo.default.min.css" rel="stylesheet" />
 </head>
 <body>
-    <a href="../index.html">Back</a>
+    <a class="offline-button" href="../index.html">Back</a>
     
         <div id="example" class="k-content">
             <ul id="panelbar">
@@ -26,26 +29,6 @@
                         <li>Damage, Inc.</li>
                     </ul>
                 </li>
-                <!--li>
-                    Scorpions - Unbreakable 2004
-                    <ul>
-                        <li>New Generation</li>
-                        <li>Love �Em or Leave �Em</li>
-                        <li>Deep and Dark</li>
-                        <li>Borderline</li>
-                        <li>Blood Too Hot</li>
-                        <li>Maybe I Maybe You</li>
-                        <li>Someday Is Now</li>
-                        <li>My City My Town</li>
-                        <li>Through My Eyes</li>
-                        <li>Can You Feel It</li>
-                        <li>This Time</li>
-                        <li>She Said</li>
-                        <li>Remember the Good Times</li>
-                        <li>Dreamers(Bonus Track Japan Edition)</li>
-                        <li>Too far(Bonus Track Japan Edition)</li>
-                    </ul>
-                </li-->
                 <li>
                     Iron Maiden - Brave New World 2000
                     <ul>
@@ -62,6 +45,9 @@
                     </ul>
                 </li>
                 <li>
+                    Empty Item
+                </li>
+                <li>
                     Ajax Item
                     <div></div>
                 </li>
@@ -73,15 +59,19 @@
         </div>
         <script>
             function onSelect(e) {
-                kendoConsole.log("Selected: " + $(e.item).find("> .k-link").text());
+                kendoConsole.log("Select: " + $(e.item).find("> .k-link").text());
             }
 
             function onExpand(e) {
-                kendoConsole.log("Expanded: " + $(e.item).find("> .k-link").text());
+                kendoConsole.log("Expand: " + $(e.item).find("> .k-link").text());
             }
 
             function onCollapse(e) {
-                kendoConsole.log("Collapsed: " + $(e.item).find("> .k-link").text());
+                kendoConsole.log("Collapse: " + $(e.item).find("> .k-link").text());
+            }
+
+            function onActivate(e) {
+                kendoConsole.log("Activate: " + $(e.item).find("> .k-link").text());
             }
 
             function onContentLoad(e) {
@@ -94,13 +84,14 @@
             }
 
             $("#panelbar").kendoPanelBar({
+                expandMode: "single",
                 select: onSelect,
                 expand: onExpand,
-                expandMode: "single",
                 collapse: onCollapse,
+                activate: onActivate,
                 contentLoad: onContentLoad,
                 error: onError,
-                contentUrls: [ , , "../../content/web/panelbar/ajax/ajaxContent1.html", "error.html" ]
+                contentUrls: [ , , , "../../content/web/panelbar/ajax/ajaxContent1.html", "error.html" ]
             }).css({ width: "250px" }).css({ margin: "20px auto" });
         </script>
         <div class="console"></div>

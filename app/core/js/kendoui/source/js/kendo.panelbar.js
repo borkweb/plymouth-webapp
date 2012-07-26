@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -19,7 +19,7 @@
      * @section
      * <p>
      *  The <strong>PanelBar</strong> displays hierarchical data as a multi-level, expandable widget that is useful for
-     *  constained areas of a page. Its structure may be defined in HTML or configured dynamically through its API. The
+     *  constrained areas of a page. Its structure may be defined in HTML or configured dynamically through its API. The
      *  content for items can also be loaded via AJAX by specifying a content URL.
      * </p>
      * <h3>Getting Started</h3>
@@ -82,12 +82,33 @@
      *     dataSource: [
      *         {
      *             text: "Item 1",
-     *             items: [
-     *                 { text: "Sub Item 1" },
-     *                 { text: "Sub Item 2" }
-     *             ]
+     *             url: "http://www.kendoui.com/"                  // link URL if navigation is needed (optional)
      *         },
-     *         { text: "Item 2" }
+     *         {
+     *             text: "<b>Item 2</b>",
+     *             encoded: false,                                 // Allows use of HTML for item text
+     *             content: "text"                                 // content within an item
+     *         },
+     *         {
+     *             text: "Item 3",
+     *             contentUrl: "partialContent.html"               // content URL to load within an item
+     *         },
+     *         {
+     *             text: "Item 4",
+     *             imageUrl: "http://www.kendoui.com/test.jpg",    // item image URL, optional
+     *             expanded: true,                                 // item is rendered expanded
+     *             items: [{                                       // Sub item collection.
+     *                 text: "Sub Item 1"
+     *             },
+     *             {
+     *                 text: "Sub Item 2"
+     *             }]
+     *         },
+     *         {
+     *             text: "Item 5",
+     *             // item image sprite CSS class, optional
+     *             spriteCssClass: "imageClass3"
+     *         }
      *     ]
      * });
      *
@@ -96,7 +117,8 @@
      * <p>
      *  While any valid technique for loading AJAX content can be used, the <strong>PanelBar</strong> provides built-in
      *  support for asynchronously loading content from URLs. These URLs should return HTML fragments that can be
-     *  loaded in the <strong>PanelBar</strong> item content area.
+     *  loaded in the <strong>PanelBar</strong> item content area. Content DIVs should be completely empty for AJAX
+     *  loading to work.
      * </p>
      *
      * @exampleTitle Create a list of items with a target for dynamic content
@@ -199,6 +221,7 @@
         EXPAND = "expand",
         SELECT = "select",
         CONTENT = "k-content",
+        ACTIVATE = "activate",
         COLLAPSE = "collapse",
         CONTENTURL = "contentUrl",
         MOUSEENTER = "mouseenter",
@@ -212,11 +235,12 @@
         HIGHLIGHTEDCLASS = ".k-state-highlighted",
         clickableItems = ITEM + ":not(.k-state-disabled) .k-link",
         disabledItems = ITEM + ".k-state-disabled .k-link",
+        selectableItems = "> li > .k-state-selected, .k-panel > li > .k-state-selected",
+        highlightableItems = "> .k-state-highlighted, .k-panel > .k-state-highlighted",
         defaultState = "k-state-default",
         VISIBLE = ":visible",
         EMPTY = ":empty",
         SINGLE = "single",
-        animating = false,
 
         templates = {
             content: template(
@@ -242,7 +266,7 @@
                 "</li>"
             ),
             image: template("<img class='k-image' alt='' src='#= imageUrl #' />"),
-            arrow: template("<span class='#= arrowClass(item, group) #'></span>"),
+            arrow: template("<span class='#= arrowClass(item) #'></span>"),
             sprite: template("<span class='k-sprite #= spriteCssClass #'></span>"),
             empty: template("")
         },
@@ -254,12 +278,14 @@
 
                 if (item.enabled === false) {
                     result += " k-state-disabled";
+                } else if (item.expanded === true) {
+                    result += " k-state-active";
                 } else {
                     result += " k-state-default";
                 }
 
-                if (index == 0) {
-                    result += " k-first"
+                if (index === 0) {
+                    result += " k-first";
                 }
 
                 if (index == group.length-1) {
@@ -280,14 +306,10 @@
             textAttributes: function(item) {
                 return item.url ? " href='" + item.url + "'" : "";
             },
-            arrowClass: function(item, group) {
+            arrowClass: function(item) {
                 var result = "k-icon";
 
-                if (group.horizontal) {
-                    result += " k-arrow-down";
-                } else {
-                    result += " k-arrow-right";
-                }
+                result += item.expanded ? " k-i-arrow-n k-panelbar-collapse" : " k-i-arrow-s k-panelbar-expand";
 
                 return result;
             },
@@ -304,7 +326,7 @@
                 return "k-group k-panel";
             },
             contentAttributes: function(content) {
-                return content.active !== true ? " style='display:none'" : "";
+                return content.item.expanded !== true ? " style='display:none'" : "";
             },
             content: function(item) {
                 return item.content ? item.content : item.contentUrl ? "" : "&nbsp;";
@@ -334,7 +356,8 @@
             .removeAttr("disabled");
         item
             .filter(":not([class*=k-state])")
-            .children("a:focus")
+            .children("a")
+            .filter(":focus")
             .parent()
             .addClass(ACTIVECLASS.substr(1));
         item
@@ -365,12 +388,12 @@
 
         items
             .filter(":has(.k-panel),:has(.k-content)")
-            .children(".k-link:not(:has([class*=k-arrow]))")
+            .children(".k-link:not(:has([class*=k-i-arrow]))")
             .each(function () {
                 var item = $(this),
                     parent = item.parent();
 
-                item.append("<span class='k-icon " + (parent.hasClass(ACTIVECLASS.substr(1)) ? "k-arrow-up k-panelbar-collapse" : "k-arrow-down k-panelbar-expand") + "'/>");
+                item.append("<span class='k-icon " + (parent.hasClass(ACTIVECLASS.substr(1)) ? "k-i-arrow-n k-panelbar-collapse" : "k-i-arrow-s k-panelbar-expand") + "'/>");
             });
     }
 
@@ -381,6 +404,14 @@
         items.filter(".k-last:not(:last-child)").removeClass(LAST);
         items.filter(":first-child").addClass(FIRST);
         items.filter(":last-child").addClass(LAST);
+    }
+
+    function updateSelected (element, link) {
+        element.find(selectableItems).removeClass(SELECTEDCLASS.substr(1));
+        element.find(highlightableItems).removeClass(HIGHLIGHTEDCLASS.substr(1));
+
+        link.addClass(SELECTEDCLASS.substr(1));
+        link.parentsUntil(element, ITEM).filter(":has(.k-header)").addClass(HIGHLIGHTEDCLASS.substr(1));
     }
 
     var PanelBar = Widget.extend({/** @lends kendo.ui.PanelBar.prototype */
@@ -516,18 +547,11 @@
             Widget.fn.init.call(that, element, options);
 
             element = that.wrapper = that.element;
-
             options = that.options;
 
             if (options.dataSource) {
-                element.empty().append($(PanelBar.renderGroup({
-                    items: options.dataSource,
-                    group: {
-                        firstLevel: true,
-                        expanded: true
-                    },
-                    panelBar: {}
-                })).children());
+                that.element.empty();
+                that.append(options.dataSource, element);
             }
 
             that._updateClasses();
@@ -686,6 +710,49 @@
                  *
                  */
                 SELECT,
+
+                /**
+                 *
+                 * Triggered when an item of a PanelBar is activated.
+                 *
+                 * @name kendo.ui.PanelBar#activate
+                 * @event
+                 *
+                 * @param {Event} e
+                 *
+                 * @param {Element} e.item
+                 * The activated item of the PanelBar.
+                 *
+                 * @exampleTitle Attach activate event handler during initialization; detach via unbind()
+                 * @example
+                 * // event handler for activate
+                 * var onActivate = function(e) {
+                 *     // access the activated item via e.item (HTMLElement)
+                 * };
+                 *
+                 * // attach activate event handler during initialization
+                 * var panelBar = $("#panelBar").kendoPanelBar({
+                 *     activate: onActivate
+                 * });
+                 *
+                 * // detach activate event handler via unbind()
+                 * panelBar.data("kendoPanelBar").unbind("activate", onActivate);
+                 *
+                 * @exampleTitle Attach activate event handler via bind(); detach via unbind()
+                 * @example
+                 * // event handler for activate
+                 * var onActivate = function(e) {
+                 *     // access the activated item via e.item (HTMLElement)
+                 * };
+                 *
+                 * // attach activate event handler via bind()
+                 * $("#panelBar").data("kendoPanelBar").bind("activate", onActivate);
+                 *
+                 * // detach activate event handler via unbind()
+                 * $("#panelBar").data("kendoPanelBar").unbind("activate", onActivate);
+                 *
+                 */
+                ACTIVATE,
 
                 /**
                  * Fires when AJAX request results in an error.
@@ -897,7 +964,7 @@
             element = that.element.find(element);
 
             if (arguments.length === 0) {
-                return that.element.find(".k-item > " + SELECTEDCLASS).parent();
+                return that.element.find(selectableItems).parent();
             }
 
             element.each(function (index, item) {
@@ -908,11 +975,7 @@
                     return that;
                 }
 
-                $(SELECTEDCLASS, that.element).removeClass(SELECTEDCLASS.substr(1));
-                $(HIGHLIGHTEDCLASS, that.element).removeClass(HIGHLIGHTEDCLASS.substr(1));
-
-                link.addClass(SELECTEDCLASS.substr(1));
-                link.parentsUntil(that.element, ITEM).filter(":has(.k-header)").addClass(HIGHLIGHTEDCLASS.substr(1));
+                updateSelected(that.element, link);
             });
 
             return that;
@@ -979,7 +1042,8 @@
          *             url: "http://www.kendoui.com/"                  // link URL if navigation is needed (optional)
          *         },
          *         {
-         *             text: "Item 2",
+         *             text: "<b>Item 2</b>",
+         *             encoded: false,                                 // Allows use of HTML for item text
          *             content: "text"                                 // content within an item
          *         },
          *         {
@@ -989,20 +1053,21 @@
          *         {
          *             text: "Item 4",
          *             imageUrl: "http://www.kendoui.com/test.jpg",    // item image URL, optional
-         *             // sub-item collection
-         *             items:
-         *                 [
-         *                     { text: "Sub Item 1" },
-         *                     { text: "Sub Item 2" }
-         *                 ]
+         *             expanded: true,                                 // item is rendered expanded
+         *             items: [{                                       // Sub item collection.
+         *                 text: "Sub Item 1"
+         *             },
+         *             {
+         *                 text: "Sub Item 2"
+         *             }]
          *         },
          *         {
          *             text: "Item 5",
          *             // item image sprite CSS class, optional
          *             spriteCssClass: "imageClass3"
          *         }
-         *      ],
-         *      referenceItem
+         *     ],
+         *     referenceItem
          * );
          *
          */
@@ -1015,8 +1080,9 @@
                 inserted.group.append(this);
 
                 var contents = inserted.contents[idx];
-                if (contents)
+                if (contents) {
                     $(this).append(contents);
+                }
 
                 updateFirstLast(this);
             });
@@ -1049,7 +1115,8 @@
          *         url: "http://www.kendoui.com"                // Link URL if navigation is needed, optional.
          *     },
          *     {
-         *         text: "Item 2",
+         *         text: "<b>Item 2</b>",
+         *         encoded: false,                              // Allows use of HTML for item text
          *         content: "text"                              // Content for the content element
          *     },
          *     {
@@ -1059,6 +1126,7 @@
          *     {
          *         text: "Item 4",
          *         imageUrl: "http://www.kendoui.com/test.jpg", // Item image URL, optional.
+         *         expanded: true,                              // item is rendered expanded
          *         items: [{                                    // Sub item collection.
          *              text: "Sub Item 1"
          *         },
@@ -1083,8 +1151,9 @@
                 referenceItem.before(this);
 
                 var contents = inserted.contents[idx];
-                if (contents)
+                if (contents) {
                     $(this).append(contents);
+                }
 
                 updateFirstLast(this);
             });
@@ -1106,7 +1175,8 @@
          *         url: "http://www.kendoui.com"                // Link URL if navigation is needed, optional.
          *     },
          *     {
-         *         text: "Item 2",
+         *         text: "<b>Item 2</b>",
+         *         encoded: false,                              // Allows use of HTML for item text
          *         content: "text"                              // Content for the content element
          *     },
          *     {
@@ -1116,6 +1186,7 @@
          *     {
          *         text: "Item 4",
          *         imageUrl: "http://www.kendoui.com/test.jpg", // Item image URL, optional.
+         *         expanded: true,                              // item is rendered expanded
          *         items: [{                                    // Sub item collection.
          *              text: "Sub Item 1"
          *         },
@@ -1139,8 +1210,9 @@
                 referenceItem.after(this);
 
                 var contents = inserted.contents[idx];
-                if (contents)
+                if (contents) {
                     $(this).append(contents);
+                }
 
                 updateFirstLast(this);
             });
@@ -1208,14 +1280,14 @@
         },
 
         _insert: function (item, referenceItem, parent) {
-            var that = this, contents = [];
+            var that = this,
+                items, contents = [];
 
             if (!referenceItem || !referenceItem.length) {
                 parent = that.element;
             }
 
             var plain = $.isPlainObject(item),
-                items,
                 groupData = {
                     firstLevel: parent.hasClass("k-panelbar"),
                     expanded: parent.parent().hasClass("k-state-active"),
@@ -1306,11 +1378,7 @@
             var link = target.closest("." + LINK),
                 item = link.closest(ITEM);
 
-            $(SELECTEDCLASS, element).removeClass(SELECTEDCLASS.substr(1));
-            $(HIGHLIGHTEDCLASS, element).removeClass(HIGHLIGHTEDCLASS.substr(1));
-
-            link.addClass(SELECTEDCLASS.substr(1));
-            link.parentsUntil(that.element, ITEM).filter(":has(.k-header)").addClass(HIGHLIGHTEDCLASS.substr(1));
+            updateSelected(element, link);
 
             var contents = item.find(GROUPS).add(item.find(CONTENTS)),
                 href = link.attr(HREF),
@@ -1385,22 +1453,23 @@
                 return;
             }
 
-            visibility && element.css("height", element.height()); // Set initial height on visible items (due to a Chrome bug/feature).
-            element.css("height");
-
             element
                 .parent()
                 .toggleClass(defaultState, visibility)
                 .toggleClass(ACTIVECLASS.substr(1), !visibility)
                 .find("> .k-link > .k-icon")
-                    .toggleClass("k-arrow-up", !visibility)
+                    .toggleClass("k-i-arrow-n", !visibility)
                     .toggleClass("k-panelbar-collapse", !visibility)
-                    .toggleClass("k-arrow-down", visibility)
+                    .toggleClass("k-i-arrow-s", visibility)
                     .toggleClass("k-panelbar-expand", visibility);
 
             if (visibility) {
                 animation = extend( hasCollapseAnimation ? collapse
                                     : extend({ reverse: true }, animation), { show: false, hide: true });
+            } else {
+                animation = extend( { complete: function (element) {
+                    that._triggerEvent(ACTIVATE, element.closest(ITEM));
+                } }, animation );
             }
 
             element
@@ -1409,20 +1478,30 @@
         },
 
         _collapseAllExpanded: function (item) {
-            var that = this;
+            var that = this, children, stopExpand = false;
 
             if (item.find("> ." + LINK).hasClass("k-header")) {
                 var groups = item.find(GROUPS).add(item.find(CONTENTS));
-                if (groups.is(VISIBLE) || groups.length == 0) {
-                    return true;
-                } else {
-                    var children = $(that.element).children();
+
+                if (groups.is(VISIBLE)) {
+                    stopExpand = true;
+                }
+
+                if (!(groups.is(VISIBLE) || groups.length === 0)) {
+                    children = $(that.element).children();
                     children.find(GROUPS).add(children.find(CONTENTS))
-                            .filter(function () { return $(this).is(VISIBLE) })
+                            .filter(function () { return $(this).is(VISIBLE); })
                             .each(function (index, content) {
-                                that._toggleGroup($(content), true);
+                                content = $(content);
+
+                                stopExpand = that._triggerEvent(COLLAPSE, content.closest(ITEM));
+                                if (!stopExpand) {
+                                    that._toggleGroup(content, true);
+                                }
                             });
                 }
+
+                return stopExpand;
             }
         },
 
@@ -1444,6 +1523,7 @@
                 data: data,
 
                 error: function (xhr, status) {
+                    statusIcon.removeClass("k-loading");
                     if (that.trigger(ERROR, { xhr: xhr, status: status })) {
                         this.complete();
                     }
@@ -1476,14 +1556,13 @@
             options = extend({ panelBar: {}, group: {} }, options);
 
             var empty = templates.empty,
-                item = options.item,
-                panelBar = options.panelBar;
+                item = options.item;
 
             return templates.item(extend(options, {
                 image: item.imageUrl ? templates.image : empty,
                 sprite: item.spriteCssClass ? templates.sprite : empty,
                 itemWrapper: templates.itemWrapper,
-                arrow: item.items ? templates.arrow : empty,
+                arrow: item.items || item.content || item.contentUrl ? templates.arrow : empty,
                 subGroup: PanelBar.renderGroup
             }, rendering));
         },
@@ -1517,3 +1596,4 @@
     kendo.ui.plugin(PanelBar);
 
 })(jQuery);
+;

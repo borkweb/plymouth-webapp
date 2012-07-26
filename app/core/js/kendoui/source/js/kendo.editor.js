@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -13,6 +13,7 @@
     var kendo = window.kendo,
         Class = kendo.Class,
         Widget = kendo.ui.Widget,
+        os = kendo.support.mobileOS,
         extend = $.extend,
         deepExtend = kendo.deepExtend,
         keys = kendo.keys;
@@ -53,25 +54,17 @@
         colorPickerTemplate:
             '<li class="k-editor-colorpicker">' +
                 '<div class="k-widget k-colorpicker k-header #= cssClass #">' +
-                    '<span class="k-tool-icon"><span class="k-selected-color"></span></span><span class="k-icon k-arrow-down"></span>' +
+                    '<span class="k-tool-icon"><span class="k-selected-color"></span></span><span class="k-icon k-i-arrow-s"></span>' +
             '</div></li>',
 
         comboBoxTemplate:
             '<li class="k-editor-combobox">' +
                 '<select title="#= tooltip #" class="#= cssClass #"></select>' +
-//                '<div class="k-widget k-combobox k-header #= cssClass #">' +
-//                    '<div class="k-dropdown-wrap k-state-default">' +
-//                        '<input class="k-input" id="-input" title="#= tooltip #" type="text" value="#=initialValue#" />' +
-//                        '<span class="k-select k-header"><span class="k-icon k-arrow-down">select</span></span>' +
-//                    '</div><input style="display:none" type="text" value="inherit" /></div>' +
             '</li>',
 
         dropDownListTemplate:
             '<li class="k-editor-selectbox">' +
                 '<select title="#= tooltip #" class="#= cssClass #"></select>' +
-//                '<div class="k-selectbox k-header #= cssClass #"><div class="k-dropdown-wrap k-state-default">' +
-//                    '<span class="k-input">#=initialValue#</span><span class="k-select"><span class="k-icon k-arrow-down">select</span></span>' +
-//                '</div></div>' +
             '</li>',
 
         focusable: ".k-colorpicker,a.k-tool-icon:not(.k-state-disabled),.k-selectbox, .k-combobox .k-input",
@@ -82,8 +75,7 @@
                 h = textarea.height(),
                 template = EditorUtils.editorWrapperTemplate,
                 editorWrap = $(template).insertBefore(textarea).width(w).height(h),
-                editArea = editorWrap.find(".k-editable-area"),
-                toolsArea = editorWrap.find(".k-editor-toolbar");
+                editArea = editorWrap.find(".k-editable-area");
 
             textarea.appendTo(editArea).addClass("k-content k-raw-content").hide();
 
@@ -99,24 +91,40 @@
                 toolsArea = $(editor.element).closest(".k-editor").find(".k-editor-toolbar");
 
             if (tools) {
-                for (j = 0; j < tools.length; j++) {
-                    currentTool = tools[j];
+                for (i = 0; i < tools.length; i++) {
+                    currentTool = tools[i];
 
                     if ($.isPlainObject(currentTool)) {
-                        options = extend({ cssClass: "k-custom", type: "button", tooltip: "" }, currentTool);
 
-                        if (options.name) {
-                            options.cssClass = "k-" + options.name;
-                        }
+                        if (currentTool.name && editor.tools[currentTool.name]) {
+                            $.extend(editor.tools[currentTool.name].options, currentTool);
 
-                        if (!options.template) {
-                            if (options.type == "button") {
-                                options.template = EditorUtils.buttonTemplate;
+                            editorTools[currentTool.name] = editor.tools[currentTool.name];
+                            options = editorTools[currentTool.name].options;
+                        } else {
+                            options = extend({ cssClass: "k-i-custom", type: "button", tooltip: "" }, currentTool);
+
+                            if (options.name) {
+                                options.cssClass = "k-" + (options.name == "custom" ? "i-custom" : options.name);
                             }
+
+                            if (!options.template) {
+                                if (options.type == "button") {
+                                    options.template = EditorUtils.buttonTemplate;
+                                }
+                            }
+
+                            //if (options.exec && typeof(options.exec) == "string") {
+                            //    options.exec = $.parseJSON('{"exec":' + '"' + options.exec + '"}').exec;
+                            //}
                         }
-                    } else if (editor._tools[currentTool]) {
-                        editorTools[currentTool] = editor._tools[currentTool];
+                    } else if (editor.tools[currentTool]) {
+                        editorTools[currentTool] = editor.tools[currentTool];
                         options = editorTools[currentTool].options;
+                    }
+
+                    if (!options) {
+                        continue;
                     }
 
                     template = options.template;
@@ -133,6 +141,10 @@
                             template = template(options);
                         }
 
+                        if (template.indexOf('<li') !== 0) {
+                            template = "<li class='k-editor-template'>" + template + "</li>";
+                        }
+
                         tool = $(template).appendTo(toolsArea);
 
                         if (options.type == "button" && options.exec) {
@@ -142,59 +154,75 @@
                 }
             }
 
-            for (j = 0; j < nativeTools.length; j++) {
-                editorTools[nativeTools[j]] = editor._tools[nativeTools[j]];
+            for (i = 0; i < nativeTools.length; i++) {
+                if (!editorTools[nativeTools[i]]) {
+                    editorTools[nativeTools[i]] = editor.tools[nativeTools[i]];
+                }
             }
 
             editor.options.tools = editorTools;
         },
 
-        createContentElement: function($textarea, stylesheets) {
-            $textarea.hide();
-            var iframe = $("<iframe />", { src: 'javascript:"<html></html>"', frameBorder: "0" })
+        decorateStyleToolItems: function(textarea) {
+            var selectBox = textarea.data.closest(".k-editor").find(".k-style").data("kendoSelectBox");
+
+            if (!selectBox) {
+                return;
+            }
+
+            var classes = selectBox.dataSource.view();
+
+            selectBox.list.find(".k-item").each(function(idx, element){
+                var item = $(element),
+                    text = item.text(),
+                
+                    style = kendo.ui.editor.Dom.inlineStyle(textarea.data.data("kendoEditor").document, "span", {className : classes[idx].value});
+                item.html('<span unselectable="on" style="display:block;' + style +'">' + text + '</span>');
+            });
+        },
+
+        createContentElement: function(textarea, stylesheets) {
+            var iframe, wnd, doc,
+                rtlStyle = textarea.closest(".k-rtl").length ? "direction:rtl;" : "";
+
+            textarea.hide();
+            iframe = $("<iframe />", { src: 'javascript:"<html></html>"', frameBorder: "0" })
                             .css("display", "")
                             .addClass("k-content")
-                            .insertBefore($textarea)[0];
+                            .insertBefore(textarea)[0];
 
-            var window = iframe.contentWindow || iframe;
-            var document = window.document || iframe.contentDocument;
+            wnd = iframe.contentWindow || iframe;
+            if (stylesheets.length > 0) {
+                $(iframe).one("load", textarea, EditorUtils.decorateStyleToolItems);
+            }
+            doc = wnd.document || iframe.contentDocument;
 
-            var html = $textarea.val()
-                        // <img>\s+\w+ creates invalid nodes after cut in IE
-                        .replace(/(<\/?img[^>]*>)[\r\n\v\f\t ]+/ig, "$1")
-                        // indented HTML introduces problematic ranges in IE
-                        .replace(/[\r\n\v\f\t ]+/ig, " ");
-
-            if (!html.length && $.browser.mozilla)
-                html = '<br _moz_dirty="true" />';
-
-            var rtlStyle = $textarea.closest(".k-rtl").length ? "direction:rtl;" : "";
-
-            document.designMode = "On";
-            document.open();
-            document.write(
-                    '<!DOCTYPE html><html><head>' +
-                    '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' +
-                    '<style type="text/css">' +
-                        'html,body{padding:0;margin:0;font-family:Verdana,Geneva,sans-serif;background:#fff;}' +
-                        'html{font-size:100%}body{font-size:.75em;line-height:1.5;padding-top:1px;margin-top:-1px;' +
+            doc.designMode = "On";
+            doc.open();
+            doc.write(
+                    "<!DOCTYPE html><html><head>" +
+                    "<meta charset='utf-8' />" +
+                    "<style>" +
+                        "html,body{padding:0;margin:0;font-family:Verdana,Geneva,sans-serif;background:#fff;}" +
+                        "html{font-size:100%}body{font-size:.75em;line-height:1.5;padding-top:1px;margin-top:-1px;" +
+                        "word-wrap: break-word;-webkit-nbsp-mode: space;-webkit-line-break: after-white-space;" +
                         rtlStyle +
-                        '}' +
-                        'h1{font-size:2em;margin:.67em 0}h2{font-size:1.5em}h3{font-size:1.16em}h4{font-size:1em}h5{font-size:.83em}h6{font-size:.7em}' +
-                        'p{margin:0 0 1em;padding:0 .2em}.k-marker{display:none;}.k-paste-container{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}' +
-                        'ul,ol{padding-left:2.5em}' +
-                        'a{color:#00a}' +
-                        'code{font-size:1.23em}' +
-                    '</style>' +
-                    $.map(stylesheets, function(href){ return ['<link type="text/css" href="', href, '" rel="stylesheet"/>'].join(''); }).join('') +
-                    '</head><body spellcheck="false">' +
-                    html +
-                    '</body></html>'
+                        "}" +
+                        "h1{font-size:2em;margin:.67em 0}h2{font-size:1.5em}h3{font-size:1.16em}h4{font-size:1em}h5{font-size:.83em}h6{font-size:.7em}" +
+                        "p{margin:0 0 1em;padding:0 .2em}.k-marker{display:none;}.k-paste-container{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}" +
+                        "ul,ol{padding-left:2.5em}" +
+                        "a{color:#00a}" +
+                        "code{font-size:1.23em}" +
+                    "</style>" +
+                    $.map(stylesheets, function(href){
+                        return "<link rel='stylesheet' href='" + href + "'>";
+                    }).join("") +
+                    "</head><body></body></html>"
                 );
 
-            document.close();
+            doc.close();
 
-            return window;
+            return wnd;
         },
 
         initializeContentElement: function(editor) {
@@ -255,10 +283,6 @@
                     keyup: function (e) {
                         var selectionCodes = [8, 9, 33, 34, 35, 36, 37, 38, 39, 40, 40, 45, 46];
 
-                        if ($.browser.mozilla && e.keyCode == keys.BACKSPACE) {
-                            fixBackspace(editor, e);
-                        }
-
                         if ($.inArray(e.keyCode, selectionCodes) > -1 || (e.keyCode == 65 && e.ctrlKey && !e.altKey && !e.shiftKey)) {
                             editor.pendingFormats.clear();
                             select(editor);
@@ -281,8 +305,9 @@
 
                         var target = $(e.target);
 
-                        if (!$.browser.gecko && e.which == 2 && target.is("a[href]"))
-                        window.open(target.attr("href"), "_new");
+                        if (!$.browser.gecko && e.which == 2 && target.is("a[href]")) {
+                            window.open(target.attr("href"), "_new");
+                        }
                     },
                     mouseup: function () {
                         select(editor);
@@ -292,9 +317,9 @@
             $(editor.window)
                 .bind("blur", function () {
                     var old = editor.textarea.value,
-                    value = editor.encodedValue();
+                        value = editor.encodedValue();
 
-                    editor.update(value);
+                    editor.update();
 
                     if (value != old) {
                         editor.trigger("change");
@@ -307,44 +332,12 @@
                   });
         },
 
-        fixBackspace: function(editor, e) {
-
-            var range = editor.getRange(),
-                startContainer = range.startContainer,
-                dom = kendo.ui.editor.Dom;
-
-            if (startContainer == editor.body.firstChild || !dom.isBlock(startContainer)
-            || (startContainer.childNodes.length > 0 && !(startContainer.childNodes.length == 1 && dom.is(startContainer.firstChild, "br"))))
-                return;
-
-            var previousBlock = startContainer.previousSibling;
-
-            while (previousBlock && !dom.isBlock(previousBlock))
-                previousBlock = previousBlock.previousSibling;
-
-            if (!previousBlock)
-                return;
-
-            var walker = editor.document.createTreeWalker(previousBlock, NodeFilter.SHOW_TEXT, null, false);
-
-            var textNode;
-
-            while (textNode = walker.nextNode())
-                previousBlock = textNode;
-
-            range.setStart(previousBlock, dom.isDataNode(previousBlock) ? previousBlock.nodeValue.length : 0);
-            range.collapse(true);
-            kendo.ui.editor.RangeUtils.selectRange(range);
-
-            dom.remove(startContainer);
-
-            e.preventDefault();
-        },
-
         formatByName: function(name, format) {
-            for (var i = 0; i < format.length; i++)
-                if ($.inArray(name, format[i].tags) >= 0)
+            for (var i = 0; i < format.length; i++) {
+                if ($.inArray(name, format[i].tags) >= 0) {
                     return format[i];
+                }
+            }
         },
 
         registerTool: function(toolName, tool) {
@@ -364,11 +357,9 @@
         focusable = EditorUtils.focusable,
         wrapTextarea = EditorUtils.wrapTextarea,
         renderTools = EditorUtils.renderTools,
-        createContentElement = EditorUtils.createContentElement,
-        initializeContentElement = EditorUtils.initializeContentElement,
-        fixBackspace = EditorUtils.fixBackspace;
+        initializeContentElement = EditorUtils.initializeContentElement;
 
-    var localization = {
+    var messages = {
         bold: "Bold",
         italic: "Italic",
         underline: "Underline",
@@ -404,8 +395,7 @@
         directoryNotFound: "A directory with this name was not found."
     };
 
-    var emptyFinder = function () { return { isFormatted: function () { return false } } };
-    var supportedBrowser = !kendo.support.mobileOS || (kendo.support.mobileOS.ios && kendo.support.mobileOS.majorVersion >= 5);
+    var supportedBrowser = !os || (os.ios && os.flatVersion >= 500) || (!os.ios && typeof(document.documentElement.contentEditable) != 'undefined');
 
     var Editor = Widget.extend({
         init: function (element, options) {
@@ -415,9 +405,13 @@
             }
 
             var that = this,
-                wrapper;
+                wrapper,
+                value,
+                editorNS = kendo.ui.editor;
 
             Widget.fn.init.call(that, element, options);
+
+            that.tools = deepExtend({}, kendo.ui.Editor.fn._tools);
 
             that.options = deepExtend({}, that.options, options);
 
@@ -427,8 +421,8 @@
                 that.update();
             });
 
-            for (var id in that._tools) {
-                that._tools[id].name = id.toLowerCase();
+            for (var id in that.tools) {
+                that.tools[id].name = id.toLowerCase();
             }
 
             that.textarea = element.attr("autocomplete", "off")[0];
@@ -439,34 +433,51 @@
 
             initializeContentElement(that);
 
-            that.keyboard = new kendo.ui.editor.Keyboard([new kendo.ui.editor.TypingHandler(that), new kendo.ui.editor.SystemHandler(that)]);
+            that.keyboard = new editorNS.Keyboard([
+                new editorNS.TypingHandler(that),
+                new editorNS.SystemHandler(that)
+            ]);
 
-            that.clipboard = new kendo.ui.editor.Clipboard(this);
+            that.clipboard = new editorNS.Clipboard(this);
 
-            that.pendingFormats = new kendo.ui.editor.PendingFormats(this);
+            that.pendingFormats = new editorNS.PendingFormats(this);
 
-            that.undoRedoStack = new kendo.ui.editor.UndoRedoStack();
+            that.undoRedoStack = new editorNS.UndoRedoStack();
 
             if (options && options.value) {
-                that.value(options.value);
+                value = options.value;
+            } else {
+                // indented HTML introduces problematic ranges in IE
+                value = element.val().replace(/[\r\n\v\f\t ]+/ig, " ");
             }
+
+            that.value(value);
 
             function toolFromClassName(element) {
                 var tool = $.grep(element.className.split(" "), function (x) {
                     return !/^k-(widget|tool-icon|state-hover|header|combobox|dropdown|selectbox|colorpicker)$/i.test(x);
                 });
-                return tool[0] ? tool[0].substring(2) : "custom";
+                return tool[0] ? tool[0].substring(tool[0].lastIndexOf("-") + 1) : "custom";
             }
 
             function appendShortcutSequence(localizedText, tool) {
-                if (!tool.key)
+                if (!tool.key) {
                     return localizedText;
+                }
 
                 var res = localizedText + " (";
 
-                if (tool.ctrl) res += "Ctrl + ";
-                if (tool.shift) res += "Shift + ";
-                if (tool.alt) res += "Alt + ";
+                if (tool.ctrl) {
+                    res += "Ctrl + ";
+                }
+
+                if (tool.shift) {
+                    res += "Shift + ";
+                }
+
+                if (tool.alt) {
+                    res += "Alt + ";
+                }
 
                 res += tool.key + ")";
 
@@ -493,8 +504,8 @@
             });
 
             wrapper
-                .delegate(enabledButtons, "mouseenter", function() { $(this).addClass("k-state-hover")})
-                .delegate(enabledButtons, "mouseleave", function() { $(this).removeClass("k-state-hover")})
+                .delegate(enabledButtons, "mouseenter", function() { $(this).addClass("k-state-hover"); })
+                .delegate(enabledButtons, "mouseleave", function() { $(this).removeClass("k-state-hover"); })
                 .delegate(buttons, "mousedown", false)
                 .delegate(focusable, "keydown", function(e) {
                     var closestLi = $(this).closest("li"),
@@ -523,7 +534,7 @@
 
                             focusElement = closestLi.nextAll(focusableTool).first().find(focusable);
 
-                            if (focusElement.length == 0) {
+                            if (!focusElement.length) {
                                 focusElement = that;
                             }
                         }
@@ -544,7 +555,7 @@
                         var toolName = toolFromClassName(this),
                             options = that.options,
                             tool = options.tools[toolName],
-                            description = options.localization[toolName],
+                            description = options.messages[toolName],
                             $this = $(this);
 
                         if (!tool) {
@@ -552,8 +563,7 @@
                         }
 
                         if (toolName == "fontSize" || toolName == "fontName") {
-                            var inheritText = options.localization[toolName + "Inherit"] || localization[toolName + "Inherit"]
-                            options[toolName][0].Text = inheritText;
+                            var inheritText = options.messages[toolName + "Inherit"] || messages[toolName + "Inherit"];
                             $this.find("input").val(inheritText).end()
                                  .find("span.k-input").text(inheritText).end();
                         }
@@ -568,7 +578,7 @@
                 that.bind("select", function() {
                     var range = that.getRange();
 
-                    var nodes = kendo.ui.editor.RangeUtils.textNodes(range);
+                    var nodes = editorNS.RangeUtils.textNodes(range);
 
                     if (!nodes.length) {
                         nodes = [range.startContainer];
@@ -585,21 +595,24 @@
 
             $(document)
                 .bind("DOMNodeInserted", function(e) {
-                    if ($.contains(e.target, that.wrapper[0]) || that.wrapper[0] == e.target) {
+                    var wrapper = that.wrapper;
+
+                    if ($.contains(e.target, wrapper[0]) || wrapper[0] == e.target) {
                         // preserve updated value before re-initializing
                         // don't use update() to prevent the editor from encoding the content too early
                         that.textarea.value = that.value();
-                        that.wrapper.find("iframe").remove();
+                        wrapper.find("iframe").remove();
                         initializeContentElement(that);
                     }
                 })
                 .bind("mousedown", function(e) {
                     try {
-                        if (that.keyboard.isTypingInProgress())
+                        if (that.keyboard.isTypingInProgress()) {
                             that.keyboard.endTyping(true);
+                        }
 
                         if (!that.selectionRestorePoint) {
-                            that.selectionRestorePoint = new kendo.ui.editor.RestorePoint(that.getRange());
+                            that.selectionRestorePoint = new editorNS.RestorePoint(that.getRange());
                         }
                     } catch (e) { }
                 });
@@ -617,7 +630,7 @@
 
         options: {
             name: "Editor",
-            localization: localization,
+            messages: messages,
             formats: {},
             encoded: true,
             stylesheets: [],
@@ -626,36 +639,34 @@
                 animation: false
             },
             fontName: [
-                { Text: localization.fontNameInherit,  Value: "inherit" },
-                { Text: "Arial", Value: "Arial,Helvetica,sans-serif" },
-                { Text: "Courier New", Value: "'Courier New',Courier,monospace" },
-                { Text: "Georgia", Value: "Georgia,serif" },
-                { Text: "Impact", Value: "Impact,Charcoal,sans-serif" },
-                { Text: "Lucida Console", Value: "'Lucida Console',Monaco,monospace" },
-                { Text: "Tahoma", Value: "Tahoma,Geneva,sans-serif" },
-                { Text: "Times New Roman", Value: "'Times New Roman',Times,serif" },
-                { Text: "Trebuchet MS", Value: "'Trebuchet MS',Helvetica,sans-serif" },
-                { Text: "Verdana", Value: "Verdana,Geneva,sans-serif" }
+                { text: "Arial", value: "Arial,Helvetica,sans-serif" },
+                { text: "Courier New", value: "'Courier New',Courier,monospace" },
+                { text: "Georgia", value: "Georgia,serif" },
+                { text: "Impact", value: "Impact,Charcoal,sans-serif" },
+                { text: "Lucida Console", value: "'Lucida Console',Monaco,monospace" },
+                { text: "Tahoma", value: "Tahoma,Geneva,sans-serif" },
+                { text: "Times New Roman", value: "'Times New Roman',Times,serif" },
+                { text: "Trebuchet MS", value: "'Trebuchet MS',Helvetica,sans-serif" },
+                { text: "Verdana", value: "Verdana,Geneva,sans-serif" }
             ],
             fontSize: [
-                { Text: localization.fontSizeInherit,  Value: "inherit" },
-                { Text: "1 (8pt)",  Value: "xx-small" },
-                { Text: "2 (10pt)", Value: "x-small" },
-                { Text: "3 (12pt)", Value: "small" },
-                { Text: "4 (14pt)", Value: "medium" },
-                { Text: "5 (18pt)", Value: "large" },
-                { Text: "6 (24pt)", Value: "x-large" },
-                { Text: "7 (36pt)", Value: "xx-large" }
+                { text: "1 (8pt)",  value: "xx-small" },
+                { text: "2 (10pt)", value: "x-small" },
+                { text: "3 (12pt)", value: "small" },
+                { text: "4 (14pt)", value: "medium" },
+                { text: "5 (18pt)", value: "large" },
+                { text: "6 (24pt)", value: "x-large" },
+                { text: "7 (36pt)", value: "xx-large" }
             ],
             formatBlock: [
-                { Text: "Paragraph", Value: "p" },
-                { Text: "Quotation", Value: "blockquote" },
-                { Text: "Heading 1", Value: "h1" },
-                { Text: "Heading 2", Value: "h2" },
-                { Text: "Heading 3", Value: "h3" },
-                { Text: "Heading 4", Value: "h4" },
-                { Text: "Heading 5", Value: "h5" },
-                { Text: "Heading 6", Value: "h6" }
+                { text: "Paragraph", value: "p" },
+                { text: "Quotation", value: "blockquote" },
+                { text: "Heading 1", value: "h1" },
+                { text: "Heading 2", value: "h2" },
+                { text: "Heading 3", value: "h3" },
+                { text: "Heading 4", value: "h4" },
+                { text: "Heading 5", value: "h5" },
+                { text: "Heading 6", value: "h6" }
             ],
             tools: [
                 "bold",
@@ -677,10 +688,10 @@
                 "formatBlock",
                 "createLink",
                 "unlink",
-                "insertImage"
-                //"style",
-                //"subscript",
-                //"superscript",
+                "insertImage"/*,
+                "style", // declare explicitly
+                "subscript", // declare explicitly
+                "superscript" // declare explicitly */
             ]
         },
 
@@ -688,7 +699,8 @@
             "insertLineBreak",
             "insertParagraph",
             "redo",
-            "undo"
+            "undo",
+            "insertHtml"
         ],
 
         _tools: {
@@ -696,27 +708,33 @@
             redo: { options: { key: "Y", ctrl: true } }
         },
 
+        tools: {}, // tools collection is copied from _tools during initialization
+
         value: function (html) {
             var body = this.body,
                 dom = kendo.ui.editor.Dom;
-            if (html === undefined) return kendo.ui.editor.Serializer.domToXhtml(body);
+
+            if (html === undefined) {
+                return kendo.ui.editor.Serializer.domToXhtml(body);
+            }
 
             this.pendingFormats.clear();
 
             // handle null value passed as a parameter
-            html = html || "";
+            html = (html || "")
+                // Some browsers do not allow setting CDATA sections through innerHTML so we encode them
+                .replace(/<!\[CDATA\[(.*)?\]\]>/g, "<!--[CDATA[$1]]-->")
+                // Encode script tags to avoid execution and lost content (IE)
+                .replace(/<script([^>]*)>(.*)?<\/script>/ig, "<telerik:script $1>$2<\/telerik:script>")
+                // <img>\s+\w+ creates invalid nodes after cut in IE
+                .replace(/(<\/?img[^>]*>)[\r\n\v\f\t ]+/ig, "$1");
 
-            // Some browsers do not allow setting CDATA sections through innerHTML so we encode them as comments
-            html = html.replace(/<!\[CDATA\[(.*)?\]\]>/g, "<!--[CDATA[$1]]-->");
-
-            // Encode script tags to avoid execution and lost content (IE)
-            html = html.replace(/<script([^>]*)>(.*)?<\/script>/ig, "<telerik:script $1>$2<\/telerik:script>");
-
-            // Add <br/>s to empty paragraphs in mozilla
-            if ($.browser.mozilla)
+            if (!$.browser.msie) {
+                // Add <br/>s to empty paragraphs in mozilla/chrome, to make them focusable
                 html = html.replace(/<p([^>]*)>(\s*)?<\/p>/ig, '<p $1><br _moz_dirty="" /><\/p>');
+            }
 
-            if ($.browser.msie && parseInt($.browser.version) < 9) {
+            if ($.browser.msie && parseInt($.browser.version, 10) < 9) {
                 // Internet Explorer removes comments from the beginning of the html
                 html = "<br/>" + html;
 
@@ -781,10 +799,11 @@
         },
 
         getRange: function () {
-            var selection = this.getSelection();
-            var range = selection.rangeCount > 0 ? selection.getRangeAt(0) : this.createRange();
+            var selection = this.getSelection(),
+                range = selection.rangeCount > 0 ? selection.getRangeAt(0) : this.createRange(),
+                doc = this.document;
 
-            if (range.startContainer == this.document && range.endContainer == this.document && range.startOffset == 0 && range.endOffset == 0) {
+            if (range.startContainer == doc && range.endContainer == doc && !range.startOffset && !range.endOffset) {
                 range.setStart(this.body, 0);
                 range.collapse(true);
             }
@@ -924,7 +943,6 @@
 (function($) {
 
 var kendo = window.kendo,
-    Class = kendo.Class,
     map = $.map,
     extend = $.extend,
     STYLE = "style",
@@ -952,25 +970,33 @@ var empty = makeMap("area,base,basefont,br,col,frame,hr,img,input,isindex,link,m
     fillAttrs = makeMap("checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected".split(","));
 
 var normalize = function (node) {
-    if (node.nodeType == 1)
+    if (node.nodeType == 1) {
         node.normalize();
+    }
 };
 
-if ($.browser.msie && parseInt($.browser.version) >= 8) {
+if ($.browser.msie && parseInt($.browser.version, 10) >= 8) {
     normalize = function(parent) {
         if (parent.nodeType == 1 && parent.firstChild) {
             var prev = parent.firstChild,
                 node = prev;
 
-            while (node = node.nextSibling) {
+            while (true) {
+                node = node.nextSibling;
+
+                if (!node) {
+                    break;
+                }
+
                 if (node.nodeType == 3 && prev.nodeType == 3) {
                     node.nodeValue = prev.nodeValue + node.nodeValue;
                     Dom.remove(prev);
                 }
+
                 prev = node;
             }
         }
-    }
+    };
 }
 
 var whitespace = /^\s+$/,
@@ -980,19 +1006,30 @@ var whitespace = /^\s+$/,
     closeTag = />/g,
     nbsp = /\u00a0/g,
     bom = /\ufeff/g;
-var cssAttributes = ("color,padding-left,padding-right,padding-top,padding-bottom,\
-background-color,background-attachment,background-image,background-position,background-repeat,\
-border-top-style,border-top-width,border-top-color,\
-border-bottom-style,border-bottom-width,border-bottom-color,\
-border-left-style,border-left-width,border-left-color,\
-border-right-style,border-right-width,border-right-color,\
-font-family,font-size,font-style,font-variant,font-weight,line-height"
-).split(",");
+    var cssAttributes =
+           ("color,padding-left,padding-right,padding-top,padding-bottom," +
+            "background-color,background-attachment,background-image,background-position,background-repeat," +
+            "border-top-style,border-top-width,border-top-color," +
+            "border-bottom-style,border-bottom-width,border-bottom-color," +
+            "border-left-style,border-left-width,border-left-color," +
+            "border-right-style,border-right-width,border-right-color," +
+            "font-family,font-size,font-style,font-variant,font-weight,line-height"
+           ).split(",");
 
 var Dom = {
     findNodeIndex: function(node) {
         var i = 0;
-        while (node = node.previousSibling) i++;
+
+        while (true) {
+            node = node.previousSibling;
+
+            if (!node) {
+                break;
+            }
+
+            i++;
+        }
+
         return i;
     },
 
@@ -1013,9 +1050,11 @@ var Dom = {
     },
 
     findClosestAncestor: function(root, node) {
-        if (Dom.isAncestorOf(root, node))
-            while (node && node.parentNode != root)
+        if (Dom.isAncestorOf(root, node)) {
+            while (node && node.parentNode != root) {
                 node = node.parentNode;
+            }
+        }
 
         return node;
     },
@@ -1035,14 +1074,17 @@ var Dom = {
         for (var key in attributes) {
             var value = node[key];
 
-            if (key == FLOAT)
+            if (key == FLOAT) {
                 value = node[$.support.cssFloat ? CSSFLOAT : STYLEFLOAT];
+            }
 
             if (typeof value == "object") {
-                if (!Dom.attrEquals(value, attributes[key]))
+                if (!Dom.attrEquals(value, attributes[key])) {
                     return false;
-            } else if (value != attributes[key])
+                }
+            } else if (value != attributes[key]) {
                 return false;
+            }
         }
 
         return true;
@@ -1058,8 +1100,9 @@ var Dom = {
 
         for (i = 0, len = nodes.length; i < len; i++) {
             var block = Dom.parentOfType(nodes[i], Dom.blockElements);
-            if (block && $.inArray(block, blocks) < 0)
+            if (block && $.inArray(block, blocks) < 0) {
                 blocks.push(block);
+            }
         }
 
         return blocks;
@@ -1078,10 +1121,13 @@ var Dom = {
     toHex: function (color) {
         var matches = rgb.exec(color);
 
-        if (!matches) return color;
+        if (!matches) {
+            return color;
+        }
 
         return "#" + map(matches.slice(1), function (x) {
-            return x = parseInt(x).toString(16), x.length > 1 ? x : "0" + x;
+            x = parseInt(x, 10).toString(16);
+            return x.length > 1 ? x : "0" + x;
         }).join("");
     },
 
@@ -1103,14 +1149,19 @@ var Dom = {
     },
 
     lastTextNode: function(node) {
-        if (node.nodeType == 3)
-            return node;
-
         var result = null;
 
-        for (var child = node.lastChild; child; child = child.previousSibling)
-            if (result = Dom.lastTextNode(child))
+        if (node.nodeType == 3) {
+            return node;
+        }
+
+        for (var child = node.lastChild; child; child = child.previousSibling) {
+            result = Dom.lastTextNode(child);
+
+            if (result) {
                 return result;
+            }
+        }
 
         return result;
     },
@@ -1148,10 +1199,11 @@ var Dom = {
     },
 
     insertBefore: function (newElement, referenceElement) {
-        if (referenceElement.parentNode)
+        if (referenceElement.parentNode) {
             return referenceElement.parentNode.insertBefore(newElement, referenceElement);
-        else
+        } else {
             return referenceElement;
+        }
     },
 
     insertAfter: function (newElement, referenceElement) {
@@ -1166,14 +1218,18 @@ var Dom = {
         for (var i = parent.childNodes.length - 1; i >= 0; i--) {
             var node = parent.childNodes[i];
             if (Dom.isDataNode(node)) {
-                if (node.nodeValue.replace(bom, "").length == 0)
+                if (!node.nodeValue.replace(bom, "").length) {
                     Dom.remove(node);
-                if (Dom.isWhitespace(node))
+                }
+
+                if (Dom.isWhitespace(node)) {
                     Dom.insertBefore(node, parent);
+                }
             } else if (node.className != KMARKER) {
                 Dom.trim(node);
-                if (node.childNodes.length == 0 && !Dom.isEmpty(node))
+                if (!node.childNodes.length && !Dom.isEmpty(node)) {
                     Dom.remove(node);
+                }
             }
         }
 
@@ -1230,8 +1286,9 @@ var Dom = {
 
     unwrap: function (node) {
         var parent = node.parentNode;
-        while (node.firstChild)
+        while (node.firstChild) {
             parent.insertBefore(node.firstChild, node);
+        }
 
         parent.removeChild(node);
     },
@@ -1256,14 +1313,16 @@ var Dom = {
 
     unstyle: function (node, value) {
         for (var key in value) {
-            if (key == FLOAT)
+            if (key == FLOAT) {
                 key = $.support.cssFloat ? CSSFLOAT : STYLEFLOAT;
+            }
 
             node.style[key] = "";
         }
 
-        if (node.style.cssText == "")
+        if (node.style.cssText === "") {
             node.removeAttribute(STYLE);
+        }
     },
 
     inlineStyle: function(document, name, attributes) {
@@ -1336,15 +1395,17 @@ var Dom = {
         for (i = 0; i < minPathLength; i++) {
             first = paths[0][i];
 
-            for (j = 1; j < count; j++)
-                if (first != paths[j][i])
+            for (j = 1; j < count; j++) {
+                if (first != paths[j][i]) {
                     return output;
+                }
+            }
 
             output = first;
         }
         return output;
     }
-}
+};
 
 kendo.ui.editor.Dom = Dom;
 
@@ -1352,8 +1413,7 @@ kendo.ui.editor.Dom = Dom;
 (function($, undefined) {
 
 // Imports ================================================================
-var doc = document,
-    kendo = window.kendo,
+var kendo = window.kendo,
     Editor = kendo.ui.editor,
     dom = Editor.Dom,
     extend = $.extend;
@@ -1367,10 +1427,11 @@ var Serializer = {
     domToXhtml: function(root) {
         var result = [];
         var tagMap = {
-            'telerik:script': { start: function (node) { result.push('<script'); attr(node); result.push('>'); }, end: function () { result.push('</script>') } },
-            b: { start: function () { result.push('<strong>') }, end: function () { result.push('</strong>') } },
-            i: { start: function () { result.push('<em>') }, end: function () { result.push('</em>') } },
-            u: { start: function () { result.push('<span style="text-decoration:underline;">') }, end: function () { result.push('</span>') } },
+            'telerik:script': { start: function (node) { result.push('<script'); attr(node); result.push('>'); }, end: function () { result.push('</script>'); } },
+            b: { start: function () { result.push('<strong>'); }, end: function () { result.push('</strong>'); } },
+            i: { start: function () { result.push('<em>'); }, end: function () { result.push('</em>'); } },
+            u: { start: function () { result.push('<span style="text-decoration:underline;">'); }, end: function () { result.push('</span>'); } },
+            iframe: { start: function (node) { result.push('<iframe'); attr(node); result.push('>'); }, end: function () { result.push('</iframe>'); } },
             font: {
                 start: function (node) {
                     result.push('<span style="');
@@ -1380,7 +1441,7 @@ var Serializer = {
                     var face = node.getAttribute('face');
 
                     if (color) {
-                        result.push('color:')
+                        result.push('color:');
                         result.push(dom.toHex(color));
                         result.push(';');
                     }
@@ -1408,6 +1469,7 @@ var Serializer = {
         function attr(node) {
             var specifiedAttributes = [],
                 attributes = node.attributes,
+                attribute, i, l,
                 trim = $.trim;
 
             if (dom.is(node, 'img')) {
@@ -1416,34 +1478,38 @@ var Serializer = {
                     $node = $(node);
 
                 if (width) {
-                    $node.attr('width', parseInt(width));
+                    $node.attr('width', parseInt(width, 10));
                     dom.unstyle(node, { width: undefined });
                 }
 
                 if (height) {
-                    $node.attr('height', parseInt(height));
+                    $node.attr('height', parseInt(height, 10));
                     dom.unstyle(node, { height: undefined });
                 }
             }
 
-            for (var i = 0, l = attributes.length; i < l; i++) {
-                var attribute = attributes[i];
+            for (i = 0, l = attributes.length; i < l; i++) {
+                attribute = attributes[i];
                 var name = attribute.nodeName;
                 // In IE < 8 the 'value' attribute is not returned as 'specified'. The same goes for type="text"
-                if (attribute.specified || (name == 'value' && node.value != '') || (name == 'type' && attribute.nodeValue == 'text'))
-                    if (name.indexOf('_moz') < 0 && name != 'complete')
+                if (attribute.specified || (name == 'value' && !node.value) || (name == 'type' && attribute.nodeValue == 'text')) {
+                    // altHtml is injected by IE8 when an <object> tag is used in the Editor
+                    if (name.indexOf('_moz') < 0 && name != 'complete' && name != 'altHtml') {
                         specifiedAttributes.push(attribute);
+                    }
+                }
             }
 
-            if (!specifiedAttributes.length)
+            if (!specifiedAttributes.length) {
                 return;
+            }
 
             specifiedAttributes.sort(function (a, b) {
                 return a.nodeName > b.nodeName ? 1 : a.nodeName < b.nodeName ? -1 : 0;
             });
 
-            for (var i = 0, l = specifiedAttributes.length; i < l; i++) {
-                var attribute = specifiedAttributes[i];
+            for (i = 0, l = specifiedAttributes.length; i < l; i++) {
+                attribute = specifiedAttributes[i];
                 var attributeName = attribute.nodeName;
                 var attributeValue = attribute.nodeValue;
 
@@ -1465,8 +1531,9 @@ var Serializer = {
                                 continue;
                             }
 
-                            if (property.indexOf('color') >= 0)
+                            if (property.indexOf('color') >= 0) {
                                 value = dom.toHex(value);
+                            }
 
                             if (property.indexOf('font') >= 0) {
                                 value = value.replace(quoteRe, "'");
@@ -1477,7 +1544,7 @@ var Serializer = {
                             result.push(value);
                             result.push(';');
                         }
-                    };
+                    }
                 } else if (attributeName == 'src' || attributeName == 'href') {
                     result.push(node.getAttribute(attributeName, 2));
                 } else {
@@ -1489,8 +1556,9 @@ var Serializer = {
         }
 
         function children(node, skip) {
-            for (var childNode = node.firstChild; childNode; childNode = childNode.nextSibling)
+            for (var childNode = node.firstChild; childNode; childNode = childNode.nextSibling) {
                 child(childNode, skip);
+            }
         }
 
         function child(node, skip) {
@@ -1501,8 +1569,9 @@ var Serializer = {
             if (nodeType == 1) {
                 tagName = dom.name(node);
 
-                if (tagName == "" || (node.attributes['_moz_dirty'] && dom.is(node, 'br')))
+                if (!tagName || (node.attributes._moz_dirty && dom.is(node, 'br'))) {
                     return;
+                }
 
                 mapper = tagMap[tagName];
 
@@ -1538,8 +1607,9 @@ var Serializer = {
                          previous = (dom.isInline(parent) ? parent : node).previousSibling;
                     }
 
-                    if (!previous || previous.innerHTML == '' || dom.isBlock(previous))
+                    if (!previous || previous.innerHTML === "" || dom.isBlock(previous)) {
                         value = value.replace(/^[\r\n\v\f\t ]+/, '');
+                    }
 
                     value = value.replace(/ +/, ' ');
                 }
@@ -1568,7 +1638,7 @@ var Serializer = {
         result = result.join('');
 
         // if serialized dom contains only whitespace elements, consider it empty (required field validation)
-        if (result.replace(brRe, "").replace(emptyPRe, "") == "") {
+        if (result.replace(brRe, "").replace(emptyPRe, "") === "") {
             return "";
         }
 
@@ -1585,8 +1655,7 @@ extend(Editor, {
 (function($) {
 
     // Imports ================================================================
-    var doc = document,
-        kendo = window.kendo,
+    var kendo = window.kendo,
         Class = kendo.Class,
         extend = $.extend,
         Editor = kendo.ui.editor,
@@ -1596,11 +1665,6 @@ extend(Editor, {
         findClosestAncestor = dom.findClosestAncestor,
         getNodeLength = dom.getNodeLength,
         normalize = dom.normalize;
-
-var START_TO_START = 0,
-    START_TO_END = 1,
-    END_TO_END = 2,
-    END_TO_START = 3;
 
 var SelectionUtils = {
     selectionFromWindow: function(window) {
@@ -1612,14 +1676,14 @@ var SelectionUtils = {
     },
 
     selectionFromRange: function(range) {
-        var document = RangeUtils.documentFromRange(range);
-        return SelectionUtils.selectionFromDocument(document);
+        var rangeDocument = RangeUtils.documentFromRange(range);
+        return SelectionUtils.selectionFromDocument(rangeDocument);
     },
 
     selectionFromDocument: function(document) {
         return SelectionUtils.selectionFromWindow(dom.windowFromDocument(document));
     }
-}
+};
 
 var W3CRange = Class.extend({
     init: function(doc) {
@@ -1676,26 +1740,35 @@ var W3CRange = Class.extend({
     },
 
     collapse: function (toStart) {
-        if (toStart)
-            this.setEnd(this.startContainer, this.startOffset);
-        else
-            this.setStart(this.endContainer, this.endOffset);
+        var that = this;
+
+        if (toStart) {
+            that.setEnd(that.startContainer, that.startOffset);
+        } else {
+            that.setStart(that.endContainer, that.endOffset);
+        }
     },
 
     // Editing Methods
 
     deleteContents: function () {
-        var range = this.cloneRange();
+        var that = this,
+            range = that.cloneRange();
 
-        if (this.startContainer != this.commonAncestorContainer)
-            this.setStartAfter(findClosestAncestor(this.commonAncestorContainer, this.startContainer));
+        if (that.startContainer != that.commonAncestorContainer) {
+            that.setStartAfter(findClosestAncestor(that.commonAncestorContainer, that.startContainer));
+        }
 
-        this.collapse(true);
+        that.collapse(true);
 
         (function deleteSubtree(iterator) {
-            while (iterator.next())
-                iterator.hasPartialSubtree() ? deleteSubtree(iterator.getSubtreeIterator())
-                                            : iterator.remove();
+            while (iterator.next()) {
+                if (iterator.hasPartialSubtree()) {
+                    deleteSubtree(iterator.getSubtreeIterator());
+                } else {
+                    iterator.remove();
+                }
+            }
         })(new RangeIterator(range));
     },
 
@@ -1703,34 +1776,44 @@ var W3CRange = Class.extend({
         // clone subtree
         var document = RangeUtils.documentFromRange(this);
         return (function cloneSubtree(iterator) {
-                for (var node, frag = document.createDocumentFragment(); node = iterator.next(); ) {
-                        node = node.cloneNode(!iterator.hasPartialSubtree());
-                        if (iterator.hasPartialSubtree())
-                                node.appendChild(cloneSubtree(iterator.getSubtreeIterator()));
-                        frag.appendChild(node);
+                var node, frag = document.createDocumentFragment();
+
+                while (node = iterator.next()) {
+                    node = node.cloneNode(!iterator.hasPartialSubtree());
+
+                    if (iterator.hasPartialSubtree()) {
+                        node.appendChild(cloneSubtree(iterator.getSubtreeIterator()));
+                    }
+
+                    frag.appendChild(node);
                 }
+
                 return frag;
         })(new RangeIterator(this));
     },
 
     extractContents: function () {
-        var range = this.cloneRange();
+        var that = this,
+            range = that.cloneRange();
 
-        if (this.startContainer != this.commonAncestorContainer)
-            this.setStartAfter(findClosestAncestor(this.commonAncestorContainer, this.startContainer));
+        if (that.startContainer != that.commonAncestorContainer) {
+            that.setStartAfter(findClosestAncestor(that.commonAncestorContainer, that.startContainer));
+        }
 
-        this.collapse(true);
+        that.collapse(true);
 
-        var self = this;
-
-        var document = RangeUtils.documentFromRange(this);
+        var document = RangeUtils.documentFromRange(that);
 
         return (function extractSubtree(iterator) {
-            for (var node, frag = document.createDocumentFragment(); node = iterator.next(); ) {
-                iterator.hasPartialSubtree() ? node = node.cloneNode(false) : iterator.remove(self.originalRange);
+            var node, frag = document.createDocumentFragment();
 
-                if (iterator.hasPartialSubtree())
+            while (node = iterator.next()) {
+                if (iterator.hasPartialSubtree()) {
+                    node = node.cloneNode(false);
                     node.appendChild(extractSubtree(iterator.getSubtreeIterator()));
+                } else {
+                    iterator.remove(that.originalRange);
+                }
 
                 frag.appendChild(node);
             }
@@ -1740,16 +1823,19 @@ var W3CRange = Class.extend({
     },
 
     insertNode: function (node) {
-        if (isDataNode(this.startContainer)) {
-            if (this.startOffset != this.startContainer.nodeValue.length)
-                dom.splitDataNode(this.startContainer, this.startOffset);
+        var that = this;
 
-            dom.insertAfter(node, this.startContainer);
+        if (isDataNode(that.startContainer)) {
+            if (that.startOffset != that.startContainer.nodeValue.length) {
+                dom.splitDataNode(that.startContainer, that.startOffset);
+            }
+
+            dom.insertAfter(node, that.startContainer);
         } else {
-            dom.insertAt(this.startContainer, node, this.startOffset);
+            dom.insertAt(that.startContainer, node, that.startOffset);
         }
 
-        this.setStart(this.startContainer, this.startOffset);
+        that.setStart(that.startContainer, that.startOffset);
     },
 
     cloneRange: function () {
@@ -1778,44 +1864,54 @@ var W3CRange = Class.extend({
 
 /* can be used in Range.compareBoundaryPoints if we need it one day */
 function compareBoundaries(start, end, startOffset, endOffset) {
-    if (start == end)
+    if (start == end) {
         return endOffset - startOffset;
+    }
 
     // end is child of start
     var container = end;
-    while (container && container.parentNode != start)
+    while (container && container.parentNode != start) {
         container = container.parentNode;
+    }
 
-    if (container)
+    if (container) {
         return findNodeIndex(container) - startOffset;
+    }
 
     // start is child of end
     container = start;
-    while (container && container.parentNode != end)
+    while (container && container.parentNode != end) {
         container = container.parentNode;
+    }
 
-    if (container)
+    if (container) {
         return endOffset - findNodeIndex(container) - 1;
+    }
 
     // deep traversal
     var root = dom.commonAncestor(start, end);
     var startAncestor = start;
 
-    while (startAncestor && startAncestor.parentNode != root)
+    while (startAncestor && startAncestor.parentNode != root) {
         startAncestor = startAncestor.parentNode;
+    }
 
-    if (!startAncestor)
+    if (!startAncestor) {
         startAncestor = root;
+    }
 
     var endAncestor = end;
-    while (endAncestor && endAncestor.parentNode != root)
+    while (endAncestor && endAncestor.parentNode != root) {
         endAncestor = endAncestor.parentNode;
+    }
 
-    if (!endAncestor)
+    if (!endAncestor) {
         endAncestor = root;
+    }
 
-    if (startAncestor == endAncestor)
+    if (startAncestor == endAncestor) {
         return 0;
+    }
 
     return findNodeIndex(endAncestor) - findNodeIndex(startAncestor);
 }
@@ -1847,8 +1943,9 @@ function updateRangeProperties(range) {
     range.collapsed = range.startContainer == range.endContainer && range.startOffset == range.endOffset;
 
     var node = range.startContainer;
-    while (node && node != range.endContainer && !dom.isAncestorOf(node, range.endContainer))
+    while (node && node != range.endContainer && !dom.isAncestorOf(node, range.endContainer)) {
         node = node.parentNode;
+    }
 
     range.commonAncestorContainer = node;
 }
@@ -1862,8 +1959,9 @@ var RangeIterator = Class.extend({
             _end: null
         });
 
-        if (range.collapsed)
+        if (range.collapsed) {
             return;
+        }
 
         var root = range.commonAncestorContainer;
 
@@ -1881,72 +1979,85 @@ var RangeIterator = Class.extend({
     },
 
     next: function () {
-        var current = this._current = this._next;
-        this._next = this._current && this._current.nextSibling != this._end ?
-        this._current.nextSibling : null;
+        var that = this,
+            current = that._current = that._next;
+        that._next = that._current && that._current.nextSibling != that._end ?
+        that._current.nextSibling : null;
 
-        if (isDataNode(this._current)) {
-            if (this.range.endContainer == this._current)
-                (current = current.cloneNode(true)).deleteData(this.range.endOffset, current.length - this.range.endOffset);
+        if (isDataNode(that._current)) {
+            if (that.range.endContainer == that._current) {
+                current = current.cloneNode(true);
+                current.deleteData(that.range.endOffset, current.length - that.range.endOffset);
+            }
 
-            if (this.range.startContainer == this._current)
-                (current = current.cloneNode(true)).deleteData(0, this.range.startOffset);
+            if (that.range.startContainer == that._current) {
+                current = current.cloneNode(true);
+                current.deleteData(0, that.range.startOffset);
+            }
         }
 
         return current;
     },
 
     traverse: function (callback) {
+        var that = this,
+            current;
+
         function next() {
-            this._current = this._next;
-            this._next = this._current && this._current.nextSibling != this._end ? this._current.nextSibling : null;
-            return this._current;
+            that._current = that._next;
+            that._next = that._current && that._current.nextSibling != that._end ? that._current.nextSibling : null;
+            return that._current;
         }
 
-        var current;
-
-        while (current = next.call(this)) {
-            if (this.hasPartialSubtree())
-                this.getSubtreeIterator().traverse(callback);
-            else
-                callback(current)
+        while (current = next()) {
+            if (that.hasPartialSubtree()) {
+                that.getSubtreeIterator().traverse(callback);
+            } else {
+                callback(current);
+            }
         }
 
         return current;
     },
 
     remove: function (originalRange) {
-        var inStartContainer = this.range.startContainer == this._current;
-        var inEndContainer = this.range.endContainer == this._current;
+        var that = this,
+            inStartContainer = that.range.startContainer == that._current,
+            inEndContainer = that.range.endContainer == that._current,
+            start, end, delta;
 
-        if (isDataNode(this._current) && (inStartContainer || inEndContainer)) {
-            var start = inStartContainer ? this.range.startOffset : 0;
-            var end = inEndContainer ? this.range.endOffset : this._current.length;
-            var delta = end - start;
+        if (isDataNode(that._current) && (inStartContainer || inEndContainer)) {
+            start = inStartContainer ? that.range.startOffset : 0;
+            end = inEndContainer ? that.range.endOffset : that._current.length;
+            delta = end - start;
 
             if (originalRange && (inStartContainer || inEndContainer)) {
-                if (this._current == originalRange.startContainer && start <= originalRange.startOffset)
+                if (that._current == originalRange.startContainer && start <= originalRange.startOffset) {
                     originalRange.startOffset -= delta;
+                }
 
-                if (this._current == originalRange.endContainer && end <= originalRange.endOffset)
+                if (that._current == originalRange.endContainer && end <= originalRange.endOffset) {
                     originalRange.endOffset -= delta;
+                }
             }
 
-            this._current.deleteData(start, delta);
+            that._current.deleteData(start, delta);
         } else {
-            var parent = this._current.parentNode;
+            var parent = that._current.parentNode;
 
-            if (originalRange && (this.range.startContainer == parent || this.range.endContainer == parent)) {
-                var nodeIndex = findNodeIndex(this._current);
+            if (originalRange && (that.range.startContainer == parent || that.range.endContainer == parent)) {
+                var nodeIndex = findNodeIndex(that._current);
 
-                if (parent == originalRange.startContainer && nodeIndex <= originalRange.startOffset)
+                if (parent == originalRange.startContainer && nodeIndex <= originalRange.startOffset) {
                     originalRange.startOffset -= 1;
+                }
 
-                if (parent == originalRange.endContainer && nodeIndex < originalRange.endOffset)
+                if (parent == originalRange.endContainer && nodeIndex < originalRange.endOffset) {
                     originalRange.endOffset -= 1;
+                }
             }
 
-            dom.remove(this._current);
+            dom.remove(that._current);
         }
     },
 
@@ -1957,13 +2068,18 @@ var RangeIterator = Class.extend({
     },
 
     getSubtreeIterator: function () {
-        var subRange = this.range.cloneRange();
-        subRange.selectNodeContents(this._current);
+        var that = this,
+            subRange = that.range.cloneRange();
 
-        if (dom.isAncestorOrSelf(this._current, this.range.startContainer))
-            subRange.setStart(this.range.startContainer, this.range.startOffset);
-        if (dom.isAncestorOrSelf(this._current, this.range.endContainer))
-            subRange.setEnd(this.range.endContainer, this.range.endOffset);
+        subRange.selectNodeContents(that._current);
+
+        if (dom.isAncestorOrSelf(that._current, that.range.startContainer)) {
+            subRange.setStart(that.range.startContainer, that.range.startOffset);
+        }
+
+        if (dom.isAncestorOrSelf(that._current, that.range.endContainer)) {
+            subRange.setEnd(that.range.endContainer, that.range.endOffset);
+        }
 
         return new RangeIterator(subRange);
     }
@@ -1995,8 +2111,8 @@ var W3CSelection = Class.extend({
         try {
             textRange = selection.createRange();
             element = textRange.item ? textRange.item(0) : textRange.parentElement();
-			if (element.ownerDocument != this.ownerDocument) {
-				return range;
+            if (element.ownerDocument != this.ownerDocument) {
+                return range;
             }
         } catch (ex) {
             return range;
@@ -2008,25 +2124,28 @@ var W3CSelection = Class.extend({
             adoptEndPoint(textRange, range, true);
             adoptEndPoint(textRange, range, false);
 
-            if (range.startContainer.nodeType == 9)
+            if (range.startContainer.nodeType == 9) {
                 range.setStart(range.endContainer, range.startOffset);
+            }
 
-            if (range.endContainer.nodeType == 9)
+            if (range.endContainer.nodeType == 9) {
                 range.setEnd(range.startContainer, range.endOffset);
+            }
 
-            if (textRange.compareEndPoints('StartToEnd', textRange) == 0)
+            if (textRange.compareEndPoints('StartToEnd', textRange) === 0) {
                 range.collapse(false);
+            }
 
             var startContainer = range.startContainer,
                 endContainer = range.endContainer,
                 body = this.ownerDocument.body;
 
-            if (!range.collapsed && range.startOffset == 0 && range.endOffset == getNodeLength(range.endContainer) // check for full body selection
-            && !(startContainer == endContainer && isDataNode(startContainer) && startContainer.parentNode == body)) { // but not when single textnode is selected
+            if (!range.collapsed && range.startOffset === 0 && range.endOffset == getNodeLength(range.endContainer) &&  // check for full body selection
+                !(startContainer == endContainer && isDataNode(startContainer) && startContainer.parentNode == body)) { // but not when single textnode is selected
                 var movedStart = false,
                     movedEnd = false;
 
-                while (findNodeIndex(startContainer) == 0 && startContainer == startContainer.parentNode.firstChild && startContainer != body) {
+                while (findNodeIndex(startContainer) === 0 && startContainer == startContainer.parentNode.firstChild && startContainer != body) {
                     startContainer = startContainer.parentNode;
                     movedStart = true;
                 }
@@ -2042,6 +2161,7 @@ var W3CSelection = Class.extend({
                 }
             }
         }
+
         return range;
     }
 });
@@ -2053,8 +2173,9 @@ function adoptContainer(textRange, range, start) {
     var anchorNode = isDataNode(container) ? container : container.childNodes[offset] || null;
     var anchorParent = isDataNode(container) ? container.parentNode : container;
     // visible data nodes need a text offset
-    if (container.nodeType == 3 || container.nodeType == 4)
+    if (container.nodeType == 3 || container.nodeType == 4) {
         textOffset = offset;
+    }
 
     // create a cursor element node to position range (since we can't select text nodes)
     var cursorNode = anchorParent.insertBefore(dom.create(range.ownerDocument, 'a'), anchorNode);
@@ -2098,10 +2219,11 @@ function adoptEndPoint(textRange, range, start) {
 
     dom.remove(cursorNode);
 
-    if (isDataNode(target))
+    if (isDataNode(target)) {
         range[start ? 'setStart' : 'setEnd'](target, cursor.text.length);
-    else
+    } else {
         range[start ? 'setStartBefore' : 'setEndBefore'](target);
+    }
 }
 
 var RangeEnumerator = Class.extend({
@@ -2124,7 +2246,7 @@ var RangeEnumerator = Class.extend({
             new RangeIterator(range).traverse(visit);
 
             return nodes;
-        }
+        };
     }
 });
 
@@ -2149,8 +2271,9 @@ var RestorePoint = Class.extend({
         while (node = node.previousSibling) {
             var nodeType = node.nodeType;
 
-            if (nodeType != 3 || lastType != nodeType)
+            if (nodeType != 3 || lastType != nodeType) {
                 result ++;
+            }
 
             lastType = nodeType;
         }
@@ -2160,9 +2283,11 @@ var RestorePoint = Class.extend({
 
     offset: function(node, value) {
         if (node.nodeType == 3) {
-            while ((node = node.previousSibling) && node.nodeType == 3)
+            while ((node = node.previousSibling) && node.nodeType == 3) {
                 value += node.nodeValue.length;
+            }
         }
+
         return value;
     },
 
@@ -2182,8 +2307,9 @@ var RestorePoint = Class.extend({
             length = path.length,
             offset = denormalizedOffset;
 
-        while (length--)
+        while (length--) {
             node = node.childNodes[path[length]];
+        }
 
         while (node.nodeType == 3 && node.nodeValue.length < offset) {
             offset -= node.nodeValue.length;
@@ -2221,11 +2347,12 @@ var Marker = Class.extend({
 
     removeCaret: function (range) {
         var that = this,
-            previous = that.caret.previousSibling;
+            previous = that.caret.previousSibling,
             startOffset = 0;
 
-        if (previous)
+        if (previous) {
             startOffset = isDataNode(previous) ? previous.nodeValue.length : findNodeIndex(previous);
+        }
 
         var container = that.caret.parentNode;
         var containerIndex = previous ? findNodeIndex(previous) : 0;
@@ -2235,17 +2362,20 @@ var Marker = Class.extend({
 
         var node = container.childNodes[containerIndex];
 
-        if (isDataNode(node))
+        if (isDataNode(node)) {
             range.setStart(node, startOffset);
+        }
         else if (node) {
             var textNode = dom.lastTextNode(node);
-            if (textNode)
+            if (textNode) {
                 range.setStart(textNode, textNode.nodeValue.length);
-            else
+            } else {
                 range[previous ? 'setStartAfter' : 'setStartBefore'](node);
+            }
         } else {
-            if (!$.browser.msie && container.innerHTML == '')
+            if (!$.browser.msie && !container.innerHTML) {
                 container.innerHTML = '<br _moz_dirty="" />';
+            }
 
             range.selectNodeContents(container);
         }
@@ -2253,24 +2383,26 @@ var Marker = Class.extend({
     },
 
     add: function (range, expand) {
+        var that = this;
+
         if (expand && range.collapsed) {
-            this.addCaret(range);
+            that.addCaret(range);
             range = RangeUtils.expand(range);
         }
 
         var rangeBoundary = range.cloneRange();
 
         rangeBoundary.collapse(false);
-        this.end = dom.create(RangeUtils.documentFromRange(range), 'span', { className: 'k-marker' });
-        rangeBoundary.insertNode(this.end);
+        that.end = dom.create(RangeUtils.documentFromRange(range), 'span', { className: 'k-marker' });
+        rangeBoundary.insertNode(that.end);
 
         rangeBoundary = range.cloneRange();
         rangeBoundary.collapse(true);
-        this.start = this.end.cloneNode(true);
-        rangeBoundary.insertNode(this.start);
+        that.start = that.end.cloneNode(true);
+        rangeBoundary.insertNode(that.start);
 
-        range.setStartBefore(this.start);
-        range.setEndAfter(this.end);
+        range.setStartBefore(that.start);
+        range.setEndAfter(that.end);
 
         normalize(range.commonAncestorContainer);
 
@@ -2278,19 +2410,31 @@ var Marker = Class.extend({
     },
 
     remove: function (range) {
-        var start = this.start,
-            end = this.end;
+        var that = this,
+            start = that.start,
+            end = that.end,
+            shouldNormalizeStart,
+            shouldNormalizeEnd,
+            shouldNormalize;
 
         normalize(range.commonAncestorContainer);
 
-        while (!start.nextSibling && start.parentNode) start = start.parentNode;
-        while (!end.previousSibling && end.parentNode) end = end.parentNode;
+        while (!start.nextSibling && start.parentNode) {
+            start = start.parentNode;
+        }
 
-        var shouldNormalizeStart = (start.previousSibling && start.previousSibling.nodeType == 3)
-                                && (start.nextSibling && start.nextSibling.nodeType == 3);
+        while (!end.previousSibling && end.parentNode) {
+            end = end.parentNode;
+        }
 
-        var shouldNormalizeEnd = (end.previousSibling && end.previousSibling.nodeType == 3)
-                                && (end.nextSibling && end.nextSibling.nodeType == 3);
+        // merely accessing the siblings will solve range issues in IE
+        shouldNormalizeStart = (start.previousSibling && start.previousSibling.nodeType == 3) &&
+                               (start.nextSibling && start.nextSibling.nodeType == 3);
+
+        shouldNormalizeEnd = (end.previousSibling && end.previousSibling.nodeType == 3) &&
+                             (end.nextSibling && end.nextSibling.nodeType == 3);
+
+        shouldNormalize = shouldNormalizeStart && shouldNormalizeEnd;
 
         start = start.nextSibling;
         end = end.previousSibling;
@@ -2298,16 +2442,16 @@ var Marker = Class.extend({
         var collapsed = false;
         var collapsedToStart = false;
         // collapsed range
-        if (start == this.end) {
-            collapsedToStart = !!this.start.previousSibling;
-            start = end = this.start.previousSibling || this.end.nextSibling;
+        if (start == that.end) {
+            collapsedToStart = !!that.start.previousSibling;
+            start = end = that.start.previousSibling || that.end.nextSibling;
             collapsed = true;
         }
 
-        dom.remove(this.start);
-        dom.remove(this.end);
+        dom.remove(that.start);
+        dom.remove(that.end);
 
-        if (start == null || end == null) {
+        if (!start || !end) {
             range.selectNodeContents(range.commonAncestorContainer);
             range.collapse(true);
             return;
@@ -2316,56 +2460,71 @@ var Marker = Class.extend({
         var startOffset = collapsed ? isDataNode(start) ? start.nodeValue.length : start.childNodes.length : 0;
         var endOffset = isDataNode(end) ? end.nodeValue.length : end.childNodes.length;
 
-        if (start.nodeType == 3)
+        if (start.nodeType == 3) {
             while (start.previousSibling && start.previousSibling.nodeType == 3) {
                 start = start.previousSibling;
                 startOffset += start.nodeValue.length;
             }
+        }
 
-        if (end.nodeType == 3)
+        if (end.nodeType == 3) {
             while (end.previousSibling && end.previousSibling.nodeType == 3) {
                 end = end.previousSibling;
                 endOffset += end.nodeValue.length;
             }
+        }
+
         var startIndex = findNodeIndex(start), startParent = start.parentNode;
         var endIndex = findNodeIndex(end), endParent = end.parentNode;
 
-        for (var startPointer = start; startPointer.previousSibling; startPointer = startPointer.previousSibling)
-            if (startPointer.nodeType == 3 && startPointer.previousSibling.nodeType == 3) startIndex--;
+        for (var startPointer = start; startPointer.previousSibling; startPointer = startPointer.previousSibling) {
+            if (startPointer.nodeType == 3 && startPointer.previousSibling.nodeType == 3) {
+                startIndex--;
+            }
+        }
 
-        for (var endPointer = end; endPointer.previousSibling; endPointer = endPointer.previousSibling)
-            if (endPointer.nodeType == 3 && endPointer.previousSibling.nodeType == 3) endIndex--;
+        for (var endPointer = end; endPointer.previousSibling; endPointer = endPointer.previousSibling) {
+            if (endPointer.nodeType == 3 && endPointer.previousSibling.nodeType == 3) {
+                endIndex--;
+            }
+        }
 
         normalize(startParent);
 
-        if (start.nodeType == 3)
+        if (start.nodeType == 3) {
             start = startParent.childNodes[startIndex];
+        }
 
         normalize(endParent);
-        if (end.nodeType == 3)
+        if (end.nodeType == 3) {
             end = endParent.childNodes[endIndex];
+        }
 
         if (collapsed) {
-            if (start.nodeType == 3)
+            if (start.nodeType == 3) {
                 range.setStart(start, startOffset);
-            else
+            } else {
                 range[collapsedToStart ? 'setStartAfter' : 'setStartBefore'](start);
+            }
 
             range.collapse(true);
 
         } else {
-            if (start.nodeType == 3)
+            if (start.nodeType == 3) {
                 range.setStart(start, startOffset);
-            else
+            } else {
                 range.setStartBefore(start);
+            }
 
-            if (end.nodeType == 3)
+            if (end.nodeType == 3) {
                 range.setEnd(end, endOffset);
-            else
+            } else {
                 range.setEndAfter(end);
+            }
         }
-        if (this.caret)
-            this.removeCaret(range);
+        if (that.caret) {
+            that.removeCaret(range);
+        }
     }
 
 });
@@ -2378,8 +2537,9 @@ var RangeUtils = {
         if (!nodes.length) {
             range.selectNodeContents(range.commonAncestorContainer);
             nodes = RangeUtils.textNodes(range);
-            if (!nodes.length)
+            if (!nodes.length) {
                 nodes = dom.significantChildNodes(range.commonAncestorContainer);
+            }
         }
         return nodes;
     },
@@ -2418,8 +2578,9 @@ var RangeUtils = {
             partitionRange.collapse(start);
             partitionRange[start ? 'setStartBefore' : 'setEndAfter'](node);
             var contents = partitionRange.extractContents();
-            if (trim)
+            if (trim) {
                 contents = dom.trim(contents);
+            }
             dom[start ? 'insertBefore' : 'insertAfter'](contents, node);
         }
         partition(true);
@@ -2430,8 +2591,9 @@ var RangeUtils = {
         var markers = [];
 
         new RangeIterator(range).traverse(function (node) {
-            if (node.className == 'k-marker')
+            if (node.className == 'k-marker') {
                 markers.push(node);
+            }
         });
 
         return markers;
@@ -2441,34 +2603,39 @@ var RangeUtils = {
         var nodes = [];
 
         new RangeIterator(range).traverse(function (node) {
-            if (dom.is(node, 'img'))
+            if (dom.is(node, 'img')) {
                 nodes.push(node);
+            }
         });
 
-        if (nodes.length == 1)
+        if (nodes.length == 1) {
             return nodes[0];
+        }
     },
 
     expand: function (range) {
         var result = range.cloneRange();
 
-        var startContainer = result.startContainer.childNodes[result.startOffset == 0 ? 0 : result.startOffset - 1];
+        var startContainer = result.startContainer.childNodes[result.startOffset === 0 ? 0 : result.startOffset - 1];
         var endContainer = result.endContainer.childNodes[result.endOffset];
 
-        if (!isDataNode(startContainer) || !isDataNode(endContainer))
+        if (!isDataNode(startContainer) || !isDataNode(endContainer)) {
             return result;
+        }
 
         var beforeCaret = startContainer.nodeValue;
         var afterCaret = endContainer.nodeValue;
 
-        if (beforeCaret == '' || afterCaret == '')
+        if (!beforeCaret || !afterCaret) {
             return result;
+        }
 
         var startOffset = beforeCaret.split('').reverse().join('').search(boundary);
         var endOffset = afterCaret.search(boundary);
 
-        if (startOffset == 0 || endOffset == 0)
+        if (!startOffset || !endOffset) {
             return result;
+        }
 
         endOffset = endOffset == -1 ? afterCaret.length : endOffset;
         startOffset = startOffset == -1 ? 0 : beforeCaret.length - startOffset;
@@ -2481,29 +2648,33 @@ var RangeUtils = {
 
     isExpandable: function (range) {
         var node = range.startContainer;
-        var document = RangeUtils.documentFromRange(range);
+        var rangeDocument = RangeUtils.documentFromRange(range);
 
-        if (node == document || node == document.body)
+        if (node == rangeDocument || node == rangeDocument.body) {
             return false;
+        }
 
         var result = range.cloneRange();
 
         var value = node.nodeValue;
-        if (!value)
+        if (!value) {
             return false;
+        }
 
         var beforeCaret = value.substring(0, result.startOffset);
         var afterCaret = value.substring(result.startOffset);
 
         var startOffset = 0, endOffset = 0;
 
-        if (beforeCaret != '')
+        if (beforeCaret) {
             startOffset = beforeCaret.split('').reverse().join('').search(boundary);
+        }
 
-        if (afterCaret != '')
+        if (afterCaret) {
             endOffset = afterCaret.search(boundary);
+        }
 
-        return startOffset != 0 && endOffset != 0;
+        return startOffset && endOffset;
     }
 };
 
@@ -2522,8 +2693,7 @@ extend(Editor, {
 (function($) {
 
     // Imports ================================================================
-    var doc = document,
-        kendo = window.kendo,
+    var kendo = window.kendo,
         Class = kendo.Class,
         Editor = kendo.ui.editor,
         EditorUtils = Editor.EditorUtils,
@@ -2617,8 +2787,7 @@ var InsertHtmlCommand = Command.extend({
 
 var InsertHtmlTool = Tool.extend({
     initialize: function(ui, initOptions) {
-        var editor = initOptions.editor,
-            title = editor.options.localization.insertHtml;
+        var editor = initOptions.editor;
 
         new Editor.SelectBox(ui, {
             dataSource: editor.options.insertHtml || [],
@@ -2627,7 +2796,7 @@ var InsertHtmlTool = Tool.extend({
             change: function (e) {
                 Tool.exec(editor, 'insertHtml', this.value());
             },
-            title:editor.options.localization.insertHtml,
+            title: editor.options.messages.insertHtml,
             highlightFirst: false
         });
     },
@@ -2650,18 +2819,22 @@ var UndoRedoStack = Class.extend({
     },
 
     push: function (command) {
-        this.stack = this.stack.slice(0, this.currentCommandIndex + 1);
-        this.currentCommandIndex = this.stack.push(command) - 1;
+        var that = this;
+
+        that.stack = that.stack.slice(0, that.currentCommandIndex + 1);
+        that.currentCommandIndex = that.stack.push(command) - 1;
     },
 
     undo: function () {
-        if (this.canUndo())
+        if (this.canUndo()) {
             this.stack[this.currentCommandIndex--].undo();
+        }
     },
 
     redo: function () {
-        if (this.canRedo())
+        if (this.canRedo()) {
             this.stack[++this.currentCommandIndex].redo();
+        }
     },
 
     canUndo: function () {
@@ -2679,18 +2852,19 @@ var TypingHandler = Class.extend({
     },
 
     keydown: function (e) {
-        var editor = this.editor,
-            keyboard = editor.keyboard;
+        var that = this,
+            editor = that.editor,
+            keyboard = editor.keyboard,
             isTypingKey = keyboard.isTypingKey(e);
 
         if (isTypingKey && !keyboard.isTypingInProgress()) {
             var range = editor.getRange();
-            this.startRestorePoint = new RestorePoint(range);
+            that.startRestorePoint = new RestorePoint(range);
 
-            keyboard.startTyping($.proxy(function () {
-                editor.selectionRestorePoint = this.endRestorePoint = new RestorePoint(editor.getRange());
-                editor.undoRedoStack.push(new GenericCommand(this.startRestorePoint, this.endRestorePoint));
-            }, this));
+            keyboard.startTyping(function () {
+                editor.selectionRestorePoint = that.endRestorePoint = new RestorePoint(editor.getRange());
+                editor.undoRedoStack.push(new GenericCommand(that.startRestorePoint, that.endRestorePoint));
+            });
 
             return true;
         }
@@ -2717,37 +2891,42 @@ var SystemHandler = Class.extend({
     },
 
     createUndoCommand: function () {
-        this.endRestorePoint = new RestorePoint(this.editor.getRange());
-        this.editor.undoRedoStack.push(new GenericCommand(this.startRestorePoint, this.endRestorePoint));
-        this.startRestorePoint = this.endRestorePoint;
+        var that = this;
+
+        that.endRestorePoint = new RestorePoint(that.editor.getRange());
+        that.editor.undoRedoStack.push(new GenericCommand(that.startRestorePoint, that.endRestorePoint));
+        that.startRestorePoint = that.endRestorePoint;
     },
 
     changed: function () {
-        if (this.startRestorePoint)
+        if (this.startRestorePoint) {
             return this.startRestorePoint.html != this.editor.body.innerHTML;
+        }
 
         return false;
     },
 
     keydown: function (e) {
-        var editor = this.editor,
+        var that = this,
+            editor = that.editor,
             keyboard = editor.keyboard;
 
         if (keyboard.isModifierKey(e)) {
 
-            if (keyboard.isTypingInProgress())
+            if (keyboard.isTypingInProgress()) {
                 keyboard.endTyping(true);
+            }
 
-            this.startRestorePoint = new RestorePoint(editor.getRange());
+            that.startRestorePoint = new RestorePoint(editor.getRange());
             return true;
         }
 
         if (keyboard.isSystem(e)) {
-            this.systemCommandIsInProgress = true;
+            that.systemCommandIsInProgress = true;
 
-            if (this.changed()) {
-                this.systemCommandIsInProgress = false;
-                this.createUndoCommand();
+            if (that.changed()) {
+                that.systemCommandIsInProgress = false;
+                that.createUndoCommand();
             }
 
             return true;
@@ -2757,9 +2936,11 @@ var SystemHandler = Class.extend({
     },
 
     keyup: function (e) {
-        if (this.systemCommandIsInProgress && this.changed()) {
-            this.systemCommandIsInProgress = false;
-            this.createUndoCommand(e);
+        var that = this;
+
+        if (that.systemCommandIsInProgress && that.changed()) {
+            that.systemCommandIsInProgress = false;
+            that.createUndoCommand(e);
             return true;
         }
 
@@ -2775,19 +2956,21 @@ var Keyboard = Class.extend({
 
     isCharacter: function(keyCode) {
         return (keyCode >= 48 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) ||
-            (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222);
+               (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222);
     },
 
     toolFromShortcut: function (tools, e) {
-        var key = String.fromCharCode(e.keyCode);
+        var key = String.fromCharCode(e.keyCode),
+            toolName,
+            toolOptions;
 
-        for (var toolName in tools) {
-            var toolOptions = tools[toolName].options || {};
+        for (toolName in tools) {
+            toolOptions = $.extend({ ctrl: false, alt: false, shift: false }, tools[toolName].options);
 
-            if ((toolOptions.key == key || toolOptions.key == e.keyCode)
-                && !!toolOptions.ctrl == e.ctrlKey
-                && !!toolOptions.alt == e.altKey
-                && !!toolOptions.shift == e.shiftKey) {
+            if ((toolOptions.key == key || toolOptions.key == e.keyCode) &&
+                toolOptions.ctrl == e.ctrlKey &&
+                toolOptions.alt == e.altKey &&
+                toolOptions.shift == e.shiftKey) {
                 return toolName;
             }
         }
@@ -2795,15 +2978,16 @@ var Keyboard = Class.extend({
 
     isTypingKey: function (e) {
         var keyCode = e.keyCode;
-        return (this.isCharacter(keyCode) && !e.ctrlKey && !e.altKey) || keyCode == 32 || keyCode == 13
-        || keyCode == 8 || (keyCode == 46 && !e.shiftKey && !e.ctrlKey && !e.altKey);
+        return (this.isCharacter(keyCode) && !e.ctrlKey && !e.altKey) ||
+               keyCode == 32 || keyCode == 13 || keyCode == 8 ||
+               (keyCode == 46 && !e.shiftKey && !e.ctrlKey && !e.altKey);
     },
 
     isModifierKey: function (e) {
         var keyCode = e.keyCode;
-        return (keyCode == 17 && !e.shiftKey && !e.altKey)
-                || (keyCode == 16 && !e.ctrlKey && !e.altKey)
-                || (keyCode == 18 && !e.ctrlKey && !e.shiftKey);
+        return (keyCode == 17 && !e.shiftKey && !e.altKey) ||
+               (keyCode == 16 && !e.ctrlKey && !e.altKey) ||
+               (keyCode == 18 && !e.ctrlKey && !e.shiftKey);
     },
 
     isSystem: function (e) {
@@ -2817,8 +3001,9 @@ var Keyboard = Class.extend({
 
     stopTyping: function() {
         this.typingInProgress = false;
-        if (this.onEndTyping)
+        if (this.onEndTyping) {
             this.onEndTyping();
+        }
     },
 
     endTyping: function (force) {
@@ -2840,9 +3025,13 @@ var Keyboard = Class.extend({
     },
 
     notify: function(e, what) {
-        for (var i = 0; i < this.handlers.length; i++)
-            if (this.handlers[i][what](e))
+        var i, handlers = this.handlers;
+
+        for (i = 0; i < handlers.length; i++) {
+            if (handlers[i][what](e)) {
                 break;
+            }
+        }
     },
 
     keydown: function (e) {
@@ -2862,20 +3051,21 @@ var Clipboard = Class.extend({
 
     htmlToFragment: function(html) {
         var editor = this.editor,
-            container = dom.create(editor.document, 'div');
+            doc = editor.document,
+            container = dom.create(doc, 'div'),
+            fragment = doc.createDocumentFragment();
 
         container.innerHTML = html;
 
-        var fragment = editor.document.createDocumentFragment();
-
-        while (container.firstChild)
+        while (container.firstChild) {
             fragment.appendChild(container.firstChild);
+        }
 
         return fragment;
     },
 
     isBlock: function(html) {
-        return /<(div|p|ul|ol|table|h[1-6])/i.test(html);
+        return (/<(div|p|ul|ol|table|h[1-6])/i).test(html);
     },
 
     oncut: function(e) {
@@ -2889,8 +3079,9 @@ var Clipboard = Class.extend({
     onpaste: function(e) {
         var editor = this.editor,
             range = editor.getRange(),
+            bom = "\ufeff",
             startRestorePoint = new RestorePoint(range),
-            clipboardNode = dom.create(editor.document, 'div', {className:'k-paste-container', innerHTML: '\ufeff'});
+            clipboardNode = dom.create(editor.document, 'div', {className:'k-paste-container', innerHTML: bom });
 
         editor.body.appendChild(clipboardNode);
 
@@ -2903,7 +3094,7 @@ var Clipboard = Class.extend({
             textRange.moveToElementText(clipboardNode);
             $(editor.body).unbind('paste');
             textRange.execCommand('Paste');
-            $(editor.body).bind('paste', arguments.callee);
+            $(editor.body).bind('paste', $.proxy(arguments.callee, this));
         } else {
             var clipboardRange = editor.createRange();
             clipboardRange.selectNodeContents(clipboardNode);
@@ -2911,13 +3102,21 @@ var Clipboard = Class.extend({
         }
 
         setTimeout(function() {
+            var html, args = { html: "" };
+
             selectRange(range);
             dom.remove(clipboardNode);
 
-            if (clipboardNode.lastChild && dom.is(clipboardNode.lastChild, 'br'))
+            if (clipboardNode.lastChild && dom.is(clipboardNode.lastChild, 'br')) {
                 dom.remove(clipboardNode.lastChild);
+            }
 
-            var args = { html: clipboardNode.innerHTML };
+            html = clipboardNode.innerHTML;
+
+            if (html != bom) {
+                args.html = html;
+            }
+
             editor.trigger("paste", args);
             editor.clipboard.paste(args.html, true);
             editor.undoRedoStack.push(new GenericCommand(startRestorePoint, new RestorePoint(editor.getRange())));
@@ -2926,27 +3125,33 @@ var Clipboard = Class.extend({
     },
 
     splittableParent: function(block, node) {
-        if (block)
+        var parentNode, body;
+
+        if (block) {
             return dom.parentOfType(node, ['p', 'ul', 'ol']) || node.parentNode;
-
-        var parent = node.parentNode;
-        var body = node.ownerDocument.body;
-
-        if (dom.isInline(parent)) {
-            while (parent.parentNode != body && !dom.isBlock(parent.parentNode))
-                parent = parent.parentNode;
         }
 
-        return parent;
+        parentNode = node.parentNode;
+        body = node.ownerDocument.body;
+
+        if (dom.isInline(parentNode)) {
+            while (parentNode.parentNode != body && !dom.isBlock(parentNode.parentNode)) {
+                parentNode = parentNode.parentNode;
+            }
+        }
+
+        return parentNode;
     },
 
     paste: function (html, clean) {
         var editor = this.editor,
             i, l;
 
-        for (i = 0, l = this.cleaners.length; i < l; i++)
-            if (this.cleaners[i].applicable(html))
+        for (i = 0, l = this.cleaners.length; i < l; i++) {
+            if (this.cleaners[i].applicable(html)) {
                 html = this.cleaners[i].clean(html);
+            }
+        }
 
         if (clean) {
             // remove br elements which immediately precede block elements
@@ -2963,11 +3168,12 @@ var Clipboard = Class.extend({
         var range = editor.getRange();
         range.deleteContents();
 
-        if (range.startContainer == editor.document)
+        if (range.startContainer == editor.document) {
             range.selectNodeContents(editor.body);
+        }
 
         var marker = new Marker();
-        var caret = marker.addCaret(range)
+        var caret = marker.addCaret(range);
 
         var parent = this.splittableParent(block, caret);
         var unwrap = false;
@@ -2993,8 +3199,9 @@ var Clipboard = Class.extend({
 
         parent = this.splittableParent(block, caret);
         if (unwrap) {
-            while (caret.parentNode != parent)
+            while (caret.parentNode != parent) {
                 dom.unwrap(caret.parentNode);
+            }
 
             dom.unwrap(caret.parentNode);
         }
@@ -3032,15 +3239,17 @@ var MSWordFormatCleaner = Class.extend({
     },
 
     applicable: function(html) {
-        return /class="?Mso|style="[^"]*mso-/i.test(html);
+        return (/class="?Mso|style="[^"]*mso-/i).test(html);
     },
 
     listType: function(html) {
-        if (/^[\u2022\u00b7\u00a7\u00d8o]\u00a0+/.test(html))
+        if (/^[\u2022\u00b7\u00a7\u00d8o]\u00a0+/.test(html)) {
             return 'ul';
+        }
 
-        if (/^\s*\w+[\.\)]\u00a0{2,}/.test(html))
+        if (/^\s*\w+[\.\)]\u00a0{2,}/.test(html)) {
             return 'ol';
+        }
     },
 
     lists: function(html) {
@@ -3051,11 +3260,11 @@ var MSWordFormatCleaner = Class.extend({
 
         for (var i = 0; i < blockChildren.length; i++) {
             var p = blockChildren[i];
-            var html = p.innerHTML.replace(/<\/?\w+[^>]*>/g, '').replace(/&nbsp;/g, '\u00a0');
+            html = p.innerHTML.replace(/<\/?\w+[^>]*>/g, '').replace(/&nbsp;/g, '\u00a0');
             var type = this.listType(html);
 
             if (!type || dom.name(p) != 'p') {
-                if (p.innerHTML == '') {
+                if (!p.innerHTML) {
                     dom.remove(p);
                 } else {
                     levels = {'ul':{}, 'ol':{}};
@@ -3071,19 +3280,23 @@ var MSWordFormatCleaner = Class.extend({
             if (margin > lastMargin || !list) {
                 list = dom.create(document, type);
 
-                if (li == placeholder)
+                if (li == placeholder) {
                     dom.insertBefore(list, p);
-                else
+                } else {
                     li.appendChild(list);
+                }
 
                 levels[type][margin] = list;
             }
 
             if (lastType != type) {
-                for (var key in levels)
-                    for (var child in levels[key])
-                        if ($.contains(list, levels[key][child]))
+                for (var key in levels) {
+                    for (var child in levels[key]) {
+                        if ($.contains(list, levels[key][child])) {
                             delete levels[key][child];
+                        }
+                    }
+                }
             }
 
             dom.remove(p.firstChild);
@@ -3107,11 +3320,16 @@ var MSWordFormatCleaner = Class.extend({
     },
 
     clean: function(html) {
-        for (var i = 0, l = this.replacements.length; i < l; i+= 2)
-            html = html.replace(this.replacements[i], this.replacements[i+1]);
+        var that = this,
+            replacements = that.replacements,
+            i, l;
 
-        html = this.stripEmptyAnchors(html);
-        html = this.lists(html);
+        for (i = 0, l = replacements.length; i < l; i += 2) {
+            html = html.replace(replacements[i], replacements[i+1]);
+        }
+
+        html = that.stripEmptyAnchors(html);
+        html = that.lists(html);
         html = html.replace(/\s+class="?[^"\s>]*"?/ig, '');
 
         return html;
@@ -3346,7 +3564,9 @@ var GreedyInlineFormatFinder = InlineFormatFinder.extend({
             trim = $.trim,
             i, l, attribute, name, attributeValue, css, pair, cssIndex, len, propertyAndValue, property, value;
 
-        if (!attributes) return;
+        if (!attributes) {
+            return;
+        }
 
         for (i = 0, l = attributes.length; i < l; i++) {
             attribute = attributes[i];
@@ -3418,19 +3638,26 @@ var GreedyInlineFormatter = InlineFormatter.extend({
 
         that.greedyProperty = greedyProperty;
         that.values = values;
-        that.finder = new GreedyInlineFormatFinder(format, greedyProperty)
+        that.finder = new GreedyInlineFormatFinder(format, greedyProperty);
     },
 
     activate: function(range, nodes) {
-        var that = this;
+        var that = this,
+            camelCase,
+            greedyProperty = that.greedyProperty,
+            action = "apply";
+
         that.split(range);
 
-        if (that.greedyProperty) {
-            var camelCase = that.greedyProperty.replace(/-([a-z])/, function(all, letter){return letter.toUpperCase()});
-            that[that.values.style[camelCase] == "inherit" ? "remove" : "apply"](nodes);
-        } else {
-            that.apply(nodes);
+        if (greedyProperty) {
+            camelCase = greedyProperty.replace(/-([a-z])/, function(all, letter) { return letter.toUpperCase(); });
+
+            if (that.values.style[camelCase] == "inherit") {
+                action = "remove";
+            }
         }
+
+        that[action](nodes);
     }
 });
 
@@ -3442,7 +3669,7 @@ var InlineFormatTool = FormatTool.extend({
     init: function(options) {
         FormatTool.fn.init.call(this, extend(options, {
             finder: new InlineFormatFinder(options.format),
-            formatter: function () { return new InlineFormatter(options.format) }
+            formatter: function () { return new InlineFormatter(options.format); }
         }));
 
         this.willDelayExecution = inlineFormatWillDelayExecution;
@@ -3455,23 +3682,23 @@ var FontTool = Tool.extend({
         Tool.fn.init.call(that, options);
 
         // IE has single selection hence we are using select box instead of combobox
-        that.options = options;
         that.type = ($.browser.msie || kendo.support.touch) ? "kendoDropDownList" : "kendoComboBox";
         that.format = [{ tags: ["span"] }],
         that.finder = new GreedyInlineFormatFinder(that.format, options.cssAttr);
     },
 
     command: function (commandArguments) {
-        var options = this.options;
+        var options = this.options,
             format = this.format,
             style = {};
+
         return new Editor.FormatCommand(extend(commandArguments, {
             formatter: function () {
                 style[options.domAttr] = commandArguments.value;
 
                 return new GreedyInlineFormatter(format, { style: style }, options.cssAttr);
             }
-        }))
+        }));
     },
 
     willDelayExecution: inlineFormatWillDelayExecution,
@@ -3488,12 +3715,24 @@ var FontTool = Tool.extend({
 
     initialize: function (ui, initOptions) {
         var editor = initOptions.editor,
-            toolName = this.options.name;
+            options = this.options,
+            toolName = options.name,
+            dataSource,
+            defaultValue = [];
+
+        if (options.defaultValue) {
+           defaultValue = [{
+                text: editor.options.messages[options.defaultValue[0].text],
+                value: options.defaultValue[0].value
+           }];
+        }
+
+        dataSource = defaultValue.concat(options.items ? options.items : editor.options[toolName]);
 
         ui[this.type]({
-            dataTextField: "Text",
-            dataValueField: "Value",
-            dataSource: editor.options[toolName],
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: dataSource,
             change: function (e) {
                 Tool.exec(editor, toolName, this.value());
             },
@@ -3512,7 +3751,7 @@ var ColorTool = Tool.extend({
         Tool.fn.init.call(this, options);
 
         this.options = options;
-        this.format = [{ tags: dom.inlineElements }];
+        this.format = [{ tags: ["span"] }];
     },
 
     update: function(ui) {
@@ -3558,34 +3797,35 @@ var StyleTool = Tool.extend({
     },
 
     command: function (commandArguments) {
+        var format = this.format;
         return new Editor.FormatCommand(extend(commandArguments, {
             formatter: function () {
-                return new GreedyInlineFormatter(this.format, { className: commandArguments.value });
+                return new GreedyInlineFormatter(format, { className: commandArguments.value });
             }
         }));
     },
 
     update: function(ui, nodes) {
-        var list = ui.data("kendoDropDownList");
+        var list = ui.data("kendoSelectBox");
         list.close();
         list.value(this.finder.getFormat(nodes));
     },
 
-    initiliaze: function(ui, initOptions) {
+    initialize: function(ui, initOptions) {
         var editor = initOptions.editor;
 
-        ui.kendoDropDownList({
-            data: editor["style"],
-            title: editor.options.localization.style,
-            itemCreate: function (e) {
-                var style = dom.inlineStyle(editor.document, "span", {className : e.dataItem.Value});
-
-                e.html = '<span unselectable="on" style="display:block;' + style +'">' + e.html + '</span>';
-            },
+        new Editor.SelectBox(ui, {
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: editor.options.style,
+            title: editor.options.messages.style,
             change: function (e) {
-                Tool.exec(editor, "style", e.value);
-            }
+                Tool.exec(editor, "style", this.value());
+            },
+            highlightFirst: false
         });
+
+        ui.closest(".k-widget").removeClass("k-" + this.name).find("*").andSelf().attr("unselectable", "on");
     }
 
 });
@@ -3601,7 +3841,7 @@ extend(Editor, {
     StyleTool: StyleTool
 });
 
-registerTool("style", new Editor.StyleTool({template: new ToolTemplate({template: EditorUtils.dropDownListTemplate, title: "Indent", initialValue: "Styles"})}));
+registerTool("style", new Editor.StyleTool({template: new ToolTemplate({template: EditorUtils.dropDownListTemplate, title: "Styles"})}));
 
 registerFormat("bold", [ { tags: ["strong"] }, { tags: ["span"], attr: { style: { fontWeight: "bold"}} } ]);
 registerTool("bold", new InlineFormatTool({ key: "B", ctrl: true, format: formats.bold, template: new ToolTemplate({template: EditorUtils.buttonTemplate, title: "Bold"}) }));
@@ -3625,9 +3865,9 @@ registerTool("foreColor", new ColorTool({cssAttr:"color", domAttr:"color", name:
 
 registerTool("backColor", new ColorTool({cssAttr:"background-color", domAttr: "backgroundColor", name:"backColor", template: new ToolTemplate({template: EditorUtils.colorPickerTemplate, title: "Background Color"})}));
 
-registerTool("fontName", new FontTool({cssAttr:"font-family", domAttr: "fontFamily", name:"fontName", template: new ToolTemplate({template: EditorUtils.comboBoxTemplate, title: "Font Name", initialValue: "(inherited font)"})}));
+registerTool("fontName", new FontTool({cssAttr:"font-family", domAttr: "fontFamily", name:"fontName", defaultValue: [{ text: "fontNameInherit",  value: "inherit" }], template: new ToolTemplate({template: EditorUtils.comboBoxTemplate, title: "Font Name"})}));
 
-registerTool("fontSize", new FontTool({cssAttr:"font-size", domAttr:"fontSize", name:"fontSize", template: new ToolTemplate({template: EditorUtils.comboBoxTemplate, title: "Font Size", initialValue: "(inherited size)"})}));
+registerTool("fontSize", new FontTool({cssAttr:"font-size", domAttr:"fontSize", name:"fontSize", defaultValue: [{ text: "fontSizeInherit",  value: "inherit" }], template: new ToolTemplate({template: EditorUtils.comboBoxTemplate, title: "Font Size"})}));
 
 })(jQuery);
 (function($) {
@@ -3657,8 +3897,9 @@ var BlockFormatFinder = Class.extend({
 
         for (i = 0, len = children.length; i < len; i++) {
             child = children[i];
-            if (child == null || !dom.isAncestorOrSelf(node, child))
+            if (!child || !dom.isAncestorOrSelf(node, child)) {
                 return false;
+            }
         }
 
         return true;
@@ -3671,22 +3912,27 @@ var BlockFormatFinder = Class.extend({
 
         for (i = 0, len = nodes.length; i < len; i++) {
             candidate = dom.ofType(nodes[i], format[0].tags) ? nodes[i] : dom.parentOfType(nodes[i], format[0].tags);
-            if (!candidate)
+            if (!candidate) {
                 return [];
-            if ($.inArray(candidate, suitable) < 0)
+            }
+
+            if ($.inArray(candidate, suitable) < 0) {
                 suitable.push(candidate);
+            }
         }
 
-        for (i = 0, len = suitable.length; i < len; i++)
-            if (this.contains(suitable[i], suitable))
+        for (i = 0, len = suitable.length; i < len; i++) {
+            if (this.contains(suitable[i], suitable)) {
                 return [suitable[i]];
+            }
+        }
 
         return suitable;
     },
 
     findFormat: function (sourceNode) {
         var format = this.format,
-        i, len, node, tags, attributes;
+            i, len, node, tags, attributes;
 
         for (i = 0, len = format.length; i < len; i++) {
             node = sourceNode;
@@ -3694,8 +3940,10 @@ var BlockFormatFinder = Class.extend({
             attributes = format[i].attr;
 
             while (node) {
-                if (dom.ofType(node, tags) && dom.attrEquals(node, attributes))
+                if (dom.ofType(node, tags) && dom.attrEquals(node, attributes)) {
                     return node;
+                }
+
                 node = node.parentNode;
             }
         }
@@ -3703,24 +3951,32 @@ var BlockFormatFinder = Class.extend({
     },
 
     getFormat: function (nodes) {
-        var findFormat = $.proxy(function(node) { return this.findFormat(dom.isDataNode(node) ? node.parentNode : node); }, this),
+        var that = this,
+            findFormat = function(node) {
+                    return that.findFormat(dom.isDataNode(node) ? node.parentNode : node);
+                },
             result = findFormat(nodes[0]),
-            i;
+            i, len;
 
-        if (!result)
+        if (!result) {
             return "";
+        }
 
-        for (i = 1, len = nodes.length; i < len; i++)
-            if (result != findFormat(nodes[i]))
+        for (i = 1, len = nodes.length; i < len; i++) {
+            if (result != findFormat(nodes[i])) {
                 return "";
+            }
+        }
 
         return result.nodeName.toLowerCase();
     },
 
     isFormatted: function (nodes) {
-        for (var i = 0, len = nodes.length; i < len; i++)
-            if (!this.findFormat(nodes[i]))
+        for (var i = 0, len = nodes.length; i < len; i++) {
+            if (!this.findFormat(nodes[i])) {
                 return false;
+            }
+        }
 
         return true;
     }
@@ -3736,8 +3992,9 @@ var BlockFormatter = Class.extend({
     wrap: function(tag, attributes, nodes) {
         var commonAncestor = nodes.length == 1 ? dom.blockParentOrBody(nodes[0]) : dom.commonAncestor.apply(null, nodes);
 
-        if (dom.isInline(commonAncestor))
+        if (dom.isInline(commonAncestor)) {
             commonAncestor = dom.blockParentOrBody(commonAncestor);
+        }
 
         var ancestors = dom.significantChildNodes(commonAncestor),
             position = dom.findNodeIndex(ancestors[0]),
@@ -3762,8 +4019,9 @@ var BlockFormatter = Class.extend({
             wrapper.appendChild(ancestor);
         }
 
-        if (wrapper.firstChild)
+        if (wrapper.firstChild) {
             dom.insertAt(commonAncestor, wrapper, position);
+        }
     },
 
     apply: function (nodes) {
@@ -3872,7 +4130,9 @@ var BlockFormatTool = FormatTool.extend({
     init: function (options) {
         FormatTool.fn.init.call(this, extend(options, {
             finder: new BlockFormatFinder(options.format),
-            formatter: function () { return new BlockFormatter(options.format) }
+            formatter: function () {
+                return new BlockFormatter(options.format);
+            }
         }));
     }
 });
@@ -3905,10 +4165,10 @@ var FormatBlockTool = Tool.extend({
             toolName = "formatBlock";
 
         new Editor.SelectBox(ui, {
-            dataTextField: "Text",
-            dataValueField: "Value",
-            dataSource: editor.options.formatBlock,
-            title: editor.options.localization.formatBlock,
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: this.options.items ? this.options.items : editor.options.formatBlock,
+            title: editor.options.messages.formatBlock,
             change: function (e) {
                 Tool.exec(editor, toolName, this.value());
             },
@@ -3928,7 +4188,7 @@ extend(Editor, {
     FormatBlockTool: FormatBlockTool
 });
 
-registerTool("formatBlock", new FormatBlockTool({template: new ToolTemplate({template: EditorUtils.dropDownListTemplate, title: "Format Block", initialValue: "Select Block Type"})}));
+registerTool("formatBlock", new FormatBlockTool({template: new ToolTemplate({template: EditorUtils.dropDownListTemplate})}));
 
 registerFormat("justifyLeft", [ { tags: dom.blockElements, attr: { style: { textAlign: "left"}} }, { tags: ["img"], attr: { style: { "float": "left"}} } ]);
 registerTool("justifyLeft", new BlockFormatTool({format: formats.justifyLeft, template: new ToolTemplate({template: EditorUtils.buttonTemplate, title: "Justify Left"})}));
@@ -3947,7 +4207,6 @@ registerTool("justifyFull", new BlockFormatTool({format: formats.justifyFull, te
 
 // Imports ================================================================
 var kendo = window.kendo,
-    Class = kendo.Class,
     extend = $.extend,
     Editor = kendo.ui.editor,
     dom = Editor.Dom,
@@ -3966,8 +4225,9 @@ var ParagraphCommand = Command.extend({
 
     exec: function () {
         var range = this.getRange(),
-            document = RangeUtils.documentFromRange(range),
+            doc = RangeUtils.documentFromRange(range),
             parent, previous, next,
+            container,
             emptyParagraphContent = $.browser.msie ? '' : '<br _moz_dirty="" />',
             paragraph, marker, li, heading, rng,
             // necessary while the emptyParagraphContent is empty under IE
@@ -3976,10 +4236,37 @@ var ParagraphCommand = Command.extend({
             endInBlock = dom.parentOfType(range.endContainer, blocks),
             shouldTrim = (startInBlock && !endInBlock) || (!startInBlock && endInBlock);
 
+        function clean(node) {
+            if (node.firstChild && dom.is(node.firstChild, 'br')) {
+                dom.remove(node.firstChild);
+            }
+
+            if (dom.isDataNode(node) && !node.nodeValue) {
+                node = node.parentNode;
+            }
+
+            if (node && !dom.is(node, 'img')) {
+                while (node.firstChild && node.firstChild.nodeType == 1) {
+                    node = node.firstChild;
+                }
+
+                if (!node.innerHTML) {
+                    node.innerHTML = emptyParagraphContent;
+                }
+            }
+        }
+
         range.deleteContents();
 
-        marker = dom.create(document, 'a');
+        marker = dom.create(doc, 'a');
         range.insertNode(marker);
+
+        if (!marker.parentNode) {
+            // inserting paragraph in Firefox full body range
+            container = range.commonAncestorContainer;
+            container.innerHTML = "";
+            container.appendChild(marker);
+        }
 
         normalize(marker.parentNode);
 
@@ -3991,8 +4278,8 @@ var ParagraphCommand = Command.extend({
             rng.selectNode(li);
 
             // hitting 'enter' in empty li
-            if (RangeUtils.textNodes(rng).length == 0) {
-                paragraph = dom.create(document, 'p');
+            if (!RangeUtils.textNodes(rng).length) {
+                paragraph = dom.create(doc, 'p');
 
                 if (li.nextSibling) {
                     RangeUtils.split(rng, li.parentNode);
@@ -4004,7 +4291,7 @@ var ParagraphCommand = Command.extend({
                 next = paragraph;
             }
         } else if (heading && !marker.nextSibling) {
-            paragraph = dom.create(document, 'p');
+            paragraph = dom.create(doc, 'p');
 
             dom.insertAfter(paragraph, heading);
             paragraph.innerHTML = emptyParagraphContent;
@@ -4037,26 +4324,6 @@ var ParagraphCommand = Command.extend({
 
             dom.remove(parent);
 
-            function clean(node) {
-                if (node.firstChild && dom.is(node.firstChild, 'br')) {
-                    dom.remove(node.firstChild);
-                }
-
-                if (dom.isDataNode(node) && node.nodeValue == '') {
-                    node = node.parentNode;
-                }
-
-                if (node && !dom.is(node, 'img')) {
-                    while (node.firstChild && node.firstChild.nodeType == 1) {
-                        node = node.firstChild;
-                    }
-
-                    if (node.innerHTML == '') {
-                        node.innerHTML = emptyParagraphContent;
-                    }
-                }
-            }
-
             clean(previous);
             clean(next);
 
@@ -4070,6 +4337,12 @@ var ParagraphCommand = Command.extend({
             range.setStartBefore(next);
         } else {
             range.selectNodeContents(next);
+
+            var textNode = RangeUtils.textNodes(range)[0];
+
+            if (textNode) {
+                range.selectNodeContents(textNode);
+            }
         }
 
         range.collapse(true);
@@ -4143,9 +4416,11 @@ var ListFormatFinder = BlockFormatFinder.extend({
     isFormatted: function (nodes) {
         var formatNodes = [], formatNode;
 
-        for (var i = 0; i < nodes.length; i++)
-            if ((formatNode = this.findFormat(nodes[i])) && dom.name(formatNode) == this.tag)
+        for (var i = 0; i < nodes.length; i++) {
+            if ((formatNode = this.findFormat(nodes[i])) && dom.name(formatNode) == this.tag) {
                 formatNodes.push(formatNode);
+            }
+        }
 
         if (formatNodes.length < 1) {
             return false;
@@ -4155,7 +4430,12 @@ var ListFormatFinder = BlockFormatFinder.extend({
             return false;
         }
 
+        // check if sequential lists are selected
         for (i = 0; i < formatNodes.length; i++) {
+            if (formatNodes[i].parentNode != formatNode.parentNode) {
+                break;
+            }
+
             if (formatNodes[i] != formatNode) {
                 return false;
             }
@@ -4165,9 +4445,12 @@ var ListFormatFinder = BlockFormatFinder.extend({
     },
 
     findSuitable: function (nodes) {
-        var candidate = dom.parentOfType(nodes[0], this.tags)
-        if (candidate && dom.name(candidate) == this.tag)
+        var candidate = dom.parentOfType(nodes[0], this.tags);
+
+        if (candidate && dom.name(candidate) == this.tag) {
             return candidate;
+        }
+
         return null;
     }
 
@@ -4182,10 +4465,11 @@ var ListFormatter = Class.extend({
     },
 
     wrap: function(list, nodes) {
-        var li = dom.create(list.ownerDocument, 'li');
+        var li = dom.create(list.ownerDocument, "li"),
+            i, node;
 
-        for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
+        for (i = 0; i < nodes.length; i++) {
+            node = nodes[i];
 
             if (dom.is(node, 'li')) {
                 list.appendChild(node);
@@ -4219,14 +4503,17 @@ var ListFormatter = Class.extend({
             }
         }
 
-        if (li.firstChild)
+        if (li.firstChild) {
             list.appendChild(li);
+        }
     },
 
     containsAny: function(parent, nodes) {
-        for (var i = 0; i < nodes.length; i++)
-            if (dom.isAncestorOrSelf(parent, nodes[i]))
+        for (var i = 0; i < nodes.length; i++) {
+            if (dom.isAncestorOrSelf(parent, nodes[i])) {
                 return true;
+            }
+        }
 
         return false;
     },
@@ -4250,10 +4537,12 @@ var ListFormatter = Class.extend({
     },
 
     split: function (range) {
-        var nodes = textNodes(range);
+        var nodes = textNodes(range),
+            start, end;
+
         if (nodes.length) {
-            var start = dom.parentOfType(nodes[0], ['li']);
-            var end = dom.parentOfType(nodes[nodes.length - 1], ['li'])
+            start = dom.parentOfType(nodes[0], ['li']);
+            end = dom.parentOfType(nodes[nodes.length - 1], ['li']);
             range.setStartBefore(start);
             range.setEndAfter(end);
 
@@ -4271,63 +4560,12 @@ var ListFormatter = Class.extend({
         }
     },
 
-    apply: function (nodes) {
-        var tag = this.tag,
-            commonAncestor = nodes.length == 1 ? dom.parentOfType(nodes[0], ['ul','ol']) : dom.commonAncestor.apply(null, nodes);
+    merge: function(tag, formatNode) {
+        var prev = formatNode.previousSibling, next;
 
-        if (!commonAncestor)
-            commonAncestor = dom.parentOfType(nodes[0], ["td"]) || nodes[0].ownerDocument.body;
-
-        if (dom.isInline(commonAncestor))
-            commonAncestor = dom.blockParentOrBody(commonAncestor);
-
-        var ancestors = [];
-
-        var formatNode = this.finder.findSuitable(nodes);
-
-        if (!formatNode)
-            formatNode = new ListFormatFinder(tag == 'ul' ? 'ol' : 'ul').findSuitable(nodes);
-
-        var childNodes = dom.significantChildNodes(commonAncestor);
-
-        if (!childNodes.length) {
-            childNodes = nodes;
+        while (prev && (prev.className == "k-marker" || (prev.nodeType == 3 && dom.isWhitespace(prev)))) {
+            prev = prev.previousSibling;
         }
-
-        if (/table|tbody/.test(dom.name(commonAncestor))) {
-            childNodes = $.map(nodes, function(node) { return dom.parentOfType(node, ["td"]) });
-        }
-
-        for (var i = 0; i < childNodes.length; i++) {
-            var child = childNodes[i];
-            var nodeName = dom.name(child);
-            if (this.suitable(child, nodes) && (!formatNode || !dom.isAncestorOrSelf(formatNode, child))) {
-
-                if (formatNode && (nodeName == 'ul' || nodeName == 'ol')) {
-                    // merging lists
-                    $.each(child.childNodes, function () { ancestors.push(this) });
-                    dom.remove(child);
-                } else {
-                    ancestors.push(child);
-                }
-            }
-        }
-
-        if (ancestors.length == childNodes.length && commonAncestor != nodes[0].ownerDocument.body && !/table|tbody|tr|td/.test(dom.name(commonAncestor)))
-            ancestors = [commonAncestor];
-
-        if (!formatNode) {
-            formatNode = dom.create(commonAncestor.ownerDocument, tag);
-            dom.insertBefore(formatNode, ancestors[0]);
-        }
-
-        this.wrap(formatNode, ancestors);
-
-        if (!dom.is(formatNode, tag))
-            dom.changeTag(formatNode, tag);
-
-        var prev = formatNode.previousSibling;
-        while (prev && (prev.className == "k-marker" || (prev.nodeType == 3 && dom.isWhitespace(prev)))) prev = prev.previousSibling;
 
         // merge with previous list
         if (prev && dom.name(prev) == tag) {
@@ -4338,8 +4576,10 @@ var ListFormatter = Class.extend({
             formatNode = prev;
         }
 
-        var next = formatNode.nextSibling;
-        while (next && (next.className == "k-marker" || (next.nodeType == 3 && dom.isWhitespace(next)))) next = next.nextSibling;
+        next = formatNode.nextSibling;
+        while (next && (next.className == "k-marker" || (next.nodeType == 3 && dom.isWhitespace(next)))) {
+            next = next.nextSibling;
+        }
 
         // merge with next list
         if (next && dom.name(next) == tag) {
@@ -4347,6 +4587,120 @@ var ListFormatter = Class.extend({
                 next.insertBefore(formatNode.lastChild, next.firstChild);
             }
             dom.remove(formatNode);
+        }
+    },
+
+    applyOnSection: function (section, nodes) {
+        var tag = this.tag,
+            commonAncestor;
+
+        if (nodes.length == 1) {
+            commonAncestor = dom.parentOfType(nodes[0], ["ul","ol"]);
+        } else {
+            commonAncestor = dom.commonAncestor.apply(null, nodes);
+        }
+
+        if (!commonAncestor) {
+            commonAncestor = dom.parentOfType(nodes[0], ["td"]) || nodes[0].ownerDocument.body;
+        }
+
+        if (dom.isInline(commonAncestor)) {
+            commonAncestor = dom.blockParentOrBody(commonAncestor);
+        }
+
+        var ancestors = [];
+
+        var formatNode = this.finder.findSuitable(nodes);
+
+        if (!formatNode) {
+            formatNode = new ListFormatFinder(tag == "ul" ? "ol" : "ul").findSuitable(nodes);
+        }
+
+        var childNodes = dom.significantChildNodes(commonAncestor);
+
+        if (!childNodes.length) {
+            childNodes = nodes;
+        }
+
+        if (/table|tbody/.test(dom.name(commonAncestor))) {
+            childNodes = $.map(nodes, function(node) {
+                return dom.parentOfType(node, ["td"]);
+            });
+        }
+
+        function pushAncestor() {
+            ancestors.push(this);
+        }
+
+        for (var i = 0; i < childNodes.length; i++) {
+            var child = childNodes[i];
+            var nodeName = dom.name(child);
+            if (this.suitable(child, nodes) && (!formatNode || !dom.isAncestorOrSelf(formatNode, child))) {
+
+                if (formatNode && (nodeName == "ul" || nodeName == "ol")) {
+                    // merging lists
+                    //Array.prototype.push.apply(ancestors, $.toArray(child.childNodes));
+                    $.each(child.childNodes, pushAncestor);
+                    dom.remove(child);
+                } else {
+                    ancestors.push(child);
+                }
+            }
+        }
+
+        if (ancestors.length == childNodes.length && commonAncestor != nodes[0].ownerDocument.body && !/table|tbody|tr|td/.test(dom.name(commonAncestor))) {
+            ancestors = [commonAncestor];
+        }
+
+        if (!formatNode) {
+            formatNode = dom.create(commonAncestor.ownerDocument, tag);
+            dom.insertBefore(formatNode, ancestors[0]);
+        }
+
+        this.wrap(formatNode, ancestors);
+
+        if (!dom.is(formatNode, tag)) {
+            dom.changeTag(formatNode, tag);
+        }
+
+        this.merge(tag, formatNode);
+    },
+
+    apply: function (nodes) {
+        var i = 0,
+            sections = [],
+            lastSection,
+            lastNodes,
+            section;
+
+        // split nodes into sections that need to be different lists
+        do {
+            section = dom.parentOfType(nodes[i], ["td","body"]);
+
+            if (!lastSection || section != lastSection) {
+                if (lastSection) {
+                    sections.push({
+                        section: lastSection,
+                        nodes: lastNodes
+                    });
+                }
+
+                lastNodes = [nodes[i]];
+                lastSection = section;
+            } else {
+                lastNodes.push(nodes[i]);
+            }
+
+            i++;
+        } while (i < nodes.length);
+
+        sections.push({
+            section: lastSection,
+            nodes: lastNodes
+        });
+
+        for (i = 0; i < sections.length; i++) {
+            this.applyOnSection(sections[i].section, sections[i].nodes);
         }
     },
 
@@ -4396,9 +4750,13 @@ var ListFormatter = Class.extend({
 
     remove: function (nodes) {
         var formatNode;
-        for (var i = 0, l = nodes.length; i < l; i++)
-            if (formatNode = this.finder.findFormat(nodes[i]))
+        for (var i = 0, l = nodes.length; i < l; i++) {
+            formatNode = this.finder.findFormat(nodes[i]);
+
+            if (formatNode) {
                 this.unwrap(formatNode);
+            }
+        }
     },
 
     toggle: function (range) {
@@ -4488,7 +4846,7 @@ var LinkFormatter = Class.extend({
 
     apply: function (range, attributes) {
         var nodes = textNodes(range);
-        if (attributes.innerHTML != undefined) {
+        if (attributes.innerHTML) {
             var markers = RangeUtils.getMarkers(range);
             var document = RangeUtils.documentFromRange(range);
             range.deleteContents();
@@ -4541,31 +4899,37 @@ var LinkCommand = Command.extend({
 
         var initialText = null;
 
-        var self = this;
+        var that = this;
 
         function apply(e) {
             var href = $('#k-editor-link-url', dialog.element).val();
 
             if (href && href != 'http://') {
-                self.attributes = { href: href };
+                that.attributes = { href: href };
 
                 var title = $('#k-editor-link-title', dialog.element).val();
-                if (title)
-                    self.attributes.title = title;
+                if (title) {
+                    that.attributes.title = title;
+                }
 
                 var text = $('#k-editor-link-text', dialog.element).val();
-                if (text !== initialText)
-                    self.attributes.innerHTML = text || href;
+                if (text !== initialText) {
+                    that.attributes.innerHTML = text || href;
+                }
 
                 var target = $('#k-editor-link-target', dialog.element).is(':checked');
-                if (target)
-                    self.attributes.target = '_blank';
+                if (target) {
+                    that.attributes.target = '_blank';
+                }
 
-                self.formatter.apply(range, self.attributes);
+                that.formatter.apply(range, that.attributes);
             }
+
             close(e);
-            if (self.change)
-                self.change();
+
+            if (that.change) {
+                that.change();
+            }
         }
 
         function close(e) {
@@ -4574,10 +4938,10 @@ var LinkCommand = Command.extend({
 
             dom.windowFromDocument(RangeUtils.documentFromRange(range)).focus();
 
-            self.releaseRange(range);
+            that.releaseRange(range);
         }
 
-        var a = nodes.length ? self.formatter.finder.findSuitable(nodes[0]) : null;
+        var a = nodes.length ? that.formatter.finder.findSuitable(nodes[0]) : null;
 
         var shouldShowText = nodes.length <= 1 || (nodes.length == 2 && collapsed);
 
@@ -4604,10 +4968,11 @@ var LinkCommand = Command.extend({
             .find('.k-dialog-insert').click(apply).end()
             .find('.k-dialog-close').click(close).end()
             .find('.k-form-text-row input').keydown(function (e) {
-                if (e.keyCode == 13)
+                if (e.keyCode == 13) {
                     apply(e);
-                else if (e.keyCode == 27)
+                } else if (e.keyCode == 27) {
                     close(e);
+                }
             }).end()
             // IE < 8 returns absolute url if getAttribute is not used
             .find('#k-editor-link-url').val(a ? a.getAttribute('href', 2) : 'http://').end()
@@ -4618,8 +4983,9 @@ var LinkCommand = Command.extend({
             .data('kendoWindow')
             .center();
 
-        if (shouldShowText && nodes.length > 0)
+        if (shouldShowText && nodes.length > 0) {
             initialText = $('#k-editor-link-text', dialog.element).val();
+        }
 
         $('#k-editor-link-url', dialog.element).focus().select();
     },
@@ -4696,10 +5062,11 @@ var ImageCommand = Command.extend({
             if (!img) {
                 img = dom.create(RangeUtils.documentFromRange(range), "img", attributes);
                 img.onload = img.onerror = function () {
-                    img.removeAttribute("complete");
-                    img.removeAttribute("width");
-                    img.removeAttribute("height");
-                }
+                        img.removeAttribute("complete");
+                        img.removeAttribute("width");
+                        img.removeAttribute("height");
+                    };
+
                 range.deleteContents();
                 range.insertNode(img);
                 range.setStartAfter(img);
@@ -4725,7 +5092,6 @@ var ImageCommand = Command.extend({
 
     exec: function () {
         var that = this,
-            insertImage = that.insertImage,
             range = that.lockRange(),
             applied = false,
             img = RangeUtils.image(range),
@@ -4764,14 +5130,8 @@ var ImageCommand = Command.extend({
             }
         }
 
-//        var fileBrowser = that.editor.fileBrowser;
-//        var showBrowser = fileBrowser && fileBrowser.selectUrl !== undefined;
-//
-        function activate() {
-//            if (showBrowser) {
-//                new $t.imageBrowser($(this).find(".k-image-browser"), extend(fileBrowser, { apply: apply, element: that.editor.element, localization: that.editor.options.localization }));
-//            }
-        }
+        //var fileBrowser = that.editor.fileBrowser;
+        //var showBrowser = fileBrowser && fileBrowser.selectUrl !== undefined;
 
         windowContent =
             '<div class="k-editor-dialog">' +
@@ -4790,7 +5150,18 @@ var ImageCommand = Command.extend({
                 .appendTo(document.body)
                 .kendoWindow(extend({}, that.editor.options.dialogOptions, {
                     title: INSERTIMAGE,
-                    close: close
+                    close: close,
+                    activate: function() {
+                        //if (showBrowser) {
+                            //new $t.imageBrowser(
+                                //$(this).find(".k-image-browser"),
+                                //extend(fileBrowser, {
+                                    //apply: apply,
+                                    //element: that.editor.element,
+                                    //messages: that.editor.options.messages
+                                //}));
+                        //}
+                    }
                 }))
                 .hide()
                 .find(".k-dialog-insert").click(apply).end()
@@ -4907,7 +5278,7 @@ var ColorPicker = Widget.extend({
                 that.close();
             }
         } else {
-            that.trigger(CHANGE, { value: that._value })
+            that.trigger(CHANGE, { value: that._value });
         }
     },
 
@@ -5050,7 +5421,8 @@ function indent(node, value) {
             node.style[property] = value + "px";
         } else {
             node.style[property] = "";
-            if (node.style.cssText == "") {
+
+            if (!node.style.cssText) {
                 node.removeAttribute("style");
             }
         }
@@ -5070,7 +5442,7 @@ var IndentFormatter = Class.extend({
         if (formatNodes.length) {
             for (i = 0, len = formatNodes.length; i < len; i++) {
                 if (dom.is(formatNodes[i], "li")) {
-                    if ($(formatNodes[i]).index() == 0) {
+                    if (!$(formatNodes[i]).index()) {
                         targets.push(formatNodes[i].parentNode);
                     } else if ($.inArray(formatNodes[i].parentNode, targets) < 0) {
                         targets.push(formatNodes[i]);
@@ -5111,7 +5483,7 @@ var IndentFormatter = Class.extend({
                         }
                     }
                 } else {
-                    var marginLeft = parseInt(indent(formatNode)) + 30;
+                    var marginLeft = parseInt(indent(formatNode), 10) + 30;
                     indent(formatNode, marginLeft);
 
                     for (var targetIndex = 0; targetIndex < targets.length; targetIndex++) {
@@ -5122,7 +5494,7 @@ var IndentFormatter = Class.extend({
                 }
             }
         } else {
-            var formatter = new BlockFormatter([{tags:blockElements}], {style:{marginLeft:30}});
+            var formatter = new BlockFormatter([{tags:"p"}], {style:{marginLeft:30}});
 
             formatter.apply(nodes);
         }
@@ -5130,10 +5502,11 @@ var IndentFormatter = Class.extend({
 
     remove: function(nodes) {
         var formatNodes = this.finder.findSuitable(nodes),
-            targetNode, i, len, list, listParent, siblings;
+            targetNode, i, len, list, listParent, siblings,
+            formatNode, marginLeft;
 
         for (i = 0, len = formatNodes.length; i < len; i++) {
-            var formatNode = $(formatNodes[i]);
+            formatNode = $(formatNodes[i]);
 
             if (formatNode.is("li")) {
                 list = formatNode.parent();
@@ -5146,8 +5519,9 @@ var IndentFormatter = Class.extend({
                     }
 
                     siblings = formatNode.nextAll("li");
-                    if (siblings.length)
+                    if (siblings.length) {
                         $(list[0].cloneNode(false)).appendTo(formatNode).append(siblings);
+                    }
 
                     if (listParent.is("li")) {
                         formatNode.insertAfter(listParent);
@@ -5171,7 +5545,7 @@ var IndentFormatter = Class.extend({
                 targetNode = formatNodes[i];
             }
 
-            var marginLeft = parseInt(indent(targetNode)) - 30;
+            marginLeft = parseInt(indent(targetNode), 10) - 30;
             indent(targetNode, marginLeft);
         }
     }
@@ -5221,8 +5595,8 @@ var OutdentTool = Tool.extend({
 
             if (!isOutdentable) {
                 listParentsCount = $(suitable[i]).parents("ul,ol").length;
-                isOutdentable = (dom.is(suitable[i], "li") && (listParentsCount > 1 || indent(suitable[i].parentNode)))
-                             || (dom.ofType(suitable[i], ["ul","ol"]) && listParentsCount > 0);
+                isOutdentable = (dom.is(suitable[i], "li") && (listParentsCount > 1 || indent(suitable[i].parentNode))) ||
+                                (dom.ofType(suitable[i], ["ul","ol"]) && listParentsCount > 0);
             }
 
             if (isOutdentable) {
@@ -5246,6 +5620,91 @@ registerTool("indent", new Tool({ command: IndentCommand, template: new ToolTemp
 registerTool("outdent", new OutdentTool({template: new ToolTemplate({template: EditorUtils.buttonTemplate, title: "Outdent"})}));
 
 })(jQuery);
+(function($, undefined) {
+
+var kendo = window.kendo,
+    extend = $.extend,
+    Editor = kendo.ui.editor,
+    dom = Editor.Dom,
+    RangeUtils = Editor.RangeUtils,
+    EditorUtils = Editor.EditorUtils,
+    Command = Editor.Command,
+    Tool = Editor.Tool,
+    ToolTemplate = Editor.ToolTemplate;
+
+var ViewHtmlCommand = Command.extend({
+    init: function(options) {
+        var cmd = this;
+        cmd.options = options;
+        Command.fn.init.call(cmd, options);
+        cmd.attributes = null;
+        cmd.async = true;
+    },
+
+    exec: function () {
+        var that = this,
+            editor = that.editor,
+            range = editor.getRange(),
+            dialog = $(ViewHtmlCommand.template).appendTo(document.body),
+            content = ViewHtmlCommand.indent(editor.value()),
+            textarea = ".k-editor-textarea";
+
+        function apply(e) {
+            editor.value(dialog.find(textarea).val());
+
+            close(e);
+
+            if (that.change) {
+                that.change();
+            }
+        }
+
+        function close(e) {
+            e.preventDefault();
+
+            dialog.data("kendoWindow").destroy();
+
+            dom.windowFromDocument(RangeUtils.documentFromRange(range)).focus();
+        }
+
+        dialog.kendoWindow(extend({}, editor.options.dialogOptions, {
+            title: "View HTML",
+            close: close
+        }))
+            .hide()
+            .find(textarea).val(content).end()
+            .find(".k-dialog-update").click(apply).end()
+            .find(".k-dialog-close").click(close).end()
+            .show()
+            .data("kendoWindow")
+            .center();
+
+        dialog.find(textarea).focus();
+    }
+});
+
+extend(ViewHtmlCommand, {
+    template: "<div class='k-editor-dialog'>" +
+                "<textarea class='k-editor-textarea k-input'></textarea>" +
+                "<div class='k-button-wrapper'>" +
+                    "<button class='k-dialog-update k-button'>Update</button>" +
+                    "&nbsp;or&nbsp;" +
+                    "<a href='#' class='k-dialog-close k-link'>Close</a>" +
+                "</div>" +
+            "</div>",
+    indent: function(content) {
+        return content.replace(/<\/(p|li|ul|ol|h[1-6]|table|tr|td|th)>/ig, "</$1>\n")
+                      .replace(/<(ul|ol)([^>]*)><li/ig, "<$1$2>\n<li")
+                      .replace(/<br \/>/ig, "<br />\n")
+                      .replace(/\n$/, "");
+    }
+});
+
+kendo.ui.editor.ViewHtmlCommand = ViewHtmlCommand;
+
+Editor.EditorUtils.registerTool("viewHtml", new Tool({ command: ViewHtmlCommand, template: new ToolTemplate({template: EditorUtils.buttonTemplate, title: "View HTML"})}));
+
+})(jQuery);
 (function($) {
 
 // Imports ================================================================
@@ -5253,7 +5712,6 @@ var kendo = window.kendo,
     Class = kendo.Class,
     extend = $.extend,
     Editor = kendo.ui.editor,
-    dom = Editor.Dom,
     RangeUtils = Editor.RangeUtils,
     Marker = Editor.Marker;
 
@@ -5264,8 +5722,9 @@ var PendingFormats = Class.extend({
     },
 
     apply: function(range) {
-        if (!this.hasPending())
+        if (!this.hasPending()) {
             return;
+        }
 
         var marker = new Marker();
 
@@ -5276,14 +5735,15 @@ var PendingFormats = Class.extend({
         var target = caret.previousSibling;
 
         /* under IE, target is a zero-length text node. go figure. */
-        if (!target.nodeValue)
+        if (!target.nodeValue) {
             target = target.previousSibling;
+        }
 
         range.setStart(target, target.nodeValue.length - 1);
 
         marker.add(range);
 
-        if (RangeUtils.textNodes(range).length == 0) {
+        if (!RangeUtils.textNodes(range).length) {
             marker.remove(range);
             range.collapse(true);
             this.editor.selectRange(range);
@@ -5327,9 +5787,11 @@ var PendingFormats = Class.extend({
 
     getPending: function(format) {
         var formats = this.formats;
-        for (var i = 0; i < formats.length; i++)
-            if (formats[i].name == format)
+        for (var i = 0; i < formats.length; i++) {
+            if (formats[i].name == format) {
                 return formats[i];
+            }
+        }
 
         return;
     },
@@ -5337,15 +5799,17 @@ var PendingFormats = Class.extend({
     toggle: function(format) {
         var formats = this.formats;
 
-        for (var i = 0; i < formats.length; i++)
+        for (var i = 0; i < formats.length; i++) {
             if (formats[i].name == format.name) {
-                if (formats[i].params && formats[i].params.value != format.params.value)
+                if (formats[i].params && formats[i].params.value != format.params.value) {
                     formats[i].params.value = format.params.value;
-                else
+                } else {
                     formats.splice(i, 1);
+                }
 
                 return;
             }
+        }
 
         formats.push(format);
     },
@@ -5361,3 +5825,4 @@ extend(Editor, {
 });
 
 })(jQuery);
+;

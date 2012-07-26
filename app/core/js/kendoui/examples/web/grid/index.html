@@ -2,27 +2,30 @@
 <html>
 <head>
     <title>Basic usage</title>
+
+    <link href="../../content/shared/styles/examples-offline.css" rel="stylesheet">
+    <link href="../../../styles/kendo.common.min.css" rel="stylesheet">
+    <link href="../../../styles/kendo.default.min.css" rel="stylesheet">
+
     <script src="../../../js/jquery.min.js"></script>
     <script src="../../../js/kendo.web.min.js"></script>
     <script src="../../content/shared/js/console.js"></script>
-    <link href="../../../styles/kendo.common.min.css" rel="stylesheet" />
-    <link href="../../../styles/kendo.default.min.css" rel="stylesheet" />
 </head>
 <body>
-    <a href="../index.html">Back</a>
+    <a class="offline-button" href="../index.html">Back</a>
             <script src="../../content/shared/js/people.js"></script>
 
         <div id="example" class="k-content">
             <div id="clientsDb">
 
-                <div id="grid"></div>
+                <div id="grid" style="height: 380px"></div>
 
             </div>
 
             <style scoped>
                 #clientsDb {
                     width: 692px;
-                    height: 393px;
+                    height: 413px;
                     margin: 30px auto;
                     padding: 51px 4px 0 4px;
                     background: url('../../content/web/grid/clientsDb.png') no-repeat 0 0;
@@ -35,9 +38,7 @@
                             data: createRandomData(50),
                             pageSize: 10
                         },
-                        height: 360,
                         groupable: true,
-                        scrollable: true,
                         sortable: true,
                         pageable: true,
                         columns: [ {
@@ -66,5 +67,6 @@
                 });
             </script>
         </div>
+
 </body>
 </html>

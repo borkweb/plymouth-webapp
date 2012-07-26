@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -197,7 +197,7 @@
          * @constructs
          * @extends kendo.ui.Widget
          *
-         * @param {DomElement} element DOM element
+         * @param {Element} element DOM element
          * @param {Object} options Configuration options.
          *
          * @option {String} [orientation] <horizontal>
@@ -253,7 +253,6 @@
          */
         init: function(element, options) {
             var that = this,
-                panesConfig,
                 triggerResize = function() {
                     that.trigger(RESIZE);
                 };
@@ -263,7 +262,6 @@
             that.wrapper = that.element;
 
             that.orientation = that.options.orientation.toLowerCase() != VERTICAL ? HORIZONTAL : VERTICAL;
-            splitbarSelector = ".k-splitbar-draggable-" + that.orientation;
 
             that.bind(RESIZE, proxy(that._resize, that));
 
@@ -274,6 +272,8 @@
             $(window).resize(triggerResize);
 
             that.resizing = new PaneResizing(that);
+
+            that.element.triggerHandler("init.kendoSplitter");
         },
         events: [
             /**
@@ -487,13 +487,23 @@
                 .delegate(splitbarSelector, MOUSELEAVE, function() { $(this).removeClass("k-splitbar-" + that.orientation + "-hover"); })
                 .delegate(splitbarSelector, "mousedown", function() { that._contentFrames(this).after("<div class='k-overlay' />"); })
                 .delegate(splitbarSelector, "mouseup", function() { that._contentFrames(this).next(".k-overlay").remove(); })
-                .delegate(expandCollapseSelector, MOUSEENTER, function() { $(this).addClass("k-state-hover")})
-                .delegate(expandCollapseSelector, MOUSELEAVE, function() { $(this).removeClass('k-state-hover')})
+                .delegate(expandCollapseSelector, MOUSEENTER, function() { $(this).addClass("k-state-hover"); })
+                .delegate(expandCollapseSelector, MOUSELEAVE, function() { $(this).removeClass('k-state-hover'); })
                 .delegate(".k-splitbar .k-collapse-next, .k-splitbar .k-collapse-prev", CLICK, that._arrowClick(COLLAPSE))
                 .delegate(".k-splitbar .k-expand-next, .k-splitbar .k-expand-prev", CLICK, that._arrowClick(EXPAND))
                 .delegate(".k-splitbar", "dblclick", proxy(that._dbclick, that))
                 .parent().closest(".k-splitter").each(function() {
-                    $(this).data("kendoSplitter").bind(RESIZE,  triggerResize);
+                    var parentSplitter = $(this),
+                        splitter = parentSplitter.data("kendoSplitter");
+
+                    if (splitter) {
+                        splitter.bind(RESIZE, triggerResize);
+                    } else {
+                        parentSplitter.one("init.kendoSplitter", function() {
+                            $(this).data("kendoSplitter").bind(RESIZE, triggerResize);
+                            triggerResize();
+                        });
+                    }
                 });
         },
 
@@ -569,7 +579,7 @@
                     pane.removeClass("k-scrollable")
                         .html("<iframe src='" + url + "' frameborder='0' class='k-content-frame'>" +
                                 "This page requires frames in order to show content" +
-                            + "</iframe>");
+                              "</iframe>");
                 }
             }
         },
@@ -610,8 +620,9 @@
                 var target = $(e.target),
                     pane;
 
-                if (target.closest(".k-splitter")[0] != that.element[0])
+                if (target.closest(".k-splitter")[0] != that.element[0]) {
                     return;
+                }
 
                 if (target.is(".k-" + arrowType + "-prev")) {
                     pane = target.parent().prev();
@@ -698,6 +709,7 @@
 
                     if (config.collapsed) {
                         size = 0;
+                        $(this).css("overflow", "hidden");
                     } else if (isFluid(config.size)) {
                         freeSizedPanes = freeSizedPanes.add(this);
                         return;
@@ -733,7 +745,7 @@
                 positioningProperty = isHorizontal ? "left" : "top",
                 sizingDomProperty = isHorizontal ? "offsetWidth" : "offsetHeight";
 
-            if (freeSizePanesCount == 0) {
+            if (freeSizePanesCount === 0) {
                 var lastNonCollapsedPane = panes.filter(function() {
                     return !(($(this).data(PANE) || {}).collapsed);
                 }).last();
@@ -776,14 +788,22 @@
          *
          */
         toggle: function(pane, expand) {
-            var pane = $(pane),
-                paneConfig = pane.data(PANE);
+            var paneConfig;
+
+            pane = $(pane);
+            paneConfig = pane.data(PANE);
 
             if (arguments.length == 1) {
                 expand = paneConfig.collapsed === undefined ? false : paneConfig.collapsed;
             }
 
             paneConfig.collapsed = !expand;
+
+            if (paneConfig.collapsed) {
+                pane.css("overflow", "hidden");
+            } else {
+                pane.css("overflow", "");
+            }
 
             this.trigger(RESIZE);
         },
@@ -922,7 +942,7 @@
 
         that._resizable = new kendo.ui.Resizable(splitter.element, {
             orientation: orientation,
-            handle: ".k-splitbar-draggable-" + orientation,
+            handle: splitter.element.children(".k-splitbar-draggable-" + orientation),
             hint: proxy(that._createHint, that),
             start: proxy(that._start, that),
             max: proxy(that._max, that),
@@ -936,7 +956,7 @@
         _createHint: function(handle) {
             var that = this;
             return $("<div class='k-ghost-splitbar k-ghost-splitbar-" + that.orientation + " k-state-default' />")
-                        .css(that.alternateSizingProperty, handle[that.alternateSizingProperty]())
+                        .css(that.alternateSizingProperty, handle[that.alternateSizingProperty]());
         },
         _start: function(e) {
             var that = this,
@@ -945,8 +965,8 @@
                 nextPane = splitbar.next(),
                 previousPaneConfig = previousPane.data(PANE),
                 nextPaneConfig = nextPane.data(PANE),
-                prevBoundary = parseInt(previousPane[0].style[that.positioningProperty]),
-                nextBoundary = parseInt(nextPane[0].style[that.positioningProperty]) + nextPane[0][that.sizingDomProperty] - splitbar[0][that.sizingDomProperty],
+                prevBoundary = parseInt(previousPane[0].style[that.positioningProperty], 10),
+                nextBoundary = parseInt(nextPane[0].style[that.positioningProperty], 10) + nextPane[0][that.sizingDomProperty] - splitbar[0][that.sizingDomProperty],
                 totalSize = that._element.css(that.sizingProperty),
                 toPx = function (value) {
                     var val = parseInt(value, 10);
@@ -981,8 +1001,8 @@
                     nextPane = splitbar.next(),
                     previousPaneConfig = previousPane.data(PANE),
                     nextPaneConfig = nextPane.data(PANE),
-                    previousPaneNewSize = ghostPosition - parseInt(previousPane[0].style[that.positioningProperty]),
-                    nextPaneNewSize = parseInt(nextPane[0].style[that.positioningProperty]) + nextPane[0][that.sizingDomProperty] - ghostPosition - splitbar[0][that.sizingDomProperty],
+                    previousPaneNewSize = ghostPosition - parseInt(previousPane[0].style[that.positioningProperty], 10),
+                    nextPaneNewSize = parseInt(nextPane[0].style[that.positioningProperty], 10) + nextPane[0][that.sizingDomProperty] - ghostPosition - splitbar[0][that.sizingDomProperty],
                     fluidPanesCount = that._element.children(PANECLASS).filter(function() { return isFluid($(this).data(PANE).size); }).length;
 
                 if (!isFluid(previousPaneConfig.size) || fluidPanesCount > 1) {
@@ -1002,6 +1022,7 @@
 
             return false;
         }
-    }
+    };
 
 })(jQuery);
+;

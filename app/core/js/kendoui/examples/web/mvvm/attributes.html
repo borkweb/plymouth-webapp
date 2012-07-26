@@ -2,15 +2,20 @@
 <html>
 <head>
     <title>Attribute binding</title>
+
+    <link href="../../content/shared/styles/examples-offline.css" rel="stylesheet">
+    <link href="../../../styles/kendo.common.min.css" rel="stylesheet">
+    <link href="../../../styles/kendo.default.min.css" rel="stylesheet">
+
     <script src="../../../js/jquery.min.js"></script>
     <script src="../../../js/kendo.web.min.js"></script>
     <script src="../../content/shared/js/console.js"></script>
-    <link href="../../../styles/kendo.common.min.css" rel="stylesheet" />
-    <link href="../../../styles/kendo.default.min.css" rel="stylesheet" />
 </head>
 <body>
-    <a href="../index.html">Back</a>
-    <div id="example" class="k-content">
+    <a class="offline-button" href="../index.html">Back</a>
+    
+
+<div id="example" class="k-content">
     <div class="demo-section">
         <img data-bind="attr: { src: imageSrc, alt: imageAlt, title: imageTitle }" />
 
@@ -23,9 +28,9 @@
             var viewModel = kendo.observable({
                 imageSrc: null,
                 food: [
-                    { name: "Mishi Kobe Niku", url: "../../content/shared/images/foods/9.jpg" },
-                    { name: "Chef Anton's Cajun Seasoning", url: "../../content/shared/images/foods/4.jpg" },
-                    { name: "Queso Manchego La Pastora", url: "../../content/shared/images/foods/12.jpg" }
+                    { name: "Mishi Kobe Niku", url: "../../content/web/foods/9.jpg" },
+                    { name: "Chef Anton's Cajun Seasoning", url: "../../content/web/foods/4.jpg" },
+                    { name: "Queso Manchego La Pastora", url: "../../content/web/foods/12.jpg" }
                 ],
                 imageAlt: "Alt attribute value",
                 imageTitle: "Title attribute value"
@@ -57,9 +62,9 @@
 var viewModel = kendo.observable({
     imageSrc: null,
     food: [
-        { name: &quot;Mishi Kobe Niku&quot;, url: &quot;../../content/shared/images/foods/9.jpg&quot; },
-        { name: &quot;Chef Anton's Cajun Seasoning&quot;, url: &quot;../../content/shared/images/foods/4.jpg&quot; },
-        { name: &quot;Queso Manchego La Pastora&quot;, url: &quot;../../content/shared/images/foods/12.jpg&quot; },
+        { name: &quot;Mishi Kobe Niku&quot;, url: &quot;../../content/web/foods/9.jpg&quot; },
+        { name: &quot;Chef Anton's Cajun Seasoning&quot;, url: &quot;../../content/web/foods/4.jpg&quot; },
+        { name: &quot;Queso Manchego La Pastora&quot;, url: &quot;../../content/web/foods/12.jpg&quot; },
     ],
     imageAlt: &quot;Alt attribute value&quot;,
     imageTitle: &quot;Title attribute value&quot;
@@ -91,7 +96,7 @@ kendo.bind($(&quot;#example&quot;), viewModel);
             float: right;
             width: 200px;
         }
-        
+
         #example > div > label > select
         {
             width: 207px;

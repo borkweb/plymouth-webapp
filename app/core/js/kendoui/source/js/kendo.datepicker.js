@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -128,12 +128,27 @@
     MONTH = "month",
     FIRST = "first",
     calendar = kendo.calendar,
-    views = calendar.viewsEnum,
     isInRange = calendar.isInRange,
     restrictValue = calendar.restrictValue,
+    isEqualDatePart = calendar.isEqualDatePart,
     extend = $.extend,
     proxy = $.proxy,
     DATE = Date;
+
+    function normalize(options) {
+        var parseFormats = options.parseFormats;
+
+        calendar.normalize(options);
+
+        parseFormats = $.isArray(parseFormats) ? parseFormats : [parseFormats];
+        parseFormats.splice(0, 0, options.format);
+
+        options.parseFormats = parseFormats;
+    }
+
+    function preventDefault(e) {
+        e.preventDefault();
+    }
 
     var DateView = function(options) {
         var that = this,
@@ -147,7 +162,7 @@
 
         that.calendar = sharedCalendar;
         that.options = options = options || {};
-        that.popup = new ui.Popup($(DIV).addClass("k-calendar-container").appendTo(body), extend(options.popup, options));
+        that.popup = new ui.Popup($(DIV).addClass("k-calendar-container").appendTo(body), extend(options.popup, options, { name: "Popup" }));
 
         that._templates();
 
@@ -169,7 +184,7 @@
                        .undelegate(CLICK_DATEPICKER)
                        .delegate("td:has(.k-link)", CLICK_DATEPICKER, proxy(that._click, that))
                        .unbind(MOUSEDOWN)
-                       .bind(MOUSEDOWN, function(e) { e.preventDefault(); })
+                       .bind(MOUSEDOWN, preventDefault)
                        .show();
 
                 calendar.unbind(CHANGE)
@@ -177,11 +192,12 @@
 
                 if (!touch) {
                     calendar.unbind(NAVIGATE)
-                            .bind(NAVIGATE, proxy(that._navigate, that))
+                            .bind(NAVIGATE, proxy(that._navigate, that));
                 }
 
                 calendar.month = that.month;
                 calendar.options.depth = options.depth;
+                calendar.options.culture = options.culture;
 
                 calendar._footer(that.footer);
 
@@ -221,14 +237,12 @@
         move: function(e) {
             var that = this,
                 options = that.options,
-                min = options.min,
-                max = options.max,
                 currentValue = new DATE(that._current),
                 calendar = that.calendar,
                 index = calendar._index,
                 view = calendar._view,
                 key = e.keyCode,
-                dateString, value, prevent, method;
+                value, prevent, method;
 
             if (key == keys.ESC) {
                 that.close();
@@ -379,11 +393,13 @@
                 empty: template("<td>" + (empty || "&nbsp;") + "</td>", { useWithBlock: !!empty })
             };
 
-            if (footer) {
-                that.footer = template(footer, { useWithBlock: false });
+            if (footer !== false) {
+                that.footer = template(footer || '#= kendo.toString(data,"D","' + options.culture +'") #', { useWithBlock: false });
             }
         }
     };
+
+    DateView.normalize = normalize;
 
     kendo.DateView = DateView;
 
@@ -391,7 +407,7 @@
         /**
          * @constructs
          * @extends kendo.ui.Widget
-         * @param {DomElement} element DOM element
+         * @param {Element} element DOM element
          * @param {Object} options Configuration options.
          * @option {Date} [value] <null> Specifies the selected date.
          * _example
@@ -427,10 +443,16 @@
          * var datePicker = $("#datePicker").data("kendoDatePicker");
          * // set the max date to Jan 1st, 2013
          * datePicker.max(new Date(2013,0, 1));
-         * @option {String} [format] <MM/dd/yyyy> Specifies the format, which is used to parse value set with value() method.
+         * @option {String} [format] <MM/dd/yyyy> Specifies the format, which is used to format the value of the DatePicker displayed in the input.
          * _example
          * $("#datePicker").kendoDatePicker({
          *     format: "yyyy/MM/dd"
+         * });
+         * @option {Array} [parseFormats] <> Specifies the formats, which are used to parse the value set with value() method or by direct input. If not set the value of the format will be used.
+         * _example
+         * $("#datePicker").kendoDatePicker({
+         *     format: "yyyy/MM/dd",
+         *     parseFormats: ["MMMM yyyy"] //format also will be added to parseFormats
          * });
          * @option {String} [start] <month> Specifies the start view.
          * The following settings are available for the <b>start</b> value:
@@ -501,34 +523,35 @@
          *     start: "decade",
          *     depth: "year" // the datePicker will only go to the year level
          * });
-         * @option {Function} [footer] <> Template to be used for rendering the footer of the calendar.
+         * @option {String} [footer] <> Template to be used for rendering the footer of the calendar.
          * _example
          *  // DatePicker initialization
-         *  &lt;script&gt;
+         *  <script>
          *      $("#datePicker").kendoDatePicker({
          *          footer: kendo.template("Today - #=kendo.toString(data, 'd') #")
          *      });
-         *  &lt;/script&gt;
+         *  </script>
          * @option {Object} [month] <> Templates for the cells rendered in the calendar "month" view.
-         * @option {Function} [month.content] <> Template to be used for rendering the cells in the calendar "month" view, which are in range.
+         * @option {String} [month.content] <> Template to be used for rendering the cells in the calendar "month" view, which are in range.
          * _example
          *  //template
-         *  &lt;script id="cellTemplate" type="text/x-kendo-tmpl"&gt;
-         *      &lt;div class="${ data.value < 10 ? exhibition : party }"&gt;
-         *      &lt;/div&gt;
+         *
+         * <script id="cellTemplate" type="text/x-kendo-tmpl">
+         *      <div class="${ data.value < 10 ? exhibition : party }">
+         *      </div>
          *      ${ data.value }
-         *  &lt;/script&gt;
+         *  </script>
          *
          *  //datePicker initialization
-         *  &lt;script&gt;
+         *  <script>
          *      $("#datePicker").kendoDatePicker({
          *          month: {
          *             content:  kendo.template($("#cellTemplate").html()),
          *          }
          *      });
-         *  &lt;/script&gt;
+         *  </script>
          *
-         * @option {Function} [month.empty]
+         * @option {String} [month.empty]
          * The template used for rendering the cells in the calendar "month" view, which are not in the range between
          * the minimum and maximum values.
          *
@@ -567,20 +590,26 @@
          *     }
          * });
          *
+         * @option {String} [culture] <en-US> Specifies the culture info used by the widget.
+         * _example
+         *
+         * // specify on widget initialization
+         * $("#datepicker").kendoDatePicker({
+         *     culture: "de-DE"
+         * });
          */
         init: function(element, options) {
-            var that = this,
-                dateView, enable;
+            var that = this;
 
             Widget.fn.init.call(that, element, options);
             element = that.element;
             options = that.options;
 
-            calendar.validate(options);
+            normalize(options);
 
             that._wrapper();
 
-            that.dateView = dateView = new DateView(extend({}, options, {
+            that.dateView = new DateView(extend({}, options, {
                 anchor: that.wrapper,
                 change: function() {
                     // calendar is the current scope
@@ -600,6 +629,10 @@
             }));
 
             that._icon();
+
+            if (!touch) {
+                element[0].type = "text";
+            }
 
             element
                 .addClass("k-input")
@@ -687,10 +720,12 @@
         options: {
             name: "DatePicker",
             value: null,
+            footer: "",
             format: "",
+            culture: "",
+            parseFormats: [],
             min: new Date(1900, 0, 1),
             max: new Date(2099, 11, 31),
-            footer: '#= kendo.toString(data,"D") #',
             start: MONTH,
             depth: MONTH,
             animation: {},
@@ -698,8 +733,13 @@
         },
 
         setOptions: function(options) {
-            Widget.fn.setOptions.call(this, options);
-            extend(this.dateView.options, options);
+            var that = this;
+
+            Widget.fn.setOptions.call(that, options);
+
+            normalize(that.options);
+
+            extend(that.dateView.options, that.options);
         },
 
         /**
@@ -717,7 +757,7 @@
         */
         enable: function(enable) {
             var that = this,
-                icon = that._icon.unbind(CLICK + " " + MOUSEDOWN),
+                icon = that._dateIcon.unbind(CLICK + " " + MOUSEDOWN),
                 wrapper = that._inputWrapper.unbind(HOVEREVENTS),
                 element = that.element;
 
@@ -737,7 +777,7 @@
                     .removeAttr(DISABLED);
 
                 icon.bind(CLICK, proxy(that._click, that))
-                    .bind(MOUSEDOWN, function(e) { e.preventDefault(); })
+                    .bind(MOUSEDOWN, preventDefault);
             }
         },
 
@@ -847,11 +887,11 @@
             var that = this,
                 element = that.element;
 
+            that.dateView.toggle();
+
             if (!touch && element[0] !== document.activeElement) {
                 element.focus();
             }
-
-            that.dateView.toggle();
         },
 
         _change: function(value) {
@@ -887,10 +927,10 @@
             icon = element.next("span.k-select");
 
             if (!icon[0]) {
-                icon = $('<span unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-icon-calendar">select</span></span>').insertAfter(element);
+                icon = $('<span unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-calendar">select</span></span>').insertAfter(element);
             }
 
-            that._icon = icon;
+            that._dateIcon = icon;
         },
 
         _option: function(option, value) {
@@ -901,7 +941,7 @@
                 return options[option];
             }
 
-            value = parse(value, options.format);
+            value = parse(value, options.parseFormats, options.culture);
 
             if (!value) {
                 return;
@@ -914,16 +954,23 @@
         _update: function(value) {
             var that = this,
                 options = that.options,
-                format = options.format,
-                date = parse(value, format);
+                min = options.min,
+                max = options.max,
+                date = parse(value, options.parseFormats, options.culture);
 
-            if (!isInRange(date, options.min, options.max)) {
+            if (+date === +that._value) {
+                return date;
+            }
+
+            if (date !== null && isEqualDatePart(date, min)) {
+                date = restrictValue(date, min, max);
+            } else if (!isInRange(date, min, max)) {
                 date = null;
             }
 
             that._value = date;
             that.dateView.value(date);
-            that.element.val(date ? kendo.toString(date, format) : value);
+            that.element.val(date ? kendo.toString(date, options.format, options.culture) : value);
 
             return date;
         },
@@ -954,3 +1001,4 @@
     ui.plugin(DatePicker);
 
 })(jQuery);
+;

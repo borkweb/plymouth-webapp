@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -93,9 +93,9 @@
     var kendo = window.kendo,
         touch = kendo.support.touch,
         keys = kendo.keys,
+        extractFormat = kendo._extractFormat,
         ui = kendo.ui,
         Widget = ui.Widget,
-        keys = kendo.keys,
         OPEN = "open",
         CLOSE = "close",
         CHANGE = "change",
@@ -103,7 +103,6 @@
         DEFAULT = "k-state-default",
         DISABLED = "disabled",
         LI = "li",
-        DIV = "<div/>",
         SPAN = "<span/>",
         FOCUSED = "k-state-focused",
         HOVER = "k-state-hover",
@@ -113,6 +112,7 @@
         MS_PER_DAY = 86400000,
         SELECTED = "k-state-selected",
         STATEDISABLED = "k-state-disabled",
+        isArray = $.isArray,
         extend = $.extend,
         proxy = $.proxy,
         DATE = Date,
@@ -121,7 +121,7 @@
     TODAY = new DATE(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate(), 0, 0, 0);
 
     var TimeView = function(options) {
-        var that = this, list;
+        var that = this;
 
         that.options = options;
 
@@ -133,9 +133,7 @@
 
         that.list = $("<div class='k-list-container'/>")
                     .append(that.ul)
-                    .mousedown(function(e) {
-                        e.preventDefault();
-                    });
+                    .mousedown(preventDefault);
 
         that._popup();
 
@@ -171,13 +169,35 @@
             var that = this;
 
             if (!that.ul[0].firstChild) {
-                that.refresh();
+                that.bind();
             }
 
             that.popup.open();
             if (that._current) {
                 that.scroll(that._current[0]);
             }
+        },
+
+        dataBind: function(dates) {
+            var that = this,
+                options = that.options,
+                format = options.format,
+                toString = kendo.toString,
+                template = that.template,
+                length = dates.length,
+                idx = 0,
+                date,
+                html = "";
+
+            for (; idx < length; idx++) {
+                date = dates[idx];
+
+                if (isInRange(date, options.min, options.max)) {
+                    html += template(toString(date, format, options.culture));
+                }
+            }
+
+            that._html(html, length);
         },
 
         refresh: function() {
@@ -220,18 +240,37 @@
                     start = new DATE(max);
                 }
 
-                html += template(toString(start, format));
+                html += template(toString(start, format, options.culture));
             }
 
-            that.ul[0].innerHTML = html;
+            that._html(html, length);
+        },
 
+        bind: function() {
+            var that = this,
+                dates = that.options.dates;
+
+            if (dates && dates[0]) {
+                that.dataBind(dates);
+            } else {
+                that.refresh();
+            }
+        },
+
+        _html: function(html, length) {
+            var that = this;
+
+            that.ul[0].innerHTML = html;
             that._height(length);
 
+            that.current(null);
             that.select(that._value);
         },
 
         scroll: function(item) {
-            if (!item) return;
+            if (!item) {
+                return;
+            }
 
             var ul = this.ul[0],
                 itemOffsetTop = item.offsetTop,
@@ -240,16 +279,19 @@
                 ulOffsetHeight = ul.clientHeight,
                 bottomDistance = itemOffsetTop + itemOffsetHeight;
 
-            ul.scrollTop = ulScrollTop > itemOffsetTop
-                        ? itemOffsetTop
-                        : bottomDistance > (ulScrollTop + ulOffsetHeight)
-                        ? bottomDistance - ulOffsetHeight
-                        : ulScrollTop;
+                ul.scrollTop = ulScrollTop > itemOffsetTop ?
+                               itemOffsetTop : bottomDistance > (ulScrollTop + ulOffsetHeight) ?
+                               bottomDistance - ulOffsetHeight : ulScrollTop;
         },
 
         select: function(li) {
             var that = this,
+                options = that.options,
                 current = that._current;
+
+            if (li instanceof Date) {
+                li = kendo.toString(li, options.format, options.culture);
+            }
 
             if (typeof li === "string") {
                 if (!current || current.text() !== li) {
@@ -310,6 +352,30 @@
             }
         },
 
+        _parse: function(value) {
+            var that = this,
+                options = that.options,
+                current = that._value || TODAY;
+
+            if (value instanceof DATE) {
+                return value;
+            }
+
+            value = kendo.parseDate(value, options.parseFormats, options.culture);
+
+            if (value) {
+                value = new DATE(current.getFullYear(),
+                                 current.getMonth(),
+                                 current.getDate(),
+                                 value.getHours(),
+                                 value.getMinutes(),
+                                 value.getSeconds(),
+                                 value.getMilliseconds());
+            }
+
+            return value;
+        },
+
         _popup: function() {
             var that = this,
                 list = that.list,
@@ -360,6 +426,9 @@
 
             } else if (key === keys.ENTER || key === keys.TAB || key === keys.ESC) {
                 e.preventDefault();
+                if (current) {
+                    that.options.change(current.text(), true);
+                }
                 that.close();
             }
         }
@@ -408,8 +477,10 @@
             msMax += MS_PER_DAY;
         }
 
-        return msValue >= msMin && msValue <= msMax
+        return msValue >= msMin && msValue <= msMax;
     }
+
+    TimeView.getMilliseconds = getMilliseconds;
 
     kendo.TimeView = TimeView;
 
@@ -421,7 +492,7 @@
          * @constructs
          * @extends kendo.ui.Widget
          *
-         * @param {DomElement} element DOM element
+         * @param {Element} element DOM element
          * @param {Object} options Configuration options.
          *
          * @option {Date} [value] <null>
@@ -433,8 +504,20 @@
          * @option {Date} [max] <00:00>
          * Specifies the end value in the popup list.
          *
-         * @option {String} [format] <h:mm tt>
-         * Specifies the format, which is used to parse value set with value() method.
+         * @option {String} [format] <h:mm tt> Specifies the format, which is used to format the value of the TimePicker displayed in the input.
+         *
+         * @option {Array} [parseFormats] <> Specifies the formats, which are used to parse the value set with the value method or by direct input. If not set the value of the options.format will be used.
+         * _example
+         * $("#timePicker").kendoTimePicker({
+         *     format: "h:mm tt",
+         *     parseFormats: ["HH:mm"] //format also will be added to parseFormats
+         * });
+         *
+         * @option {Array} [dates] <> Specifies a list of dates, which are shown in the time drop-down list. If not set, the DateTimePicker will auto-generate the available times.
+         *  _example
+         * $("#timePicker").kendoTimePicker({
+         *     dates: [new Date(2000, 10, 10, 10, 0, 0), new Date(2000, 10, 10, 30, 0)] //the drop-down list will consist only two entries - "10:00 AM" and "10:30 AM"
+         * });
          *
          * @option {Number} [interval] <30>
          * Specifies the interval, between values in the popup list, in minutes.
@@ -473,6 +556,13 @@
          *     }
          * });
          *
+         * @option {String} [culture] <en-US> Specifies the culture info used by the widget.
+         * _example
+         *
+         * // specify on widget initialization
+         * $("#timepicker").kendoTimePicker({
+         *     culture: "de-DE"
+         * });
          */
         init: function(element, options) {
             var that = this;
@@ -482,7 +572,7 @@
             element = that.element;
             options = that.options;
 
-            options.format = options.format || kendo.culture().calendar.patterns.t;
+            normalize(options);
 
             that._wrapper();
 
@@ -510,6 +600,10 @@
 
             that._icon();
 
+            if (!touch) {
+                element[0].type = "text";
+            }
+
             element.addClass("k-input")
                 .bind({
                     keydown: proxy(that._keydown, that),
@@ -534,6 +628,8 @@
             min: TODAY,
             max: TODAY,
             format: "",
+            dates: [],
+            parseFormats: [],
             value: null,
             interval: 30,
             height: 200,
@@ -579,17 +675,67 @@
          * $("#timePicker").data("kendoTimePicker").unbind("change", onChange);
          *
          */
+         /**
+        * Fires when the time drop-down list is opened
+        * @name kendo.ui.TimePicker#open
+        * @event
+        * @param {Event} e
+        * @example
+        * $("#timePicker").kendoTimePicker({
+        *     open: function(e) {
+        *         // handle event
+        *     }
+        * });
+        * @exampleTitle To set after initialization
+        * @example
+        * // get a reference to the timePicker widget
+        * var timePicker = $("#timePicker").data("kendoTimePicker");
+        * // bind to the open event
+        * timePicker.bind("open", function(e) {
+        *     // handle event
+        * });
+        */
+        /**
+        * Fires when the time drop-down list is closed
+        * @name kendo.ui.TimePicker#close
+        * @event
+        * @param {Event} e
+        * @example
+        * $("#timePicker").kendoTimePicker({
+        *     close: function(e) {
+        *         // handle event
+        *     }
+        * });
+        * @exampleTitle To set after initialization
+        * @example
+        * // get a reference to the timePicker widget
+        * var timePicker = $("#timePicker").data("kendoTimePicker");
+        * // bind to the close event
+        * timePicker.bind("close", function(e) {
+        *     // handle event
+        * });
+        */
          OPEN,
          CLOSE,
          CHANGE
         ],
 
         setOptions: function(options) {
-            Widget.fn.setOptions.call(this, options);
+            var that = this;
 
-            extend(this.timeView.options, options);
+            Widget.fn.setOptions.call(that, options);
 
-            this.timeView.refresh();
+            normalize(that.options);
+
+            extend(that.timeView.options, that.options);
+
+            that.timeView.ul[0].innerHTML = "";
+        },
+
+        dataBind: function(dates) {
+            if (isArray(dates)) {
+                this.timeView.dataBind(dates);
+            }
         },
 
         /**
@@ -621,7 +767,7 @@
             if (enable === false) {
                 wrapper
                     .removeClass(DEFAULT)
-                    .addClass(STATEDISABLED)
+                    .addClass(STATEDISABLED);
 
                 element.attr(DISABLED, DISABLED);
             } else {
@@ -634,7 +780,7 @@
                     .removeAttr(DISABLED);
 
                 arrow.bind(CLICK, proxy(that._click, that))
-                     .bind(MOUSEDOWN, function(e) { e.preventDefault(); });
+                     .bind(MOUSEDOWN, preventDefault);
             }
         },
 
@@ -757,11 +903,11 @@
             var that = this,
                 element = that.element;
 
+            that.timeView.toggle();
+
             if (!touch && element[0] !== document.activeElement) {
                 element.focus();
             }
-
-            that.timeView.toggle();
         },
 
         _change: function(value) {
@@ -786,7 +932,7 @@
             arrow = element.next("span.k-select");
 
             if (!arrow[0]) {
-                arrow = $('<span unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-icon-clock">select</span></span>').insertAfter(element);
+                arrow = $('<span unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-clock">select</span></span>').insertAfter(element);
             }
 
             that._arrow = arrow;
@@ -795,14 +941,11 @@
         _keydown: function(e) {
             var that = this,
                 key = e.keyCode,
-                enter = key == keys.ENTER,
                 timeView = that.timeView;
 
-            if (timeView.popup.visible() || e.altKey || enter) {
+            if (timeView.popup.visible() || e.altKey) {
                 timeView.move(e);
-            }
-
-            if (enter) {
+            } else if (key === keys.ENTER) {
                 that._change(that.element.val());
             }
         },
@@ -815,7 +958,7 @@
                 return options[option];
             }
 
-            value = that._parse(value);
+            value = that.timeView._parse(value);
 
             if (!value) {
                 return;
@@ -825,30 +968,7 @@
 
             options[option] = value;
             that.timeView.options[option] = value;
-            that.timeView.refresh();
-        },
-
-        _parse: function(value) {
-            var that = this,
-                current = that._value || TODAY;
-
-            if (value instanceof DATE) {
-                return value;
-            }
-
-            value = kendo.parseDate(value, that.options.format);
-
-            if (value) {
-                value = new DATE(current.getFullYear(),
-                                 current.getMonth(),
-                                 current.getDate(),
-                                 value.getHours(),
-                                 value.getMinutes(),
-                                 value.getSeconds(),
-                                 value.getMilliseconds());
-            }
-
-            return value;
+            that.timeView.bind();
         },
 
         _toggleHover: function(e) {
@@ -859,18 +979,16 @@
 
         _update: function(value) {
             var that = this,
-                current = that._value,
                 options = that.options,
-                date = that._parse(value),
-                text = kendo.toString(date, options.format);
+                date = that.timeView._parse(value);
 
             if (!isInRange(date, options.min, options.max)) {
                 date = null;
             }
 
             that._value = date;
-            that.element.val(date ? text : value);
-            that.timeView.value(text);
+            that.element.val(date ? kendo.toString(date, options.format, options.culture) : value);
+            that.timeView.value(date);
 
             return date;
         },
@@ -898,6 +1016,21 @@
         }
     });
 
+    function normalize(options) {
+        var parseFormats = options.parseFormats;
+
+        options.format = extractFormat(options.format || kendo.getCulture(options.culture).calendars.standard.patterns.t);
+
+        parseFormats = isArray(parseFormats) ? parseFormats : [parseFormats];
+        parseFormats.splice(0, 0, options.format);
+        options.parseFormats = parseFormats;
+    }
+
+    function preventDefault(e) {
+        e.preventDefault();
+    }
+
     ui.plugin(TimePicker);
 
 })(jQuery);
+;

@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -43,8 +43,31 @@
         },
         nameSpecialCharRegExp = /(\[|\]|\$|\.|\:|\+)/g;
 
+    if (!kendo.ui.validator) {
+        kendo.ui.validator = { rules: {}, messages: {} };
+    }
+
+    function resolveRules(element) {
+        var resolvers = kendo.ui.validator.ruleResolvers || {},
+            rules = {},
+            name;
+
+        for (name in resolvers) {
+            $.extend(true, rules, resolvers[name].resolve(element));
+        }
+        return rules;
+    }
+
+    function decode(value) {
+        return value.replace(/&amp/g, '&amp;')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'")
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>');
+    }
+
     /**
-     *  @name kendo.ui.Validator.Description
+     *  @name kendo.Validator.Description
      *
      *  @section
      *  <p>
@@ -145,7 +168,7 @@
      *  <p>
      *      Ideally Kendo Validator places its tooltips besides the validated input. However, if the input is later enhanced to a ComboBox, AutoComplete or other Kendo Widget, placing the
      *      tooltip beside the input may cover important information or break the widget rendering. In this case, you can specify where exactly do you want the tooltip to be placed by
-     *      adding a span with data-for attribute set to the validated input ID and a class .k-invalid-msg. Check the example below:
+     *      adding a span with data-for attribute set to the validated input name and a class .k-invalid-msg. Check the example below:
      *  </p>
      *
      *  @exampleTitle <b>Validator</b> initialization with specific tooltip placement (the tooltip will remain outside of the AutoComplete widget after enhancement)
@@ -164,10 +187,10 @@
      *      $("#myform").kendoValidator();
      *  </script>
      */
-    var Validator = Widget.extend(/** @lends kendo.ui.Validator.prototype */{ /**
+    var Validator = Widget.extend(/** @lends kendo.Validator.prototype */{ /**
          * @constructs
-         * @extends kendo.ui.Widget
-         * @param {DomElement} element DOM element
+         * @extends kendo.Widget
+         * @param {Element} element DOM element
          * @param {Object} options Configuration options.
          * @option {Object} [rules] Set of validation rules. Those rules will extend the built-in ones.
          * _example
@@ -195,9 +218,16 @@
          *          }
          *      }
          * });
+         * @option {Boolean} [validateOnBlur] Determines if validation will be triggered when element loses focus. Default value is true.
          */
         init: function(element, options) {
-            var that = this;
+            var that = this,
+                resolved = resolveRules(element);
+
+            options = options || {};
+
+            options.rules = $.extend({}, kendo.ui.validator.rules, resolved.rules, options.rules);
+            options.messages = $.extend({}, kendo.ui.validator.messages, resolved.messages, options.messages);
 
             Widget.fn.init.call(that, element, options);
 
@@ -231,10 +261,9 @@
                         value = input.val();
 
                     return !(hasAttribute(input, "required") && (value === "" || !value  || checkbox));
-
                 },
                 pattern: function(input) {
-                    if (input.filter("[type=text],[type=email],[type=url],[type=tel],[type=search]").filter("[pattern]").length && input.val() !== "") {
+                    if (input.filter("[type=text],[type=email],[type=url],[type=tel],[type=search],[type=password]").filter("[pattern]").length && input.val() !== "") {
                         return patternMatcher(input.val(), input.attr("pattern"));
                     }
                     return true;
@@ -350,7 +379,7 @@
 
         /**
          * Validates the input element against the declared validation rules.
-         * @param {DomElement} input Input element to be validated.
+         * @param {Element} input Input element to be validated.
          * @returns {Boolean} If all rules are passed successfully.
          */
         validateInput: function(input) {
@@ -361,18 +390,19 @@
                 result = that._checkValidity(input),
                 valid = result.valid,
                 className = "." + INVALIDMSG,
-                fieldName = (input.attr(NAME) || "").replace(nameSpecialCharRegExp, "\\$1"),
-                DATAFOR = kendo.attr("for"),
-                lbl = that.element.find(className + "[" + DATAFOR +"=" + fieldName + "]").add(input.next(className)).hide(),
+                fieldName = (input.attr(NAME) || ""),
+                lbl = that._findMessageContainer(fieldName).add(input.next(className)).hide(),
                 messageText;
 
             if (!valid) {
                 messageText = that._extractMessage(input, result.key);
                 that._errors[fieldName] = messageText;
+                var messageLabel = $(template({ message: decode(messageText) }));
 
-                var messageLabel = $(template({ message: messageText })).addClass(INVALIDMSG).attr(DATAFOR, fieldName || "");
+                that._decorateMessageContainer(messageLabel, fieldName);
+
                 if (!lbl.replaceWith(messageLabel).length) {
-                    messageLabel.insertAfter(input)
+                    messageLabel.insertAfter(input);
                 }
                 messageLabel.show();
             }
@@ -380,6 +410,29 @@
             input.toggleClass(INVALIDINPUT, !valid);
 
             return valid;
+        },
+
+        _findMessageContainer: function(fieldName) {
+            var locators = kendo.ui.validator.messageLocators,
+                name,
+                containers = this.element.find("." + INVALIDMSG + "[" + kendo.attr("for") +"=" + fieldName.replace(nameSpecialCharRegExp, "\\$1") + "]");
+
+            for (name in locators) {
+                containers = containers.add(locators[name].locate(this.element, fieldName));
+            }
+
+            return containers;
+        },
+
+        _decorateMessageContainer: function(container, fieldName) {
+            var locators = kendo.ui.validator.messageLocators,
+                name;
+
+            container.addClass(INVALIDMSG).attr(kendo.attr("for"), fieldName || "");
+
+            for (name in locators) {
+                locators[name].decorate(container, fieldName);
+            }
         },
 
         _extractMessage: function(input, ruleKey) {
@@ -435,3 +488,4 @@
 
     kendo.ui.plugin(Validator);
 })(jQuery);
+;

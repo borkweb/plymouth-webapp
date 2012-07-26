@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -47,18 +47,30 @@
      * @example
      * $(document).ready(function() {
      *  $("#menu").kendoMenu({
-     *   dataSource: [
-     *    {
-     *     text: "Menu Item 1",
-     *     items: [
-     *      { text: "Sub Menu Item 1" },
-     *      { text: "Sub Menu Item 2" }
-     *     ]
-     *    },
-     *    {
-     *     text: "Menu Item 2"
-     *    }
-     *   ]
+     *   dataSource:
+     *     [{
+     *         text: "Item 1",
+     *         url: "http://www.kendoui.com"                // Link URL if navigation is needed, optional.
+     *     },
+     *     {
+     *         text: "<b>Item 2</b>",
+     *         encoded: false,                                 // Allows use of HTML for item text
+     *         content: "text"                                 // content within an item
+     *     },
+     *     {
+     *         text: "Item 3",
+     *         imageUrl: "http://www.kendoui.com/test.jpg", // Item image URL, optional.
+     *         items: [{                                    // Sub item collection
+     *              text: "Sub Item 1"
+     *         },
+     *         {
+     *              text: "Sub Item 2"
+     *         }]
+     *     },
+     *     {
+     *         text: "Item 4",
+     *         spriteCssClass: "imageClass3"                // Item image sprite CSS class, optional.
+     *     }]
      *  })
      * });
      *
@@ -140,22 +152,24 @@
         TIMER = "timer",
         FIRST = "k-first",
         IMAGE = "k-image",
-        EMPTY = ":empty",
         SELECT = "select",
         ZINDEX = "zIndex",
         MOUSEENTER = "mouseenter",
         MOUSELEAVE = "mouseleave",
         KENDOPOPUP = "kendoPopup",
-        SLIDEINRIGHT = "slideIn:right",
         DEFAULTSTATE = "k-state-default",
         DISABLEDSTATE = "k-state-disabled",
         groupSelector = ".k-group",
-        allItemsSelector = ".k-item",
+        allItemsSelector = ":not(.k-list) > .k-item",
         disabledSelector = ".k-item.k-state-disabled",
         itemSelector = ".k-item:not(.k-state-disabled)",
         linkSelector = ".k-item:not(.k-state-disabled) > .k-link",
+        templateSelector = "div:not(.k-animation-container,.k-list-container)",
 
         templates = {
+            content: template(
+                "<div class='k-content k-group'>#= content(item) #</div>"
+            ),
             group: template(
                 "<ul class='#= groupCssClass(group) #'#= groupAttributes(group) #>" +
                     "#= renderItems(data) #" +
@@ -193,8 +207,8 @@
                     result += " k-state-default";
                 }
 
-                if (group.firstLevel && index == 0) {
-                    result += " k-first"
+                if (group.firstLevel && index === 0) {
+                    result += " k-first";
                 }
 
                 if (index == group.length-1) {
@@ -216,9 +230,9 @@
                 var result = "k-icon";
 
                 if (group.horizontal) {
-                    result += " k-arrow-down";
+                    result += " k-i-arrow-s";
                 } else {
-                    result += " k-arrow-right";
+                    result += " k-i-arrow-e";
                 }
 
                 return result;
@@ -238,6 +252,10 @@
             /** @ignore */
             groupCssClass: function(group) {
                 return "k-group";
+            },
+            /** @ignore */
+            content: function(item) {
+                return item.content ? item.content : "&nbsp;";
             }
         };
 
@@ -276,7 +294,7 @@
     function updateItemClasses (item) {
         item = $(item);
 
-        item
+        item.addClass("k-item")
             .children(IMG)
             .addClass(IMAGE);
         item
@@ -295,7 +313,8 @@
             .addClass(DISABLEDSTATE)
             .removeAttr("disabled");
         item
-            .children("a:focus")
+            .children("a")
+            .filter(":focus")
             .parent()
             .addClass("k-state-active");
 
@@ -316,12 +335,12 @@
         item.find(".k-icon").remove();
 
         item.filter(":has(.k-group)")
-            .children(".k-link:not(:has([class*=k-arrow]))")
+            .children(".k-link:not(:has([class*=k-i-arrow]))")
             .each(function () {
                 var item = $(this),
                     parent = item.parent().parent();
 
-                item.append("<span class='k-icon " + (parent.hasClass(MENU + "-horizontal") ? "k-arrow-down" : "k-arrow-next") + "'/>");
+                item.append("<span class='k-icon " + (parent.hasClass(MENU + "-horizontal") ? "k-i-arrow-s" : "k-i-arrow-e") + "'/>");
             });
     }
 
@@ -388,6 +407,13 @@
          * $("#menu").kendoMenu({
          *     direction: "top left"
          * });
+         * @option {String} [popupCollision] Specifies how Menu should adjust to screen boundaries. By default the strategy is <b>"fit"</b> for a sub menu with a horizontal parent,
+         * meaning it will move to fit in screen boundaries in all directions, and <b>"fit flip"</b> for a sub menu with vertical parent, meaning it will fit vertically and flip over
+         * its parent horizontally. You can also switch off the screen boundary detection completely if you set the <b>popupCollision</b> to false.
+         * _example
+         * $("#menu").kendoMenu({
+         *     popupCollision: false
+         * });
          */
         init: function(element, options) {
             var that = this;
@@ -395,19 +421,11 @@
             Widget.fn.init.call(that, element, options);
 
             element = that.wrapper = that.element;
-
             options = that.options;
 
             if (options.dataSource) {
-                that.element.empty().append($(Menu.renderGroup({
-                    items: options.dataSource,
-                    group: {
-                        firstLevel: true,
-                        horizontal: that.element.hasClass(MENU + "-horizontal"),
-                        expanded: true
-                    },
-                    menu: {}
-                })).children());
+                that.element.empty();
+                that.append(options.dataSource, element);
             }
 
             that._updateClasses();
@@ -430,8 +448,10 @@
                 element.delegate(linkSelector, "touchstart touchend", that._toggleHover);
             }
 
-            $(document).click(proxy( that._documentClick, that ));
-            that.clicked = false;
+            if (options.openOnClick) {
+                that.clicked = false;
+                $(document).click(proxy( that._documentClick, that ));
+            }
 
             kendo.notify(that);
         },
@@ -578,7 +598,12 @@
          *         url: "http://www.kendoui.com"                // Link URL if navigation is needed, optional.
          *     },
          *     {
-         *         text: "Item 2",
+         *         text: "<b>Item 2</b>",
+         *         encoded: false,                                 // Allows use of HTML for item text
+         *         content: "text"                                 // content within an item
+         *     },
+         *     {
+         *         text: "Item 3",
          *         imageUrl: "http://www.kendoui.com/test.jpg", // Item image URL, optional.
          *         items: [{                                    // Sub item collection
          *              text: "Sub Item 1"
@@ -588,7 +613,7 @@
          *         }]
          *     },
          *     {
-         *         text: "Item 3",
+         *         text: "Item 4",
          *         spriteCssClass: "imageClass3"                // Item image sprite CSS class, optional.
          *     }],
          *     referenceItem
@@ -599,13 +624,19 @@
 
             var inserted = this._insert(item, referenceItem, referenceItem.length ? referenceItem.find("> .k-group, .k-animation-container > .k-group") : null);
 
-            each(inserted.items, function () {
+            each(inserted.items, function (idx) {
                 inserted.group.append(this);
-                updateFirstLast(this);
+
+                var contents = inserted.contents[idx];
+                if (contents) {
+                    $(this).append(contents);
+                }
+
+                updateArrow(this);
             });
 
             updateArrow(referenceItem);
-            updateFirstLast(inserted.group.find(".k-first, .k-last"));
+            updateFirstLast(inserted.group.find(".k-first, .k-last").add(inserted.items));
 
             return this;
         },
@@ -633,7 +664,12 @@
          *         url: "http://www.kendoui.com"                // Link URL if navigation is needed, optional.
          *     },
          *     {
-         *         text: "Item 2",
+         *         text: "<b>Item 2</b>",
+         *         encoded: false,                                 // Allows use of HTML for item text
+         *         content: "text"                                 // content within an item
+         *     },
+         *     {
+         *         text: "Item 3",
          *         imageUrl: "http://www.kendoui.com/test.jpg", // Item image URL, optional.
          *         items: [{                                    // Sub item collection
          *              text: "Sub Item 1"
@@ -643,7 +679,7 @@
          *         }]
          *     },
          *     {
-         *         text: "Item 3",
+         *         text: "Item 4",
          *         spriteCssClass: "imageClass3"                // Item image sprite CSS class, optional.
          *     }],
          *     referenceItem
@@ -654,8 +690,15 @@
 
             var inserted = this._insert(item, referenceItem, referenceItem.parent());
 
-            each(inserted.items, function () {
+            each(inserted.items, function (idx) {
                 referenceItem.before(this);
+
+                var contents = inserted.contents[idx];
+                if (contents) {
+                    $(this).append(contents);
+                }
+
+                updateArrow(this);
                 updateFirstLast(this);
             });
 
@@ -687,7 +730,12 @@
          *         url: "http://www.kendoui.com"                // Link URL if navigation is needed, optional.
          *     },
          *     {
-         *         text: "Item 2",
+         *         text: "<b>Item 2</b>",
+         *         encoded: false,                                 // Allows use of HTML for item text
+         *         content: "text"                                 // content within an item
+         *     },
+         *     {
+         *         text: "Item 3",
          *         imageUrl: "http://www.kendoui.com/test.jpg", // Item image URL, optional.
          *         items: [{                                    // Sub item collection
          *              text: "Sub Item 1"
@@ -697,7 +745,7 @@
          *         }]
          *     },
          *     {
-         *         text: "Item 3",
+         *         text: "Item 4",
          *         spriteCssClass: "imageClass3"                // Item image sprite CSS class, optional.
          *     }],
          *     referenceItem
@@ -709,8 +757,15 @@
 
             var inserted = this._insert(item, referenceItem, referenceItem.parent());
 
-            each(inserted.items, function () {
+            each(inserted.items, function (idx) {
                 referenceItem.after(this);
+
+                var contents = inserted.contents[idx];
+                if (contents) {
+                    $(this).append(contents);
+                }
+
+                updateArrow(this);
                 updateFirstLast(this);
             });
 
@@ -720,14 +775,14 @@
         },
 
         _insert: function (item, referenceItem, parent) {
-            var that = this;
+            var that = this,
+                items, groups, contents = [];
 
             if (!referenceItem || !referenceItem.length) {
                 parent = that.element;
             }
 
             var plain = $.isPlainObject(item),
-                items,
                 groupData = {
                     firstLevel: parent.hasClass(MENU),
                     horizontal: parent.hasClass(MENU + "-horizontal"),
@@ -741,18 +796,36 @@
 
             if (plain || $.isArray(item)) { // is JSON
                 items = $.map(plain ? [ item ] : item, function (value, idx) {
-                            return $(Menu.renderItem({
-                                group: groupData,
-                                item: extend(value, { index: idx })
-                            }));
+                            if (typeof value === "string") {
+                                return $(value);
+                            } else {
+                                return $(Menu.renderItem({
+                                    group: groupData,
+                                    item: extend(value, { index: idx })
+                                }));
+                            }
+                        });
+                contents = $.map(plain ? [ item ] : item, function (value, idx) {
+                            if (value.content || value.contentUrl) {
+                                return $(Menu.renderContent({
+                                    item: extend(value, { index: idx })
+                                }));
+                            } else {
+                                return false;
+                            }
                         });
             } else {
                 items = $(item);
+                groups = items.find("> ul")
+                                .addClass("k-group");
+                items = items.filter("li");
 
-                updateItemClasses(items);
+                items.add(groups.find("> li")).each(function () {
+                    updateItemClasses(this);
+                });
             }
 
-            return { items: items, group: parent };
+            return { items: items, group: parent, contents: contents };
         },
 
         /**
@@ -783,7 +856,11 @@
 
             if (group && !group.children(allItemsSelector).length) {
                 var container = group.parent(".k-animation-container");
-                container.length ? container.remove() : group.remove();
+                if (container.length) {
+                    container.remove();
+                } else {
+                    group.remove();
+                }
             }
 
             if (parent.length) {
@@ -824,6 +901,16 @@
                 direction = horizontal ? (direction + " right").replace("default", "bottom") : "right";
             }
 
+            element.siblings()
+                   .find(">.k-popup:visible,>.k-animation-container>.k-popup:visible")
+                   .each(function () {
+                       var popup = $(this).data("kendoPopup");
+
+                       if (popup) {
+                           popup.close();
+                       }
+                   });
+
             element.each(function () {
                 var li = $(this);
 
@@ -847,12 +934,22 @@
                             popup = ul.kendoPopup({
                                 origin: directions.origin,
                                 position: directions.position,
-                                collision: parentHorizontal ? "fit" : "fit flip",
+                                collision: options.popupCollision !== undefined ? options.popupCollision : (parentHorizontal ? "fit" : "fit flip"),
                                 anchor: li,
                                 appendTo: li,
                                 animation: {
                                     open: extend(true, { effects: openEffects }, options.animation.open),
                                     close: options.animation.close
+                                },
+                                close: function (e) {
+                                    var li = e.sender.wrapper.parent();
+
+                                    if (that.trigger(CLOSE, { item: li[0] }) === false) {
+                                        li.css(ZINDEX, li.data(ZINDEX));
+                                        li.removeData(ZINDEX);
+                                    } else {
+                                        e.preventDefault();
+                                    }
                                 }
                             }).data(KENDOPOPUP);
                         } else {
@@ -891,6 +988,10 @@
             var that = this;
             element = that.element.find(element);
 
+            if (!element[0]) {
+                element = that.element.find(">.k-item");
+            }
+
             element.each(function () {
                 var li = $(this);
 
@@ -898,10 +999,7 @@
 
                 li.data(TIMER, setTimeout(function () {
                     var ul = li.find(".k-group:first:visible"), popup;
-                    if (ul[0] && that.trigger(CLOSE, { item: li[0] }) === false) {
-                        li.css(ZINDEX, li.data(ZINDEX));
-                        li.removeData(ZINDEX);
-
+                    if (ul[0]) {
                         popup = ul.data(KENDOPOPUP);
                         popup.close();
                     }
@@ -937,8 +1035,7 @@
                             .find("li > ul")
                             .addClass("k-group")
                             .end()
-                            .find("> li,.k-group > li")
-                            .addClass("k-item");
+                            .find("> li,.k-group > li");
 
             items.each(function () {
                 updateItemClasses(this);
@@ -949,6 +1046,10 @@
             var that = this,
                 element = $(e.currentTarget),
                 hasChildren = (element.children(".k-animation-container").length || element.children(groupSelector).length);
+
+            if (e.delegateTarget != element.parents(".k-menu")[0]) {
+                return;
+            }
 
             if (!that.options.openOnClick || that.clicked) {
                 if (!contains(e.currentTarget, e.relatedTarget) && hasChildren) {
@@ -968,6 +1069,11 @@
                 element = $(e.currentTarget),
                 hasChildren = (element.children(".k-animation-container").length || element.children(groupSelector).length);
 
+            if (element.parentsUntil(".k-animation-container", ".k-list-container,.k-calendar-container")[0]) {
+                e.stopImmediatePropagation();
+                return;
+            }
+
             if (!that.options.openOnClick && !contains(e.currentTarget, e.relatedTarget) && hasChildren) {
                 that.close(element);
             }
@@ -978,7 +1084,12 @@
                 target = $(kendo.eventTarget(e)),
                 link = target.closest("." + LINK),
                 href = link.attr("href"),
-                element = target.closest(allItemsSelector);
+                element = target.closest(allItemsSelector),
+                isLink = (!!href && href.charAt(href.length - 1) != "#");
+
+            if (element.children(templateSelector)[0]) {
+                return;
+            }
 
             if (element.hasClass(DISABLEDSTATE)) {
                 e.preventDefault();
@@ -991,8 +1102,9 @@
                 }, that));
             }
 
-            if (!e.handled) // We shouldn't stop propagation.
-                that.trigger(SELECT, { item: element[0] });
+            if (!e.handled && that.trigger(SELECT, { item: element[0] })) { // We shouldn't stop propagation.
+                e.preventDefault();
+            }
 
             e.handled = true;
 
@@ -1004,7 +1116,9 @@
                 return;
             }
 
-            e.preventDefault();
+            if (!isLink) {
+                e.preventDefault();
+            }
 
             that.clicked = true;
             openHandle = element.children(".k-animation-container, .k-group").is(":visible") ? CLOSE : OPEN;
@@ -1018,10 +1132,7 @@
                 return;
             }
 
-            if (that.clicked) {
-                that.clicked = false;
-                that.close(that.element.find(".k-item>.k-animation-container:visible").parent());
-            }
+            that.clicked = false;
         }
     });
 
@@ -1031,14 +1142,13 @@
             options = extend({ menu: {}, group: {} }, options);
 
             var empty = templates.empty,
-                item = options.item,
-                menu = options.menu;
+                item = options.item;
 
             return templates.item(extend(options, {
                 image: item.imageUrl ? templates.image : empty,
                 sprite: item.spriteCssClass ? templates.sprite : empty,
                 itemWrapper: templates.itemWrapper,
-                arrow: item.items ? templates.arrow : empty,
+                arrow: item.items || item.content ? templates.arrow : empty,
                 subGroup: Menu.renderGroup
             }, rendering));
         },
@@ -1062,9 +1172,14 @@
                     return html;
                 }
             }, options, rendering));
+        },
+
+        renderContent: function (options) {
+            return templates.content(extend(options, rendering));
         }
     });
 
     kendo.ui.plugin(Menu);
 
 })(jQuery);
+;

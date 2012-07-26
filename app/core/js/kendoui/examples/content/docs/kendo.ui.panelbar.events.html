@@ -3,6 +3,38 @@
     
         <div class="detailHandle">
             <div class="detailCollapsed"></div>
+            <a name="activate"><code>activate</code></a>
+        </div>
+        <div class="detailBody">
+            <div class="desc">Triggered when an item of a PanelBar is activated.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Attach activate event handler during initialization; detach via unbind()</h4><pre class="code prettyprint"><code>// event handler for activatevar onActivate = function(e) {    // access the activated item via e.item (HTMLElement)};// attach activate event handler during initializationvar panelBar = $("#panelBar").kendoPanelBar({    activate: onActivate});// detach activate event handler via unbind()panelBar.data("kendoPanelBar").unbind("activate", onActivate);</code></pre></div><div class="code-sample"><h4 class="code-title">Attach activate event handler via bind(); detach via unbind()</h4><pre class="code prettyprint"><code>// event handler for activatevar onActivate = function(e) {    // access the activated item via e.item (HTMLElement)};// attach activate event handler via bind()$("#panelBar").data("kendoPanelBar").bind("activate", onActivate);// detach activate event handler via unbind()$("#panelBar").data("kendoPanelBar").unbind("activate", onActivate);</code></pre></div>
+
+            
+                <div class="details-list">
+                    <h4 class="details-title">Event data</h4>
+                    <dl>
+                    
+                        
+                    
+                        
+                        <dt>
+                            <code>item</code>
+                            <span class="type">: Element</span> 
+                            
+                        </dt>
+                        <dd>The activated item of the PanelBar.</dd>
+                        
+                    
+                    </dl>
+                </div>
+            
+
+            
+
+            
+        </div>
+    
+        <div class="detailHandle">
+            <div class="detailCollapsed"></div>
             <a name="collapse"><code>collapse</code></a>
         </div>
         <div class="detailBody">

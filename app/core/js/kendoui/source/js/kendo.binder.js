@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -7,34 +7,35 @@
 * GNU General Public License (GPL) version 3.
 * For GPL requirements, please review: http://www.gnu.org/copyleft/gpl.html
 */
-(function ($, undefined) {
+(function ($, unefined) {
     var kendo = window.kendo,
         Observable = kendo.Observable,
         ObservableObject = kendo.data.ObservableObject,
         ObservableArray = kendo.data.ObservableArray,
         toString = {}.toString,
-        data = kendo.data,
+        binders = {},
         Class = kendo.Class,
-        GET = "get",
         innerText,
+        proxy = $.proxy,
+        VALUE = "value",
+        CHECKED = "checked",
         CHANGE = "change";
 
     (function() {
         var a = document.createElement("a");
         if (a.innerText !== undefined) {
-            innerText = "innerText"
+            innerText = "innerText";
         } else if (a.textContent !== undefined) {
             innerText = "textContent";
         }
     })();
 
     var Binding = Observable.extend( {
-        init: function(root, source, path) {
+        init: function(source, path) {
             var that = this;
 
             Observable.fn.init.call(that);
 
-            that.root = root;
             that.source = source;
             that.path = path;
             that.dependencies = {};
@@ -50,7 +51,7 @@
                     that.change(e);
                 };
 
-                that.source.bind("change", that._change);
+                that.source.bind(CHANGE, that._change);
             }
         },
 
@@ -61,7 +62,7 @@
                 that = this;
 
             if (that.path === "this") {
-                that.trigger("change", e);
+                that.trigger(CHANGE, e);
             } else {
                 for (dependency in that.dependencies) {
                     idx = dependency.indexOf(e.field);
@@ -70,7 +71,7 @@
                        ch = dependency.charAt(e.field.length);
 
                        if (!ch || ch === "." || ch === "[") {
-                            that.trigger("change", e);
+                            that.trigger(CHANGE, e);
                             break;
                        }
                     }
@@ -92,17 +93,47 @@
 
         get: function() {
             var that = this,
-                result = that.source;
+                source = that.source,
+                index,
+                path = that.path,
+                result = source;
 
             that.start();
 
             if (that.observable) {
-                result = that.source.get(that.path);
+                result = source.get(path);
 
+                // Traverse the observable hierarchy if the binding is not resolved at the current level.
+                while (result === undefined && source) {
+                    source = source.parent();
+
+                    if (source instanceof ObservableObject) {
+                        result = source.get(path);
+                    }
+                }
+
+                // If the result is a function - invoke it
                 if (typeof result === "function") {
-                    result = $.proxy(result, that.source);
+                    index = path.lastIndexOf(".");
 
-                    result = result();
+                    // If the function is a member of a nested observable object make that nested observable the context (this) of the function
+                    if (index > 0) {
+                        source = source.get(path.substring(0, index));
+                    }
+
+                    // Set the context (this) of the function
+                    result = proxy(result, source);
+
+                    // Invoke the function
+                    result = result(that.source);
+                }
+
+                // If the binding is resolved by a parent object
+                if (source && source !== that.source) {
+                    // Listen for changes in the parent object
+
+                    source.unbind(CHANGE, that._change)
+                          .bind(CHANGE, that._change);
                 }
             }
 
@@ -117,7 +148,7 @@
 
         destroy: function() {
             if (this.observable) {
-                this.source.unbind("change", this._change);
+                this.source.unbind(CHANGE, this._change);
             }
         }
     });
@@ -125,19 +156,24 @@
     var EventBinding = Binding.extend( {
         get: function() {
             var source = this.source,
-                handler = source.get(this.path);
+                path = this.path,
+                handler;
 
-            if (handler === undefined) {
-                handler = this.root.get(this.path);
-                source = this.root;
+            handler = source.get(path);
+
+            while (!handler && source) {
+                source = source.parent();
+                if (source instanceof ObservableObject) {
+                    handler = source.get(path);
+                }
             }
 
-            return $.proxy(handler, source);
+            return proxy(handler, source);
         }
     });
 
     var TemplateBinding = Binding.extend( {
-        init: function(root, source, path, template) {
+        init: function(source, path, template) {
             var that = this;
 
             Binding.fn.init.call(that, source, path);
@@ -165,11 +201,21 @@
             this.options = options;
         },
 
+        bind: function(binding, attribute) {
+            var that = this;
+
+            binding = attribute ? binding[attribute] : binding;
+
+            binding.bind(CHANGE, function(e) {
+                that.refresh(attribute || e);
+            });
+
+            that.refresh(attribute);
+        },
+
         destroy: function() {
         }
     });
-
-    var binders = {};
 
     binders.attr = Binder.extend({
         refresh: function(key) {
@@ -228,13 +274,19 @@
 
     binders.text = Binder.extend({
         refresh: function() {
-            this.element[innerText] = this.bindings["text"].get();
+            var text = this.bindings.text.get();
+
+            if (text == null) {
+                text = "";
+            }
+
+            this.element[innerText] = text;
         }
     });
 
     binders.visible = Binder.extend({
         refresh: function() {
-            if (this.bindings["visible"].get()) {
+            if (this.bindings.visible.get()) {
                 this.element.style.display = "";
             } else {
                 this.element.style.display = "none";
@@ -244,7 +296,7 @@
 
     binders.invisible = Binder.extend({
         refresh: function() {
-            if (!this.bindings["invisible"].get()) {
+            if (!this.bindings.invisible.get()) {
                 this.element.style.display = "";
             } else {
                 this.element.style.display = "none";
@@ -254,7 +306,7 @@
 
     binders.html = Binder.extend({
         refresh: function() {
-            this.element.innerHTML = this.bindings["html"].get();
+            this.element.innerHTML = this.bindings.html.get();
         }
     });
 
@@ -262,18 +314,32 @@
         init: function(element, bindings, options) {
             Binder.fn.init.call(this, element, bindings, options);
 
-            this._change = $.proxy(this.change, this);
-            this.eventName = options.valueUpdate || "change";
+            this._change = proxy(this.change, this);
+            this.eventName = options.valueUpdate || CHANGE;
 
             $(this.element).bind(this.eventName, this._change);
+
+            this._initChange = false;
         },
 
         change: function() {
-            this.bindings["value"].set(this.element.value);
+            this._initChange = this.eventName != CHANGE;
+            this.bindings[VALUE].set(this.element.value);
+            this._initChange = false;
         },
 
         refresh: function() {
-            this.element.value = this.bindings["value"].get();
+            if (!this._initChange) {
+                var value = this.bindings[VALUE].get();
+
+                if (value == null) {
+                    value = "";
+                }
+
+                this.element.value = value;
+            }
+
+            this._initChange = false;
         },
 
         destroy: function() {
@@ -284,8 +350,6 @@
     binders.source = Binder.extend({
         init: function(element, bindings, options) {
             Binder.fn.init.call(this, element, bindings, options);
-
-            var source = bindings["source"].get();
         },
 
         refresh: function(e) {
@@ -334,9 +398,9 @@
                         template = "<option>#:data#</option>";
                     }
                 } else if (nodeName == "tbody") {
-                    template = "<tr><td>#:data#</td></tr>"
+                    template = "<tr><td>#:data#</td></tr>";
                 } else if (nodeName == "ul" || nodeName == "ol") {
-                    template = "<li>#:data#</li>"
+                    template = "<li>#:data#</li>";
                 } else {
                     template = "#:data#";
                 }
@@ -350,7 +414,7 @@
         destroy: function() {
             var source = this.bindings.source.get();
 
-            source.unbind("change", this._change);
+            source.unbind(CHANGE, this._change);
         },
 
         add: function(index, items) {
@@ -367,11 +431,7 @@
                 for (idx = 0, length = items.length; idx < length; idx++) {
                     child = clone.children[0];
                     element.insertBefore(child, reference || null);
-                    if (this.bindings.template) {
-                        bindElement(child, this.bindings.source.root, items[idx]);
-                    } else {
-                        bindElement(child, items[idx]);
-                    }
+                    bindElement(child, items[idx]);
                 }
             }
         },
@@ -386,13 +446,23 @@
         },
 
         render: function() {
-            var source = this.bindings["source"].get();
-            var idx, length;
-            var element = this.container();
-            var template = this.template();
+            var source = this.bindings.source.get(),
+                 idx,
+                 length,
+                 element = this.container(),
+                 template = this.template(),
+                 parent;
 
             if (!(source instanceof ObservableArray) && toString.call(source) !== "[object Array]") {
+                if (source.parent) {
+                    parent = source.parent;
+                }
+
                 source = new ObservableArray([source]);
+
+                if (source.parent) {
+                    source.parent = parent;
+                }
             }
 
             if (this.bindings.template) {
@@ -400,7 +470,7 @@
 
                 if (element.children.length) {
                     for (idx = 0, length = source.length; idx < length; idx++) {
-                        bindElement(element.children[idx], this.bindings.source.root, source[idx]);
+                        bindElement(element.children[idx], source[idx]);
                     }
                 }
             }
@@ -414,7 +484,7 @@
         checked: Binder.extend({
             init: function(element, bindings, options) {
                 Binder.fn.init.call(this, element, bindings, options);
-                this._change = $.proxy(this.change, this);
+                this._change = proxy(this.change, this);
 
                 $(this.element).change(this._change);
             },
@@ -423,9 +493,9 @@
                 var value = this.value();
 
                 if (element.type == "radio") {
-                    this.bindings["checked"].set(value);
+                    this.bindings[CHECKED].set(value);
                 } else if (element.type == "checkbox") {
-                    var source = this.bindings["checked"].get();
+                    var source = this.bindings[CHECKED].get();
                     var index;
 
                     if (source instanceof ObservableArray) {
@@ -438,13 +508,13 @@
                             }
                         }
                     } else {
-                        this.bindings["checked"].set(value);
+                        this.bindings[CHECKED].set(value);
                     }
                 }
             },
 
             refresh: function() {
-                var value = this.bindings["checked"].get();
+                var value = this.bindings[CHECKED].get();
                 var element = this.element;
 
                 if (element.type == "checkbox") {
@@ -455,19 +525,19 @@
                     }
 
                     element.checked = value === true;
-                } else if (element.type == "radio") {
-                    if (element.value == value) {
+                } else if (element.type == "radio" && value != null) {
+                    if (element.value === value.toString()) {
                         element.checked = true;
                     }
                 }
             },
 
             value: function() {
-                var element = this.element;
-                var value = element.value;
+                var element = this.element,
+                    value = element.value;
 
                 if (element.type == "checkbox") {
-                    if (value == "on" || value == "off") {
+                    if (value == "on" || value == "off" || value === "true") {
                         value = element.checked;
                     }
                 }
@@ -475,17 +545,17 @@
                 return value;
             },
             destroy: function() {
-                $(this.element).unbind("change", this._change);
+                $(this.element).unbind(CHANGE, this._change);
             }
         })
-    }
+    };
 
     binders.select = {
         value: Binder.extend({
             init: function(target, bindings, options) {
                 Binder.fn.init.call(this, target, bindings, options);
 
-                this._change = $.proxy(this.change, this);
+                this._change = proxy(this.change, this);
                 $(this.element).change(this._change);
             },
 
@@ -494,7 +564,9 @@
                     element = this.element,
                     source,
                     field = this.options.valueField || this.options.textField,
-                    option, value,
+                    option,
+                    valueIndex,
+                    value,
                     idx,
                     length;
 
@@ -516,7 +588,7 @@
 
                 if (field) {
                     source = this.bindings.source.get();
-                    for (var valueIndex = 0; valueIndex < values.length; valueIndex++) {
+                    for (valueIndex = 0; valueIndex < values.length; valueIndex++) {
                         for (idx = 0, length = source.length; idx < length; idx++) {
                             if (source[idx].get(field) == values[valueIndex]) {
                                 values[valueIndex] = source[idx];
@@ -526,20 +598,20 @@
                     }
                 }
 
-                var value = this.bindings["value"].get();
+                value = this.bindings[VALUE].get();
                 if (value instanceof ObservableArray) {
                     value.splice.apply(value, [0, value.length].concat(values));
                 } else if (value instanceof ObservableObject || !field) {
-                    this.bindings["value"].set(values[0]);
+                    this.bindings[VALUE].set(values[0]);
                 } else {
-                    this.bindings["value"].set(values[0].get(field));
+                    this.bindings[VALUE].set(values[0].get(field));
                 }
             },
             refresh: function() {
                 var optionIndex,
                     element = this.element,
                     options = element.options,
-                    value = this.bindings["value"].get(),
+                    value = this.bindings[VALUE].get(),
                     values = value,
                     field = this.options.valueField || this.options.textField,
                     optionValue;
@@ -568,10 +640,10 @@
                 }
             },
             destroy: function() {
-                $(this.element).unbind("change", this._change);
+                $(this.element).unbind(CHANGE, this._change);
             }
         })
-    }
+    };
 
     binders.widget = {
         events : Binder.extend({
@@ -583,16 +655,22 @@
 
             refresh: function(key) {
                 var binding = this.bindings.events[key],
-                    handler = this.handlers[key] = binding.get();
+                    handler = binding.get();
 
-                this.widget.bind(key, handler);
+                this.handlers[key] = function(e) {
+                    e.data = binding.source;
+
+                    handler(e);
+                };
+
+                this.widget.bind(key, this.handlers[key]);
             },
 
             destroy: function() {
                 var handler;
 
                 for (handler in this.handlers) {
-                    this.element.unbind(handler, this.handlers[handler]);
+                    this.widget.unbind(handler, this.handlers[handler]);
                 }
             }
         }),
@@ -602,15 +680,15 @@
                 Binder.fn.init.call(this, widget.element[0], bindings, options);
 
                 this.widget = widget;
-                this._change = $.proxy(this.change, this);
-                this.widget.bind("change", this._change);
+                this._change = proxy(this.change, this);
+                this.widget.bind(CHANGE, this._change);
             },
             change: function() {
-                this.bindings["checked"].set(this.value());
+                this.bindings[CHECKED].set(this.value());
             },
 
             refresh: function() {
-                this.widget.check(this.bindings["checked"].get() === true);
+                this.widget.check(this.bindings[CHECKED].get() === true);
             },
 
             value: function() {
@@ -625,7 +703,7 @@
             },
 
             destroy: function() {
-                this.widget.unbind("change", this._change);
+                this.widget.unbind(CHANGE, this._change);
             }
         }),
 
@@ -685,11 +763,18 @@
 
         source: Binder.extend({
             init: function(widget, bindings, options) {
-                Binder.fn.init.call(this, widget.element[0], bindings, options);
+                var that = this;
 
-                this.widget = widget;
-                this._dataBinding = $.proxy(this.dataBinding, this);
-                this._dataBound = $.proxy(this.dataBound, this);
+                Binder.fn.init.call(that, widget.element[0], bindings, options);
+
+                that.widget = widget;
+                that._dataBinding = proxy(that.dataBinding, that);
+                that._dataBound = proxy(that.dataBound, that);
+                that._itemChange = proxy(that.itemChange, that);
+            },
+
+            itemChange: function(e) {
+                bindElement(e.item[0], e.data, e.ns || kendo.ui);
             },
 
             dataBinding: function() {
@@ -703,13 +788,14 @@
                 }
             },
 
-            dataBound: function() {
+            dataBound: function(e) {
                 var idx,
                     length,
                     widget = this.widget,
                     items = widget.items(),
                     dataSource = widget.dataSource,
                     view = dataSource.view(),
+                    ns = e.ns || kendo.ui,
                     groups = dataSource.group() || [];
 
                 if (items.length) {
@@ -718,13 +804,14 @@
                     }
 
                     for (idx = 0, length = view.length; idx < length; idx++) {
-                        bindElement(items[idx], this.bindings.source.root, view[idx]);
+                        bindElement(items[idx], view[idx], ns);
                     }
                 }
             },
 
             refresh: function(e) {
                 var that = this,
+                    source,
                     widget = that.widget;
 
                 e = e || {};
@@ -734,9 +821,10 @@
 
                     widget.bind("dataBinding", that._dataBinding);
                     widget.bind("dataBound", that._dataBound);
+                    widget.bind("itemChange", that._itemChange);
 
                     if (widget.dataSource instanceof kendo.data.DataSource) {
-                        var source = this.bindings.source.get();
+                        source = that.bindings.source.get();
                         if (source instanceof kendo.data.DataSource) {
                             widget.setDataSource(source);
                         } else {
@@ -751,6 +839,7 @@
 
                 widget.unbind("dataBinding", this._dataBinding);
                 widget.unbind("dataBound", this._dataBound);
+                widget.unbind("itemChange", this._itemChange);
             }
         }),
 
@@ -760,7 +849,7 @@
 
                 this.widget = widget;
                 this._change = $.proxy(this.change, this);
-                this.widget.bind("change", this._change);
+                this.widget.first(CHANGE, this._change);
 
                 var value = this.bindings.value.get();
                 this._valueIsObservableObject = value == null || value instanceof ObservableObject;
@@ -815,7 +904,7 @@
             },
 
             destroy: function() {
-                this.widget.unbind("change", this._change);
+                this.widget.unbind(CHANGE, this._change);
             }
         })
     };
@@ -828,8 +917,7 @@
         },
 
         bind: function(bindings) {
-            var that = this,
-                nodeName = this.target.nodeName.toLowerCase(),
+            var nodeName = this.target.nodeName.toLowerCase(),
                 key,
                 specificBinders = binders[nodeName] || {};
 
@@ -841,6 +929,7 @@
         applyBinding: function(name, bindings, specificBinders) {
             var binder = specificBinders[name] || binders[name],
                 toDestroy = this.toDestroy,
+                attribute,
                 binding = bindings[name];
 
             if (binder) {
@@ -849,20 +938,12 @@
                 toDestroy.push(binder);
 
                 if (binding instanceof Binding) {
-                    binding.bind("change", function(e){
-                        binder.refresh(e);
-                    });
-                    binder.refresh();
+                    binder.bind(binding);
                     toDestroy.push(binding);
                 } else {
-                    for (var attribute in binding) {
-                        (function(attribute) {
-                            binding[attribute].bind("change", function() {
-                                binder.refresh(attribute);
-                            });
-                        })(attribute);
-                        binder.refresh(attribute);
-                        toDestroy.push(binding[attribute])
+                    for (attribute in binding) {
+                        binder.bind(binding, attribute);
+                        toDestroy.push(binding[attribute]);
                     }
                 }
             } else if (name !== "template") {
@@ -874,7 +955,6 @@
             var idx,
                 length,
                 toDestroy = this.toDestroy;
-
 
             for (idx = 0, length = toDestroy.length; idx < length; idx++) {
                 toDestroy[idx].destroy();
@@ -890,27 +970,28 @@
                 hasSource = false;
 
             for (binding in bindings) {
-                if (binding == "value") {
+                if (binding == VALUE) {
                     hasValue = true;
                 } else if (binding == "source") {
                     hasSource = true;
                 } else {
-                    this.applyBinding(binding, bindings);
+                    that.applyBinding(binding, bindings);
                 }
             }
 
             if (hasSource) {
-                this.applyBinding("source", bindings);
+                that.applyBinding("source", bindings);
             }
 
             if (hasValue) {
-                this.applyBinding("value", bindings);
+                that.applyBinding(VALUE, bindings);
             }
         },
 
         applyBinding: function(name, bindings) {
             var binder = binders.widget[name],
                 toDestroy = this.toDestroy,
+                attribute,
                 binding = bindings[name];
 
             if (binder) {
@@ -920,24 +1001,13 @@
 
 
                 if (binding instanceof Binding) {
-                    binding.bind("change", function(e) {
-                        binder.refresh(e);
-                    });
-
-                    binder.refresh();
-
+                    binder.bind(binding);
                     toDestroy.push(binding);
                 } else {
-                     for (var attribute in binding) {
-                        (function(attribute) {
-                            binding[attribute].bind("change", function() {
-                                binder.refresh(attribute);
-                            });
-                        })(attribute);
-                        binder.refresh(attribute);
-                        toDestroy.push(binding[attribute])
+                    for (attribute in binding) {
+                        binder.bind(binding, attribute);
+                        toDestroy.push(binding[attribute]);
                     }
-
                 }
             } else {
                 throw new Error("The " + name + " binding is not supported by the " + this.target.options.name + " widget");
@@ -946,7 +1016,7 @@
     });
 
     function flattenGroups(data) {
-        var idx, lenght, result = [];
+        var idx, length, result = [];
 
         for (idx = 0, length = data.length; idx < length; idx++) {
             if (data[idx].hasSubgroups) {
@@ -959,15 +1029,16 @@
     }
 
     function bindingTargetForRole(role, element, namespace) {
-        var type = namespace.roles[role];
+        var roles = namespace.roles,
+            type = roles[role];
 
         if (type) {
-            return new WidgetBindingTarget(kendo.initWidget(element, type.options, namespace));
+            return new WidgetBindingTarget(kendo.initWidget(element, type.options, roles));
         }
     }
 
-    var keyValueRegExp = /\w+:({([^}]*)}|[^,}]+)/g;
-    var whiteSpaceRegExp = /\s/g;
+    var keyValueRegExp = /[A-Za-z0-9_\-]+:(\{([^}]*)\}|[^,}]+)/g,
+        whiteSpaceRegExp = /\s/g;
 
     function parseBindings(bind) {
         var result = {},
@@ -998,21 +1069,20 @@
         return result;
     }
 
-    function createBindings(bindings, root, source, type) {
+    function createBindings(bindings, source, type) {
         var binding,
             result = {};
 
         for (binding in bindings) {
-            result[binding] = new type(root, source, bindings[binding]);
+            result[binding] = new type(source, bindings[binding]);
         }
 
         return result;
     }
 
-    function bindElement(element, root, source, namespace) {
+    function bindElement(element, source, namespace) {
         var role = element.getAttribute("data-" + kendo.ns + "role"),
             idx,
-            length,
             bind = element.getAttribute("data-" + kendo.ns + "bind"),
             children = element.children,
             deep = true,
@@ -1036,16 +1106,16 @@
             bind = parseBindings(bind.replace(whiteSpaceRegExp, ""));
 
             if (!target) {
-                options = kendo.parseOptions(element, { textField: "", valueField: "", template: "", valueUpdate: "change" });
+                options = kendo.parseOptions(element, { textField: "", valueField: "", template: "", valueUpdate: CHANGE});
                 target = new BindingTarget(element, options);
             }
 
             target.source = source;
 
-            bindings = createBindings(bind, root, source, Binding);
+            bindings = createBindings(bind, source, Binding);
 
             if (options.template) {
-                bindings.template = new TemplateBinding(root, source, "", options.template);
+                bindings.template = new TemplateBinding(source, "", options.template);
             }
 
             if (bindings.click) {
@@ -1059,15 +1129,15 @@
             }
 
             if (bind.attr) {
-                bindings.attr = createBindings(bind.attr, root, source, Binding);
+                bindings.attr = createBindings(bind.attr, source, Binding);
             }
 
             if (bind.style) {
-                bindings.style = createBindings(bind.style, root, source, Binding);
+                bindings.style = createBindings(bind.style, source, Binding);
             }
 
             if (bind.events) {
-                bindings.events = createBindings(bind.events, root, source, EventBinding);
+                bindings.events = createBindings(bind.events, source, EventBinding);
             }
 
             target.bind(bindings);
@@ -1079,7 +1149,7 @@
 
         if (deep && children) {
             for (idx = 0; idx < children.length; idx++) {
-                bindElement(children[idx], root, source, namespace);
+                bindElement(children[idx], source, namespace);
             }
         }
     }
@@ -1091,7 +1161,7 @@
         dom = $(dom);
 
         for (idx = 0, length = dom.length; idx < length; idx++ ) {
-            bindElement(dom[idx], object, object, namespace);
+            bindElement(dom[idx], object, namespace);
         }
     }
 
@@ -1159,3 +1229,4 @@
     };
 
 })(jQuery);
+;
