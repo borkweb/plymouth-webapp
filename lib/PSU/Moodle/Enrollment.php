@@ -28,9 +28,11 @@ class Enrollment {
 	/**
 	 * Leverage the flatfile enrollment plugin to carry out enrollments
 	 * 
-	 * $user is the idnumber of the user aka PSU_ID
-	 * $course is the idnumber from the course table aka crn.termcode
-	 * $role that will be used is declared at instantiation
+	 * @param user idnumber of the user aka PSU_ID
+	 * @param course idnumber from the course table aka crn.termcode
+	 * @param action defaults to add, but can be passed del to remove an enrollment
+	 * @param timestart when to begin enrollment (not required)
+	 * @param timestop when to end the enrollment (not required)
 	 */
 	public function add_to_flatfile( $user, $course, $action = 'add', $timestart = NULL, $timestop = NULL ) {
 		$entry = array(
