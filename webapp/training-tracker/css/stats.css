@@ -31,3 +31,6 @@
 .ui-progressbar-value{
 	box-sizing: content-box !important;	
 }
+.chkbox-container input[type="checkbox"]{
+	margin-right: 0.5em;
+}
