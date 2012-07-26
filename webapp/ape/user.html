@@ -40,10 +40,10 @@ if($title_log['source'] == 'ape')
 	if(IDMObject::authZ('admin', $log['attribute']) || IDMObject::authZ('permission', 'ape_attribute_admin'))
 		$tpl->assign('admin_title', true);
 }//end if
+
 /*********************************************************************
  *    Retrieve Notes
  *********************************************************************/
-//load turntable 
 //add the notes to the session
 foreach( $person->notes as $note ){
 	$_SESSION[$note->status][]=$note->note;

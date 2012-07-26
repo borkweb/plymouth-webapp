@@ -1074,6 +1074,7 @@ class PSUPerson_Loader_SIS extends PSUPerson_Loader implements PSUPerson_Loader_
 	function _load_notes(){
 		$notes = new \PSU\Person\Notes( $this->person->data['wp_id'] );
 		$notes->load();
+		$this->person->data['notes']  = $notes;
 		$this->person->notes = $notes; 
 	}//end _load_notes
 	/**

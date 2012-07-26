@@ -25,7 +25,7 @@ switch( $_GET['action'] ){
 		//needs to load edit page
 		$note = \PSU\Person\Note::get( $_GET['id'] );
 		$tpl->assign( 'note', $note );
-	break;
+		break;
 
 	case add:
 		//adds the new note
@@ -50,11 +50,11 @@ switch( $_GET['action'] ){
 			//creates a new note object
 			$note = new \PSU\Person\Note( $args );
 			$note->save();
-			$_SESSION['successes'][]='You have successfully added a new note.';
+			$_SESSION['successes'][]="New {$note->status} note added to user {$person->username}.";
 		}
 
 			PSUHTML::redirect( $GLOBALS['BASE_URL'] . '/user/' . $person->pidm . '/notes');
-	break;
+		break;
 
 	case delete:
 		//grabs the note you are trying to deleted
@@ -62,7 +62,7 @@ switch( $_GET['action'] ){
 		//and deletes it
 		$note->delete();
 		PSUHTML::redirect( $GLOBALS['BASE_URL'] . '/user/' . $person->pidm . '/notes');
-	break;
+		break;
 
 	case change:
 		//grabs the arguments and filters them
@@ -88,12 +88,11 @@ switch( $_GET['action'] ){
 			//edit the note and save it
 			$note->edit( $args );
 			$note->save();
-			$_SESSION['successes'][]='You have successfully edited a note.';
+			$_SESSION['successes'][]="Edited {$note->status} note for user {$person->username}.";
 		}
 
 			PSUHTML::redirect( $GLOBALS['BASE_URL'] . '/user/' . $person->pidm . '/notes');
 
-	break;
 }//end switch
 //display the manage notes template
 $tpl->display('notes.tpl');

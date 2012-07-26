@@ -48,4 +48,4 @@ class Notes extends \PSU\Collection{
 		return null;
 	}//end _get_order
 
-}//end class Collection
+}//end class
