@@ -212,3 +212,67 @@ respond( 'GET', '/statistics/[:wpid]', function( $request, $responce, $app ) {
 	$app->tpl->display('statistics.tpl');
 });
 
+
+respond( 'POST', '/merit/remove', function( $request, $responce, $app ) {
+	
+	$id = $request->data[0];
+	TrainingTracker::merit_remove($id);
+
+});
+
+respond( 'POST', '/merit', function( $request, $responce, $app ) {
+
+	$type = $request->data[0];
+	$comments = $request->data[1];
+	$wpid = $request->data[2];
+	if(TrainingTracker::valid_wpid($wpid)){
+		$comments = htmlentities($comments);
+		$comments = stripslashes($comments);
+		$comments = trim($comments);
+		if ($type == 'star' || $type == 'dog-house'){
+				$checklist_id = TrainingTracker::get_checklist_id($wpid);
+				// If they don't have a checklist, most likely a mentor
+				if (!$checklist_id){
+					$user_type = TrainingTracker::level_translation(TrainingTracker::get_user_level($wpid)); 
+					TrainingTracker::checklist_insert($wpid, $user_type);					
+					$checklist_id = TrainingTracker::get_checklist_id($wpid);
+				}
+				if ($type == 'star'){
+					$type = 'merit';
+				}	
+				else{
+					$type = 'demerit';
+				}
+				$updated_by = $app->user->pidm;
+				$item_id = 42;
+				TrainingTracker::merit_insert($item_id, $checklist_id, $type, $comments, $updated_by);
+				$last_insert_id = TrainingTracker::last_insert_id();
+
+				$data = array(
+					'id' => $last_insert_id,
+				);
+				
+				// echoed for ajax to pickup and use.
+				echo json_encode($data);
+
+		}
+	}
+});
+
+respond( 'GET', '/merit', function( $request, $responce, $app ) {
+
+	$staff_collection = new TrainingTracker\StaffCollection();
+	$staff_collection->load();
+
+	$staff = $staff_collection->merit_users();
+
+	foreach ($staff as $person){
+		$merits[$person->wpid]['merits'] = TrainingTracker::merit_get($person->wpid);
+		$merits[$person->wpid]['demerits'] = TrainingTracker::demerit_get($person->wpid);
+	}
+
+	$app->tpl->assign('merits', $merits);
+	$app->tpl->assign('staff', $staff);
+	$app->tpl->display('merit.tpl');
+});
+
