@@ -125,7 +125,7 @@
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Destroys the window and its modal overlay, if necessary. Useful for removing modal windows.</div>
+                    <div class="desc">Destroys the window and its modal overlay, if necessary. Removes the Window HTML elements from the DOM.</div>
 
                     
 
@@ -141,7 +141,7 @@
                     : <span class="type">Window</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Maximizes a Window to the entire viewing area of the user agent.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Maximize a Window</h4><pre class="code prettyprint"><code>$("#window").data("kendoWindow").maximize();</code></pre></div>
+                    <div class="desc">Maximizes a Window to the entire viewing area of the user agent. Triggers the resize event.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Maximize a Window</h4><pre class="code prettyprint"><code>$("#window").data("kendoWindow").maximize();</code></pre></div>
 
                     
 
@@ -314,7 +314,7 @@
                     : <span class="type">Window</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Restores a maximized or minimized Window to its previous state.</div><div class="code-sample"><h4 class="code-title">Restore the state of a Window; utilize chaining (if necessary)</h4><pre class="code prettyprint"><code>var kendoWindow = $("#window").data("kendoWindow").restore();</code></pre></div>
+                    <div class="desc">Restores a maximized or minimized Window to its previous state. Triggers the resize event.</div><div class="code-sample"><h4 class="code-title">Restore the state of a Window; utilize chaining (if necessary)</h4><pre class="code prettyprint"><code>var kendoWindow = $("#window").data("kendoWindow").restore();</code></pre></div>
 
                     
 
@@ -429,7 +429,7 @@
                     : <span class="type">Window</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Toggles a Window between a maximized and restored state.</div><div class="code-sample"><h4 class="code-title">Toggle the state of a Window; utilize chaining (if necessary)</h4><pre class="code prettyprint"><code>var kendoWindow = $("#window").data("kendoWindow").toggleMaximization();</code></pre></div>
+                    <div class="desc">Toggles a Window between a maximized and restored state. Triggers the resize event.</div><div class="code-sample"><h4 class="code-title">Toggle the state of a Window; utilize chaining (if necessary)</h4><pre class="code prettyprint"><code>var kendoWindow = $("#window").data("kendoWindow").toggleMaximization();</code></pre></div>
 
                     
 

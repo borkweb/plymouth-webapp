@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -19,25 +19,21 @@
      * @section
      * <p>
      *  A <strong>DropDownList</strong> displays a list of values and allows the selection of a single value from the
-     *  list. It is a richer version of the standard HTML select, providing support for local and remote data binding,
-     *  item templates, and configurable options for controlling the list behavior.
-     * </p>
-     * <p>
-     *  If you want to allow user input, use the
-     *  <a href="../dropdownlist/index.html" title="Kendo UI dropdownlist">Kendo UI dropdownlist</a>.
+     *  list.Custom values may not be entered via keyboard input.If you wish permit keyboard input - that is, custom
+     *  values are allowed - use the <strong>ComboBox</strong>.
      * </p>
      * <h3>Getting Started</h3>
-     * <p>There are two basic ways to create a <strong>DropDownList</strong>:</p>
+     * <p>There are two ways to create a <strong>DropDownList</strong>:</p>
      * <ol>
-     *  <li>From a input element, using data binding to define the list items</li>
-     *  <li>From a select element, using HTML to define the list items</li>
+     *  <li>From a &lt;select&gt; element with HTML to define the list items</li>
+     *  <li>From an &lt;input&gt; element with databinding to define the listitems</li>
      * </ol>
      * <p>
-     *  Regardless of the initialization technique, the resulting <strong>DropDownList</strong> will look and function
-     *  identically.
+     *  A <strong>DropDownList</strong> will look and operate consistently regardless of the way in which it was
+     *  created.
      * </p>
      *
-     * @exampleTitle Creating a dropdownlist from existing input HTML element
+     * @exampleTitle Creating a DropDownList from existing &lt;input&gt; element
      * @example
      * <input id="dropDownList" />
      *
@@ -62,7 +58,7 @@
      *     });
      * });
      *
-     * @exampleTitle Create a DropDownList from existing select HTML element with a defined structure
+     * @exampleTitle Create a DropDownList from existing &lt;select&gt; element with a pre-defined structure
      * @example
      * <select id="dropDownList">
      *     <option>Item 1</option>
@@ -71,16 +67,18 @@
      * </select>
      *
      * <script>
-     *    $(document).ready(function(){
-     *       $("#dropDownList").kendoDropDownList();
-     *    });
+     *     $(document).ready(function(){
+     *         $("#dropDownList").kendoDropDownList();
+     *     });
      * </script>
+     *
      * @section
-     * <h3>Binding to Data</h3>
+     * <h3>Binding to Local or Remote Data</h3>
      * <p>
-     *  A <strong>DropDownList</strong> can be bound to both local arrays and remote data via the DataSource component.
-     *  Arrays are appropriate for limited value options while remote data binding is better suited for larger data
-     *  sets. With remote binding, options will be loaded on-demand, similar to an <strong>AutoComplete</strong>.
+     *  The <strong>DropDownList</strong> can be bound to both local arrays and remote data via the
+     *  <strong>DataSource</strong> component; an abstraction for local and
+     *  remote data. Local arrays are appropriate for limited value options, while remote data binding is better for
+     *  larger data sets. With remote data-binding, items will be loaded on-demand; when they are displayed.
      * </p>
      *
      * @exampleTitle Binding to a remote OData service
@@ -90,12 +88,8 @@
      *         index: 0,
      *         dataTextField: "Name",
      *         dataValueField: "Id",
-     *         filter: "contains",
      *         dataSource: {
      *             type: "odata",
-     *             serverFiltering: true,
-     *             serverPaging: true,
-     *             pageSize: 20,
      *             transport: {
      *                 read: "http://odata.netflix.com/Catalog/Titles"
      *             }
@@ -104,11 +98,12 @@
      * });
      *
      * @section
+     * @section
      * <h3>Customizing Item Templates</h3>
      * <p>
-     *  A DropDownList leverages templates, providing an ability to control item rendering. For a complete overview of
-     *  the template capabilities and syntax of Kendo UI Web, please review the
-     *  <a href="../templates/index.html" title="Kendo UI Template">Kendo UI Template</a> demos and documentation.
+     *  The <strong>DropDownList</strong> uses Kendo UI templates to enable you to control how items are rendered. For
+     *  a detailed description of the capabilities and syntax of the Kendo UI templates, please refer to the
+     *  <a href="http://www.kendoui.com/documentation/framework/templates/overview.aspx" title="Kendo UI Template">documentation</a>.
      * </p>
      *
      * @exampleTitle Basic item template customization
@@ -119,9 +114,11 @@
      * <!-- Template -->
      * <script id="scriptTemplate" type="text/x-kendo-template">
      *     # if (data.BoxArt.SmallUrl) { #
-     *         <img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
+     *         <img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" />
+     *         Title:${ data.Name }, Year: ${ data.Name }
      *     # } else { #
-     *         <img alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
+     *         <img alt="${ data.Name }" />
+     *         Title:${ data.Name }, Year: ${ data.Name }
      *     # } #
      * </script>
      *
@@ -135,9 +132,6 @@
      *             template: $("#scriptTemplate").html(),
      *             dataSource: {
      *                 type: "odata",
-     *                 serverFiltering: true,
-     *                 serverPaging: true,
-     *                 pageSize: 20,
      *                 transport: {
      *                     read: "http://odata.netflix.com/Catalog/Titles"
      *                 }
@@ -163,7 +157,6 @@
         ui = kendo.ui,
         Select = ui.Select,
         os = kendo.support.mobileOS,
-        CLICK = kendo.support.touch ? "touchend" : "click",
         ATTRIBUTE = "disabled",
         CHANGE = "change",
         SELECT = "select",
@@ -171,17 +164,15 @@
         DEFAULT = "k-state-default",
         DISABLED = "k-state-disabled",
         SELECTED = "k-state-selected",
-        HOVER = "k-state-hover",
+        TABINDEX = "tabIndex",
         HOVEREVENTS = "mouseenter mouseleave",
-        INPUTWRAPPER = ".k-dropdown-wrap",
-        trimRegExp = /^\s/,
         proxy = $.proxy;
 
     var DropDownList = Select.extend( /** @lends kendo.ui.DropDownList.prototype */ {
         /**
          * @constructs
          * @extends kendo.ui.Select
-         * @param {DomElement} element DOM element
+         * @param {Element} element DOM element
          * @param {Object} options Configuration options.
          * @option {kendo.data.DataSource | Object} [dataSource] Instance of DataSource or the data that the DropDownList will be bound to.
          * _exampleTitle Bind to a local array
@@ -251,36 +242,57 @@
          * $("#dropdownlist").kendoDropDownList({
          *     height: 400
          * });
-         * @option {String} [optionLabel] Define the text of the default empty item.
+         * @option {String | Object} [optionLabel] <""> Define the text of the default empty item. If the value is an object, then the widget will use it directly.
          * _example
          * $("#dropdownlist").kendoDropDownList({
          *     optionLabel: "Select An Option"
          * });
-         * @option {Function} [template] Template to be used for rendering the items in the list.
+         * _example
+         * $("#dropdownlist").kendoDropDownList({
+         *     dataTextField: "text",
+         *     dataValueField: "value",
+         *     optionLabel: {
+         *        text: "Select An Option",
+         *        value: ""
+         *     }
+         * });
+         * @option {String} [template] Template to be used for rendering the items in the list.
          * _example
          *  //template
-         * &lt;script id="template" type="text/x-kendo-tmpl"&gt;
+         * <script id="template" type="text/x-kendo-tmpl">
          *       # if (data.BoxArt.SmallUrl) { #
-         *           &lt;img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" /&gt;Title:${ data.Name }, Year: ${ data.Name }
+         *           <img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
          *       # } else { #
-         *           &lt;img alt="${ data.Name }" /&gt;Title:${ data.Name }, Year: ${ data.Name }
+         *           <img alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
          *       # } #
-         *  &lt;/script&gt;
+         *  </script>
          *
          *  //dropdownlist initialization
-         *  &lt;script&gt;
+         *  <script>
          *      $("#dropdownlist").kendoDropDownList({
          *          dataSource: dataSource,
          *          dataTextField: "Name",
          *          dataValueField: "Id",
          *          template: kendo.template($("#template").html())
          *      });
-         *  &lt;/script&gt;
+         *  </script>
+         * @option {String} [text] <""> Define the text of the widget, when the autoBind is set to false.
+         * _example
+         * $("#dropdownlist").kendoDropDownList({
+         *      autoBind: false,
+         *      text: "Chai"
+         * });
+         * @option {String} [value] <""> Define the value of the widget
+         * _example
+         * $("#dropdownlist").kendoDropDownList({
+         *      dataSource: ["Item1", "Item2"],
+         *      value: "Item1"
+         * });
          * @option {Object} [animation] <> Animations to be used for opening/closing the popup. Setting to false will turn of the animation.
          * @option {Object} [animation.open] <> Animation to be used for opening of the popup.
          * _example
          *  //dropdownlist initialization
-         *  &lt;script&gt;
+         *  <script>
          *      $("#dropdownlist").kendoDropDownList({
          *          dataSource: dataSource,
          *          animation: {
@@ -291,11 +303,11 @@
          *             }
          *          }
          *      });
-         *  &lt;/script&gt;
+         *  </script>
          * @option {Object} [animation.close] <> Animation to be used for closing of the popup.
          * _example
          *  //dropdownlist initialization
-         *  &lt;script&gt;
+         *  <script>
          *      $("#dropdownlist").kendoDropDownList({
          *          dataSource: dataSource,
          *          animation: {
@@ -307,10 +319,17 @@
          *             }
          *          }
          *      });
-         *  &lt;/script&gt;
+         *  </script>
+         * @option {String} [ignoreCase] <true> Controls whether the search should be case sensitive.
+         * _example
+         * $("#dropdownlist").kendoDropDownList({
+         *     ignoreCase: false //now search will be case sensitive
+         * });
          */
         init: function(element, options) {
             var that = this,
+                index = options && options.index,
+                optionLabel, useOptionLabel, text;
 
             options = $.isArray(options) ? { dataSource: options } : options;
 
@@ -339,18 +358,33 @@
 
             that._enable();
 
+            that._cascade();
+
             that.selectedIndex = -1;
+
+            if (index !== undefined) {
+                options.index = index;
+            }
 
             if (options.autoBind) {
                 that._selectItem();
             } else {
-                if (element.is(SELECT)) {
-                    that.text(element.children(":selected").text());
-                }
+                text = options.text;
+                if (!text) {
+                    optionLabel = that._optionLabelText(options.optionLabel),
+                    useOptionLabel = optionLabel && options.index === 0;
 
-                if (!that.text().replace(trimRegExp, "") && options.optionLabel) {
-                    that.text(options.optionLabel);
+                    if (element.is(SELECT)) {
+                        if (useOptionLabel) {
+                            text = optionLabel;
+                        } else {
+                            text = element.children(":selected").text();
+                        }
+                    } else if (!element[0].value && useOptionLabel) {
+                        text = optionLabel;
+                    }
                 }
+                that.text(text);
             }
 
             kendo.notify(that);
@@ -361,12 +395,15 @@
             enable: true,
             index: 0,
             autoBind: true,
+            text: "",
             template: "",
             delay: 500,
+            height: 200,
             dataTextField: "",
             dataValueField: "",
             optionLabel: "",
-            height: 200,
+            cascadeFrom: "",
+            ignoreCase: true,
             animation: {}
         },
         events: [
@@ -488,14 +525,6 @@
             this._accessors();
         },
 
-        setDataSource: function(dataSource) {
-            this.options.dataSource = dataSource;
-
-            this._dataSource();
-
-            this._selectItem();
-        },
-
         /**
         * Closes the drop-down list.
         * @name kendo.ui.DropDownList#close
@@ -535,7 +564,7 @@
         enable: function(enable) {
             var that = this,
                 element = that.element,
-                wrapper = that.wrapper.unbind(),
+                wrapper = that.wrapper.unbind(".dropdownlist"),
                 dropDownWrapper = that._inputWrapper.unbind(HOVEREVENTS);
 
             if (enable === false) {
@@ -554,16 +583,16 @@
 
                 wrapper
                     .bind({
-                        click: function(e) {
+                        "click.dropdownlist": function(e) {
                             e.preventDefault();
                             that.toggle();
                         },
-                        keydown: proxy(that._keydown, that),
-                        keypress: proxy(that._keypress, that),
-                        focusin: function() {
+                        "keydown.dropdownlist": proxy(that._keydown, that),
+                        "keypress.dropdownlist": proxy(that._keypress, that),
+                        "focusin.dropdownlist": function() {
                             dropDownWrapper.addClass(FOCUSED);
                         },
-                        focusout: function(e) {
+                        "focusout.dropdownlist": function(e) {
                             that._blur();
                             dropDownWrapper.removeClass(FOCUSED);
                         }
@@ -622,12 +651,16 @@
                 optionLabel = that.options.optionLabel;
 
             that.trigger("dataBinding");
+            if (that._current) {
+                that.current(null);
+            }
 
             that.ul[0].innerHTML = kendo.render(that.template, data);
             that._height(length);
 
             if (that.element.is(SELECT)) {
                 if (optionLabel && length) {
+                    optionLabel = that._optionLabelText(optionLabel);
                     optionLabel = '<option value="">' + optionLabel + "</option>";
                 }
 
@@ -635,7 +668,8 @@
             }
 
             if (that._open) {
-                that.toggle(length);
+                that._open = false;
+                that.toggle(!!length);
             }
 
             that._hideBusy();
@@ -657,14 +691,24 @@
         * dropdownlist.search("In");
         */
         search: function(word) {
-            if(word){
-                var that = this;
-                word = word.toLowerCase();
+            if (word) {
+                var that = this,
+                    ignoreCase = that.options.ignoreCase;
+
+                if (ignoreCase) {
+                    word = word.toLowerCase();
+                }
 
                 that._select(function(dataItem) {
                     var text = that._text(dataItem);
+
                     if (text !== undefined) {
-                        return (text + "").toLowerCase().indexOf(word) === 0;
+                        text = (text + "");
+                        if (ignoreCase) {
+                            text = text.toLowerCase();
+                        }
+
+                        return text.indexOf(word) === 0;
                     }
                 });
             }
@@ -672,8 +716,8 @@
 
         /**
         * Selects drop-down list item and sets the value and the text of the dropdownlist.
-        * @param {jQueryObject | Number | Function} li LI element or index of the item or predicate function, which defines the item that should be selected.
-        * @returns {Integer} The index of the selected LI element.
+        * @param {jQuery | Number | Function} li LI element or index of the item or predicate function, which defines the item that should be selected.
+        * @returns {Number} The index of the selected LI element.
         * @example
         * // get a reference to the dropdown list
         * var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
@@ -738,10 +782,13 @@
         */
         value: function(value) {
             var that = this,
-                element = that.element,
                 idx;
 
             if (value !== undefined) {
+                if (value !== null) {
+                    value = value.toString();
+                }
+
                 if (value && that._valueOnFetch(value)) {
                     return;
                 }
@@ -758,17 +805,31 @@
             var that = this;
 
             that.dataSource.one(CHANGE, function() {
-                var value = that.value();
+                var value = that.options.value || that.value();
                 if (value) {
                     that.value(value);
                 } else {
                     that.select(that.options.index);
                 }
+
+                that.trigger("selected");
             }).fetch();
         },
 
         _accept: function(li) {
             this._focus(li);
+        },
+
+        _optionLabelText: function() {
+            var options = this.options,
+                dataTextField = options.dataTextField,
+                optionLabel = options.optionLabel;
+
+            if (optionLabel && dataTextField && typeof optionLabel === "object") {
+                return this._text(optionLabel);
+            }
+
+            return optionLabel;
         },
 
         _data: function() {
@@ -783,7 +844,9 @@
                 idx = 0;
 
             if (optionLabel && length) {
-                if (textField) {
+                if (typeof optionLabel === "object") {
+                    first = optionLabel;
+                } else if (textField) {
                     first = {};
 
                     textField = textField.split(".");
@@ -851,7 +914,6 @@
 
         _select: function(li) {
             var that = this,
-                element = that.element[0],
                 current = that._current,
                 data = that._data(),
                 value,
@@ -873,7 +935,7 @@
                     that.selectedIndex = idx;
 
                     that.text(text);
-                    that._accessor(value != undefined ? value : text, idx);
+                    that._accessor(value !== undefined ? value : text, idx);
                     that.current(li.addClass(SELECTED));
                 }
             }
@@ -898,14 +960,14 @@
             span = wrapper.find(SELECTOR);
 
             if (!span[0]) {
-                wrapper.append('<span unselectable="on" class="k-dropdown-wrap k-state-default"><span unselectable="on" class="k-input">&nbsp;</span><span class="k-select"><span class="k-icon k-arrow-down">select</span></span></span>')
+                wrapper.append('<span unselectable="on" class="k-dropdown-wrap k-state-default"><span unselectable="on" class="k-input">&nbsp;</span><span class="k-select"><span class="k-icon k-i-arrow-s">select</span></span></span>')
                        .append(that.element);
 
                 span = wrapper.find(SELECTOR);
             }
 
             that.span = span;
-            that._inputWrapper = $(wrapper[0].firstChild)
+            that._inputWrapper = $(wrapper[0].firstChild);
             that._arrow = wrapper.find(".k-icon").mousedown(function(e) { e.preventDefault(); });
         },
 
@@ -913,7 +975,7 @@
             var that = this,
                 element = that.element,
                 DOMelement = element[0],
-                TABINDEX = "tabIndex",
+                tabIndex = element.attr(TABINDEX),
                 wrapper;
 
             wrapper = element.parent();
@@ -922,10 +984,7 @@
                 wrapper = element.wrap("<span />").parent();
             }
 
-            if (!wrapper.attr(TABINDEX)) {
-                wrapper.attr(TABINDEX, 0);
-            }
-
+            wrapper.attr(TABINDEX, tabIndex || 0);
             wrapper[0].style.cssText = DOMelement.style.cssText;
             element.hide();
 
@@ -956,3 +1015,4 @@
 
     ui.plugin(DropDownList);
 })(jQuery);
+;

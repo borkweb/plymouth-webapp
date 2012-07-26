@@ -1,5 +1,5 @@
 ﻿/*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -36,8 +36,8 @@
         calendars: {
             standard: {
                 days: {
-                    names: ["недеља","понедељак","уторак","среда","четвртак","петак","субота"],
-                    namesAbbr: ["нед","пон","уто","сре","чет","пет","суб"],
+                    names: ["неђеља","понеђељак","уторак","сриједа","четвртак","петак","субота"],
+                    namesAbbr: ["неђ","пон","уто","сри","чет","пет","суб"],
                     namesShort: ["не","по","ут","ср","че","пе","су"]
                 },
                 months: {
@@ -68,3 +68,4 @@
         }
     }
 })(this);
+;

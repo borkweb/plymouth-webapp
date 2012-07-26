@@ -204,9 +204,13 @@
 
                     animated.kendoStop().kendoAnimate(extend({}, animation.hide, { complete: function(element) {
                         if (element[0] == exampleElement[0]) {
+                            animated.css("visibility", "hidden"); // Hide the element with restored opacity.
                             replaceTheme();
                             setTimeout(function() {
-                                animated.kendoStop().kendoAnimate(animation.show);
+                                animated
+                                    .css("visibility", "visible")
+                                    .kendoStop()
+                                    .kendoAnimate(animation.show);
                             }, 100);
                         }
                     }}));
@@ -468,7 +472,14 @@
             };
 
         return this.each(function() {
-            var theme = sessionStorage.getItem("kendoSkin") || "default";
+            var theme;
+
+            try {
+                theme = sessionStorage.getItem("kendoSkin");
+            } catch(err) {}
+
+            theme = theme || "default";
+
             $(this).html(kendo.render(template, themes))
                    .on("click", "li", function() {
                        var li = $(this).children("span").addClass("k-state-selected").end(),

@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -30,7 +30,7 @@
                 }
             },
             sort: function(params, orderby) {
-                params.$orderby = $.map(orderby, function(value) {
+                var expr = $.map(orderby, function(value) {
                     var order = value.field.replace(/\./g, "/");
 
                     if (value.dir === "desc") {
@@ -39,6 +39,10 @@
 
                     return order;
                 }).join(",");
+
+                if (expr) {
+                    params.$orderby = expr;
+                }
             },
             skip: function(params, skip) {
                 if (skip) {
@@ -67,6 +71,7 @@
             format,
             operator,
             value,
+            ignoreCase,
             filters = filter.filters;
 
         for (idx = 0, length = filters.length; idx < length; idx++) {
@@ -78,8 +83,8 @@
             if (filter.filters) {
                 filter = toOdataFilter(filter);
             } else {
-                field = field.replace(/\./g, "/"),
-
+                ignoreCase = filter.ignoreCase;
+                field = field.replace(/\./g, "/");
                 filter = odataFilters[operator];
 
                 if (filter && value !== undefined) {
@@ -87,6 +92,11 @@
                     if (type === "string") {
                         format = "'{1}'";
                         value = value.replace(/'/g, "''");
+
+                        if (ignoreCase === true) {
+                            field = "tolower(" + field + ")";
+                        }
+
                     } else if (type === "date") {
                         format = "datetime'{1:yyyy-MM-ddTHH:mm:ss}'";
                     } else {
@@ -166,9 +176,12 @@
 
                     if (type === "read") {
                         params = {
-                            $format: "json",
                             $inlinecount: "allpages"
                         };
+
+                        if (dataType != "json") {
+                            params.$format = "json";
+                        }
 
                         for (option in options) {
                             if (mappers[option]) {
@@ -200,3 +213,4 @@
         }
     });
 })(jQuery);
+;

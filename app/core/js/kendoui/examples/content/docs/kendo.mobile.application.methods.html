@@ -21,12 +21,12 @@
             <li>
                 <div class="detailHandle">
                     <div class="detailCollapsed"></div>
-                    <a name="navigate"><code>navigate</code></a> (url)
+                    <a name="navigate"><code>navigate</code></a> (url, transition)
 
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Navigate the local or remote view.</div><div class="code-sample"><h4 class="code-title">Navigate to a remote view</h4><pre class="code prettyprint"><code>var app = new kendo.mobile.Application();app.navigate("settings.html");</code></pre></div><div class="code-sample"><h4 class="code-title">Navigate to a local view</h4><pre class="code prettyprint"><code>&lt;div data-role="view" id="foo"&gt; ... &lt;/div&gt;&lt;script&gt;var app = new kendo.mobile.Application();app.navigate("#foo");&lt;/script&gt;</code></pre></div>
+                    <div class="desc">Navigate to local or to remote view.</div><div class="code-sample"><h4 class="code-title">Navigate to a remote view</h4><pre class="code prettyprint"><code>var app = new kendo.mobile.Application();app.navigate("settings.html");</code></pre></div><div class="code-sample"><h4 class="code-title">Navigate to a local view</h4><pre class="code prettyprint"><code>&lt;div data-role="view" id="foo"&gt; ... &lt;/div&gt;&lt;script&gt;var app = new kendo.mobile.Application();app.navigate("#foo");&lt;/script&gt;</code></pre></div>
 
                     
                     <div class="details-list">
@@ -38,6 +38,12 @@
                                 
                             </dt>
                             <dd>The id or url of the view.</dd>
+                        
+                            <dt>
+                                <code>transition</code><span class="light fixedFont">: String</span> 
+                                
+                            </dt>
+                            <dd>The transition to apply when navigating. See View Transitions section for moreinformation.</dd>
                         
                         </dl>
                     </div>
@@ -52,7 +58,7 @@
                     <div class="detailCollapsed"></div>
                     <a name="scroller"><code>scroller</code></a> ()
 
-                    : <span class="type"><a href="symbols/kendo.mobile.ui.Scrollerundefined">kendo.mobile.ui.Scroller</a></span>
+                    : <span class="type">Scroller</span>
                 </div>
                 <div class="detailBody">
                     <div class="desc">Get a reference to the current view's scroller widget instance.</div>
@@ -68,7 +74,7 @@
                             
                                 <dt class="heading">Returns</dt>
                                 
-                                    <dd><span class="light fixedFont"><a href="symbols/kendo.mobile.ui.Scrollerundefined">kendo.mobile.ui.Scroller</a></span> the scroller widget instance.</dd>
+                                    <dd><span class="light fixedFont">Scroller</span> the scroller widget instance.</dd>
                                 
                             
 
@@ -93,6 +99,40 @@
 
                     
 
+                    
+                </div>
+            </li>
+        
+            <li>
+                <div class="detailHandle">
+                    <div class="detailCollapsed"></div>
+                    <a name="view"><code>view</code></a> ()
+
+                    : <span class="type">View</span>
+                </div>
+                <div class="detailBody">
+                    <div class="desc">Get a reference to the current view.</div>
+
+                    
+
+                    
+                        <dl class="detailList">
+                            
+
+                            
+
+                            
+                                <dt class="heading">Returns</dt>
+                                
+                                    <dd><span class="light fixedFont">View</span> the view instance.</dd>
+                                
+                            
+
+                            
+
+                            
+
+                        </dl>
                     
                 </div>
             </li>

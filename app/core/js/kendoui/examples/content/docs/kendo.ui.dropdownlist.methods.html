@@ -10,10 +10,7 @@
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Closes the drop-down list.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown widget
-var dropdownList = $("#dropdownList").data("kendoDropDownList");
-// close the dropdown
-dropdownlist.close();</code></pre></div>
+                    <div class="desc">Closes the drop-down list.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown widgetvar dropdownList = $("#dropdownList").data("kendoDropDownList");// close the dropdowndropdownlist.close();</code></pre></div>
 
                     
 
@@ -29,13 +26,7 @@ dropdownlist.close();</code></pre></div>
                     : <span class="type">Object</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Returns the raw data record at the specified index. If the index is not specified, the selected index will be used.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
-
-// get the dataItem corresponding to the selectedIndex.
-var dataItem = dropdownlist.dataItem();
-
-// get the dataItem corresponding to the passed index.
-var dataItem = dropdownlist.dataItem(1);</code></pre></div>
+                    <div class="desc">Returns the raw data record at the specified index. If the index is not specified, the selected index will be used.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var dropdownlist = $("#dropdownlist").data("kendoDropDownList");// get the dataItem corresponding to the selectedIndex.var dataItem = dropdownlist.dataItem();// get the dataItem corresponding to the passed index.var dataItem = dropdownlist.dataItem(1);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -82,10 +73,7 @@ var dataItem = dropdownlist.dataItem(1);</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Enables/disables the dropdownlist widget</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown list
-var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
-// disable the dropdown list
-dropdownlist.enable(false);</code></pre></div>
+                    <div class="desc">Enables/disables the dropdownlist widget</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown listvar dropdownlist = $("#dropdownlist").data("kendoDropDownList");// disable the dropdown listdropdownlist.enable(false);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -114,10 +102,7 @@ dropdownlist.enable(false);</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Opens the drop-down list.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown list
-var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
-// open the drop down
-dropdownlist.open();</code></pre></div>
+                    <div class="desc">Opens the drop-down list.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown listvar dropdownlist = $("#dropdownlist").data("kendoDropDownList");// open the drop downdropdownlist.open();</code></pre></div>
 
                     
 
@@ -133,10 +118,7 @@ dropdownlist.open();</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Re-render the items in drop-down list.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a referenence to the Kendo UI DropDownList
-var dropdownlist = $("dropdownlist").data("kendoDropDownList");
-// re-render the items in drop-down list.
-dropdownlist.refresh();</code></pre></div>
+                    <div class="desc">Re-render the items in drop-down list.</div><div class="desc"></div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a referenence to the Kendo UI DropDownListvar dropdownlist = $("dropdownlist").data("kendoDropDownList");// re-render the items in drop-down list.dropdownlist.refresh();</code></pre></div>
 
                     
 
@@ -152,11 +134,7 @@ dropdownlist.refresh();</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Selects item, which starts with the provided parameter.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown list
-var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
-
-// Selects item which starts with "In".
-dropdownlist.search("In");</code></pre></div>
+                    <div class="desc">Selects item, which starts with the provided parameter.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown listvar dropdownlist = $("#dropdownlist").data("kendoDropDownList");// Selects item which starts with "In".dropdownlist.search("In");</code></pre></div>
 
                     
                     <div class="details-list">
@@ -182,22 +160,10 @@ dropdownlist.search("In");</code></pre></div>
                     <div class="detailCollapsed"></div>
                     <a name="select"><code>select</code></a> (li)
 
-                    : <span class="type">Integer</span>
+                    : <span class="type">Number</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Selects drop-down list item and sets the value and the text of the dropdownlist.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown list
-var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
-
-// selects by jQuery object
-dropdownlist.select(dropdownlist.ul.children().eq(0));
-
-// selects by index
-dropdownlist.select(1);
-
-// selects item if its text is equal to "test" using predicate function
-dropdownlist.select(function(dataItem) {
-    return dataItem.text === "test";
-});</code></pre></div>
+                    <div class="desc">Selects drop-down list item and sets the value and the text of the dropdownlist.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown listvar dropdownlist = $("#dropdownlist").data("kendoDropDownList");// selects by jQuery objectdropdownlist.select(dropdownlist.ul.children().eq(0));// selects by indexdropdownlist.select(1);// selects item if its text is equal to "test" using predicate functiondropdownlist.select(function(dataItem) {    return dataItem.text === "test";});</code></pre></div>
 
                     
                     <div class="details-list">
@@ -205,7 +171,7 @@ dropdownlist.select(function(dataItem) {
                         <dl>
                         
                             <dt>
-                                <code>li</code><span class="light fixedFont">: jQueryObject | Number | Function</span> 
+                                <code>li</code><span class="light fixedFont">: jQuery | Number | Function</span> 
                                 
                             </dt>
                             <dd>LI element or index of the item or predicate function, which defines the item that should be selected.</dd>
@@ -223,7 +189,7 @@ dropdownlist.select(function(dataItem) {
                             
                                 <dt class="heading">Returns</dt>
                                 
-                                    <dd><span class="light fixedFont">Integer</span> The index of the selected LI element.</dd>
+                                    <dd><span class="light fixedFont">Number</span> The index of the selected LI element.</dd>
                                 
                             
 
@@ -244,11 +210,7 @@ dropdownlist.select(function(dataItem) {
                     : <span class="type">String</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Gets/Sets the text of the dropdownlist.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown list
-var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
-
-// get the text of the dropdownlist.
-var text = dropdownlist.text();</code></pre></div>
+                    <div class="desc">Gets/Sets the text of the dropdownlist.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown listvar dropdownlist = $("#dropdownlist").data("kendoDropDownList");// get the text of the dropdownlist.var text = dropdownlist.text();</code></pre></div>
 
                     
                     <div class="details-list">
@@ -295,11 +257,7 @@ var text = dropdownlist.text();</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Toggles the drop-down list between opened and closed state.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown list
-var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
-
-// toggles the open state of the drop-down list.
-dropdownlist.toggle();</code></pre></div>
+                    <div class="desc">Toggles the drop-down list between opened and closed state.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown listvar dropdownlist = $("#dropdownlist").data("kendoDropDownList");// toggles the open state of the drop-down list.dropdownlist.toggle();</code></pre></div>
 
                     
                     <div class="details-list">
@@ -328,14 +286,7 @@ dropdownlist.toggle();</code></pre></div>
                     : <span class="type">String</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Gets/Sets the value of the dropdownlist. The value will not be set if there is no item with such value. If value is undefined, text of the data item is used.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown list
-var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
-
-// get the value of the dropdownlist.
-var value = dropdownlist.value();
-
-// set the value of the dropdownlist.
-dropdownlist.value("1"); //looks for item which has value "1"</code></pre></div>
+                    <div class="desc">Gets/Sets the value of the dropdownlist. The value will not be set if there is no item with such value. If value is undefined, text of the data item is used.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the dropdown listvar dropdownlist = $("#dropdownlist").data("kendoDropDownList");// get the value of the dropdownlist.var value = dropdownlist.value();// set the value of the dropdownlist.dropdownlist.value("1"); //looks for item which has value "1"</code></pre></div>
 
                     
                     <div class="details-list">

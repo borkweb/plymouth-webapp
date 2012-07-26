@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -17,6 +17,8 @@
         appendingToBodyTriggersResize = $.browser.msie && $.browser.version < 9,
         OPEN = "open",
         CLOSE = "close",
+        DEACTIVATE = "deactivate",
+        ACTIVATE = "activate",
         CENTER = "center",
         LEFT = "left",
         RIGHT = "right",
@@ -54,23 +56,26 @@
 
     var Popup = Widget.extend({
         init: function(element, options) {
-            var that = this;
+            var that = this, parentPopup;
 
             Widget.fn.init.call(that, element, options);
 
             element = that.element;
             options = that.options;
 
-            that.collisions = that.options.collision.split(" ");
+            that.collisions = options.collision ? options.collision.split(" ") : [];
 
             if (that.collisions.length === 1) {
                 that.collisions.push(that.collisions[0]);
             }
 
+            parentPopup = $(that.options.anchor).closest(".k-popup,.k-group"); // When popup is in another popup, make it relative.
+            options.appendTo = $($(options.appendTo)[0] || parentPopup[0] || BODY);
+
             that.element.hide()
                 .addClass("k-popup k-group k-reset")
                 .css({ position : ABSOLUTE })
-                .appendTo($(options.appendTo))
+                .appendTo(options.appendTo)
                 .bind("mouseenter mouseleave", function(e) {
                     that._hovered = e.type === "mouseenter";
                 });
@@ -81,13 +86,10 @@
                 options.animation = { open: { show: true, effects: {} }, close: { hide: true, effects: {} } };
             }
 
-            if (!(EFFECTS in options.animation.close)) {
-                options.animation.close = extend(true, { reverse: true }, options.animation.open, options.animation.close);
-            }
-
             extend(options.animation.open, {
                 complete: function() {
                     that.wrapper.css({ overflow: VISIBLE }); // Forcing refresh causes flickering in mobile.
+                    that.trigger(ACTIVATE);
                 }
             });
 
@@ -117,6 +119,7 @@
                     }
 
                     that._closing = false;
+                    that.trigger(DEACTIVATE);
                 }
             });
 
@@ -137,7 +140,9 @@
 
         events: [
             OPEN,
-            CLOSE
+            ACTIVATE,
+            CLOSE,
+            DEACTIVATE
         ],
 
         options: {
@@ -146,8 +151,8 @@
             origin: BOTTOM + " " + LEFT,
             position: TOP + " " + LEFT,
             anchor: BODY,
-            appendTo: BODY,
             collision: "flip fit",
+            viewport: window,
             animation: {
                 open: {
                     effects: "slideIn:down",
@@ -163,8 +168,9 @@
             }
         },
 
-        open: function() {
+        open: function(x, y) {
             var that = this,
+                fixed = { isFixed: !isNaN(parseInt(y,10)), x: x, y: y },
                 element = that.element,
                 options = that.options,
                 direction = "down",
@@ -187,7 +193,7 @@
                                 .bind(MOUSEDOWN, that._mousedownProxy);
                 if (!touch) {
                     WINDOW.unbind(RESIZE_SCROLL, that._resizeProxy)
-                          .bind(RESIZE_SCROLL, that._resizeProxy)
+                          .bind(RESIZE_SCROLL, that._resizeProxy);
                 }
 
                 that.wrapper = wrapper = kendo.wrap(element)
@@ -208,7 +214,9 @@
                 }
 
                 animation = extend(true, {}, options.animation.open);
-                animation.effects = kendo.parseEffects(animation.effects, that._update());
+                that.flipped = that._position(fixed);
+                animation.effects = kendo.parseEffects(animation.effects, that.flipped);
+
                 direction = animation.effects.slideIn ? animation.effects.slideIn.direction : direction;
 
                 if (options.anchor != BODY) {
@@ -242,24 +250,35 @@
         close: function() {
             var that = this,
                 options = that.options,
-                animation,
-                effects;
+                animation, openEffects, closeEffects;
 
             if (that.visible()) {
                 if (that._closing || that.trigger(CLOSE)) {
                     return;
                 }
 
+                // Close all inclusive popups.
+                that.element.find(".k-popup").each(function () {
+                    var that = $(this),
+                        popup = that.data("kendoPopup");
+
+                    if (popup) {
+                        popup.close();
+                    }
+                });
+
                 DOCUMENT_ELEMENT.unbind(MOUSEDOWN, that._mousedownProxy);
                 WINDOW.unbind(RESIZE_SCROLL, that._resizeProxy);
 
                 animation = extend(true, {}, options.animation.close);
-                effects = that.element.data(EFFECTS);
+                openEffects = that.element.data(EFFECTS);
+                closeEffects = animation.effects;
 
                 that.wrapper = kendo.wrap(that.element).css({ overflow: HIDDEN });
 
-                if (effects) {
-                    animation.effects = effects;
+                if (!closeEffects && !kendo.size(closeEffects) && openEffects && kendo.size(openEffects)) {
+                    animation.effects = openEffects;
+                    animation.reverse = true;
                 }
 
                 that._closing = true;
@@ -302,10 +321,6 @@
             }
         },
 
-        _update: function() {
-            return this._position($(window));
-        },
-
         _fit: function(position, size, viewPortSize) {
             var output = 0;
 
@@ -314,7 +329,7 @@
             }
 
             if (position < 0) {
-                output = position;
+                output = -position;
             }
 
             return output;
@@ -336,11 +351,13 @@
             return output;
         },
 
-        _position: function(viewport) {
+        _position: function(fixed) {
             var that = this,
                 element = that.element,
                 wrapper = that.wrapper,
                 options = that.options,
+                viewport = $(options.viewport),
+                viewportOffset = $(viewport).offset(),
                 anchor = $(options.anchor),
                 origins = options.origin.toLowerCase().split(" "),
                 positions = options.position.toLowerCase().split(" "),
@@ -359,10 +376,10 @@
 
             wrapper.css("zIndex", zIndex);
 
-            if (options.appendTo === Popup.fn.options.appendTo) {
-                wrapper.css(that._align(origins, positions));
+            if (fixed && fixed.isFixed) {
+                wrapper.css({ left: fixed.x, top: fixed.y });
             } else {
-                wrapper.css(that._align(origins, positions, true));
+                wrapper.css(that._align(origins, positions));
             }
 
             var pos = getOffset(wrapper, POSITION),
@@ -374,10 +391,14 @@
                 offset = getOffset(wrapper);
             }
 
-            offset = {
-                top: offset.top - (window.pageYOffset || document.documentElement.scrollTop || 0),
-                left: offset.left - (window.pageXOffset || document.documentElement.scrollLeft || 0)
-            };
+            if (viewport[0] === window) {
+                offset.top -= (window.pageYOffset || document.documentElement.scrollTop || 0);
+                offset.left -= (window.pageXOffset || document.documentElement.scrollLeft || 0);
+            }
+            else {
+                offset.top -= viewportOffset.top;
+                offset.left -= viewportOffset.left;
+            }
 
             if (!that.wrapper.data(LOCATION)) { // Needed to reset the popup location after every closure - fixes the resize bugs.
                 wrapper.data(LOCATION, extend({}, pos));
@@ -403,7 +424,7 @@
             var flipPos = extend({}, location);
 
             if (collisions[0] === "flip") {
-                location.top += that._flip(offsets.top, element.outerHeight(), anchor.outerHeight(), viewport.height() / zoomLevel, origins[0], positions[0], wrapper.outerHeight())
+                location.top += that._flip(offsets.top, element.outerHeight(), anchor.outerHeight(), viewport.height() / zoomLevel, origins[0], positions[0], wrapper.outerHeight());
             }
 
             if (collisions[1] === "flip") {
@@ -415,7 +436,7 @@
             return (location.left != flipPos.left || location.top != flipPos.top);
         },
 
-        _align: function(origin, position, isPosition) {
+        _align: function(origin, position) {
             var that = this,
                 element = that.wrapper,
                 anchor = $(that.options.anchor),
@@ -423,25 +444,25 @@
                 horizontalOrigin = origin[1],
                 verticalPosition = position[0],
                 horizontalPosition = position[1],
-                anchorOff = getOffset(anchor),
-                appendOff = getOffset($(that.options.appendTo)),
-                anchorOffset = isPosition ? { top: anchorOff.top - appendOff.top , left: anchorOff.left - appendOff.left } : anchorOff,
+                anchorOffset = getOffset(anchor),
+                appendTo = $(that.options.appendTo),
+                appendToOffset,
                 width = element.outerWidth(),
                 height = element.outerHeight(),
                 anchorWidth = anchor.outerWidth(),
                 anchorHeight = anchor.outerHeight(),
                 top = anchorOffset.top,
                 left = anchorOffset.left,
-                round = Math.round,
-                verticalFlip = verticalOrigin !== verticalPosition,
-                horizontalflip = horizontalOrigin !== horizontalPosition;
+                round = Math.round;
 
-
-            if (verticalOrigin === TOP && isPosition && verticalFlip) {
-                top -= height;
+            if (appendTo[0] != document.body) {
+                appendToOffset = getOffset(appendTo);
+                top -= appendToOffset.top;
+                left -= appendToOffset.left;
             }
 
-            if (verticalOrigin === BOTTOM && !isPosition) {
+
+            if (verticalOrigin === BOTTOM) {
                 top += anchorHeight;
             }
 
@@ -449,11 +470,7 @@
                 top += round(anchorHeight / 2);
             }
 
-            if (verticalPosition === TOP && isPosition && verticalFlip) {
-                top += anchorHeight;
-            }
-
-            if (verticalPosition === BOTTOM && !isPosition) {
+            if (verticalPosition === BOTTOM) {
                 top -= height;
             }
 
@@ -461,11 +478,7 @@
                 top -= round(height / 2);
             }
 
-            if (horizontalOrigin === LEFT && isPosition && horizontalflip) {
-                left -= width;
-            }
-
-            if (horizontalOrigin === RIGHT && !isPosition) {
+            if (horizontalOrigin === RIGHT) {
                 left += anchorWidth;
             }
 
@@ -473,11 +486,7 @@
                 left += round(anchorWidth / 2);
             }
 
-            if (horizontalPosition === LEFT && isPosition && horizontalflip) {
-                left += anchorWidth;
-            }
-
-            if (horizontalPosition === RIGHT && !isPosition) {
+            if (horizontalPosition === RIGHT) {
                 left -= width;
             }
 
@@ -494,3 +503,4 @@
 
     ui.plugin(Popup);
 })(jQuery);
+;

@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -42,7 +42,7 @@
      * <p>
      *  Locally defined values are best for small, fixed sets of suggestions.
      *  Remote suggestions should be used for larger data sets. When used
-     *  with the <a href="../datasource/index.html">DataSource</a> component,
+     *  with the <strong>DataSource</strong> component,
      *  filtering large remote data services can be pushed to the server as
      *  well, maximizing client-side performance.
      * </p>
@@ -69,7 +69,7 @@
      * <p>
      *  The easiest way to bind an <b>AutoComplete</b> to remote
      *  suggestions is to use the
-     *  <a href="../datasource/index.html">DataSource</a> component; an
+     *  <strong>DataSource</strong> component; an
      *  abstraction for local and remote data. The <b>DataSource</b>
      *  component can be used to serve data from a variety of data services,
      *  such as
@@ -189,7 +189,7 @@
         /**
         * @constructs
         * @extends kendo.ui.List
-        * @param {DomElement} element DOM element
+        * @param {Element} element DOM element
         * @param {Object} options Configuration options.
         * @option {Object | kendo.data.DataSource } [dataSource] The set of data that the AutoComplete will be bound to.
         *  Either a local JavaScript object, or an instance of the Kendo UI DataSource.
@@ -211,6 +211,11 @@
         * // disable the autocomplete when it is created (enabled by default)
         * $("#autoComplete").kendoAutoComplete({
         *     enable: false
+        * });
+        * @option {Boolean} [highlightFirst] <true> Controls whether the first item will be automatically highlighted.
+        * _example
+        * $("#autocomplete").kendoAutoComplete({
+        *     highlightFirst: false //no of the suggested items will be highlighted
         * });
         * @option {Boolean} [suggest] <false> Controls whether the AutoComplete should automatically auto-type the rest of text.
         * _example
@@ -244,6 +249,12 @@
         * $("#autoComplete").kendoAutoComplete({
         *     filter: 'contains'
         * });
+        * @option {String} [ignoreCase] <true> Defines whether the filtration should be case sensitive.
+        * _example
+        * $("#autoComplete").kendoAutoComplete({
+        *     filter: 'contains',
+        *     ignoreCase: false //now filtration will be case sensitive
+        * });
         * @option {Number} [height] <200> Sets the height of the drop-down list in pixels.
         * _example
         * // set the height of the drop-down list that appears when the autocomplete is activated to 500px
@@ -256,31 +267,31 @@
         * $("#autoComplete").kendoAutoComplete({
         *     separator: ", "
         * });
-        * @option {Function} [template] Template to be used for rendering the items in the list.
+        * @option {String} [template] Template to be used for rendering the items in the list.
         * _example
         *  //template
-        * &lt;script id="template" type="text/x-kendo-tmpl"&gt;
+        *
+        * <script id="template" type="text/x-kendo-tmpl">
         *       # if (data.BoxArt.SmallUrl) { #
-        *           &lt;img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" /&gt;Title:${ data.Name }, Year: ${ data.Name }
+        *           <img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
         *       # } else { #
-        *           &lt;img alt="${ data.Name }" /&gt;Title:${ data.Name }, Year: ${ data.Name }
+        *           <img alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
         *       # } #
-        *  &lt;/script&gt;
+        *  </script>
         *
         *  //autocomplete initialization
-        *  &lt;script&gt;
+        *  <script>
         *      $("#autocomplete").kendoAutoComplete({
         *          dataSource: dataSource,
         *          dataTextField: "Name",
-        *          dataValueField: "Id",
         *          template: kendo.template($("#template").html())
         *      });
-        *  &lt;/script&gt;
+        *  </script>
         * @option {Object} [animation] <> Animations to be used for opening/closing the popup. Setting to false will turn of the animation.
         * @option {Object} [animation.open] <> Animation to be used for opening of the popup.
         * _example
         *  //autocomplete initialization
-        *  &lt;script&gt;
+        *  <script>
         *      $("#autocomplete").kendoAutoComplete({
         *          dataSource: dataSource,
         *          animation: {
@@ -291,11 +302,11 @@
         *             }
         *          }
         *      });
-        *  &lt;/script&gt;
+        *  </script>
         * @option {Object} [animation.close] <> Animation to be used for closing of the popup.
         * _example
         *  //autocomplete initialization
-        *  &lt;script&gt;
+        *  <script>
         *      $("#autocomplete").kendoAutoComplete({
         *          dataSource: dataSource,
         *          animation: {
@@ -307,7 +318,7 @@
         *             }
         *          }
         *      });
-        *  &lt;/script&gt;
+        *  </script>
         *  @option {String} [placeholder] <""> A string that appears in the textbox when it has no value.
         *  _example
         *  //autocomplete initialization
@@ -328,7 +339,7 @@
         *  </script>
         */
         init: function (element, options) {
-            var that = this, wrapper, placeholder;
+            var that = this, wrapper;
 
             options = $.isArray(options) ? { dataSource: options} : options;
 
@@ -390,6 +401,7 @@
             delay: 200,
             height: 200,
             filter: "startswith",
+            ignoreCase: true,
             highlightFirst: false,
             separator: null,
             placeholder: "",
@@ -601,8 +613,7 @@
             ul = that.ul[0],
             popup = that.popup,
             options = that.options,
-            suggest = options.suggest,
-            data = that.dataSource.view(),
+            data = that._data(),
             length = data.length;
 
             that.trigger("dataBinding");
@@ -612,12 +623,12 @@
             that._height(length);
 
             if (length) {
-                if (suggest || options.highlightFirst) {
+                if (options.highlightFirst) {
                     that.current($(ul.firstChild));
                 }
 
-                if (suggest) {
-                    that.suggest(that._current);
+                if (options.suggest) {
+                    that.suggest($(ul.firstChild));
                 }
             }
 
@@ -661,12 +672,12 @@
         */
         search: function (word) {
             var that = this,
-            word = word || that.value(),
             options = that.options,
+            ignoreCase = options.ignoreCase,
             separator = options.separator,
-            length,
-            caret,
-            index;
+            length;
+
+            word = word || that.value();
 
             that._current = null;
 
@@ -682,7 +693,13 @@
                 that.popup.close();
             } else if (length >= that.options.minLength) {
                 that._open = true;
-                that.dataSource.filter({ field: options.dataTextField, operator: options.filter, value: word });
+
+                that.dataSource.filter({
+                    value: ignoreCase ? word.toLowerCase() : word,
+                    operator: options.filter,
+                    field: options.dataTextField,
+                    ignoreCase: ignoreCase
+                });
             }
         },
 
@@ -719,10 +736,10 @@
             word = word || "";
 
             if (typeof word !== "string") {
-                idx = word.index();
+                idx = List.inArray(word[0], that.ul[0]);
 
                 if (idx > -1) {
-                    word = that._text(that.dataSource.view()[idx]);
+                    word = that._text(that._data()[idx]);
                 } else {
                     word = "";
                 }
@@ -776,8 +793,19 @@
 
             if (value !== undefined) {
                 element.value = value;
+                that._placeholder();
             } else {
-                return element.value;
+                value = element.value;
+
+                if (element.className.indexOf("k-readonly") > -1) {
+                    if (value === that.options.placeholder) {
+                        return "";
+                    } else {
+                        return value;
+                    }
+                }
+
+                return value;
             }
         },
 
@@ -858,6 +886,10 @@
                     }
                 }
 
+                if (value === that._old && !show) {
+                    return;
+                }
+
                 element.toggleClass("k-readonly", show)
                        .val(placeholder);
             }
@@ -878,7 +910,7 @@
         _select: function (li) {
             var that = this,
                 separator = that.options.separator,
-                data = that.dataSource.view(),
+                data = that._data(),
                 text,
                 idx;
 
@@ -911,7 +943,6 @@
             var that = this,
                 element = that.element,
                 DOMelement = element[0],
-                TABINDEX = "tabIndex",
                 wrapper;
 
             wrapper = element.parent();
@@ -935,3 +966,4 @@
 
     ui.plugin(AutoComplete);
 })(jQuery);
+;

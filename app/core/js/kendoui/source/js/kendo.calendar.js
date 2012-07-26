@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -137,7 +137,9 @@
         ui = kendo.ui,
         Widget = ui.Widget,
         parse = kendo.parseDate,
+        extractFormat = kendo._extractFormat,
         template = kendo.template,
+        getCulture = kendo.getCulture,
         touch = kendo.support.touch,
         transitions = kendo.support.transitions,
         transitionOrigin = transitions ? transitions.css + "transform-origin" : "",
@@ -179,7 +181,7 @@
         /**
           * @constructs
           * @extends kendo.ui.Widget
-          * @param {DomElement} element DOM element
+          * @param {Element} element DOM element
           * @param {Object} options Configuration options.
           * @option {Date} [value] <null> Specifies the selected date.
           * _example
@@ -242,34 +244,46 @@
           * $("#calendar").kendoCalendar({
           *     depth: "year"
           * });
-          * @option {Function} [footer] <> Template to be used for rendering the footer. If false, the footer will not be rendered.
+          * @option {Array} [dates] <> Specifies a list of dates, which will be passed to the month template.
+          *  _example
+          * $("#calendar").kendoCalendar({
+          *     dates: [new Date(2000, 10, 10, 10, 0, 0), new Date(2000, 10, 10, 30, 0)] //can manipulate month template depending on this array.
+          * });
+          * @option {String} [footer] <> Template to be used for rendering the footer. If false, the footer will not be rendered.
           * _example
           *
           *  //calendar intialization
-          *  &lt;script&gt;
+          *  <script>
           *      $("#calendar").kendoCalendar({
           *          footer: kendo.template("Today - #=kendo.toString(data, 'd') #")
           *      });
-          *  &lt;/script&gt;
+          *  </script>
           * @option {Object} [month] <> Templates for the cells rendered in the "month" view.
-          * @option {Function} [month.content] <> Template to be used for rendering the cells in the "month" view, which are in range.
+          * @option {String} [month.content] <> Template to be used for rendering the cells in the "month" view, which are in range.
           * _example
           *  //template
-          *  &lt;script id="cellTemplate" type="text/x-kendo-tmpl"&gt;
-          *      &lt;div class="${ data.value < 10 ? exhibition : party }"&gt;
-          *      &lt;/div&gt;
+          * <script id="cellTemplate" type="text/x-kendo-tmpl">
+          *      <div class="${ data.value < 10 ? exhibition : party }">
+          *      </div>
           *      ${ data.value }
-          *  &lt;/script&gt;
+          *  </script>
           *
           *  //calendar intialization
-          *  &lt;script&gt;
+          *  <script>
           *      $("#calendar").kendoCalendar({
           *          month: {
-          *             content:  kendo.template($("#cellTemplate").html()),
+          *             content:  $("#cellTemplate").html(),
           *          }
           *      });
-          *  &lt;/script&gt;
-          * @option {Function} [month.empty] <> Template to be used for rendering the cells in the "month" view, which are not in the min/max range.
+          *  </script>
+          * @option {String} [month.empty] <> Template to be used for rendering the cells in the "month" view, which are not in the min/max range.
+          * @option {String} [culture] <en-US> Specifies the culture info used by the widget.
+          * _example
+          *
+          * // specify on widget initialization
+          * $("#calendar").kendoCalendar({
+          *     culture: "de-DE"
+          * });
           */
         init: function(element, options) {
             var that = this, value;
@@ -278,6 +292,8 @@
 
             element = that.wrapper = that.element;
             options = that.options;
+
+            options.url = window.unescape(options.url);
 
             element.addClass("k-widget k-calendar");
 
@@ -288,12 +304,11 @@
             that._footer(that.footer);
 
             element
-                .delegate(CELLSELECTOR, MOUSEENTER, mouseenter)
-                .delegate(CELLSELECTOR, MOUSELEAVE, mouseleave)
+                .delegate(CELLSELECTOR, MOUSEENTER + " " + MOUSELEAVE, mousetoggle)
                 .delegate(CELLSELECTOR, CLICK, proxy(that._click, that));
 
             value = options.value;
-            validate(options);
+            normalize(options);
 
             that._index = views[options.start];
             that._current = new DATE(restrictValue(value, options.min, options.max));
@@ -308,7 +323,10 @@
             value: null,
             min: new DATE(1900, 0, 1),
             max: new DATE(2099, 11, 31),
-            footer : '#= kendo.toString(data,"D") #',
+            dates: [],
+            url: "",
+            culture: "",
+            footer : "",
             format : "",
             month : {},
             start: MONTH,
@@ -370,6 +388,12 @@
             CHANGE,
             NAVIGATE
         ],
+
+        setOptions: function(options) {
+            normalize(options);
+
+            Widget.fn.setOptions.call(this, options);
+        },
 
         /**
         * Gets/Sets the min value of the calendar.
@@ -494,6 +518,7 @@
 
             var that = this,
                 options = that.options,
+                culture = options.culture,
                 min = options.min,
                 max = options.max,
                 title = that._title,
@@ -504,15 +529,10 @@
                 vertical = view !== undefined && view !== that._index,
                 to, currentView, compare;
 
-            //do not navigate if the view is still animating
-            if (from && from.parent().data("animating")) {
-                return;
-            }
-
             if (!value) {
                 value = currentValue;
             } else {
-                that._current = value = new DATE(restrictValue(value, min, max))
+                that._current = value = new DATE(restrictValue(value, min, max));
             }
 
             if (view === undefined) {
@@ -524,17 +544,21 @@
             that._view = currentView = calendar.views[view];
             compare = currentView.compare;
 
-            title.toggleClass(DISABLED, view === views[CENTURY])
+            title.toggleClass(DISABLED, view === views[CENTURY]);
             that[PREVARROW].toggleClass(DISABLED, compare(value, min) < 1);
             that[NEXTARROW].toggleClass(DISABLED, compare(value, max) > -1);
 
             if (!from || that._changeView) {
-                title.html(currentView.title(value));
+                title.html(currentView.title(value, culture));
 
                 that._table = to = $(currentView.content(extend({
                     min: min,
                     max: max,
-                    date: value
+                    date: value,
+                    url: options.url,
+                    dates: options.dates,
+                    format: options.format,
+                    culture: culture
                 }, that[currentView.name])));
 
                 makeUnselectable(to);
@@ -581,7 +605,7 @@
                 return that._value;
             }
 
-            value = parse(value, options.format);
+            value = parse(value, options.format, options.culture);
 
             if (value !== null) {
                 value = new DATE(value);
@@ -603,6 +627,11 @@
                 to = options.to;
 
             if (!from) {
+                to.insertAfter(that.element[0].firstChild);
+            } else if (from.parent().data("animating")) {
+                from.parent().kendoStop(true, true).remove();
+                from.remove();
+
                 to.insertAfter(that.element[0].firstChild);
             } else if (!from.is(":visible") || that.options.animation === false) {
                 to.insertAfter(from);
@@ -649,7 +678,6 @@
             var that = this,
                 vertical = that.options.animation.vertical,
                 effects = vertical.effects,
-                viewWidth = from.outerWidth(),
                 cell, position;
 
             if (effects && effects.indexOf("zoom") != -1) {
@@ -662,7 +690,7 @@
                 if (transitionOrigin) {
                     cell = that._cellByDate(that._view.toDateString(that._current));
                     position = cell.position();
-                    position = (position.left + parseInt(cell.width() / 2)) + "px" + " " + (position.top + parseInt(cell.height() / 2) + "px");
+                    position = (position.left + parseInt(cell.width() / 2, 10)) + "px" + " " + (position.top + parseInt(cell.height() / 2, 10) + "px");
                     to.css(transitionOrigin, position);
                 }
 
@@ -709,7 +737,9 @@
             //Safari cannot create corretly date from "1/1/2090"
             value = new DATE(value[0], value[1], value[2]);
 
-            e.preventDefault();
+            if (link[0].href.indexOf("#") != -1) {
+                e.preventDefault();
+            }
 
             if (link.parent().hasClass(OTHERMONTH)) {
                 currentValue = value;
@@ -737,8 +767,7 @@
             var that = this,
                 element = that.element,
                 today = new DATE(),
-                footer = element.find(".k-footer"),
-                link;
+                footer = element.find(".k-footer");
 
             if (!template) {
                 that._toggle(false);
@@ -753,7 +782,7 @@
             that._today = footer.show()
                                 .find(".k-link")
                                 .html(template(today))
-                                .attr("title", kendo.toString(today, "D"));
+                                .attr("title", kendo.toString(today, "D", that.options.culture));
 
             that._toggle();
         },
@@ -764,16 +793,15 @@
             links;
 
             if (!element.find(".k-header")[0]) {
-                element.html('<div class="k-header">'
-                           + '<a href="#" class="k-link k-nav-prev"><span class="k-icon k-arrow-prev"></span></a>'
-                           + '<a href="#" class="k-link k-nav-fast"></a>'
-                           + '<a href="#" class="k-link k-nav-next"><span class="k-icon k-arrow-next"></span></a>'
-                           + '</div>');
+                element.html('<div class="k-header">' +
+                             '<a href="#" class="k-link k-nav-prev"><span class="k-icon k-i-arrow-w"></span></a>' +
+                             '<a href="#" class="k-link k-nav-fast"></a>' +
+                             '<a href="#" class="k-link k-nav-next"><span class="k-icon k-i-arrow-e"></span></a>' +
+                             '</div>');
             }
 
             links = element.find(".k-link")
-                           .bind(MOUSEENTER, mouseenter)
-                           .bind(MOUSELEAVE, mouseleave)
+                           .bind(MOUSEENTER + " " + MOUSELEAVE, mousetoggle)
                            .click(false);
 
             that._title = links.eq(1).bind(CLICK, proxy(that.navigateUp, that));
@@ -809,7 +837,7 @@
                 return options[option];
             }
 
-            value = parse(value, options.format);
+            value = parse(value, options.format, options.culture);
 
             if (!value) {
                 return;
@@ -821,7 +849,7 @@
 
             if (option === MIN) {
                 bigger = +value > selectedValue;
-                navigate = navigate > -1
+                navigate = navigate > -1;
             } else {
                 bigger = selectedValue > +value;
                 navigate = navigate < 1;
@@ -846,7 +874,7 @@
             }
 
             if (link) {
-                link.unbind(CLICK)
+                link.unbind(CLICK);
 
                 if (toggle) {
                     link.addClass(TODAY)
@@ -886,12 +914,12 @@
                 empty = month.empty;
 
             that.month = {
-                content: template('<td#=data.cssClass#><a class="k-link" href="\\#" ' + kendo.attr("value") + '="#=data.dateString#" title="#=data.title#">' + (content || "#=data.value#") + '</a></td>', { useWithBlock: !!content }),
+                content: template('<td#=data.cssClass#><a class="k-link#=data.linkClass#" href="#=data.url#" ' + kendo.attr("value") + '="#=data.dateString#" title="#=data.title#">' + (content || "#=data.value#") + '</a></td>', { useWithBlock: !!content }),
                 empty: template("<td>" + (empty || "&nbsp;") + "</td>", { useWithBlock: !!empty })
             };
 
-            if (footer) {
-                that.footer = template(footer, { useWithBlock: false });
+            if (footer !== false) {
+                that.footer = template(footer || '#= kendo.toString(data,"D","' + options.culture +'") #', { useWithBlock: false });
             }
         }
     });
@@ -907,12 +935,14 @@
             );
         },
 
-        firstVisibleDay: function (date) {
-            var firstDay = kendo.culture().calendar.firstDay,
+        firstVisibleDay: function (date, calendarInfo) {
+            calendarInfo = calendarInfo || kendo.culture().calendar;
+
+            var firstDay = calendarInfo.firstDay,
             firstVisibleDay = new DATE(date.getFullYear(), date.getMonth(), 0, date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
 
             while (firstVisibleDay.getDay() != firstDay) {
-                calendar.setTime(firstVisibleDay, -1 * MS_PER_DAY)
+                calendar.setTime(firstVisibleDay, -1 * MS_PER_DAY);
             }
 
             return firstVisibleDay;
@@ -927,8 +957,8 @@
         },
         views: [{
             name: MONTH,
-            title: function(date) {
-                return kendo.culture().calendar.months.names[date.getMonth()] + " " + date.getFullYear();
+            title: function(date, culture) {
+                return getCalendarInfo(culture).months.names[date.getMonth()] + " " + date.getFullYear();
             },
             content: function(options) {
                 var that = this,
@@ -936,13 +966,17 @@
                 min = options.min,
                 max = options.max,
                 date = options.date,
-                currentCalendar = kendo.culture().calendar,
+                dates = options.dates,
+                format = options.format,
+                culture = options.culture,
+                navigateUrl = options.url,
+                hasUrl = navigateUrl && dates[0],
+                currentCalendar = getCalendarInfo(culture),
                 firstDayIdx = currentCalendar.firstDay,
                 days = currentCalendar.days,
                 names = shiftArray(days.names, firstDayIdx),
-                abbr = shiftArray(days.namesAbbr, firstDayIdx),
                 short = shiftArray(days.namesShort, firstDayIdx),
-                start = calendar.firstVisibleDay(date),
+                start = calendar.firstVisibleDay(date, currentCalendar),
                 firstDayOfMonth = that.first(date),
                 lastDayOfMonth = that.last(date),
                 toDateString = that.toDateString,
@@ -950,7 +984,7 @@
                 html = '<table class="k-content" cellspacing="0"><thead><tr>';
 
                 for (; idx < 7; idx++) {
-                    html += '<th abbr="' + abbr[idx] + '" scope="col" title="' + names[idx] + '">' + short[idx] + '</th>';
+                    html += '<th scope="col" title="' + names[idx] + '">' + short[idx] + '</th>';
                 }
 
                 today = +new DATE(today.getFullYear(), today.getMonth(), today.getDate());
@@ -967,7 +1001,9 @@
                     setter: that.setDate,
                     build: function(date, idx) {
                         var cssClass = [],
-                        day = date.getDay();
+                            day = date.getDay(),
+                            linkClass = "",
+                            url = "#";
 
                         if (date < firstDayOfMonth || date > lastDayOfMonth) {
                             cssClass.push(OTHERMONTH);
@@ -981,13 +1017,21 @@
                             cssClass.push("k-weekend");
                         }
 
+                        if (hasUrl && inArray(+date, dates)) {
+                            url = navigateUrl.replace("{0}", kendo.toString(date, format, culture));
+                            linkClass = " k-action-link";
+                        }
+
                         return {
                             date: date,
+                            dates: dates,
                             ns: kendo.ns,
-                            title: kendo.toString(date, "D"),
+                            title: kendo.toString(date, "D", culture),
                             value: date.getDate(),
                             dateString: toDateString(date),
-                            cssClass: cssClass[0] ? ' class="' + cssClass.join(" ") + '"' : ""
+                            cssClass: cssClass[0] ? ' class="' + cssClass.join(" ") + '"' : "",
+                            linkClass: linkClass,
+                            url: url
                         };
                     }
                 });
@@ -1032,7 +1076,7 @@
                 return date.getFullYear();
             },
             content: function(options) {
-                var namesAbbr = kendo.culture().calendar.months.namesAbbr,
+                var namesAbbr = getCalendarInfo(options.culture).months.namesAbbr,
                 toDateString = this.toDateString,
                 min = options.min,
                 max = options.max;
@@ -1107,7 +1151,7 @@
                             value: date.getFullYear(),
                             ns: kendo.ns,
                             dateString: toDateString(date),
-                            cssClass: idx == 0 || idx == 11 ? OTHERMONTHCLASS : ""
+                            cssClass: idx === 0 || idx == 11 ? OTHERMONTHCLASS : ""
                         };
                     }
                 });
@@ -1163,7 +1207,7 @@
                             value: year + " - " + (year + 9),
                             ns: kendo.ns,
                             dateString: toDateString(date),
-                            cssClass: idx == 0 || idx == 11 ? OTHERMONTHCLASS : ""
+                            cssClass: idx === 0 || idx == 11 ? OTHERMONTHCLASS : ""
                         };
                     }
                 });
@@ -1187,12 +1231,11 @@
                 return (year - year % 10) + "/0/1";
             }
         }]
-    }
+    };
 
     function view(options) {
         var idx = 0,
             data,
-            view = options.view,
             min = options.min,
             max = options.max,
             start = options.start,
@@ -1200,13 +1243,12 @@
             build = options.build,
             length = options.cells || 12,
             cellsPerRow = options.perRow || 4,
-            toDateString = options.toDateString,
             content = options.content || cellTemplate,
             empty = options.empty || emptyCellTemplate,
             html = options.html || '<table class="k-content k-meta-view" cellspacing="0"><tbody><tr>';
 
         for(; idx < length; idx++) {
-            if (idx > 0 && idx % cellsPerRow == 0) {
+            if (idx > 0 && idx % cellsPerRow === 0) {
                 html += "</tr><tr>";
             }
 
@@ -1270,22 +1312,25 @@
         date.setFullYear(value);
     }
 
-    function mouseenter() {
-        $(this).addClass(HOVER);
-    }
-
-    function mouseleave() {
-        $(this).removeClass(HOVER);
+    function mousetoggle(e) {
+        e.stopImmediatePropagation();
+        $(this).toggleClass(HOVER, e.type == "mouseenter");
     }
 
     function prevent (e) {
         e.preventDefault();
     }
 
-    function validate(options) {
+    function getCalendarInfo(culture) {
+        return getCulture(culture).calendars.standard;
+    }
+
+    function normalize(options) {
         var start = views[options.start],
             depth = views[options.depth],
-            format = options.format || kendo.culture().calendar.patterns.d;
+            culture = getCulture(options.culture);
+
+        options.format = extractFormat(options.format || culture.calendars.standard.patterns.d);
 
         if (isNaN(start)) {
             start = 0;
@@ -1295,12 +1340,6 @@
         if (depth === undefined || depth > start) {
             options.depth = MONTH;
         }
-
-        if (format.slice(0,3) === "{0:") {
-            format = format.slice(3, format.length - 1);
-        }
-
-        options.format = format;
     }
 
     function makeUnselectable(element) {
@@ -1309,11 +1348,32 @@
         }
     }
 
+    function inArray(date, dates) {
+        for(var i = 0, length = dates.length; i < length; i++) {
+            if (date === +dates[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function isEqualDatePart(value1, value2) {
+        if (value1) {
+            return value1.getFullYear() === value2.getFullYear() &&
+                   value1.getMonth() === value2.getMonth() &&
+                   value1.getDate() === value2.getDate();
+        }
+
+        return false;
+    }
+
+    calendar.isEqualDatePart = isEqualDatePart;
     calendar.makeUnselectable =  makeUnselectable;
     calendar.restrictValue = restrictValue;
     calendar.isInRange = isInRange;
-    calendar.validate = validate;
+    calendar.normalize = normalize;
     calendar.viewsEnum = views;
 
     kendo.calendar = calendar;
 })(jQuery);
+;

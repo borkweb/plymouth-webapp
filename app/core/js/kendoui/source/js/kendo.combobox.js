@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -13,36 +13,38 @@
      *
      * @section
      * <p>
-     * The <b>ComboBox</b> widget allows the selection from pre-defined
-     * values or entering a new value. It is a richer version of the standard
-     * HTML select, providing support for local and remote data binding, item
-     * templates, and configurable options for controlling the list behavior.
+     * The <strong>ComboBox</strong> displays a list of values and allows the selection of a single value from this
+     * list. Custom values may also be entered via keyboard input. If you do not wish permit keyboard input - that is,
+     * custom values are not permitted - use the
+     * <strong>DropDownList</strong>.
      * </p>
      * <p>
-     *  To prevent user input, use the
-     *  <a href="../combobox/index.html">combobox</a>.
+     * The <strong>ComboBox</strong> represents a richer version of a &lt;select&gt; element, providing support for
+     * local and remote data binding, item templates, and configurable options for controlling the list behavior.
      * </p>
      * <h3>Getting Started</h3>
-     * <p>There are two basic ways to create a <b>ComboBox</b>:</p>
+     * <p>There are two ways to create a <strong>ComboBox</strong>:</p>
      * <ol>
-     *  <li>
-     *   From a HTML input element, using data binding to define the list
-     *   items
-     *  </li>
-     *  <li>
-     *   From a HTML select element, using HTML to define the list items
-     *  </li>
+     *  <li>From a &lt;select&gt; element with HTML to define the list items</li>
+     *  <li>From an &lt;input&gt; element with databinding to define the listitems</li>
      * </ol>
      * <p>
-     *  Regardless of the initialization technique, the resulting
-     *  <b>ComboBox</b> will look and function identically.
+     *  A <strong>ComboBox</strong> will look and operate consistently regardless of the way in which it was created.
      * </p>
      *
-     * @exampleTitle Creating a combobox from existing input HTML element
+     * @exampleTitle Creating a ComboBox from an existing &lt;input&gt; element
      * @example
      * <input id="comboBox" />
      *
-     * @exampleTitle ComboBox initialization
+     * @section
+     * <p></p>
+     * <p>
+     *  Initialization of a <strong>ComboBox</strong> should occur after the DOM is fully loaded. It is recommended
+     *  that initialization the <strong>ComboBox</strong> occur within a handler is provided to
+     *  $(document).ready().
+     * </p>
+     *
+     * @exampleTitle Initialize a ComboBox using a selector within $(document).ready()
      * @example
      * $(document).ready(function(){
      *     $("#comboBox").kendoComboBox({
@@ -55,97 +57,98 @@
      *     });
      * });
      *
-     * @exampleTitle Creating a ComboBox from existing select HTML element
+     * @exampleTitle Creating a ComboBox from existing &lt;select&gt; element with a pre-defined structure
      * @example
      * <select id="comboBox">
-     *  <option>Item 1</option>
-     *  <option>Item 2</option>
-     *  <option>Item 3</option>
+     *     <option>Item 1</option>
+     *     <option>Item 2</option>
+     *     <option>Item 3</option>
      * </select>
      *
      * <script>
-     *    $(document).ready(function(){
-     *      $("#comboBox").kendoComboBox();
-     *    });
+     *     $(document).ready(function(){
+     *         $("#comboBox").kendoComboBox();
+     *     });
      * </script>
      *
      * @section
-     * <h3>Binding to Data</h3>
+     * <h3>Binding to Local or Remote Data</h3>
      * <p>
-     *  The <b>ComboBox</b> can be bound to both local arrays and remote data
-     *  via the <a href="../datasource/index.html">DataSource</a> component;
-     *  an abstraction for local and remote data. Local arrays are
-     *  appropriate for limited value options, while remote data binding is
-     *  better for larger data sets. With remote binding, options will be
-     *  loaded on-demand, similar to an
-     *  <a href="../combobox/index.html">combobox</a>.
+     *  The <strong>ComboBox</strong> can be bound to both local arrays and remote data via the
+     *  <strong>DataSource</strong> component; an abstraction for local and
+     *  remote data. Local arrays are appropriate for limited value options, while remote data binding is better for
+     *  larger data sets. With remote data-binding, items will be loaded on-demand; when they are displayed.
      * </p>
+     *
      * @exampleTitle Binding to a remote OData service
      * @example
      * $(document).ready(function() {
-     *  $("#comboBox").kendoComboBox({
-     *   index: 0,
-     *   dataTextField: "Name",
-     *   dataValueField: "Id",
-     *   filter: "contains",
-     *   dataSource: {
-     *    type: "odata",
-     *    serverFiltering: true,
-     *    serverPaging: true,
-     *    pageSize: 20,
-     *    transport: {
-     *     read: "http://odata.netflix.com/Catalog/Titles"
-     *    }
-     *   }
-     *  });
+     *     $("#comboBox").kendoComboBox({
+     *         index: 0,
+     *         dataTextField: "Name",
+     *         dataValueField: "Id",
+     *         filter: "contains",
+     *         dataSource: {
+     *             type: "odata",
+     *             serverFiltering: true,
+     *             serverPaging: true,
+     *             pageSize: 20,
+     *             transport: {
+     *                 read: "http://odata.netflix.com/Catalog/Titles"
+     *             }
+     *         }
+     *     });
      * });
      *
      * @section
      * <h3>Customizing Item Templates</h3>
      * <p>
-     *       ComboBox leverages Kendo UI high-performance Templates to give you complete control
-     *       over item rendering. For a complete overview of Kendo UI Template capabilities and syntax,
-     *       please review the <a href="../templates/index.html" title="Kendo UI Template">Kendo UI Template</a> demos and documentation.
-     *   </p>
+     *  The <strong>ComboBox</strong> uses Kendo UI templates to enable you to control how items are rendered. For a
+     *  detailed description of the capabilities and syntax of the Kendo UI templates, please refer to the
+     *  <a href="http://www.kendoui.com/documentation/framework/templates/overview.aspx" title="Kendo UI Template">documentation</a>.
+     * </p>
+     *
      * @exampleTitle Basic item template customization
      * @example
      * <input id="comboBox" />
      * <!-- Template -->
      * <script id="scriptTemplate" type="text/x-kendo-template">
-     *  # if (data.BoxArt.SmallUrl) { #
-     *  <img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
-     *  # } else { #
-     *  <img alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
-     *  # } #
+     *     # if (data.BoxArt.SmallUrl) { #
+     *         <img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" />
+     *         Title:${ data.Name }, Year: ${ data.Name }
+     *     # } else { #
+     *         <img alt="${ data.Name }" />
+     *         Title:${ data.Name }, Year: ${ data.Name }
+     *     # } #
      * </script>
+     *
      * <!-- ComboBox initialization -->
      * <script>
-     *  $(document).ready(function() {
-     *   $("#comboBox").kendoComboBox({
-     *    autoBind: false,
-     *    dataTextField: "Name",
-     *    dataValueField: "Id",
-     *    template: $("#scriptTemplate").html(),
-     *    dataSource: {
-     *     type: "odata",
-     *     serverFiltering: true,
-     *     serverPaging: true,
-     *     pageSize: 20,
-     *     transport: {
-     *      read: "http://odata.netflix.com/Catalog/Titles"
-     *     }
-     *    }
-     *   });
-     *  });
+     *     $(document).ready(function() {
+     *         $("#comboBox").kendoComboBox({
+     *             autoBind: false,
+     *             dataTextField: "Name",
+     *             dataValueField: "Id",
+     *             template: $("#scriptTemplate").html(),
+     *             dataSource: {
+     *                 type: "odata",
+     *                 serverFiltering: true,
+     *                 serverPaging: true,
+     *                 pageSize: 20,
+     *                 transport: {
+     *                     read: "http://odata.netflix.com/Catalog/Titles"
+     *                 }
+     *             }
+     *         });
+     *     });
      * </script>
      *
      * @section
      * <h3>Accessing an Existing ComboBox</h3>
      * <p>
      *  You can reference an existing <b>ComboBox</b> instance via
-     *  <a href="http://api.jquery.com/jQuery.data/">jQuery.data()</a>.
-     *  Once a reference has been established, you can use the API to control
-     *  its behavior.
+     *  <a href="http://api.jquery.com/jQuery.data/">jQuery.data()</a>. Objectnce a reference has been established, you
+     *  can use the API to control its behavior.
      * </p>
      *
      * @exampleTitle Accessing an existing ComboBox instance
@@ -159,6 +162,7 @@
         Select = ui.Select,
         support = kendo.support,
         placeholderSupported = support.placeholder,
+        removeFiltersForField = Select.removeFiltersForField,
         keys = kendo.keys,
         CLICK = support.touch ? "touchend" : "click",
         ATTRIBUTE = "disabled",
@@ -171,7 +175,7 @@
         STATE_SELECTED = "k-state-selected",
         STATE_FILTER = "filter",
         STATE_ACCEPT = "accept",
-        HOVER = "k-state-hover",
+        STATE_REBIND = "rebind",
         HOVEREVENTS = "mouseenter mouseleave",
         NULL = null,
         proxy = $.proxy;
@@ -180,7 +184,7 @@
         /**
         * @constructs
         * @extends kendo.ui.Select
-        * @param {DomElement} element DOM element
+        * @param {Element} element DOM element
         * @param {Object} options Configuration options.
         * @option {Object | kendo.data.DataSource} [dataSource] A local JavaScript object or instance of DataSource or the data that the ComboBox will be bound to.
         * _example
@@ -260,31 +264,49 @@
         * $("#comboBox").kendoComboBox({
         *     filter: "startswith"
         * });
+        * @option {String} [ignoreCase] <true> Defines whether the filtration should be case sensitive.
+        * _example
+        * $("#combobox").kendoComboBox({
+        *     filter: 'contains',
+        *     ignoreCase: false //now filtration will be case sensitive
+        * });
         * @option {Number} [height] <200> Define the height of the drop-down list in pixels.
         * _example
         * $("#comboBox").kendoComboBox({
         *     height: 500
         * });
-        * @option {Function} [template] Template to be used for rendering the items in the list.
+        * @option {string} [template] Template to be used for rendering the items in the list.
         * _example
         *  //template
-        * &lt;script id="template" type="text/x-kendo-tmpl"&gt;
+        * <script id="template" type="text/x-kendo-tmpl">
         *       # if (data.BoxArt.SmallUrl) { #
-        *           &lt;img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" /&gt;Title:${ data.Name }, Year: ${ data.Name }
+        *           <img src="${ data.BoxArt.SmallUrl }" alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
         *       # } else { #
-        *           &lt;img alt="${ data.Name }" /&gt;Title:${ data.Name }, Year: ${ data.Name }
+        *           <img alt="${ data.Name }" />Title:${ data.Name }, Year: ${ data.Name }
         *       # } #
-        *  &lt;/script&gt;
+        *  </script>
         *
         *  //combobox initialization
-        *  &lt;script&gt;
+        *  <script>
         *      $("#combobox").kendoComboBox({
         *          dataSource: dataSource,
         *          dataTextField: "Name",
         *          dataValueField: "Id",
         *          template: kendo.template($("#template").html())
         *      });
-        *  &lt;/script&gt;
+        *  </script>
+        * @option {String} [text] <""> Define the text of the widget, when the autoBind is set to false.
+        * _example
+        * $("#combobox").kendoComboBox({
+        *      autoBind: false,
+        *      text: "Chai"
+        * });
+        * @option {String} [value] <""> Define the value of the widget
+        * _example
+        * $("#combobox").kendoComboBox({
+        *      dataSource: ["Item1", "Item2"],
+        *      value: "Item1"
+        * });
         * @option {Object} [animation] <> Animations to be used for opening/closing the popup. Setting to false will turn off the animation.
         * _exampleTitle Turn of animation
         * _example
@@ -294,7 +316,8 @@
         * @option {Object} [animation.open] <> Animation to be used for opening of the popup.
         * _example
         *  //combobox initialization
-        *  &lt;script&gt;
+        *
+        * <script>
         *      $("#combobox").kendoComboBox({
         *          dataSource: dataSource,
         *          animation: {
@@ -305,12 +328,12 @@
         *             }
         *          }
         *      });
-        *  &lt;/script&gt;
+        *  </script>
         *
         * @option {Object} [animation.close] <> Animation to be used for closing of the popup.
         * _example
         *  //combobox initialization
-        *  &lt;script&gt;
+        *  <script>
         *      $("#combobox").kendoComboBox({
         *          dataSource: dataSource,
         *          animation: {
@@ -322,7 +345,7 @@
         *             }
         *          }
         *      });
-        *  &lt;/script&gt;
+        *  </script>
         *  @option {String} [placeholder] <""> A string that appears in the textbox when the combobox has no value.
         *  _example
         *  //combobox initialization
@@ -343,7 +366,7 @@
         *  </script>
         */
         init: function(element, options) {
-            var that = this, wrapper;
+            var that = this, wrapper, text;
 
             options = $.isArray(options) ? { dataSource: options } : options;
 
@@ -370,6 +393,8 @@
 
             that._enable();
 
+            that._cascade();
+
             wrapper = that._inputWrapper;
 
             that.input.bind({
@@ -392,11 +417,21 @@
 
             if (options.autoBind) {
                 that._selectItem();
-            } else if (element.is(SELECT)) {
-                that.input.val(element.children(":selected").text());
+            } else {
+                text = options.text;
+
+                if (!text && element.is(SELECT)) {
+                    text = element.children(":selected").text();
+                }
+
+                if (text) {
+                    that.input.val(text);
+                }
             }
 
-            that._placeholder();
+            if (!text) {
+                that._placeholder();
+            }
 
             kendo.notify(that);
         },
@@ -416,6 +451,7 @@
             filter: "none",
             placeholder: "",
             suggest: false,
+            ignoreCase: true,
             animation: {}
         },
 
@@ -605,7 +641,7 @@
                     .bind(HOVEREVENTS, that._toggleHover);
 
                 input.removeAttr(ATTRIBUTE);
-                arrow.bind(CLICK, function() { that.toggle() })
+                arrow.bind(CLICK, function() { that.toggle(); })
                      .bind(MOUSEDOWN, function(e) { e.preventDefault(); });
             }
         },
@@ -627,7 +663,7 @@
 
             if (!that.ul[0].firstChild || (that._state === STATE_ACCEPT && !serverFiltering)) {
                 that._open = true;
-                that._state = "";
+                that._state = STATE_REBIND;
                 that._selectItem();
             } else {
                 that.popup.open();
@@ -648,10 +684,8 @@
         refresh: function() {
             var that = this,
                 ul = that.ul[0],
-                popup = that.popup,
                 options = that.options,
-                suggest = options.suggest,
-                height = options.height,
+                value = that.value(),
                 data = that._data(),
                 length = data.length;
 
@@ -662,15 +696,20 @@
 
             if (that.element.is(SELECT)) {
                 that._options(data);
+
+                if (value && that._state === STATE_REBIND) {
+                    that._state = "";
+                    that.value(value);
+                }
             }
 
             if (length) {
-                if (suggest || options.highlightFirst) {
+                if (options.highlightFirst) {
                     that.current($(ul.firstChild));
                 }
 
-                if (suggest && that.input.val()) {
-                    that.suggest(that._current);
+                if (options.suggest && that.input.val()) {
+                    that.suggest($(ul.firstChild));
                 }
             }
 
@@ -691,8 +730,8 @@
 
         /**
         * Selects drop-down list item and sets the value and the text of the combobox.
-        * @param {jQueryObject | Number | Function} li LI element or index of the item or predicate function, which defines the item that should be selected.
-        * @returns {Integer} The index of the selected LI element.
+        * @param {jQuery | Number | Function} li LI element or index of the item or predicate function, which defines the item that should be selected.
+        * @returns {Number} The index of the selected LI element.
         * @example
         * var combobox = $("#combobox").data("kendoComboBox");
         *
@@ -733,9 +772,10 @@
             var that = this,
                 length = word.length,
                 options = that.options,
+                ignoreCase = options.ignoreCase,
                 filter = options.filter,
                 field = options.dataTextField,
-                expression;
+                filters, expression;
 
             clearTimeout(that._typing);
 
@@ -750,7 +790,12 @@
                     removeFiltersForField(expression, field);
 
                     filters = expression.filters || [];
-                    filters.push({ field: field, operator: filter, value: word });
+                    filters.push({
+                        value: ignoreCase ? word.toLowerCase() : word,
+                        field: field,
+                        operator: filter,
+                        ignoreCase: ignoreCase
+                    });
 
                     that.dataSource.filter(filters);
                 }
@@ -785,7 +830,7 @@
             word = word || "";
 
             if (typeof word !== "string") {
-                idx = word.index();
+                idx = List.inArray(word[0], that.ul[0]);
 
                 if (idx > -1) {
                     word = that._text(that.dataSource.view()[idx]);
@@ -808,12 +853,7 @@
             }
 
             if (value.length !== caret || !word) {
-
-                if (value.toLowerCase() === word.toLowerCase()) {
-                    value = word;
-                }
-
-                that.text(value);
+                element.value = value;
                 List.selectText(element, caret, value.length);
             }
         },
@@ -829,9 +869,13 @@
         * var text = combobox.text();
         */
         text: function (text) {
+            text = text === null ? "" : text;
+
             var that = this,
                 textAccessor = that._text,
                 input = that.input[0],
+                ignoreCase = that.options.ignoreCase,
+                loweredText = text,
                 dataItem;
 
             if (text !== undefined) {
@@ -841,15 +885,25 @@
                     return;
                 }
 
-                that._select(function(dataElement) {
-                    return textAccessor(dataElement) === text;
+                if (ignoreCase) {
+                    loweredText = loweredText.toLowerCase();
+                }
+
+                that._select(function(data) {
+                    data = textAccessor(data);
+
+                    if (ignoreCase) {
+                        data = (data + "").toLowerCase();
+                    }
+
+                    return data === loweredText;
                 });
 
                 if (that.selectedIndex < 0) {
                     that._custom(text);
+                    input.value = text;
                 }
 
-                input.value = text;
             } else {
                 return input.value;
             }
@@ -885,10 +939,13 @@
         */
         value: function(value) {
             var that = this,
-                element = that.element,
                 idx;
 
             if (value !== undefined) {
+                if (value !== null) {
+                    value = value.toString();
+                }
+
                 if (value && that._valueOnFetch(value)) {
                     return;
                 }
@@ -901,6 +958,7 @@
                     that.current(NULL);
                     that._custom(value);
                     that.text(value);
+                    that._placeholder();
                 }
 
                 that._old = that._accessor();
@@ -944,10 +1002,10 @@
         },
 
         _filter: function(word) {
-            word = word.toLowerCase();
             var that = this,
                 options = that.options,
                 dataSource = that.dataSource,
+                ignoreCase = options.ignoreCase,
                 predicate = function (dataItem) {
                     var text = that._text(dataItem);
                     if (text !== undefined) {
@@ -956,12 +1014,24 @@
                             return false;
                         }
 
-                        return text.toLowerCase().indexOf(word) === 0;
+                        if (ignoreCase) {
+                            text = text.toLowerCase();
+                        }
+
+                        return text.indexOf(word) === 0;
                     }
                 };
 
+            if (ignoreCase) {
+                word = word.toLowerCase();
+            }
+
             if (!that.ul[0].firstChild) {
-                dataSource.one(CHANGE, function () { that.search(word); }).fetch();
+                dataSource.one(CHANGE, function () {
+                    if (dataSource.data()[0]) {
+                        that.search(word);
+                    }
+                }).fetch();
                 return;
             }
 
@@ -978,7 +1048,7 @@
         _highlight: function(li) {
             var that = this, idx;
 
-            if (li == undefined) {
+            if (li === undefined || li === null) {
                 return -1;
             }
 
@@ -1001,20 +1071,33 @@
         _input: function() {
             var that = this,
                 element = that.element[0],
+                tabIndex = element.tabIndex,
                 wrapper = that.wrapper,
                 SELECTOR = ".k-input",
-                input;
+                input, DOMInput,
+                name = element.name || "";
+
+            if (name) {
+                name = 'name="' + name + '_input" ';
+            }
 
             input = wrapper.find(SELECTOR);
 
             if (!input[0]) {
-                wrapper.append('<span unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text" autocomplete="off"/><span unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-arrow-down">select</span></span></span>')
+                wrapper.append('<span unselectable="on" class="k-dropdown-wrap k-state-default"><input ' + name + 'class="k-input" type="text" autocomplete="off"/><span unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s">select</span></span></span>')
                        .append(that.element);
 
                 input = wrapper.find(SELECTOR);
             }
 
-            input[0].style.cssText = element.style.cssText;
+            DOMInput = input[0];
+            DOMInput.tabIndex = tabIndex;
+            DOMInput.style.cssText = element.style.cssText;
+
+            if (element.maxLength > -1) {
+                DOMInput.maxLength = element.maxLength;
+            }
+
             input.addClass(element.className)
                  .val(element.value)
                  .css({
@@ -1029,7 +1112,7 @@
 
             that._focused = that.input = input;
             that._arrow = wrapper.find(".k-icon");
-            that._inputWrapper = $(wrapper[0].firstChild)
+            that._inputWrapper = $(wrapper[0].firstChild);
         },
 
         _keydown: function(e) {
@@ -1069,16 +1152,17 @@
                     show = !value;
                 }
 
+                input.toggleClass("k-readonly", show);
+
                 if (!show) {
-                    if (value) {
-                        placeholder = input.val();
-                    } else {
+                    if (!value) {
                         placeholder = "";
+                    } else {
+                        return;
                     }
                 }
 
-                input.toggleClass("k-readonly", show)
-                     .val(placeholder);
+                input.val(placeholder);
             }
         },
 
@@ -1111,25 +1195,27 @@
                 value = that._value(data);
 
                 that._prev = that.input[0].value = text;
-                that._accessor(value != undefined ? value : text, idx);
+                that._accessor(value !== undefined ? value : text, idx);
                 that._placeholder();
             }
         },
 
         _selectItem: function() {
             var that = this,
+                options = that.options,
                 dataSource = that.dataSource,
                 expression = dataSource.filter() || {};
 
             removeFiltersForField(expression, that.options.dataTextField);
 
             that.dataSource.one(CHANGE, function() {
-                var value = that.value();
+                var value = options.value || that.value();
                 if (value) {
                     that.value(value);
                 } else {
-                    that.select(that.options.index);
+                    that.select(options.index);
                 }
+                that.trigger("selected");
             }).filter(expression);
         },
 
@@ -1145,26 +1231,12 @@
             }
 
             wrapper[0].style.cssText = element[0].style.cssText;
-            that.wrapper = wrapper.addClass("k-widget k-combobox k-header").show();
+            that.wrapper = wrapper.addClass("k-widget k-combobox k-header")
+                                  .addClass(element[0].className)
+                                  .show();
         }
     });
 
-    function removeFiltersForField(expression, field) {
-        if (!field) {
-            return;
-        }
-
-        if (expression.filters) {
-            expression.filters = $.grep(expression.filters, function(filter) {
-                removeFiltersForField(filter, field);
-                if (filter.filters) {
-                    return filter.filters.length;
-                } else {
-                    return filter.field != field;
-                }
-            });
-        }
-    }
-
     ui.plugin(ComboBox);
 })(jQuery);
+;

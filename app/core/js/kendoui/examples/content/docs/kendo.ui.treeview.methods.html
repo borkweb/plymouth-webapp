@@ -10,7 +10,7 @@
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Appends a node to a group of a TreeView. This method may also be used to reorder the nodes of aTreeView.</div><div class="code-sample"><h4 class="code-title">Append a new node with the text, "Meanwhile, in HTML5..." to the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.append({ text: "Meanwhile, in HTML5..." }, $("#firstItem"));</code></pre></div><div class="code-sample"><h4 class="code-title">Moves the node with ID, secondNode as a last child of the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.append($("#secondNode"), $("#firstItem"));</code></pre></div>
+                    <div class="desc">Appends a node to a group of a TreeView. This method may also be used to reorder the nodes of aTreeView.</div><div class="code-sample"><h4 class="code-title">Append a new node with the text, "HTML5" to the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.append({ text: "HTML5" }, $("#firstItem"));</code></pre></div><div class="code-sample"><h4 class="code-title">Moves the node with ID, secondNode as a last child of the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.append($("#secondNode"), $("#firstItem"));</code></pre></div>
 
                     
                     <div class="details-list">
@@ -69,9 +69,38 @@
             <li>
                 <div class="detailHandle">
                     <div class="detailCollapsed"></div>
+                    <a name="dataItem"><code>dataItem</code></a> (node)
+
+                    
+                </div>
+                <div class="detailBody">
+                    <div class="desc">Returns the dataItem that corresponds to a TreeView node</div>
+
+                    
+                    <div class="details-list">
+                        <h4 class="details-title">Parameters</h4>
+                        <dl>
+                        
+                            <dt>
+                                <code>node</code>
+                                
+                            </dt>
+                            <dd></dd>
+                        
+                        </dl>
+                    </div>
+                    
+
+                    
+                </div>
+            </li>
+        
+            <li>
+                <div class="detailHandle">
+                    <div class="detailCollapsed"></div>
                     <a name="detach"><code>detach</code></a> (node)
 
-                    : <span class="type">jQueryObject</span>
+                    : <span class="type">jQuery</span>
                 </div>
                 <div class="detailBody">
                     <div class="desc">Removes a node from a TreeView, but keeps its jQuery.data() objects.</div><div class="code-sample"><h4 class="code-title">Remove the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");var firstItem = $("#firstItem");firstItem.data("id", 1);treeview.detach(firstItem);firstItem.data("id") == 1;</code></pre></div>
@@ -100,7 +129,7 @@
                             
                                 <dt class="heading">Returns</dt>
                                 
-                                    <dd><span class="light fixedFont">jQueryObject</span> The node that has been detached.</dd>
+                                    <dd><span class="light fixedFont">jQuery</span> The node that has been detached.</dd>
                                 
                             
 
@@ -182,10 +211,57 @@
                     <div class="detailCollapsed"></div>
                     <a name="findByText"><code>findByText</code></a> (text)
 
-                    : <span class="type">jQueryObject</span>
+                    : <span class="type">jQuery</span>
                 </div>
                 <div class="detailBody">
                     <div class="desc">Searches a TreeView for a node that has specific text.</div><div class="code-sample"><h4 class="code-title">Search a TreeView for the item that has the text, "CSS3 is da bomb!"</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");var foundNode = treeView.findByText("CSS3 is da bomb!");</code></pre></div>
+
+                    
+                    <div class="details-list">
+                        <h4 class="details-title">Parameters</h4>
+                        <dl>
+                        
+                            <dt>
+                                <code>text</code><span class="light fixedFont">: String</span> 
+                                
+                            </dt>
+                            <dd>The text that is being searched for.</dd>
+                        
+                        </dl>
+                    </div>
+                    
+
+                    
+                        <dl class="detailList">
+                            
+
+                            
+
+                            
+                                <dt class="heading">Returns</dt>
+                                
+                                    <dd><span class="light fixedFont">jQuery</span> All nodes that have the text.</dd>
+                                
+                            
+
+                            
+
+                            
+
+                        </dl>
+                    
+                </div>
+            </li>
+        
+            <li>
+                <div class="detailHandle">
+                    <div class="detailCollapsed"></div>
+                    <a name="findByUid"><code>findByUid</code></a> (text)
+
+                    : <span class="type">jQueryObject</span>
+                </div>
+                <div class="detailBody">
+                    <div class="desc">Searches a TreeView for a node with the given unique identifier.Applicable when the widget is bound to a HierarchicalDataSource.</div><div class="code-sample"><h4 class="code-title">Search a TreeView for the item that has the text, "CSS3 is da bomb!"</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");var foundNode = treeView.findByText("CSS3 is da bomb!");</code></pre></div>
 
                     
                     <div class="details-list">
@@ -232,7 +308,7 @@
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Inserts a node after a specified node in a TreeView. This method may also be used to reorder the nodes of aTreeView.</div><div class="code-sample"><h4 class="code-title">Insert a node with the text, "Y U NO insert node?" after the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.insertAfter({ text: "Y U NO insert node?" }, $("#firstItem"));</code></pre></div><div class="code-sample"><h4 class="code-title">Moves a node with ID, secondNode after a node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.insertAfter($("#secondNode"), $("#firstItem"));</code></pre></div>
+                    <div class="desc">Inserts a node after a specified node in a TreeView. This method may also be used to reorder the nodes of aTreeView.</div><div class="code-sample"><h4 class="code-title">Insert a node with the text, "JavaScript" after the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.insertAfter({ text: "JavaScript" }, $("#firstItem"));</code></pre></div><div class="code-sample"><h4 class="code-title">Moves a node with ID, secondNode after a node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.insertAfter($("#secondNode"), $("#firstItem"));</code></pre></div>
 
                     
                     <div class="details-list">
@@ -267,7 +343,7 @@
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Inserts a node before another node. This method may also be used to reorder the nodes of aTreeView.</div><div class="code-sample"><h4 class="code-title">Inserts a new node with the text, "It's over 9000!" before the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.insertBefore({ text: "It's over 9000!" }, $("#firstItem"));</code></pre></div><div class="code-sample"><h4 class="code-title">Moves the node with ID, secondNode before the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.insertBefore($("#secondNode"), $("#firstItem"));</code></pre></div>
+                    <div class="desc">Inserts a node before another node. This method may also be used to reorder the nodes of aTreeView.</div><div class="code-sample"><h4 class="code-title">Inserts a new node with the text, "CSS3" before the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.insertBefore({ text: "CSS3" }, $("#firstItem"));</code></pre></div><div class="code-sample"><h4 class="code-title">Moves the node with ID, secondNode before the node with ID, firstItem</h4><pre class="code prettyprint"><code>var treeView = $("#treeView").data("kendoTreeView");treeView.insertBefore($("#secondNode"), $("#firstItem"));</code></pre></div>
 
                     
                     <div class="details-list">

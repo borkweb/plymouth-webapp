@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -10,22 +10,25 @@
 (function ($, undefined) {
     var kendo = window.kendo,
         support = kendo.support,
+        pointers = support.pointers,
         document = window.document,
         SURFACE = $(document.documentElement),
         Class = kendo.Class,
         Widget = kendo.ui.Widget,
         Observable = kendo.Observable,
         proxy = $.proxy,
+        now = $.now,
         extend = $.extend,
         getOffset = kendo.getOffset,
         draggables = {},
         dropTargets = {},
         lastDropTarget,
-        RESIZE_EVENT = "resize",
+        invalidZeroEvents = support.mobileOS && support.mobileOS.android,
         START_EVENTS = "mousedown",
         MOVE_EVENTS = "mousemove",
         END_EVENTS = "mouseup mouseleave",
         KEYUP = "keyup",
+        CHANGE = "change",
 
         // Draggable events
         DRAGSTART = "dragstart",
@@ -46,10 +49,15 @@
         TAP = "tap";
 
     if (support.touch) {
-        RESIZE_EVENT = "orientationchange";
         START_EVENTS = "touchstart";
         MOVE_EVENTS = "touchmove";
         END_EVENTS = "touchend touchcancel";
+    }
+
+    if(pointers) {
+        START_EVENTS = "MSPointerDown";
+        MOVE_EVENTS = "MSPointerMove";
+        END_EVENTS = "MSPointerUp MSPointerCancel";
     }
 
     function contains(parent, child) {
@@ -64,12 +72,42 @@
         return document.elementFromPoint(e.x.client, e.y.client);
     }
 
+    function numericCssPropery(element, property) {
+        return parseInt(element.css(property), 10) || 0;
+    }
+
+    function within(value, range) {
+        return Math.min(Math.max(value, range.min), range.max);
+    }
+
+    function containerBoundaries(container, element) {
+        var offset = container.offset(),
+            minX = offset.left + numericCssPropery(container, "borderLeftWidth") + numericCssPropery(container, "paddingLeft"),
+            minY = offset.top + numericCssPropery(container, "borderTopWidth") + numericCssPropery(container, "paddingTop"),
+            maxX = minX + container.width() - element.outerWidth(true),
+            maxY = minY + container.height() - element.outerHeight(true);
+
+        return {
+            x: { min: minX, max: maxX },
+            y: { min: minY, max: maxY }
+        };
+    }
+
     function addNS(events, ns) {
         return events.replace(/ /g, ns + " ");
     }
 
-    function preventDefault(e) {
+    function preventTrigger(e) {
         e.preventDefault();
+
+        var target = $(e.target),   // Determine the correct parent to receive the event and bubble.
+            parent = target.closest(".k-widget").parent();
+
+        if (!parent[0]) {
+            parent = target.parent();
+        }
+
+        parent.trigger(e.type);
     }
 
     /**
@@ -119,7 +157,7 @@
             var that = this,
                 offset = location["page" + that.axis];
 
-            if (!offset) {
+            if (!offset && invalidZeroEvents) {
                 return;
             }
 
@@ -143,11 +181,14 @@
         /**
          * @constructs
          * @extends kendo.Observable
-         * @param {DomElement} element the DOM element from which the drag event starts.
+         * @param {Element} element the DOM element from which the drag event starts.
          * @param {Object} options Configuration options.
-         * @option {Integer} [threshold] <0> The minimum distance the mouse/touch should move before the event is triggered.
+         * @option {Number} [threshold] <0> The minimum distance the mouse/touch should move before the event is triggered.
          * @option {Boolean} [global] <false> If set to true, the drag event will be tracked beyond the element boundaries.
+         * @option {Element} [surface]  If set, the drag event will be tracked for the surface boundaries. By default, leaving the element boundaries will end the drag.
          * @option {Boolean} [allowSelection] <false> If set to true, the mousedown and selectstart events will not be prevented.
+         * @option {Boolean} [stopPropagation] <false> If set to true, the mousedown event propagation will be stopped, disabling
+         * drag capturing at parent elements.
          * If set to false, dragging outside of the element boundaries will trigger the <code>end</code> event.
          * @option {Selector} [filter] If passed, the filter limits the child elements that will trigger the event sequence.
          */
@@ -155,6 +196,7 @@
             var that = this,
                 eventMap = {},
                 filter,
+                preventIfMoving,
                 ns = "." + kendo.guid();
 
             options = options || {};
@@ -164,8 +206,6 @@
             element = $(element);
             Observable.fn.init.call(that);
 
-            eventMap = {};
-
             eventMap[addNS(MOVE_EVENTS, ns)] = proxy(that._move, that);
             eventMap[addNS(END_EVENTS, ns)] = proxy(that._end, that);
 
@@ -173,7 +213,8 @@
                 x: new DragAxis("X"),
                 y: new DragAxis("Y"),
                 element: element,
-                surface: options.global ? SURFACE : element,
+                surface: options.global ? SURFACE : options.surface || element,
+                stopPropagation: options.stopPropagation,
                 pressed: false,
                 eventMap: eventMap,
                 ns: ns
@@ -181,14 +222,30 @@
 
             element
                 .on(START_EVENTS, filter, proxy(that._start, that))
-                .on("dragstart", filter, preventDefault);
+                .on("dragstart", filter, kendo.preventDefault);
 
-            if (!options.allowSelection) {
-                element.on("mousedown selectstart", filter, preventDefault);
+            if (pointers) {
+                element.css("-ms-touch-action", "pinch-zoom double-tap-zoom");
             }
 
-            if (support.touch) {
-                that.surface[0].addEventListener("touchend", function(e) { if (that.moved) { e.preventDefault() } }, true);
+            if (!options.allowSelection) {
+                var args = ["mousedown selectstart", filter, preventTrigger];
+
+                if (filter instanceof $) {
+                    args.splice(2, 0, null);
+                }
+
+                element.on.apply(element, args);
+            }
+
+            if (support.eventCapture) {
+                preventIfMoving = function(e) {
+                    if (that.moved) {
+                        e.preventDefault();
+                    }
+                };
+
+                that.surface[0].addEventListener(support.mouseup, preventIfMoving, true);
             }
 
             that.bind([
@@ -278,17 +335,22 @@
             this.trigger(CANCEL);
         },
 
+        skip: function() {
+            this._cancel();
+        },
+
         _cancel: function() {
-            this.pressed = false;
-            this.surface.off(this.ns);
+            var that = this;
+            that.moved = that.pressed = false;
+            that.surface.off(that.ns);
         },
 
         _start: function(e) {
             var that = this,
                 filter = that.filter,
                 originalEvent = e.originalEvent,
-                touches = originalEvent && originalEvent.changedTouches,
-                touch = touches && touches[0];
+                touch,
+                location = e;
 
             if (that.pressed) { return; }
 
@@ -298,14 +360,32 @@
                 that.target = that.element;
             }
 
-            that.pressed = true;
-            that.moved = false;
-
-            if (touch) {
-                that.touchID = touch.identifier;
+            if (!that.target.length) {
+                return;
             }
 
-            that._perAxis(START, touch || e, e.timeStamp);
+            that.currentTarget = e.currentTarget;
+
+            if (that.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            that.pressed = true;
+            that.moved = false;
+            that.startTime = null;
+
+            if (support.touch) {
+                touch = originalEvent.changedTouches[0];
+                that.touchID = touch.identifier;
+                location = touch;
+            }
+
+            if (pointers) {
+                that.touchID = originalEvent.pointerId;
+                location = originalEvent;
+            }
+
+            that._perAxis(START, location, now());
             that.surface.off(that.eventMap).on(that.eventMap);
             Drag.captured = false;
         },
@@ -320,7 +400,7 @@
 
             that._withEvent(e, function(location) {
 
-                that._perAxis(MOVE, location, e.timeStamp);
+                that._perAxis(MOVE, location, now());
 
                 if (!that.moved) {
                     xDelta = that.x.initialDelta;
@@ -333,6 +413,7 @@
                     }
 
                     if (!Drag.captured) {
+                        that.startTime = now();
                         that._trigger(START, e);
                         that.moved = true;
                     } else {
@@ -353,14 +434,15 @@
             if (!that.pressed) { return; }
 
             that._withEvent(e, function() {
-                that._cancel();
-
                 if (that.moved) {
+                    that.endTime = now();
                     that._trigger(END, e);
                     that.moved = false;
                 } else {
                     that._trigger(TAP, e);
                 }
+
+                that._cancel();
             });
         },
 
@@ -384,31 +466,43 @@
 
         _withEvent: function(e, callback) {
             var that = this,
+                touchID = that.touchID,
                 originalEvent = e.originalEvent,
-                which = e.which,
-                touches = originalEvent && originalEvent.changedTouches,
-                idx = touches && touches.length;
+                touches,
+                idx;
 
-            if (!touches) {
-                return callback(e);
-            }
+            if (support.touch) {
+                touches = originalEvent.changedTouches;
+                idx = touches.length;
 
-            while (idx) {
-                idx --;
-                if (touches[idx].identifier === that.touchID) {
-                    return callback(touches[idx]);
+                while (idx) {
+                    idx --;
+                    if (touches[idx].identifier === touchID) {
+                        return callback(touches[idx]);
+                    }
                 }
+            }
+            else if (pointers) {
+                if (touchID === originalEvent.pointerId) {
+                    return callback(originalEvent);
+                }
+            } else {
+                return callback(e);
             }
         }
     });
 
     var Tap = Observable.extend({
         init: function(element, options) {
-            var that = this;
+            var that = this,
+                domElement = element[0];
 
             that.capture = false;
-            element[0].addEventListener(START_EVENTS, proxy(that._press, that), true);
-            element.on(END_EVENTS, proxy(that._release, that));
+            domElement.addEventListener(START_EVENTS, proxy(that._press, that), true);
+            $.each(END_EVENTS.split(" "), function() {
+                domElement.addEventListener(this, proxy(that._release, that), true);
+            });
+
             Observable.fn.init.call(that);
 
             that.bind(["press", "release"], options || {});
@@ -419,7 +513,6 @@
             that.trigger("press");
             if (that.capture) {
                 e.preventDefault();
-                e.originalEvent && e.originalEvent.preventDefault();
             }
         },
 
@@ -429,7 +522,6 @@
 
             if (that.capture) {
                 e.preventDefault();
-                e.originalEvent && e.originalEvent.preventDefault();
                 that.cancelCapture();
             }
         },
@@ -467,38 +559,53 @@
             return  offset > this.max || offset < this.min;
         },
 
-        totalSize: function() {
-            return this.element[0][this.scrollSize];
-        },
-
         present: function() {
             return this.max - this.min;
         },
 
-        update: function() {
+        getSize: function() {
+            return this.container[this.measure]();
+        },
+
+        getTotal: function() {
+            return this.element[0][this.scrollSize];
+        },
+
+        update: function(silent) {
             var that = this;
 
-            that.size = that.container[that.measure]();
-            that.total = that.element[0][that.scrollSize];
+            that.size = that.getSize();
+            that.total = that.getTotal();
             that.min = Math.min(that.max, that.size - that.total);
-            that.trigger("change", that);
+            if (!silent) {
+                that.trigger(CHANGE, that);
+            }
         }
     });
 
-    var PaneDimensions = Class.extend({
+    var PaneDimensions = Observable.extend({
         init: function(options) {
             var that = this,
-                movable = options.movable;
+                refresh = proxy(that.refresh, that);
+
+            Observable.fn.init.call(that);
 
             that.x = new PaneDimension(extend({horizontal: true}, options));
             that.y = new PaneDimension(extend({horizontal: false}, options));
 
-            $(window).bind(RESIZE_EVENT, proxy(that.refresh, that));
+            that.bind(CHANGE, options);
+
+            kendo.onResize(refresh);
+        },
+
+        present: function() {
+            return this.x.present() || this.y.present();
         },
 
         refresh: function() {
             this.x.update();
             this.y.update();
+            this.trigger(CHANGE);
         }
     });
 
@@ -525,7 +632,7 @@
             }
 
             movable.translateAxis(axis, delta);
-            that.trigger("change", that);
+            that.trigger(CHANGE, that);
         }
     });
 
@@ -560,6 +667,8 @@
                         x.dragMove(e.x.delta);
                         y.dragMove(e.y.delta);
                         e.preventDefault();
+                    } else {
+                        that.drag.skip();
                     }
                 },
 
@@ -577,11 +686,11 @@
     if (support.hasHW3D) {
         translate = function(x, y) {
             return "translate3d(" + round(x) + "px," + round(y) +"px,0)";
-        }
+        };
     } else {
         translate = function(x, y) {
             return "translate(" + round(x) + "px," + round(y) +"px)";
-        }
+        };
     }
 
     var Movable = Observable.extend({
@@ -624,7 +733,7 @@
             if (newCoordinates != that.coordinates) {
                 that.element[0].style[TRANSFORM_STYLE] = newCoordinates;
                 that._saveCoordinates(newCoordinates);
-                that.trigger("change");
+                that.trigger(CHANGE);
             }
         },
 
@@ -637,7 +746,7 @@
         /**
          * @constructs
          * @extends kendo.ui.Widget
-         * @param {DomElement} element DOM element
+         * @param {Element} element DOM element
          * @param {Object} options Configuration options.
          * @option {String} [group] <"default"> Used to group sets of draggable and drop targets. A draggable with the same group value as a drop target will be accepted by the drop target.
          */
@@ -661,7 +770,7 @@
              * @name kendo.ui.DropTarget#dragenter
              * @event
              * @param {Event} e
-             * @param {jQueryObject} e.draggable Reference to the draggable that enters the drop target.
+             * @param {jQuery} e.draggable Reference to the draggable that enters the drop target.
              */
             DRAGENTER,
             /**
@@ -669,7 +778,7 @@
              * @name kendo.ui.DropTarget#dragleave
              * @event
              * @param {Event} e
-             * @param {jQueryObject} e.draggable Reference to the draggable that leaves the drop target.
+             * @param {jQuery} e.draggable Reference to the draggable that leaves the drop target.
              */
             DRAGLEAVE,
             /**
@@ -677,8 +786,8 @@
              * @name kendo.ui.DropTarget#drop
              * @event
              * @param {Event} e
-             * @param {jQueryObject} e.draggable Reference to the draggable that is dropped over the drop target.
-             * @param {jQueryObject} e.draggable.currentTarget The element that the drag and drop operation started from.
+             * @param {jQuery} e.draggable Reference to the draggable that is dropped over the drop target.
+             * @param {jQuery} e.draggable.currentTarget The element that the drag and drop operation started from.
              */
             DROP
         ],
@@ -740,17 +849,19 @@
         /**
          * @constructs
          * @extends kendo.ui.Widget
-         * @param {DomElement} element DOM element
+         * @param {Element} element DOM element
          * @param {Object} options Configuration options.
-         * @option {Integer} [distance] <5> The required distance that the mouse should travel in order to initiate a drag.
+         * @option {Number} [distance] <5> The required distance that the mouse should travel in order to initiate a drag.
          * @option {Selector} [filter] Selects child elements that are draggable if a widget is attached to a container.
          * @option {String} [group] <"default"> Used to group sets of draggable and drop targets. A draggable with the same group value as a drop target will be accepted by the drop target.
+         * @option {String} [axis] <null> Constrains the hint movement to either the horizontal (x) or vertical (y) axis. Can be set to either "x" or "y".
+         * @option {jQuery} [container] If set, the hint movement is constrained to the container boundaries.
          * @option {Object} [cursorOffset] <null> If set, specifies the offset of the hint relative to the mouse cursor/finger.
          * By default, the hint is initially positioned on top of the draggable source offset. The option accepts an object with two keys: <code>top</code> and <code>left</code>.
          * _exampleTitle Initialize Draggable with cursorOffset
          * _example
-         * $("#draggable").kendoDraggable({cursorOffset: {top: 10, left: 10});
-         * @option {Function | jQueryObject} [hint] Provides a way for customization of the drag indicator. If a function is supplied, it receives one argument - the draggable element's jQuery object.
+         * $("#draggable").kendoDraggable({cursorOffset: {top: 10, left: 10}});
+         * @option {Function | jQuery} [hint] Provides a way for customization of the drag indicator. If a function is supplied, it receives one argument - the draggable element's jQuery object.
          * _example
          *  //hint as a function
          *  $("#draggable").kendoDraggable({
@@ -773,6 +884,7 @@
 
             that.drag = new Drag(that.element, {
                 global: true,
+                stopPropagation: true,
                 filter: that.options.filter,
                 threshold: that.options.distance,
                 start: proxy(that._start, that),
@@ -787,7 +899,7 @@
                     that._trigger(DRAGCANCEL, {event: e});
                     that.drag.cancel();
                 }
-            }
+            };
         },
 
         events: [
@@ -826,12 +938,15 @@
             distance: 5,
             group: "default",
             cursorOffset: null,
+            axis: null,
+            container: null,
             dropped: false
         },
 
         _start: function(e) {
             var that = this,
                 options = that.options,
+                container = options.container,
                 hint = options.hint;
 
             that.currentTarget = that.drag.target;
@@ -842,11 +957,12 @@
 
                 var offset = getOffset(that.currentTarget);
                 that.hintOffset = offset;
+
                 that.hint.css( {
                     position: "absolute",
-                    zIndex: 10010, //the Window's z-index is 10000
-                    left: offset.x,
-                    top: offset.y
+                    zIndex: 20000, // the Window's z-index is 10000 and can be raised because of z-stacking
+                    left: offset.left,
+                    top: offset.top
                 })
                 .appendTo(document.body);
             }
@@ -854,6 +970,10 @@
             draggables[options.group] = that;
 
             that.dropped = false;
+
+            if (container) {
+                that.boundaries = containerBoundaries(container, that.hint);
+            }
 
             if (that._trigger(DRAGSTART, e)) {
                 that.drag.cancel();
@@ -866,7 +986,9 @@
         updateHint: function(e) {
             var that = this,
                 coordinates,
-                offset = that.initialOffset,
+                options = that.options,
+                boundaries = that.boundaries,
+                axis = options.axis,
                 cursorOffset = that.options.cursorOffset;
 
             if (cursorOffset) {
@@ -874,15 +996,25 @@
             } else {
                that.hintOffset.left += e.x.delta;
                that.hintOffset.top += e.y.delta;
-               coordinates = that.hintOffset;
+               coordinates = $.extend({}, that.hintOffset);
+            }
+
+            if (boundaries) {
+                coordinates.top = within(coordinates.top, boundaries.y);
+                coordinates.left = within(coordinates.left, boundaries.x);
+            }
+
+            if (axis === "x") {
+                delete coordinates.top;
+            } else if (axis === "y") {
+                delete coordinates.left;
             }
 
             that.hint.css(coordinates);
         },
 
         _drag: function(e) {
-            var that = this,
-                cursorOffset = that.options.cursorOffset;
+            var that = this;
 
             e.preventDefault();
 
@@ -955,11 +1087,15 @@
         _withDropTarget: function(e, callback) {
             var that = this,
                 target,
+                theTarget,
                 result,
                 options = that.options,
-                targets = dropTargets[options.group];
+                targets = dropTargets[options.group],
+                i = 0,
+                length = targets && targets.length;
 
-            if (targets && targets.length) {
+            if (length) {
+
                 target = elementUnderCursor(e);
 
                 if (that.hint && contains(that.hint, target)) {
@@ -968,15 +1104,18 @@
                     that.hint.show();
                 }
 
-                $.each(targets, function() {
-                    var that = this,
-                        element = that.element[0];
-
-                    if (contains(element, target)) {
-                        result = that;
-                        return false;
+                outer:
+                while (target) {
+                    for (i = 0; i < length; i ++) {
+                        theTarget = targets[i];
+                        if (theTarget.element[0] === target) {
+                            result = theTarget;
+                            break outer;
+                        }
                     }
-                });
+
+                    target = target.parentNode;
+                }
 
                 callback(result);
             }
@@ -1000,6 +1139,7 @@
     kendo.ui.plugin(Draggable);
     kendo.Drag = Drag;
     kendo.Tap = Tap;
+    kendo.containerBoundaries = containerBoundaries;
 
     extend(kendo.ui, {
         Pane: Pane,
@@ -1008,3 +1148,4 @@
     });
 
  })(jQuery);
+;

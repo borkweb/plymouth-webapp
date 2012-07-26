@@ -10,17 +10,7 @@
                     : <span class="type">Object</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Adds a new Model instance to the DataSource</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var model = kendo.data.Model.extend({
-    id: "orderId",
-    fields: {
-        name: "customerName",
-        description: "orderDescription",
-        address: "customerAddress"
-    }
-});
-// add a new model item to the data source.  If a model has not been declared as above, a new
-// model instance will be created for you.
-dataSource.add({ name: "John Smith", description: "Product Description", address: "123 1st Street" });</code></pre></div>
+                    <div class="desc">Adds a new Model instance to the DataSource</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var model = kendo.data.Model.extend({    id: "orderId",    fields: {        name: "customerName",        description: "orderDescription",        address: "customerAddress"    }});// add a new model item to the data source.  If a model has not been declared as above, a new// model instance will be created for you.dataSource.add({ name: "John Smith", description: "Product Description", address: "123 1st Street" });</code></pre></div>
 
                     
                     <div class="details-list">
@@ -148,8 +138,7 @@ dataSource.add({ name: "John Smith", description: "Product Description", address
                     : <span class="type">Object</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Returns the raw data record at the specified index</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// returns the 4th item in the collection
-var order = dataSource.at(3);</code></pre></div>
+                    <div class="desc">Returns the raw data record at the specified index</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// returns the 4th item in the collectionvar order = dataSource.at(3);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -196,9 +185,7 @@ var order = dataSource.at(3);</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Cancel the changes made to the DataSource after the last sync. Any changes currently existing in the model
-will be discarded.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// we have updated 2 items and deleted 1. All of those changes will be discarded.
-dataSource.cancelChanges();</code></pre></div>
+                    <div class="desc">Cancel the changes made to the DataSource after the last sync. Any changes currently existing in the modelwill be discarded.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// we have updated 2 items and deleted 1. All of those changes will be discarded.dataSource.cancelChanges();</code></pre></div>
 
                     
                     <div class="details-list">
@@ -274,9 +261,7 @@ dataSource.cancelChanges();</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Fetches data using the current filter/sort/group/paging information.
-If data is not available or remote operations are enabled data is requested through the transport,
-otherwise operations are executed over the available data.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>dataSource.fetch();</code></pre></div>
+                    <div class="desc">Fetches data using the current filter/sort/group/paging information.If data is not available or remote operations are enabled data is requested through the transport,otherwise operations are executed over the available data.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>dataSource.fetch();</code></pre></div>
 
                     
                     <div class="details-list">
@@ -305,36 +290,7 @@ otherwise operations are executed over the available data.</div><div class="code
                     : <span class="type">Array</span>
                 </div>
                 <div class="detailBody">
-                    Get current filters or filter the data.
-<p>
-<i>Supported filter operators/aliases are</i>:
-<div class="details-list">
-    <dl>
-        <dt><b>Equal To</b></dt>
-        <dd>"eq", "==", "isequalto", "equals", "equalto", "equal"</dd>
-        <dt><b>Not Equal To</b></dt>
-        <dd>"neq", "!=", "isnotequalto", "notequals", "notequalto", "notequal", "ne"</dd>
-        <dt><b>Less Then</b></dt>
-        <dd>"lt", "<", "islessthan", "lessthan", "less"</dd>
-        <dt><b>Less Then or Equal To</b></dt>
-        <dd> "lte", "<=", "islessthanorequalto", "lessthanequal", "le"</dd>
-        <dt><b>Greater Then</b></dt>
-        <dd> "gt", ">", "isgreaterthan", "greaterthan", "greater"</dd>
-        <dt><b>Greater Then or Equal To</b></dt>
-        <dd>"gte", ">=", "isgreaterthanorequalto", "greaterthanequal", "ge"</dd>
-        <dt><b>Starts With</b></dt>
-        <dd>"startswith"</dd>
-        <dt><b>Ends With</b></dt>
-        <dd>"endswith"</dd>
-        <dt><b>Contains</b></dt>
-        <dd>"contains", "substringof"</dd>
-    </dl>
-</div>
-</p><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>dataSource.filter({ field: "orderId", operator: "eq", value: 10428 });
-dataSource.filter([
-     { field: "orderId", operator: "neq", value: 42 },
-     { field: "unitPrice", operator: "ge", value: 3.14 }
-]);</code></pre></div>
+                    Get current filters or filter the data.<p><i>Supported filter operators/aliases are</i>:<div class="details-list">    <dl>        <dt><b>Equal To</b></dt>        <dd>"eq", "==", "isequalto", "equals", "equalto", "equal"</dd>        <dt><b>Not Equal To</b></dt>        <dd>"neq", "!=", "isnotequalto", "notequals", "notequalto", "notequal", "ne"</dd>        <dt><b>Less Then</b></dt>        <dd>"lt", "<", "islessthan", "lessthan", "less"</dd>        <dt><b>Less Then or Equal To</b></dt>        <dd> "lte", "<=", "islessthanorequalto", "lessthanequal", "le"</dd>        <dt><b>Greater Then</b></dt>        <dd> "gt", ">", "isgreaterthan", "greaterthan", "greater"</dd>        <dt><b>Greater Then or Equal To</b></dt>        <dd>"gte", ">=", "isgreaterthanorequalto", "greaterthanequal", "ge"</dd>        <dt><b>Starts With</b></dt>        <dd>"startswith"</dd>        <dt><b>Ends With</b></dt>        <dd>"endswith"</dd>        <dt><b>Contains</b></dt>        <dd>"contains", "substringof"</dd>    </dl></div></p><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>dataSource.filter({ field: "orderId", operator: "eq", value: 10428 });dataSource.filter([     { field: "orderId", operator: "neq", value: 42 },     { field: "unitPrice", operator: "ge", value: 3.14 }]);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -522,16 +478,7 @@ dataSource.filter([
                     : <span class="type">Object</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Inserts a new Model instance to the DataSource.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var model = kendo.data.Model.extend({
-    id: "orderId",
-    fields: {
-        name: "customerName",
-        description: "orderDescription",
-        address: "customerAddress"
-    }
-});
-// insert a new model item at the very front of the collection
-dataSource.insert(0, { name: "John Smith", description: "Product Description", address: "123 1st Street" });</code></pre></div>
+                    <div class="desc">Inserts a new Model instance to the DataSource.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var model = kendo.data.Model.extend({    id: "orderId",    fields: {        name: "customerName",        description: "orderDescription",        address: "customerAddress"    }});// insert a new model item at the very front of the collectiondataSource.insert(0, { name: "John Smith", description: "Product Description", address: "123 1st Street" });</code></pre></div>
 
                     
                     <div class="details-list">
@@ -678,16 +625,7 @@ dataSource.insert(0, { name: "John Smith", description: "Product Description", a
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Executes a query over the data. Available operations are paging, sorting, filtering, grouping.
-If data is not available or remote operations are enabled, data is requested through the transport.
-Otherwise operations are executed over the available data.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>
-// create a view containing at most 20 records, taken from the
-// 5th page and sorted ascending by orderId field.
-dataSource.query({ page: 5, pageSize: 20, sort: { field: "orderId", dir: "asc" } });
-
-// moves the view to the first page returning at most 20 records
-// but without particular ordering.
-dataSource.query({ page: 1, pageSize: 20 });</code></pre></div>
+                    <div class="desc">Executes a query over the data. Available operations are paging, sorting, filtering, grouping.If data is not available or remote operations are enabled, data is requested through the transport.Otherwise operations are executed over the available data.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// create a view containing at most 20 records, taken from the// 5th page and sorted ascending by orderId field.dataSource.query({ page: 5, pageSize: 20, sort: { field: "orderId", dir: "asc" } });// moves the view to the first page returning at most 20 records// but without particular ordering.dataSource.query({ page: 1, pageSize: 20 });</code></pre></div>
 
                     
                     <div class="details-list">
@@ -716,13 +654,7 @@ dataSource.query({ page: 1, pageSize: 20 });</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Read the data into the DataSource using the transport read definition</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var dataSource = new kendo.data.DataSource({
-    transport: {
-        read: "orders.json";
-    }
-});
-// the datasource will not contain any data until a read is called
-dataSource.read();</code></pre></div>
+                    <div class="desc">Read the data into the DataSource using the transport read definition</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var dataSource = new kendo.data.DataSource({    transport: {        read: "orders.json";    }});// the datasource will not contain any data until a read is calleddataSource.read();</code></pre></div>
 
                     
                     <div class="details-list">
@@ -751,10 +683,7 @@ dataSource.read();</code></pre></div>
                     
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Remove given Model instance from the DataSource.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get the model item with an id of 1 from the DataSource
-var itemToRemove = dataSource.get(1);
-// remove the item from the DataSource
-dataSource.remove(itemToRemove);</code></pre></div>
+                    <div class="desc">Remove given Model instance from the DataSource.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get the model item with an id of 1 from the DataSourcevar itemToRemove = dataSource.get(1);// remove the item from the DataSourcedataSource.remove(itemToRemove);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -783,11 +712,7 @@ dataSource.remove(itemToRemove);</code></pre></div>
                     : <span class="type">Array</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Get current sort descriptors or sorts the data.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>dataSource.sort({ field: "orderId", dir: "desc" });
-dataSource.sort([
-     { field: "orderId", dir: "desc" },
-     { field: "unitPrice", dir: "asc" }
-]);</code></pre></div>
+                    <div class="desc">Get current sort descriptors or sorts the data.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>dataSource.sort({ field: "orderId", dir: "desc" });dataSource.sort([     { field: "orderId", dir: "desc" },     { field: "unitPrice", dir: "asc" }]);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -834,10 +759,7 @@ dataSource.sort([
                     
                 </div>
                 <div class="detailBody">
-                    Synchronizes changes through the transport. Any pending CRUD operations will be sent to the server.
-<p>If the DataSource is in <b>batch</b> mode, only one call will be made for each type of operation.
-Otherwise, the DataSource will send one command per pending item change per change type.<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// we have deleted 2 items and updated 1. If not in batch mode, this will send three commands to the server
-dataSource.sync();</code></pre></div>
+                    Synchronizes changes through the transport. Any pending CRUD operations will be sent to the server.<p>If the DataSource is in <b>batch</b> mode, only one call will be made for each type of operation.Otherwise, the DataSource will send one command per pending item change per change type.<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// we have deleted 2 items and updated 1. If not in batch mode, this will send three commands to the serverdataSource.sync();</code></pre></div>
 
                     
 
@@ -903,18 +825,7 @@ dataSource.sync();</code></pre></div>
                     : <span class="type">Array</span>
                 </div>
                 <div class="detailBody">
-                    <div class="desc">Returns a view of the data with operation such as in-memory sorting, paring, grouping and filtering are applied.
-To ensure that data is available this method should be use from within change event of the dataSource.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var dataSource = new kendo.data.DataSource({
-    transport: {
-        read: "orders.json"
-    }
-    change: function(e) {
-       // create a template instance
-       var template = kendo.template($("#template").html());
-       // render a view by passing the data to a template
-       kendo.render(template, dataSource.view());
-    }
-});</code></pre></div>
+                    <div class="desc">Returns a view of the data with operation such as in-memory sorting, paring, grouping and filtering are applied.To ensure that data is available this method should be use from within change event of the dataSource.</div><div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var dataSource = new kendo.data.DataSource({    transport: {        read: "orders.json"    }    change: function(e) {       // create a template instance       var template = kendo.template($("#template").html());       // render a view by passing the data to a template       kendo.render(template, dataSource.view());    }});</code></pre></div>
 
                     
 

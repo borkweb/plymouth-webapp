@@ -2,15 +2,20 @@
 <html>
 <head>
     <title>Event binding</title>
+
+    <link href="../../content/shared/styles/examples-offline.css" rel="stylesheet">
+    <link href="../../../styles/kendo.common.min.css" rel="stylesheet">
+    <link href="../../../styles/kendo.default.min.css" rel="stylesheet">
+
     <script src="../../../js/jquery.min.js"></script>
     <script src="../../../js/kendo.web.min.js"></script>
     <script src="../../content/shared/js/console.js"></script>
-    <link href="../../../styles/kendo.common.min.css" rel="stylesheet" />
-    <link href="../../../styles/kendo.default.min.css" rel="stylesheet" />
 </head>
 <body>
-    <a href="../index.html">Back</a>
-    <div id="example" class="k-content">
+    <a class="offline-button" href="../index.html">Back</a>
+    
+
+<div id="example" class="k-content">
     <div class="demo-section">
 
         <button class="k-button" data-bind="events: { click: listener, dblclick: listener, mouseover: listener, mouseout: listener }">Button</button>

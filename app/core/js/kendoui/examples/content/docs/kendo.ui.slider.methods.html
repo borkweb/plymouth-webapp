@@ -5,28 +5,12 @@
             <li>
                 <div class="detailHandle">
                     <div class="detailCollapsed"></div>
-                    <a name="disable"><code>disable</code></a> ()
-
-                    
-                </div>
-                <div class="detailBody">
-                    Disables a <strong>Slider</strong> from handling user interactions (i.e. mouse click).<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var slider = $("#slider").data("kendoSlider");slider.disable();</code></pre></div>
-
-                    
-
-                    
-                </div>
-            </li>
-        
-            <li>
-                <div class="detailHandle">
-                    <div class="detailCollapsed"></div>
                     <a name="enable"><code>enable</code></a> (enable)
 
                     
                 </div>
                 <div class="detailBody">
-                    Enables a <strong>Slider</strong> for handling user interactions (i.e. mouse click).<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var slider = $("#slider").data("kendoSlider");slider.enable();</code></pre></div>
+                    Enable/Disable the <strong>Slider</strong> widget.<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the slider widgetvar slider = $("#slider").data("kendoSlider");// disables the sliderslider.enable(false);// enables the sliderslider.enable(true);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -34,10 +18,10 @@
                         <dl>
                         
                             <dt>
-                                <code>enable</code>
+                                <code>enable</code><span class="light fixedFont">: Boolean</span> 
                                 
                             </dt>
-                            <dd></dd>
+                            <dd>The argument, which defines whether to enable/disable the <strong>Slider</strong>.</dd>
                         
                         </dl>
                     </div>
@@ -85,28 +69,12 @@
             <li>
                 <div class="detailHandle">
                     <div class="detailCollapsed"></div>
-                    <a name="disable"><code>disable</code></a> ()
-
-                    
-                </div>
-                <div class="detailBody">
-                    Disables a <strong>RangeSlider</strong> from handling user interactions (i.e. mouse click).<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var rangeSlider = $("#rangeSlider").data("kendoRangeSlider");rangeSlider.disable();</code></pre></div>
-
-                    
-
-                    
-                </div>
-            </li>
-        
-            <li>
-                <div class="detailHandle">
-                    <div class="detailCollapsed"></div>
                     <a name="enable"><code>enable</code></a> (enable)
 
                     
                 </div>
                 <div class="detailBody">
-                    Enables a <strong>RangeSlider</strong> for handling user interactions (i.e. mouse click).<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var rangeSlider = $("#rangeSlider").data("kendoRangeSlider");rangeSlider.enable();</code></pre></div>
+                    Enable/Disable the <strong>RangeSlider</strong> widget.<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>// get a reference to the range slider widgetvar rangeSlider = $("#rangeSlider").data("kendoRangeSlider");// disables the range sliderrangeSlider.enable(false);// enables the range sliderrangeSlider.enable(true);</code></pre></div>
 
                     
                     <div class="details-list">
@@ -114,10 +82,10 @@
                         <dl>
                         
                             <dt>
-                                <code>enable</code>
+                                <code>enable</code><span class="light fixedFont">: Boolean</span> 
                                 
                             </dt>
-                            <dd></dd>
+                            <dd>The argument, which defines whether to enable/disable the <strong>RangeSlider</strong>.</dd>
                         
                         </dl>
                     </div>
@@ -130,13 +98,26 @@
             <li>
                 <div class="detailHandle">
                     <div class="detailCollapsed"></div>
-                    <a name="values"><code>values</code></a> ()
+                    <a name="value"><code>value</code></a> (value)
 
                     
                 </div>
                 <div class="detailBody">
-                    The value method gets or sets the start and end selection values of the <strong>RangeSlider</strong>. Itaccepts a string, a number, or an array as parameters, and returns an object array with the start and endselection values.<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var rangeSider = $("#rangeSlider").data("kendoRangeSlider");rangeSlider.values();</code></pre></div>
+                    The value method gets or sets the start and end values of the <strong>RangeSlider</strong>. Itaccepts an array as parameter, and returns an object array with the start and endselection values.<div class="code-sample"><h4 class="code-title">Example</h4><pre class="code prettyprint"><code>var rangeSider = $("#rangeSlider").data("kendoRangeSlider");rangeSlider.value();</code></pre></div>
 
+                    
+                    <div class="details-list">
+                        <h4 class="details-title">Parameters</h4>
+                        <dl>
+                        
+                            <dt>
+                                <code>value</code>
+                                
+                            </dt>
+                            <dd></dd>
+                        
+                        </dl>
+                    </div>
                     
 
                     

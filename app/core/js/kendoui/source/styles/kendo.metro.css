@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -9,9 +9,11 @@
 */
 /* Kendo skin */
 /* main colors */
+.k-block,
 .k-widget {
   background-color: #ffffff;
 }
+.k-block,
 .k-widget,
 .k-input,
 .k-textbox,
@@ -20,7 +22,8 @@
 .k-header,
 .k-editable-area,
 .k-separator,
-.k-colorpicker .k-arrow-down,
+.k-colorpicker .k-i-arrow-s,
+.k-textbox > input,
 .k-autocomplete,
 .k-dropdown-wrap,
 .k-toolbar,
@@ -35,10 +38,11 @@
 .k-grid td,
 .k-grid-footer-wrap,
 .k-pager-wrap,
+.k-pager-wrap .k-link,
+.k-pager-refresh,
 .k-grouping-header,
 .k-grouping-header .k-group-indicator,
 .k-dropdown-wrap,
-.k-autocomplete,
 .k-panelbar > .k-item > .k-link,
 .k-panel > .k-item > .k-link,
 .k-panelbar .k-panel,
@@ -88,6 +92,7 @@ td.k-group-cell,
 .k-widget .k-dropdown-wrap,
 .k-widget .k-picker-wrap,
 .k-widget .k-numeric-wrap,
+.k-textbox,
 .k-autocomplete.k-header,
 .k-autocomplete.k-state-focused,
 div.k-dropdown-wrap.k-state-active,
@@ -102,6 +107,7 @@ span.k-numeric-wrap.k-state-active,
   border-color: #dadada;
   background-color: #ffffff;
 }
+.k-textbox > input,
 .k-autocomplete .k-input,
 .k-dropdown-wrap .k-input,
 .k-autocomplete.k-state-focused .k-input,
@@ -111,10 +117,15 @@ span.k-numeric-wrap.k-state-active,
   border-color: #dadada;
 }
 .k-input,
-.k-textbox {
+input.k-textbox,
+textarea.k-textbox,
+input.k-textbox:hover,
+textarea.k-textbox:hover,
+.k-textbox > input {
   background-color: #ffffff;
   color: #777777;
 }
+.k-block,
 .k-widget,
 .k-popup,
 .k-content,
@@ -139,6 +150,7 @@ span.k-numeric-wrap.k-state-active,
 .k-button,
 .k-draghandle,
 .k-tile,
+.k-textbox,
 .k-autocomplete,
 .k-state-hover,
 .k-state-selected,
@@ -146,6 +158,7 @@ span.k-numeric-wrap.k-state-active,
 .k-tabstrip-items .k-item {
   background-image: none;
 }
+.k-block,
 .k-header,
 .k-grid-header,
 .k-toolbar,
@@ -157,13 +170,16 @@ span.k-numeric-wrap.k-state-active,
   background-color: #ffffff;
 }
 /* icons */
-.k-icon {
+.k-icon,
+.k-column-menu .k-sprite {
   opacity: .8;
 }
 .k-icon:hover,
 .k-state-hover .k-icon,
 .k-state-selected .k-icon,
-.k-state-focused .k-icon {
+.k-state-focused .k-icon,
+.k-column-menu .k-state-hover .k-sprite,
+.k-column-menu .k-state-active .k-sprite {
   opacity: 1;
 }
 .k-icon,
@@ -172,7 +188,8 @@ span.k-numeric-wrap.k-state-active,
 .k-drop-hint,
 .k-callout,
 .k-progress,
-.k-progress-status {
+.k-progress-status,
+.k-column-menu .k-sprite {
   background-image: url('Metro/sprite.png');
 }
 .k-loading {
@@ -236,7 +253,8 @@ span.k-numeric-wrap.k-state-active,
 .k-splitbar-horizontal-hover:hover,
 .k-splitbar-vertical-hover:hover,
 .k-list > .k-state-hover,
-.k-marquee {
+.k-marquee,
+.k-pager-wrap .k-link:hover {
   color: #000000;
   background-color: #e6e6e6;
   border-color: #e6e6e6;
@@ -245,6 +263,7 @@ span.k-numeric-wrap.k-state-active,
 .k-other-month.k-state-hover .k-link {
   color: #000000;
 }
+.k-textbox:hover,
 .k-autocomplete.k-state-hover,
 .k-picker-wrap.k-state-hover,
 .k-numeric-wrap.k-state-hover,
@@ -346,13 +365,23 @@ span.k-numeric-wrap.k-state-active,
 .k-window {
   border-color: #dadada;
 }
+.k-textbox > input,
 .k-autocomplete .k-input,
 .k-combobox .k-input,
 .k-picker-wrap .k-input {
   box-shadow: inset 0 0 1px 1px transparent;
   -webkit-box-shadow: inset 0 0 1px 1px transparent;
 }
+.k-shadow {
+  box-shadow: 0 1px 2px 0 transparent;
+  -webkit-box-shadow: 0 1px 2px 0 transparent;
+}
+.k-inset {
+  box-shadow: inset 0 1px 1px transparent;
+  -webkit-box-shadow: inset 0 1px 1px transparent;
+}
 /* Border radius */
+.k-block,
 .k-button,
 .k-textbox,
 .k-drag-clue,
@@ -360,8 +389,7 @@ span.k-numeric-wrap.k-state-active,
 .k-window,
 .k-window-titleless .k-window-content,
 .k-window-action,
-.k-pager .k-state-active,
-.k-pager .k-state-hover,
+.k-inline-block,
 .k-grid .k-filter-options,
 .k-grouping-header .k-group-indicator,
 .k-autocomplete,
@@ -397,6 +425,7 @@ span.k-numeric-wrap.k-state-active,
   border-radius: 0 0 0 0;
 }
 .k-window-titlebar,
+.k-block > .k-header,
 .k-tabstrip-items .k-item,
 .k-panelbar .k-tabstrip-items .k-item,
 .k-tabstrip-items .k-link,
@@ -420,6 +449,7 @@ span.k-numeric-wrap.k-state-active,
   -webkit-border-radius: 0 0 0 0;
   border-radius: 0 0 0 0;
 }
+.k-textbox > input,
 .k-autocomplete .k-input,
 .k-dropdown-wrap .k-input,
 .k-picker-wrap .k-input,

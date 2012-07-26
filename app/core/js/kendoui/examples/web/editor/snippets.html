@@ -2,14 +2,17 @@
 <html>
 <head>
     <title>Snippets</title>
+
+    <link href="../../content/shared/styles/examples-offline.css" rel="stylesheet">
+    <link href="../../../styles/kendo.common.min.css" rel="stylesheet">
+    <link href="../../../styles/kendo.default.min.css" rel="stylesheet">
+
     <script src="../../../js/jquery.min.js"></script>
     <script src="../../../js/kendo.web.min.js"></script>
     <script src="../../content/shared/js/console.js"></script>
-    <link href="../../../styles/kendo.common.min.css" rel="stylesheet" />
-    <link href="../../../styles/kendo.default.min.css" rel="stylesheet" />
 </head>
 <body>
-    <a href="../index.html">Back</a>
+    <a class="offline-button" href="../index.html">Back</a>
             <div id="example" class="k-content">
 				<textarea id="editor" rows="10" cols="30" style="width:740px;height:440px">
                     Put the cursor after this text and use the "Insert HTML" tool.
@@ -20,7 +23,7 @@
                         tools: ["insertHtml"],
                         insertHtml: [
                             { text: "Signature", value: "<p>Regards,<br /> John Doe,<br /><a href='mailto:john.doe@example.com'>john.doe@example.com</a></p>" },
-                            { text: "Kendo online demos", value: "<a href='http://demos.kendoui.com'>Kendo online demos</a>" }
+                            { text: "Kendo online demos", value: " <a href='http://demos.kendoui.com'>Kendo online demos</a> " }
                         ]
                     });
                 });

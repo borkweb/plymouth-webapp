@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -52,7 +52,7 @@
      * </p>
      * <ul>
      *  <li>Minimum height/width</li>
-     *  <li>Available user actions (close/refresh/maximize/minimize)</li>
+     *  <li>Available user actions (close/refresh/maximize/minimize) and ability to define custom ones</li>
      *  <li>Title</li>
      *  <li>Draggable and resizable behaviors</li>
      * </ul>
@@ -60,7 +60,7 @@
      * @exampleTitle Create a modal Window with all user actions enabled
      * @example
      * $("#window").kendoWindow({
-     *     actions: ["Refresh", "Maximize", "Minimize", "Close"],
+     *     actions: ["Custom", "Refresh", "Maximize", "Minimize", "Close"],
      *     draggable: false,
      *     height: "300px",
      *     modal: true,
@@ -76,6 +76,20 @@
      *  <strong>Window</strong> to fill the screen and as a button to restore a <strong>Window</strong> to its previous
      *  size. The minimize action collapses a <strong>Window</strong> to its title.
      * </p>
+     * <p>If a non-recognized action name is supplied, it is treated as a custom action - <strong>k-icon</strong> and <strong>k-actionname</strong>
+     * CSS classes are rendered for it and no click event handler is attached automatically. The Kendo stylesheets have a supplied icon for
+     * actions with the name "Custom", but any name can be used. Click events can be captured and handled in a standard way:</p>
+     *
+     * @exampleTitle Custom actions
+     * @example
+     *   $("#window").kendoWindow({
+     *       actions: ["Custom", "Minimize", "Maximize", "Close"],
+     *       title: "Window Title"
+     *   }).data("kendoWindow").wrapper.find(".k-i-custom").click(function(e) {
+     *       alert("Custom action button clicked");
+     *       e.preventDefault();
+     *   });
+     *
      * <h3>Positioning and Opening a Window</h3>
      * <p>
      *  In some scenarios, it is preferable to center a <strong>Window</strong> rather than open it near the HTML
@@ -86,15 +100,15 @@
      *
      * @exampleTitle Centering a Window and opening on button click
      * @example
-     * <p id="window">
+     * <div id="window">
      *     Content of the Window
-     * </p>
+     * </div>
      * <button id="openButton">Open Window</button>
      *
      * @exampleTitle Initialize Window, center, and configure button click action
      * @example
      * $(document).ready(function(){
-     *     var window = $("#window").kendoWindow({
+     *     var win = $("#window").kendoWindow({
      *         height: "200px",
      *         title: "Centered Window",
      *         visible: false,
@@ -103,9 +117,9 @@
      * });
      *
      * $("#openButton").click(function(){
-     *     var window = $("#window").data("kendoWindow");
-     *     window.center();
-     *     window.open();
+     *     var win = $("#window").data("kendoWindow");
+     *     win.center();
+     *     win.open();
      * });
      *
      * @section
@@ -138,19 +152,18 @@
      *
      * @exampleTitle Accessing an existing Window instance
      * @example
-     * var window = $("#window").data("kendoWindow");
+     * var win = $("#window").data("kendoWindow");
      *
      */
     var kendo = window.kendo,
         Widget = kendo.ui.Widget,
         Draggable = kendo.ui.Draggable,
-        fx = kendo.fx,
         isPlainObject = $.isPlainObject,
         proxy = $.proxy,
         extend = $.extend,
         each = $.each,
         template = kendo.template,
-        body,
+        BODY = "body",
         templates,
         // classNames
         KWINDOW = ".k-window",
@@ -163,6 +176,7 @@
         KHOVERSTATE = "k-state-hover",
         // constants
         VISIBLE = ":visible",
+        HIDDEN = "hidden",
         CURSOR = "cursor",
         // events
         OPEN = "open",
@@ -176,8 +190,12 @@
         ERROR = "error",
         OVERFLOW = "overflow",
         ZINDEX = "zIndex",
-        MINIMIZE_MAXIMIZE = ".k-window-actions .k-minimize,.k-window-actions .k-maximize",
+        MINIMIZE_MAXIMIZE = ".k-window-actions .k-i-minimize,.k-window-actions .k-i-maximize",
         isLocalUrl = kendo.isLocalUrl;
+
+    function constrain(value, low, high) {
+        return Math.max(Math.min(value, high), low);
+    }
 
     function windowObject(element) {
         return element.children(KWINDOWCONTENT).data("kendoWindow");
@@ -187,6 +205,8 @@
         return $(KWINDOW).filter(function() {
             var wnd = $(this);
             return wnd.is(VISIBLE) && windowObject(wnd).options.modal;
+        }).sort(function(a, b){
+            return +$(a).css("zIndex") - +$(b).css("zIndex");
         });
     }
 
@@ -223,14 +243,14 @@
          * @constructs
          * @extends kendo.ui.Widget
          *
-         * @param {DomElement} element
+         * @param {Element} element
          * DOM element
          *
          * @param {Object} options
          * Configuration options.
          *
          * @option {Boolean} [modal] <false>
-         * Specifies whether the window should block interaction with other page elements.
+         * Specifies whether the window should show a modal overlay over the page.
          *
          * @option {Boolean} [visible] <true>
          * Specifies whether the window will be initially visible.
@@ -243,11 +263,17 @@
          * Enables (<strong>true</strong>) or disables (<strong>false</strong>) the ability for users to resize a
          * <strong>Window</strong>.
          *
-         * @option {Integer} [minWidth] <50>
+         * @option {Number} [minWidth] <50>
          * The minimum width (in pixels) that may be achieved by resizing the window.
          *
-         * @option {Integer} [minHeight] <50>
+         * @option {Number} [minHeight] <50>
          * The minimum height (in pixels) that may be achieved by resizing the window.
+         *
+         * @option {Number} [maxWidth] <Infinity>
+         * The maximum width (in pixels) that may be achieved by resizing the window.
+         *
+         * @option {Number} [maxHeight] <Infinity>
+         * The maximum height (in pixels) that may be achieved by resizing the window.
          *
          * @option {Object|String} [content]
          * Specifies a URL or request options that the window should load its content from. For remote URLs, a
@@ -266,6 +292,9 @@
          * @option {String} [title]
          * The text in the window title bar.
          *
+         * @option {Object} [appendTo] <document.body>
+         * The element that the Window will be appended to.
+         *
          * @option {Object} [animation]
          * A collection of {Animation} objects, used to change default animations. A value of <strong>false</strong>
          * will disable all animations in the widget.
@@ -280,16 +309,16 @@
         init: function(element, options) {
             var that = this,
                 wrapper,
-                titleBar, offset, visibility, display,
+                offset, visibility, display,
                 isVisible = false,
                 content;
-
-            body = document.body;
 
             Widget.fn.init.call(that, element, options);
             options = that.options;
             element = that.element;
             content = options.content;
+
+            that.appendTo = $(options.appendTo || document.body);
 
             that._animations();
 
@@ -297,7 +326,7 @@
                 content = options.content = { url: content };
             }
 
-            if (!element.parent().is("body")) {
+            if (!element.parent().is(that.appendTo)) {
                 if (element.is(VISIBLE)) {
                     offset = element.offset();
                     isVisible = true;
@@ -305,36 +334,31 @@
                     visibility = element.css("visibility");
                     display = element.css("display");
 
-                    element.css({ visibility: "hidden", display: "" });
+                    element.css({ visibility: HIDDEN, display: "" });
                     offset = element.offset();
                     element.css({ visibility: visibility, display: display });
                 }
+            }
+
+            if (typeof options.visible == "undefined") {
+                options.visible = element.is(VISIBLE);
             }
 
             wrapper = that.wrapper = element.closest(KWINDOW);
 
             if (!element.is(".k-content") || !wrapper[0]) {
                 element.addClass("k-window-content k-content");
-                createWindow(element, options);
+                that._createWindow(element, options);
                 wrapper = that.wrapper = element.closest(KWINDOW);
 
                 that._dimensions();
             }
 
             if (offset) {
-                if (isVisible) {
-                    wrapper.css({
-                        top: offset.top,
-                        left: offset.left
-                    });
-                } else {
-                   wrapper.css({
-                        top: offset.top,
-                        left: offset.left,
-                        visibility: "visible",
-                        display: "none"
-                    });
-                }
+                wrapper.css({
+                    top: offset.top,
+                    left: offset.left
+                });
             }
 
             if (content) {
@@ -343,7 +367,7 @@
 
             that.toFront();
 
-            if (options.modal) {
+            if (options.visible && options.modal) {
                 that._overlay(wrapper.is(VISIBLE)).css({ opacity: 0.5 });
             }
 
@@ -374,7 +398,7 @@
 
             $(window).resize(proxy(that._onDocumentResize, that));
 
-            if (wrapper.is(VISIBLE)) {
+            if (options.visible) {
                 that.trigger(OPEN);
                 that.trigger(ACTIVATE);
             }
@@ -773,23 +797,21 @@
             minWidth: 90,
             minHeight: 50,
             maxWidth: Infinity,
-            maxHeight: Infinity,
-            visible: true
+            maxHeight: Infinity
         },
 
         _overlay: function (visible) {
-            var overlay = $("body > .k-overlay"),
-                doc = $(document),
+            var overlay = this.appendTo.children(".k-overlay"),
                 wrapper = this.wrapper;
 
-            if (overlay.length == 0) {
+            if (!overlay.length) {
                 overlay = $("<div class='k-overlay' />");
             }
 
             overlay
                 .insertBefore(wrapper[0])
                 .toggle(visible)
-                .css(ZINDEX, parseInt(wrapper.css(ZINDEX)) - 1);
+                .css(ZINDEX, parseInt(wrapper.css(ZINDEX), 10) - 1);
 
             return overlay;
         },
@@ -799,11 +821,11 @@
                 that = this;
 
             each({
-                "k-close": that.close,
-                "k-maximize": that.maximize,
-                "k-minimize": that.minimize,
-                "k-restore": that.restore,
-                "k-refresh": that.refresh
+                "k-i-close": that.close,
+                "k-i-maximize": that.maximize,
+                "k-i-minimize": that.minimize,
+                "k-i-restore": that.restore,
+                "k-i-refresh": that.refresh
             }, function (commandName, handler) {
                 if (target.hasClass(commandName)) {
                     e.preventDefault();
@@ -866,7 +888,7 @@
                 title = titleBar.children(".k-window-title"),
                 titleBarHeight = titleBar.outerHeight();
 
-            if (arguments.length == 0) {
+            if (!arguments.length) {
                 return title.text();
             }
 
@@ -874,7 +896,7 @@
                 wrapper.addClass("k-window-titleless");
                 titleBar.remove();
             } else {
-                if (titleBar.length == 0) {
+                if (!titleBar.length) {
                     wrapper.prepend(templates.titlebar(extend(templates, options)));
                 }
 
@@ -934,15 +956,19 @@
         open: function () {
             var that = this,
                 wrapper = that.wrapper,
-                showOptions = that.options.animation.open,
+                options = that.options,
+                showOptions = options.animation.open,
                 contentElement = wrapper.children(KWINDOWCONTENT),
-                initialOverflow = contentElement.css(OVERFLOW);
+                initialOverflow = contentElement.css(OVERFLOW),
+                overlay;
 
             if (!that.trigger(OPEN)) {
                 that.toFront();
 
-                if (that.options.modal) {
-                    var overlay = that._overlay(false);
+                options.visible = true;
+
+                if (options.modal) {
+                    overlay = that._overlay(false);
 
                     if (showOptions.duration) {
                         overlay.kendoStop().kendoAnimate({
@@ -956,7 +982,7 @@
                 }
 
                 if (!wrapper.is(VISIBLE)) {
-                    contentElement.css(OVERFLOW, "hidden");
+                    contentElement.css(OVERFLOW, HIDDEN);
                     wrapper.show().kendoStop().kendoAnimate({
                         effects: showOptions.effects,
                         duration: showOptions.duration,
@@ -968,8 +994,9 @@
                 }
             }
 
-            if (that.options.isMaximized) {
-               $("html, body").css(OVERFLOW, "hidden");
+            if (options.isMaximized) {
+                that._documentScrollTop = $(document).scrollTop();
+                $("html, body").css(OVERFLOW, HIDDEN);
             }
 
             return that;
@@ -997,6 +1024,8 @@
                 shouldHideOverlay, overlay;
 
             if (wrapper.is(VISIBLE) && !that.trigger(CLOSE)) {
+                options.visible = false;
+
                 modalWindows = openedModalWindows();
 
                 shouldHideOverlay = options.modal && modalWindows.length == 1;
@@ -1030,6 +1059,9 @@
 
             if (that.options.isMaximized) {
                 $("html, body").css(OVERFLOW, "");
+                if (this._documentScrollTop && this._documentScrollTop > 0) {
+                    $(document).scrollTop(this._documentScrollTop);
+                }
             }
 
             return that;
@@ -1051,7 +1083,8 @@
             var that = this,
                 wrapper = that.wrapper,
                 currentWindow = wrapper[0],
-                zIndex = +wrapper.css(ZINDEX);
+                zIndex = +wrapper.css(ZINDEX),
+                originalZIndex = zIndex;
 
             $(KWINDOW).each(function(i, element) {
                 var windowObject = $(element),
@@ -1069,15 +1102,17 @@
                 }
             });
 
-            wrapper.css(ZINDEX, zIndex + 2);
-            that.element.find("> .k-overlay").remove();
+            if (zIndex == 10001 || originalZIndex < zIndex) {
+                wrapper.css(ZINDEX, zIndex + 2);
+                that.element.find("> .k-overlay").remove();
+            }
 
             return that;
         },
 
         /**
          *
-         * Toggles a Window between a maximized and restored state.
+         * Toggles a Window between a maximized and restored state. Triggers the resize event.
          *
          * @returns {Window}
          * Returns the (Kendo UI) Window object to support chaining.
@@ -1093,7 +1128,7 @@
 
         /**
          *
-         * Restores a maximized or minimized Window to its previous state.
+         * Restores a maximized or minimized Window to its previous state. Triggers the resize event.
          *
          * @returns {Window}
          * Returns the (Kendo UI) Window object to support chaining.
@@ -1121,10 +1156,13 @@
                     height: restoreOptions.height
                 })
                 .find(".k-window-content,.k-resize-handle").show().end()
-                .find(".k-window-titlebar .k-restore").parent().remove().end().end()
+                .find(".k-window-titlebar .k-i-restore").parent().remove().end().end()
                 .find(MINIMIZE_MAXIMIZE).parent().show();
 
             $("html, body").css(OVERFLOW, "");
+            if (this._documentScrollTop && this._documentScrollTop > 0) {
+                $(document).scrollTop(this._documentScrollTop);
+            }
 
             options.isMaximized = options.isMinimized = false;
 
@@ -1135,7 +1173,7 @@
 
         /**
          *
-         * Maximizes a Window to the entire viewing area of the user agent.
+         * Maximizes a Window to the entire viewing area of the user agent. Triggers the resize event.
          *
          * @function
          * @returns {Window}
@@ -1162,7 +1200,8 @@
                     position: "fixed"
                 });
 
-            $("html, body").css(OVERFLOW, "hidden");
+            this._documentScrollTop = $(document).scrollTop();
+            $("html, body").css(OVERFLOW, HIDDEN);
 
             that.options.isMaximized = true;
 
@@ -1202,7 +1241,7 @@
 
             wrapper.css({
                     width: wnd.width(),
-                    height: wnd.height()
+                    height: wnd.height() - parseInt(wrapper.css("padding-top"), 10)
                 });
 
             that.trigger(RESIZE);
@@ -1254,6 +1293,7 @@
                 initOptions = that.options,
                 element = $(that.element),
                 iframe,
+                showIframe = initOptions.iframe,
                 url;
 
             if (!isPlainObject(options)) {
@@ -1265,7 +1305,11 @@
             url = options.url;
 
             if (url) {
-                if (that.options.iframe === false || isLocalUrl(url)) {
+                if (typeof showIframe == "undefined") {
+                    showIframe = !isLocalUrl(url);
+                }
+
+                if (!showIframe) {
                     // perform AJAX request
                     that._ajaxRequest(options);
                 } else {
@@ -1290,7 +1334,7 @@
         _ajaxRequest: function (options) {
             var that = this,
                 contentTemplate = options.template,
-                refreshIcon = that.wrapper.find(".k-window-titlebar .k-refresh"),
+                refreshIcon = that.wrapper.find(".k-window-titlebar .k-i-refresh"),
                 loadingIconTimeout = setTimeout(function () {
                     refreshIcon.addClass(LOADING);
                 }, 100);
@@ -1319,7 +1363,7 @@
         },
 
         /**
-         * Destroys the window and its modal overlay, if necessary. Useful for removing modal windows.
+         * Destroys the window and its modal overlay, if necessary. Removes the Window HTML elements from the DOM.
          */
         destroy: function () {
             var that = this,
@@ -1337,6 +1381,49 @@
             } else if (modalWindows.length > 0) {
                 windowObject(modalWindows.eq(modalWindows.length - 2))._overlay(true);
             }
+        },
+
+        _createWindow: function() {
+            var that = this,
+                contentHtml = that.element,
+                options = that.options,
+                iframeSrcAttributes,
+                wrapper;
+
+            if (options.scrollable === false) {
+                contentHtml.attr("style", "overflow:hidden;");
+            }
+
+            if (options.iframe) {
+                contentHtml.html(templates.contentFrame(options));
+            }
+
+            wrapper = $(templates.wrapper(options));
+
+            if (options.title !== false) {
+                wrapper.append(templates.titlebar(extend(templates, options)));
+            }
+
+            wrapper.toggleClass("k-rtl", !!that.element.closest(".k-rtl").length);
+
+            // Collect the src attributes of all iframes and then set them to empty string.
+            // This seems to fix this IE9 "feature": http://msdn.microsoft.com/en-us/library/gg622929%28v=VS.85%29.aspx?ppud=4
+            iframeSrcAttributes = contentHtml.find("iframe").map(function(iframe) {
+                var src = this.getAttribute("src");
+                this.src = "";
+                return src;
+            });
+
+            // Make sure the wrapper is appended to the body only once. IE9+ will throw exceptions if you move iframes in DOM
+            wrapper
+                .appendTo(that.appendTo)
+                .append(contentHtml)
+                .find("iframe").each(function(index) {
+                   // Restore the src attribute of the iframes when they are part of the live DOM tree
+                   this.src = iframeSrcAttributes[index];
+                });
+
+            contentHtml.show();
         }
     });
 
@@ -1344,7 +1431,7 @@
         wrapper: template("<div class='k-widget k-window' />"),
         action: template(
             "<a href='\\#' class='k-window-action k-link'>" +
-                "<span class='k-icon k-#= name.toLowerCase() #'>#= name #</span>" +
+                "<span class='k-icon k-i-#= name.toLowerCase() #'>#= name #</span>" +
             "</a>"
         ),
         titlebar: template(
@@ -1367,44 +1454,6 @@
         resizeHandle: template("<div class='k-resize-handle k-resize-#= data #'></div>")
     };
 
-    function createWindow(element, options) {
-        var contentHtml = element,
-            iframeSrcAttributes,
-            wrapper;
-
-        if (options.scrollable === false) {
-            contentHtml.attr("style", "overflow:hidden;");
-        }
-
-        if (options.iframe) {
-            contentHtml.html(templates.contentFrame(options));
-        }
-
-        wrapper = $(templates.wrapper(options));
-
-        if (options.title !== false) {
-            wrapper.append(templates.titlebar(extend(templates, options)))
-        }
-
-        wrapper.toggleClass("k-rtl", !!element.closest(".k-rtl").length);
-
-        // Collect the src attributes of all iframes and then set them to empty string.
-        // This seems to fix this IE9 "feature": http://msdn.microsoft.com/en-us/library/gg622929%28v=VS.85%29.aspx?ppud=4
-        iframeSrcAttributes = contentHtml.find("iframe").map(function(iframe) {
-            var src = this.getAttribute("src");
-            this.src = "";
-            return src;
-        });
-
-        // Make sure the wrapper is appended to the body only once. IE9+ will throw exceptions if you move iframes in DOM
-        wrapper
-            .appendTo(body)
-            .append(contentHtml)
-            .find("iframe").each(function(index) {
-               // Restore the src attribute of the iframes when they are part of the live DOM tree
-               this.src = iframeSrcAttributes[index];
-            });
-    }
 
     function WindowResizing(wnd) {
         var that = this;
@@ -1421,85 +1470,89 @@
 
     WindowResizing.prototype = /** @ignore */ {
         dragstart: function (e) {
-            var wnd = this.owner,
+            var that = this,
+                wnd = that.owner,
                 wrapper = wnd.wrapper;
 
-            wnd.elementPadding = parseInt(wnd.wrapper.css("padding-top"));
-            wnd.initialCursorPosition = wrapper.offset();
+            that.elementPadding = parseInt(wnd.wrapper.css("padding-top"), 10);
+            that.initialCursorPosition = wrapper.offset();
 
-            wnd.resizeDirection = e.currentTarget.prop("className").replace("k-resize-handle k-resize-", "").split("");
+            that.resizeDirection = e.currentTarget.prop("className").replace("k-resize-handle k-resize-", "");
 
-            wnd.initialSize = {
-                width: wnd.wrapper.width(),
-                height: wnd.wrapper.height()
+            that.initialSize = {
+                width: wrapper.width(),
+                height: wrapper.height()
             };
+
+            that.containerOffset = wnd.appendTo.offset(),
 
             wrapper
                 .append(templates.overlay)
                 .find(KWINDOWRESIZEHANDLES).not(e.currentTarget).hide();
 
-            $(body).css(CURSOR, e.currentTarget.css(CURSOR));
+            $(BODY).css(CURSOR, e.currentTarget.css(CURSOR));
         },
         drag: function (e) {
-            var wnd = this.owner,
+            var that = this,
+                wnd = that.owner,
                 wrapper = wnd.wrapper,
                 options = wnd.options,
-                constrain = function(value, low, high) {
-                    return Math.max(Math.min(value, high), low);
-                },
-                resizeHandlers = {
-                    "e": function () {
-                        var newWidth = e.x.location - wnd.initialCursorPosition.left;
+                direction = that.resizeDirection,
+                containerOffset = that.containerOffset,
+                initialPosition = that.initialCursorPosition,
+                initialSize = that.initialSize,
+                newWidth, newHeight,
+                windowBottom, windowRight,
+                x = e.x.location,
+                y = e.y.location;
 
-                        wrapper.width(constrain(newWidth, options.minWidth, options.maxWidth));
-                    },
-                    "s": function () {
-                        var newHeight = e.y.location - wnd.initialCursorPosition.top - wnd.elementPadding;
+            if (direction.indexOf("e") >= 0) {
+                newWidth = x - initialPosition.left;
 
-                        wrapper.height(constrain(newHeight, options.minHeight, options.maxHeight));
-                    },
-                    "w": function () {
-                        var windowRight = wnd.initialCursorPosition.left + wnd.initialSize.width,
-                            newWidth = constrain(windowRight - e.x.location, options.minWidth, options.maxWidth);
+                wrapper.width(constrain(newWidth, options.minWidth, options.maxWidth));
+            } else if (direction.indexOf("w") >= 0) {
+                windowRight = initialPosition.left + initialSize.width;
+                newWidth = constrain(windowRight - x, options.minWidth, options.maxWidth);
 
-                        wrapper.css({
-                            left: windowRight - newWidth,
-                            width: newWidth
-                        })
-                    },
-                    "n": function () {
-                        var windowBottom = wnd.initialCursorPosition.top + wnd.initialSize.height,
-                            newHeight = constrain(windowBottom - e.y.location, options.minHeight, options.maxHeight);
+                wrapper.css({
+                    left: windowRight - newWidth - containerOffset.left,
+                    width: newWidth
+                });
+            }
 
-                        wrapper.css({
-                            top: windowBottom - newHeight,
-                            height: newHeight
-                        });
-                    }
-                };
+            if (direction.indexOf("s") >= 0) {
+                newHeight = y - initialPosition.top - that.elementPadding;
 
-            each(wnd.resizeDirection, function () {
-                resizeHandlers[this]();
-            });
+                wrapper.height(constrain(newHeight, options.minHeight, options.maxHeight));
+            } else if (direction.indexOf("n") >= 0) {
+                windowBottom = initialPosition.top + initialSize.height;
+                newHeight = constrain(windowBottom - y, options.minHeight, options.maxHeight);
+
+                wrapper.css({
+                    top: windowBottom - newHeight - containerOffset.top,
+                    height: newHeight
+                });
+            }
 
             wnd.trigger(RESIZE);
         },
         dragend: function (e) {
-            var wnd = this.owner,
+            var that = this,
+                wnd = that.owner,
                 wrapper = wnd.wrapper;
 
             wrapper
                 .find(KOVERLAY).remove().end()
                 .find(KWINDOWRESIZEHANDLES).not(e.currentTarget).show();
 
-            $(body).css(CURSOR, "");
+            $(BODY).css(CURSOR, "");
 
             if (wnd.touchScroller) {
                wnd.touchScroller.reset();
             }
             if (e.keyCode == 27) {
-                wrapper.css(wnd.initialCursorPosition)
-                    .css(wnd.initialSize);
+                wrapper.css(that.initialCursorPosition)
+                    .css(that.initialSize);
             }
 
             return false;
@@ -1524,7 +1577,8 @@
         dragstart: function (e) {
             var wnd = this.owner,
                 element = wnd.element,
-                actions = element.find(".k-window-actions");
+                actions = element.find(".k-window-actions"),
+                containerOffset = wnd.appendTo.offset();
 
             wnd.trigger(DRAGSTART);
 
@@ -1541,18 +1595,21 @@
                 wnd.minLeftPosition =  20 - element.outerWidth(); // at least 20px remain visible
             }
 
+            wnd.minLeftPosition -= containerOffset.left;
+            wnd.minTopPosition = -containerOffset.top;
+
             wnd.wrapper
                 .append(templates.overlay)
                 .find(KWINDOWRESIZEHANDLES).hide();
 
-            $(body).css(CURSOR, e.currentTarget.css(CURSOR));
+            $(BODY).css(CURSOR, e.currentTarget.css(CURSOR));
         },
 
         drag: function (e) {
             var wnd = this.owner,
                 coordinates = {
                     left: Math.max(e.x.client - wnd.startPosition.left, wnd.minLeftPosition),
-                    top: Math.max(e.y.client - wnd.startPosition.top, 0)
+                    top: Math.max(e.y.client - wnd.startPosition.top, wnd.minTopPosition)
                 };
 
             $(wnd.wrapper).css(coordinates);
@@ -1565,7 +1622,7 @@
                 .find(KWINDOWRESIZEHANDLES).show().end()
                 .find(KOVERLAY).remove();
 
-            $(body).css(CURSOR, "");
+            $(BODY).css(CURSOR, "");
 
             e.currentTarget.closest(KWINDOW).css(wnd.initialWindowPosition);
         },
@@ -1577,7 +1634,7 @@
                 .find(KWINDOWRESIZEHANDLES).show().end()
                 .find(KOVERLAY).remove();
 
-            $(body).css(CURSOR, "");
+            $(BODY).css(CURSOR, "");
 
             wnd.trigger(DRAGEND);
 
@@ -1588,3 +1645,4 @@
     kendo.ui.plugin(Window);
 
 })(jQuery);
+;

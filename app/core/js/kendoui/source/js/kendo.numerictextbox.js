@@ -1,5 +1,5 @@
 /*
-* Kendo UI Web v2012.1.322 (http://kendoui.com)
+* Kendo UI Web v2012.2.710 (http://kendoui.com)
 * Copyright 2012 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at http://kendoui.com/web-license
@@ -98,7 +98,9 @@
         ui = kendo.ui,
         Widget = ui.Widget,
         parse = kendo.parseFloat,
+        placeholderSupported = kendo.support.placeholder,
         touch = kendo.support.touch,
+        getCulture = kendo.getCulture,
         CHANGE = "change",
         DISABLED = "disabled",
         INPUT = "k-input",
@@ -106,7 +108,6 @@
         TOUCHEND = "touchend",
         MOUSEDOWN = touch ? "touchstart" : "mousedown",
         MOUSEUP = touch ? "touchmove " + TOUCHEND : "mouseup mouseleave",
-        HIDE = "k-hide-text",
         DEFAULT = "k-state-default",
         FOCUSED = "k-state-focused",
         HOVER = "k-state-hover",
@@ -126,13 +127,13 @@
         /**
          * @constructs
          * @extends kendo.ui.Widget
-         * @param {DomElement} element DOM element
+         * @param {Element} element DOM element
          * @param {Object} options Configuration options
          * @option {Number} [value] <null> Specifies the value of the NumericTextBox widget.
          * _example
          *  // specify in the HTML
-         * &lt;input id="numeric" value="10" type="number" min="-100" max="100" step="10"/&gt;
-         * <br />
+         * <input id="numeric" value="10" type="number" min="-100" max="100" step="10"/>
+         *
          * // specify on widget initialization
          * $("#numeric").kendoNumericTextBox({
          *     min: 0,
@@ -142,7 +143,7 @@
          * @option {Number} [min] <null> Specifies the smallest value the user can enter.
          * _example
          *  // specify in the HTML
-         * &lt;input id="numeric" value="10" type="number" min="-100" max="100" step="10"/&gt;
+         * <input id="numeric" value="10" type="number" min="-100" max="100" step="10"/>
          * <br />
          * // specify on widget initialization
          * $("#numeric").kendoNumericTextBox({
@@ -153,7 +154,7 @@
          * @option {Number} [max] <null> Specifies the largest value the user can enter.
          * _example
          *  // specify in the HTML
-         * &lt;input id="numeric" value="10" type="number" min="-100" max="100" step="10"/&gt;
+         * <input id="numeric" value="10" type="number" min="-100" max="100" step="10"/>
          * <br />
          * // specify on widget initialization
          * $("#numeric").kendoNumericTextBox({
@@ -163,9 +164,6 @@
          * });
          * @option {Number} [decimals] <null> Specifies the number precision. If not set precision defined by current culture is used.
          * _example
-         *  // specify in the HTML
-         * &lt;input id="numeric" value="10" type="number" min="0" max="1" step=".1" decimals="1"/&gt;
-         * <br />
          * // specify on widget initialization
          * $("#numeric").kendoNumericTextBox({
          *     min: 0,
@@ -176,7 +174,7 @@
          * @option {Number} [step] <1> Specifies the increment/decrement step.
          * _example
          *  // specify in the HTML
-         * &lt;input id="numeric" value="10" type="number" /&gt;
+         * <input id="numeric" value="10" type="number" />
          * <br />
          * // specify on widget initialization
          * $("#numeric").kendoNumericTextBox({
@@ -199,7 +197,7 @@
          *     min: 0,
          *     max: 100,
          *     value: 50,
-         *     placeHolder: "Select A Value"
+         *     placeholder: "Select A Value"
          * });
          * @option {String} [upArrowText] <Increase value> Specifies the text of the tooltip on the up arrow.
          * _example
@@ -221,10 +219,17 @@
          *     upArrowText: "More",
          *     downArrowText: "Less"
          * });
+         * @option {String} [culture] <en-US> Specifies the culture info used by the NumericTextBox widget.
+         * _example
+         *
+         * // specify on widget initialization
+         * $("#numeric").kendoNumericTextBox({
+         *     culture: "de-DE"
+         * });
          */
          init: function(element, options) {
              var that = this,
-             isStep = options && options[step] !== undefined,
+             isStep = options && options.step !== undefined,
              min, max, step, value, format;
 
              Widget.fn.init.call(that, element, options);
@@ -244,15 +249,17 @@
                         });
                     });
 
+             options.placeholder = options.placeholder || element.attr("placeholder");
+
              that._wrapper();
              that._arrows();
              that._input();
 
              that._text.focus(proxy(that._click, that));
 
-             min = parse(element.attr("min"));
-             max = parse(element.attr("max"));
-             step = parse(element.attr("step"));
+             min = that.min(element.attr("min"));
+             max = that.max(element.attr("max"));
+             step = that._parse(element.attr("step"));
 
              if (options.min === NULL && min !== NULL) {
                  options.min = min;
@@ -286,7 +293,9 @@
             max: NULL,
             value: NULL,
             step: 1,
+            culture: "",
             format: "n",
+            spinners: true,
             placeholder: "",
             upArrowText: "Increase value",
             downArrowText: "Decrease value"
@@ -360,7 +369,7 @@
             if (enable === false) {
                 wrapper
                     .removeClass(DEFAULT)
-                    .addClass(STATEDISABLED)
+                    .addClass(STATEDISABLED);
 
                 text.attr(DISABLED, DISABLED);
             } else {
@@ -386,6 +395,60 @@
         },
 
         /**
+        * Gets/Sets the min value of the NumericTextBox.
+        * @param {Number | String} value The min value to set.
+        * @returns {Number} The min value of the NumericTextBox.
+        * @example
+        * // get a reference to the NumericTextBox widget
+        * var numerictextbox = $("#numerictextbox").data("kendoNumericTextBox");
+        *
+        * // get the min value of the numerictextbox.
+        * var min = numerictextbox.min();
+        *
+        * // set the min value of the numerictextbox.
+        * numerictextbox.min(-10);
+        */
+        min: function(value) {
+            return this._option("min", value);
+        },
+
+        /**
+        * Gets/Sets the max value of the NumericTextBox.
+        * @param {Number | String} value The max value to set.
+        * @returns {Number} The max value of the NumericTextBox.
+        * @example
+        * // get a reference to the NumericTextBox widget
+        * var numerictextbox = $("#numerictextbox").data("kendoNumericTextBox");
+        *
+        * // get the max value of the numerictextbox.
+        * var max = numerictextbox.max();
+        *
+        * // set the max value of the numerictextbox.
+        * numerictextbox.max(10);
+        */
+        max: function(value) {
+            return this._option("max", value);
+        },
+
+        /**
+        * Gets/Sets the step value of the NumericTextBox.
+        * @param {Number | String} value The step value to set.
+        * @returns {Number} The step value of the NumericTextBox.
+        * @example
+        * // get a reference to the NumericTextBox widget
+        * var numerictextbox = $("#numerictextbox").data("kendoNumericTextBox");
+        *
+        * // get the step value of the numerictextbox.
+        * var step = numerictextbox.step();
+        *
+        * // set the step value of the numerictextbox.
+        * numerictextbox.step(0.1);
+        */
+        step: function(value) {
+            return this._option("step", value);
+        },
+
+        /**
         * Gets/Sets the value of the numerictextbox.
         * @param {Number | String} value The value to set.
         * @returns {Number} The value of the numerictextbox.
@@ -406,7 +469,7 @@
                 return that._value;
             }
 
-            value = parse(value);
+            value = that._parse(value);
             adjusted = that._adjust(value);
 
             if (value !== adjusted) {
@@ -423,6 +486,10 @@
             min = options.min,
             max = options.max;
 
+            if (value === NULL) {
+                return value;
+            }
+
             if (min !== NULL && value < min) {
                 value = min;
             } else if (max !== NULL && value > max) {
@@ -436,12 +503,13 @@
             var that = this,
             arrows,
             options = that.options,
+            spinners = options.spinners,
             element = that.element;
 
             arrows = element.siblings(".k-icon");
 
             if (!arrows[0]) {
-                arrows = $(buttonHtml("up", options.upArrowText) + buttonHtml("down", options.downArrowText))
+                arrows = $(buttonHtml("n", options.upArrowText) + buttonHtml("s", options.downArrowText))
                         .insertAfter(element);
 
                 arrows.wrapAll('<span class="k-select"/>');
@@ -453,6 +521,11 @@
                 }
                 arrows.removeClass(SELECTED);
             });
+
+            if (!spinners) {
+                arrows.toggle(spinners);
+                that._inputWrapper.addClass("k-expand-padding");
+            }
 
             that._upArrow = arrows.eq(0);
             that._downArrow = arrows.eq(1);
@@ -509,6 +582,10 @@
             }
         },
 
+        _culture: function(culture) {
+            return culture || getCulture(this.options.culture);
+        },
+
         _focusin: function() {
             var that = this;
             that._toggleText(false);
@@ -519,15 +596,15 @@
         _focusout: function() {
             var that = this;
 
+            clearTimeout(that._focusing);
             that._inputWrapper.removeClass(FOCUSED);
             that._blur();
         },
 
-        _format: function(format) {
-            var that = this,
-                options = that.options,
-                numberFormat = kendo.culture().numberFormat;
+        _format: function(format, culture) {
+            var numberFormat = this._culture(culture).numberFormat;
 
+            format = format.toLowerCase();
 
             if (format.indexOf("c") > -1) {
                 numberFormat = numberFormat.currency;
@@ -553,10 +630,12 @@
             }
 
             element.type = TYPE;
-            text[0].type = TYPE;
-
+            text[0].type = "text";
             text[0].style.cssText = element.style.cssText;
-            that._text = text.attr("readonly", true).addClass(element.className);
+            text.attr("placeholder", that.options.placeholder);
+
+            that._text = text.attr("readonly", true)
+                             .addClass(element.className);
         },
 
         _keydown: function(e) {
@@ -582,7 +661,7 @@
                 value = element.value;
 
             setTimeout(function() {
-                if (parse(element.value) === NULL) {
+                if (that._parse(element.value) === NULL) {
                     that._update(value);
                 }
             });
@@ -605,21 +684,21 @@
                 precision = numberFormat.decimals;
             }
 
-            if ((key > 16 && key < 21)
-             || (key > 32 && key < 37)
-             || (key > 47 && key < 58)
-             || (key > 95 && key < 106)
-             || key == 45 /* INSERT */
-             || key == 46 /* DELETE */
-             || key == keys.LEFT
-             || key == keys.RIGHT
-             || key == keys.TAB
-             || key == keys.BACKSPACE
-             || key == keys.ENTER) {
+            if ((key > 16 && key < 21) ||
+                (key > 32 && key < 37) ||
+                (key > 47 && key < 58) ||
+                (key > 95 && key < 106) ||
+                 key == keys.INSERT ||
+                 key == keys.DELETE ||
+                 key == keys.LEFT ||
+                 key == keys.RIGHT ||
+                 key == keys.TAB ||
+                 key == keys.BACKSPACE ||
+                 key == keys.ENTER) {
                 prevent = false;
             } else if (decimals[key] === separator && precision > 0 && value.indexOf(separator) == -1) {
                 prevent = false;
-            } else if ((min === NULL || min < 0) && value.indexOf("-") == -1 && (key == 189 || key == 109) && idx == 0) { //sign
+            } else if ((min === NULL || min < 0) && value.indexOf("-") == -1 && (key == 189 || key == 109) && idx === 0) { //sign
                 prevent = false;
             } else if (key == 110 && precision > 0 && value.indexOf(separator) == -1) {
                 end = value.substring(idx);
@@ -628,6 +707,23 @@
             }
 
             return prevent;
+        },
+
+        _option: function(option, value) {
+            var that = this,
+                options = that.options;
+
+            if (value === undefined) {
+                return options[option];
+            }
+
+            value = that._parse(value);
+
+            if (!value && option === "step") {
+                return;
+            }
+
+            options[option] = that._parse(value);
         },
 
         _spin: function(step, timeout) {
@@ -646,13 +742,13 @@
         _step: function(step) {
             var that = this,
                 element = that.element,
-                value = parse(element.val()) || 0;
+                value = that._parse(element.val()) || 0;
 
             if (document.activeElement != element[0]) {
                 that._focusin();
             }
 
-            value += that.options.step * parse(step);
+            value += that.options.step * step;
 
             that._update(that._adjust(value));
 
@@ -673,19 +769,24 @@
             that.element.toggle(!toggle);
         },
 
+        _parse: function(value, culture) {
+            return parse(value, this._culture(culture), this.options.format);
+        },
+
         _update: function(value) {
             var that = this,
                 options = that.options,
                 format = options.format,
                 decimals = options.decimals,
-                numberFormat = that._format(format),
+                culture = that._culture(),
+                numberFormat = that._format(format, culture),
                 isNotNull;
 
             if (decimals === NULL) {
                 decimals = numberFormat.decimals;
             }
 
-            value = parse(value);
+            value = that._parse(value, culture);
 
             isNotNull = value !== NULL;
 
@@ -694,8 +795,15 @@
             }
 
             that._value = value = that._adjust(value);
-            that._text.val(isNotNull ? kendo.toString(value, format) : options.placeholder);
+            that._placeholder(kendo.toString(value, format, culture));
             that.element.val(isNotNull ? value.toString().replace(POINT, numberFormat[POINT]) : "");
+        },
+
+        _placeholder: function(value) {
+            this._text.val(value);
+            if (!placeholderSupported && !value) {
+                this._text.val(this.options.placeholder);
+            }
         },
 
         _wrapper: function() {
@@ -718,7 +826,7 @@
     });
 
     function buttonHtml(className, text) {
-        return '<span unselectable="on" class="k-link"><span unselectable="on" class="k-icon k-arrow-' + className + '" title="' + text + '">' + text + '</span></span>'
+        return '<span unselectable="on" class="k-link"><span unselectable="on" class="k-icon k-i-arrow-' + className + '" title="' + text + '">' + text + '</span></span>';
     }
 
     function caret(element, position) {
@@ -726,8 +834,10 @@
             isPosition = position !== undefined;
 
         if (document.selection) {
-            element.focus();
-            var range = document.selection.createRange();
+            if ($(element).is(":visible")) {
+                element.focus();
+            }
+            range = document.selection.createRange();
             if (isPosition) {
                 range.move("character", position);
                 range.select();
@@ -754,3 +864,4 @@
 
     ui.plugin(NumericTextBox);
 })(jQuery);
+;
