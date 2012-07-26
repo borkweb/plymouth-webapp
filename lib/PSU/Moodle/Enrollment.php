@@ -7,7 +7,9 @@ use PSU\Moodle\Enrollment\Exception;
 class Enrollment {
 
 	public $course;
+	public $flush = false;
 	public $population;
+	public $to_write = array();
 
 	/**
 	 * magic constructor method
@@ -22,6 +24,35 @@ class Enrollment {
 		}
 
 	}//end __construct
+
+	/**
+	 * Leverage the flatfile enrollment plugin to carry out enrollments
+	 * 
+	 * @param user idnumber of the user aka PSU_ID
+	 * @param course idnumber from the course table aka crn.termcode
+	 * @param action defaults to add, but can be passed del to remove an enrollment
+	 * @param timestart when to begin enrollment (not required)
+	 * @param timestop when to end the enrollment (not required)
+	 */
+	public function add_to_flatfile( $user, $course, $action = 'add', $timestart = NULL, $timestop = NULL ) {
+		$entry = array(
+			$action,
+			$this->role,
+			$user,
+			$course,
+		);
+
+		// Only add these values if they are actually set
+		// We don't want to be adding extra commas to our file
+		if( $timestart ) {
+			$entry[] = $timestart;
+			if( $timestop ) {
+				$entry[] = $timestop;
+			}//end if
+		}//end if
+
+		$this->to_write[] = $entry;
+	}//end add_to_flatfile
 
 	/**
 	 * Assign a role to the user for the course they have been enrolled in.
@@ -80,7 +111,21 @@ class Enrollment {
 		";
 
 		return \PSU::db('moodle2')->GetOne( $sql, array( $idnumber ) );
-	}//end enrolid
+	}//end courseid
+
+	/**
+	 * Return the courseidnumber from moodle for the given course id 
+	 */
+	public function courseidnumber( $id ) {
+
+		$sql = "
+			SELECT idnumber
+			  FROM mdl_course
+			 WHERE id = ? 
+		";
+
+		return \PSU::db('moodle2')->GetOne( $sql, array( $id ) );
+	}//end courseidnumber
 
 	/**
 	 * Return the enrolid from moodle for the given course and enrollment method
@@ -149,7 +194,7 @@ class Enrollment {
 	 * Take in the arguments from the sub-enrollment types and insert into the database
 	 * Assign perscribed role to the user for the course
 	 */
-	public function perform_enrollment( $userid, $courseid, $method = 'psu_auto_enroller' ) {
+	public function perform_enrollment( $userid, $courseid, $method = 'manual' ) {
 		$insert_time = time();
 		$enrolid = $this->enrolid ?: self::enrolid( $method, $courseid );
 
@@ -235,4 +280,20 @@ class Enrollment {
 
 		return \PSU::db('moodle2')->GetOne( $sql, $args );
 	}//end userid
+
+	/**
+	 * Write the contents to $this->to_write to the target
+	 * flatfile for the Moodle flatfile enrollment plugin to 
+	 * pick up on.
+	 */
+	public function write_to_flatfile() {
+		$mode = $this->flush ? 'w' : 'a';
+		$fp = fopen( '/web/temp/moodle/m2_auto.txt', $mode );
+
+		foreach( $this->to_write as $enrollment ) {
+			fputcsv( $fp, $enrollment );
+		}//end foreach
+
+		fclose( $fp );
+	}//end write_to_flatfile
 }//end PSU_Moodle_Enrollment	

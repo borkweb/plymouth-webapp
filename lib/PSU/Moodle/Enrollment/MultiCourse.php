@@ -24,10 +24,10 @@ class MultiCourse extends \PSU\Moodle\Enrollment {
 
 	public function enroll() {
 		foreach( $this->course as $id ) {
-			$courseid = self::courseid( $id );
-			$this->enrolid = self::enrolid( 'psu_auto_enroller', $courseid );
-			self::perform_enrollment( self::userid( $this->population), $courseid );
+			self::add_to_flatfile( $this->population, $id );
 		}//end foreach
+
+		self::write_to_flatfile();
 	}//end manual
 
 }//end PSU_Moodle_Enrollment	
