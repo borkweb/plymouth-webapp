@@ -11,28 +11,6 @@ if( $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_GET['ajax']==1 ){
 
 	switch($_GET['return']) {
 	
-		case 'showGroupUsers':
-			$getGroupUsers = $db->GetAll("SELECT * FROM its_employee_groups, call_log_employee WHERE its_employee_groups.group_id = '$_GET[group_number]' AND call_log_employee.call_log_user_id = its_employee_groups.employee_id AND its_employee_groups.option_id != '0'");
-			for($i=0;$i<=count($getGroupUsers);$i++){
-				$j = $i+1;
-				$group_names = $j." - ".$getGroupUsers[$i]['first_name']." ".$getGroupUsers[$i]['last_name']."<br/>";
-				$tpl->assign('group_names',$group_names);
-				$tpl->parse('main.group_names');
-			}
-			$tpl->parse('main');
-			$tpl->out('main');
-		break;
-	
-	 case 'keywordList':
-			ob_clean();
-			echo generateKeywordList($_GET['call_id'], $_GET['details']);
-		break;
-	
-		case 'get_employee_group_info':
-			$tpl = new PSU\Template;
-			$tpl->assign( 'groups', getOpenCallGroups() );
-			$tpl->display( 'open_calls.tpl', false );
-		break;
 	
 		case 'restoreRequest': 
 			$restore_full_date_time = $_GET['restore_year']."-".$_GET['restore_month']."-".$_GET['restore_date']." ".$_GET['restore_hour'].":".$_GET['restore_minute'];
