@@ -44,10 +44,19 @@ if($title_log['source'] == 'ape')
 /*********************************************************************
  *    Retrieve Notes
  *********************************************************************/
-//add the notes to the session
-foreach( $person->notes as $note ){
-	$_SESSION[$note->status][]=$note->note;
-}
+// If the user has the correct privileges, add the notes to the session
+$calllog_level = \PSU::db('calllog')->GetOne("SELECT user_privileges FROM call_log_employee WHERE user_name=?", array($_SESSION['username']));
+if( 
+	IDMObject::authN('department', 'Information Technology Services') 
+	|| 'trainee' == $calllog_level
+	|| 'sta' == $calllog_level
+	|| 'shift_leader' == $calllog_level
+	|| 'supervisor' == $calllog_level
+) {
+	foreach( $person->notes as $note ){
+		$_SESSION[$note->status][]=$note->note;
+	}
+}//end if
 /*********************************************************************
  *    Set Workflow Permissions
  *********************************************************************/
