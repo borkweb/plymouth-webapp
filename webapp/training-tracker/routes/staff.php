@@ -196,6 +196,13 @@ respond( 'GET', '/statistics/[:wpid]', function( $request, $responce, $app ) {
 		$sub_cat['stat'] = $stats[$id];
 	}
 
+	if ($current_user->wpid == $app->user->wpid){
+		$disabled = true;
+	}else{
+		$disabled = false;
+	}
+
+	$app->tpl->assign('disabled', $disabled);
 	$app->tpl->assign('progress', $progress);	
 	$app->tpl->assign('title', $title);	
 	$app->tpl->assign('checked', $checklist_checked);
