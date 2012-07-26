@@ -1,7 +1,7 @@
 <?php
 
 function returnOpenCalls($option, $caller_user_name='', $sort_by='', $what='*' ){
-	global $db, $user;
+	global $user;
 	$result = array(); 
 	
 	/*
@@ -77,46 +77,9 @@ function returnOpenCalls($option, $caller_user_name='', $sort_by='', $what='*' )
 
 	$query .= " ORDER BY $sort_by ASC";
 
-	return $db->GetAll($query);
+	return PSU::db('calllog')->GetAll($query);
 }// end function returnOpenCalls
 
-/*
-	UPDATE: 12/19/03 - I just noticed something, I was nearly shocked.
-	Notice that the function directly above is called, "returnCallerOpenCalls(),"
-	and the function directly below is called, "returnCalls()," now, what I don't
-	understand is what the hell the difference is, and I wondered why I have two
-	functions that [almost] do one thing--do the same thing, but I'm not sure 
-	from what page the returnCalls() function is used, but it seems that by making
-	a minor adjustment, the functin above me and below me might as well be the 
-	same function, maybe they shouldn't be the same function, I don't know.
-
-	Zach: not sure his plan, but sorta fixed it up.
-*/
-
-function returnCallerOpenCalls($user_name='', $notused1='', $notused2=''){
-	return returnOpenCalls('',$user_name);
-}// end function returnCallerOpenCalls
-
-
-function returnCalls($call_type){
-	return returnOpenCalls('today');
-}// end function returnCalls
-
-function displayOpenCalls($template_file, $level=""){
-	$tpl = new XTemplate($template_file);
-	$open_calls = getOpenCallGroups();
-	foreach( $open_calls as $group ) {
-		$tpl->assign('my_group', $group['id'] );
-		$tpl->assign('numberOfRows', $group['num'] );
-		$tpl->assign('open_call_type', $group['open_call_type'] );
-		$tpl->assign('type', $group['type'] );
-		$tpl->assign('title', $group['title'] );
-		$tpl->assign('my_group_name', $group['my_group_name'] );
-		$tpl->parse('main'.$level.'.group');
-	}//end foreach
-
-	return $tpl->text('main'.$level.'.group');
-}
 
 function getOpenCallCount( $option, $caller_user_name='' ) {
 	$count_arr = returnOpenCalls( $option, $caller_user_name, '', 'COUNT(call_log.call_id) count' );
@@ -125,7 +88,7 @@ function getOpenCallCount( $option, $caller_user_name='' ) {
 }
 
 function getOpenCallGroups() {
-	global $db, $user;
+	global $user;
 	
 	$groups = array();
 

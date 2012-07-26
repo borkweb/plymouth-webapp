@@ -23,7 +23,7 @@ if( $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_GET['ajax']==1 ){
 			$tpl->out('main');
 		break;
 	
-	    case 'keywordList':
+	 case 'keywordList':
 			ob_clean();
 			echo generateKeywordList($_GET['call_id'], $_GET['details']);
 		break;
@@ -34,7 +34,7 @@ if( $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_GET['ajax']==1 ){
 			$tpl->display( 'open_calls.tpl', false );
 		break;
 	
-	    case 'restoreRequest': 
+		case 'restoreRequest': 
 			$restore_full_date_time = $_GET['restore_year']."-".$_GET['restore_month']."-".$_GET['restore_date']." ".$_GET['restore_hour'].":".$_GET['restore_minute'];
 			$less_one_month = strtotime("one month ago", $restore_full_date_time);
 
