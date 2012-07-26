@@ -1,4 +1,8 @@
 <?php
+if( ! IDMObject::authZ('permission', 'ape_notes') ) {
+	die('You do not have permission to edit APE notes');
+}//end if
+
 //grabs the user and person the user is looking at
 $myuser = new PSUPerson($_SESSION['wp_id']);
 $person = new PSUPerson($_GET['pidm']);

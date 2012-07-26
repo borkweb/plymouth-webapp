@@ -12,7 +12,9 @@
 		{else}
 			{*{if $person->banner_roles.employee && $AUTHZ.permission.ape_checklist_employee_exit_hr}*}, <a href="{$PHP.BASE_URL}/user/{$person->pidm}/checklist/employee-exit">employee clearance</a>{*{/if}*}
 		{/if}
+		{if $AUTHZ.permission.ape_notes}
 		, <a href="{$PHP.BASE_URL}/user/{$person->pidm}/notes">manage notes ({$person->notes->count()})</a>
+		{/if}
 	</div>
 	{if $AUTHZ.permission.ape_ssn}
 		<div class="note">Note: all requests for SSNs, Pins, Cert Numbers, etc are logged.</div>
