@@ -30,7 +30,7 @@ if($_GET['theme']) {
 		$too_awesome = false;
 
 		if(isAdmin() && $_SESSION['specific']!=$_SESSION['username'] && $_SESSION['specific']!='') {
-			if(in_array($user,array('zbtirrell','mtbatchelder','jrlemieux','sdcapraro')) && $_SESSION['username']!='mtbatchelder') {
+			if(in_array($user,array('sdcapraro','pdmanseau')) && $_SESSION['username']!='mtbatchelder') {
 				$_SESSION['errors'][] = 'This user is too awesome for you to mess with.';
 				$too_awesome = true;
 			}//end if
