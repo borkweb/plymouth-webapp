@@ -203,7 +203,8 @@ $GLOBALS['search_setting'] = $GLOBALS['user']->getSearchSetting($_SESSION['usern
 // Select Options Arrays, To Use For Zach's getSelectOptions function
 // ------------------------------------------------------------------ 
 $call_status_options = Array('closed'=>'Closed', 'open'=>'Open');
-$call_priority_options = Array('normal'=>'Normal', 'medium'=>'Medium', 'high'=>'High', 'inprogress'=>'In Progress', 'pending'=>'Pending', 'delayed'=>'Delayed', 'install'=>'Install', 'upgrade' => 'Upgrade', 'purchase' => 'Purchase', 'collision' => 'Account Collision');
+$call_priority_options = Array('normal'=>'Normal', 'medium'=>'Medium', 'high'=>'High');
+$call_state_options = Array('inprogress'=>'In Progress', 'pending'=>'Pending', 'delayed'=>'Delayed', 'install'=>'Install', 'upgrade' => 'Upgrade', 'purchase' => 'Purchase');
 $user_status = Array('active'=>'Active', 'disabled'=>'Disabled', 'inactive'=>'Inactive');
 $tlc_employee_positions = Array('trainee'=>'Information Desk Trainee', 'sta'=>'Information Desk Consultant', 'shift_leader'=>'Senior Information Desk Consultant', 'cts'=>'Classroom Technology Assistant', 'cts_manager'=>'CTS Manager', 'supervisor'=>'Information Desk Shift Supervisor',  'manager'=>'LLC Manager', 'staff'=>'Staff Member', 'webguru'=>'Call Log Overlord');
 $class_options = Array('first_year'=>'First Year', 'second_year'=>'Second Year', 'third_year'=>'Third Year', 'fourth_year'=>'Fourth Year', 'fifth_year'=>'Fifth Year', 'grad'=>'Grad School', 'alum'=>'Alumni');

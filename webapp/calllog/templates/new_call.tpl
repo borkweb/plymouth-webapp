@@ -77,7 +77,7 @@
 		<input type="text" name="keywords_list" id="keywords_list" size="51" placeholder="Nouns related to this ticket..." value="{$call_assignment_history_keywords}"/>
 		<div id="keywordsList"></div>
 		
-		<input type="hidden" id='call_status' name="call_status" value="{if isset($call_status)}{$call_status}{else}open{/if}" />
+		<input type="hidden" id="call_status" name="call_status" value="{if isset($call_status)}{$call_status}{else}open{/if}" />
 		{col size=4 class="alpha omega meta"}
 			<label for="call_priority" class="label">Priority:</label>
 				<select name="call_priority" id="call_priority">
