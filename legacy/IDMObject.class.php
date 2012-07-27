@@ -412,8 +412,7 @@ class IDMObject
 			$params['host'] = PSU::isdev() ? 'connect.dev' : 'connect';
 		}
 
-		if(!$_SESSION['username'] || isset($_REQUEST['logout']))
-		{
+		if(! isset( $_SESSION['username'] ) || isset( $_REQUEST['logout'] )) {
 			self::setupCAS($params['host'],$params['dir']);
 
 			// TODO: handle certs
@@ -430,9 +429,7 @@ class IDMObject
 			// at this step, the user has been authenticated by the CAS server
 			// and the user's login name can be read with phpCAS::getUser().
 			$_SESSION['username'] = $username = phpCAS::getUser();
-		}
-		else
-		{
+		} else {
 			$username = $_SESSION['username'];
 		}//end else
 
@@ -445,10 +442,8 @@ class IDMObject
 			$_SESSION['username'] = $username = 'j_pseudo';
 		}
 
-	  if($params['authz'])
-	  {
-			if($username)
-			{
+	  if($params['authz']) {
+			if($username) {
 				// login from a non-banner user
 				if( PSU::is_wpid($username) ) {
 					if($pidm = PSU::get('idmobject')->getIdentifier($username, 'wp_id','pid')) {
@@ -457,15 +452,11 @@ class IDMObject
 					}//end if
 
 					$_SESSION['wp_id'] = $username;
-				}
-
-				elseif($pidm = PSU::get('idmobject')->getIdentifier($username, 'login_name','pid'))
-				{
+				} elseif($pidm = PSU::get('idmobject')->getIdentifier($username, 'login_name','pid')) {
 					$_SESSION['pidm'] = $pidm;
 					PSU::get('idmobject')->loadAuthZ($pidm);
 
-					if($wp_id = PSU::get('idmobject')->getIdentifier($username, 'login_name', 'wp_id'))
-					{
+					if($wp_id = PSU::get('idmobject')->getIdentifier($username, 'login_name', 'wp_id')) {
 						$_SESSION['wp_id'] = $wp_id;
 					}//end if
 				}//end if
