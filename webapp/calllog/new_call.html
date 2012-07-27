@@ -156,6 +156,7 @@ if ($_GET['call_id']) {
 	$its_assigned_to = $getOpenCallDetailsValue['its_assigned_group'];
 	$call_status = $getOpenCallDetailsValue['call_status'];
 	$call_priority = $getOpenCallDetailsValue['call_priority'];
+	$call_state = $getOpenCallDetailsValue['call_state'];
 
 	$tpl->assign('call_history_id', $getOpenCallDetails[0]['id']);
 	$tpl->assign('details_name', "Update Information");
@@ -185,9 +186,10 @@ $tpl->assign('restore_request_func', $GLOBALS['restore']->restoreRequestFunc());
 if($resnet_call == 'resnet'){
 	$tpl->assign('is_resnet', 'checked');
 }
-
+PSU::dbug($call_priority);
 $tpl->assign('call_status', $call_status);
 $tpl->assign('call_priority_select_list', PSUHTML::getSelectOptions($call_priority_options, $call_priority));
+$tpl->assign('call_state_select_list', PSUHTML::getSelectOptions($call_state_options, $call_state));
 $tpl->assign('building_select_list', PSUHTML::getSelectOptions($building_options, $building_id));
 
 

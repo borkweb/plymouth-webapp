@@ -182,6 +182,7 @@ if(!checkEmployee() && $_SERVER['SCRIPT_NAME'] != '/webapp/calllog/add_new_call.
 	}//end else
 	$_POST['call_status'] = $_POST['call_status'] == 'closed' ? 'closed' : $max_history['call_status'];
 	$_POST['call_priority'] = $max_history['call_priority'];
+	$_POST['call_state'] = $max_history['call_state'];
 	$_POST['location_building_id'] = 0;
 	$_POST['location_building_room_number'] = '';
 	$_POST['location_call_logged_from'] = 'support';
