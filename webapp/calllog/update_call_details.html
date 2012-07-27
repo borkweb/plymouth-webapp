@@ -12,6 +12,7 @@ $date_assigned = $_POST['date_assigned'];
 $time_assigned = $_POST['time_assigned'];
 $call_priority = $_POST['call_priority'];
 $call_status = $_POST['call_status'];
+$call_state = $_POST['call_state'];
 $its_assigned_group = $_POST['its_assigned_group'];
 $location_building_id = $_POST['location_building_id'];
 $location_building_room_number = $_POST['location_building_room_number'];
@@ -121,7 +122,7 @@ if($call_log_username != "" || $caller_user_name != ""){
 	);
 
 	if( $db->Execute( $query, $args ) ){
-		$call_info = array('tlc_assigned_to'=>$tlc_assigned_to, 'updated_by'=>$call_log_username, 'comments'=>$comments, 'date_assigned'=>'NOW()', 'time_assigned'=>'NOW()', 'call_priority'=>$call_priority, 'call_status'=>$call_status, 'call_id'=>$call_id, 'current'=>1, 'its_assigned_group'=>$its_assigned_group);
+		$call_info = array('tlc_assigned_to'=>$tlc_assigned_to, 'updated_by'=>$call_log_username, 'comments'=>$comments, 'date_assigned'=>'NOW()', 'time_assigned'=>'NOW()', 'call_priority'=>$call_priority, 'call_status'=>$call_status, 'call_state'=>$call_state, 'call_id'=>$call_id, 'current'=>1, 'its_assigned_group'=>$its_assigned_group);
 		$call_info['caller_wp_id'] = $_POST['caller_wp_id'];
 		$_POST['date_assigned'] = date('Y-m-d');
 		$_POST['time_assigned'] = date('H:i:s');

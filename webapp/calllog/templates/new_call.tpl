@@ -78,6 +78,7 @@
 		<div id="keywordsList"></div>
 		
 		<input type="hidden" id="call_status" name="call_status" value="{if isset($call_status)}{$call_status}{else}open{/if}" />
+
 		{col size=4 class="alpha omega meta"}
 			<label for="call_priority" class="label">Priority:</label>
 				<select name="call_priority" id="call_priority">
@@ -85,7 +86,14 @@
 			</select>
 			
 			<br clear="left"/>
-			
+
+			<label for="call_state" class="label">State:</label>
+				<select name="call_state" id="call_state">
+				{$call_state_select_list}
+			</select>
+
+			<br clear="left"/>
+
 			<label for="call_location" class="label">Location:</label>
 			<select name="call_location">
 				<option value="n/a">No Building Selected</option>

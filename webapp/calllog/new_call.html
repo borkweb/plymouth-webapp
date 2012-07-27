@@ -186,7 +186,7 @@ $tpl->assign('restore_request_func', $GLOBALS['restore']->restoreRequestFunc());
 if($resnet_call == 'resnet'){
 	$tpl->assign('is_resnet', 'checked');
 }
-PSU::dbug($call_priority);
+
 $tpl->assign('call_status', $call_status);
 $tpl->assign('call_priority_select_list', PSUHTML::getSelectOptions($call_priority_options, $call_priority));
 $tpl->assign('call_state_select_list', PSUHTML::getSelectOptions($call_state_options, $call_state));

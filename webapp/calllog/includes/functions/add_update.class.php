@@ -55,6 +55,7 @@ class NewCall{
 			$call_history['time_assigned'] = 'NOW()';
 			$call_history['call_status'] = $new_call_form_vars['call_status']; //required
 			$call_history['call_priority'] = $new_call_form_vars['call_priority']; //required
+			$call_history['call_state'] = $new_call_form_vars['call_state']; //required
 			$call_history['current'] = 1;
 			
 			$status = $this->addToCallHistory($call_history);

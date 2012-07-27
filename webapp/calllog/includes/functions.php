@@ -542,7 +542,7 @@ function checkEmployee($user = null){
 	}//end if
 // TODO: change to ape perms
 	$EMPLOYEE_INFO = $db->GetRow("SELECT * FROM call_log_employee WHERE (user_name=? AND status='active')", array($user));
-	PSU::dbug($EMPLOYEE_INFO);	
+
 	return count($EMPLOYEE_INFO);
 }
 
