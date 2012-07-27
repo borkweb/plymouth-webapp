@@ -319,7 +319,7 @@ abstract class MyPortalObject extends MyMagicGetters {
 		);
 
 		// don't use targeting if the global identifier is 0 (editing the default layout)
-		if( $GLOBALS['identifier'] ) {
+		if( ! $GLOBALS['identifier'] ) {
 			self::use_targeting( false );
 		}//end if
 	
