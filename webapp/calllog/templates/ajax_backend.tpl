@@ -43,12 +43,6 @@
 	</div>
 	<!-- END: call_history -->
 
-	<!-- BEGIN: highlight_call_history -->
-	<script type="text/javascript">
-	new Effect.Highlight('CallHistoryRow1', {startcolor:'#D19275', endcolor:'#FFEFD5', restorecolor:'#FFEFD5'});
-	</script>
-	<!-- END: highlight_call_history -->
-
 	<!-- BEGIN: restore_request -->
 		<!-- BEGIN: restore_request_error -->
 		<script type="text/javascript">
@@ -70,22 +64,5 @@
 	Your message has been sent<br/>
 	<a href="javascript: sendHelpDeskMail('{caller_user_name}@{caller_class}plymouth.edu',0,'reset');">Back to Caller Information</a>
 	<!-- END: queueEmailMessage -->
-
-	<!-- BEGIN: group_names -->
-	{group_names}
-	<!-- END: group_names -->
-
-	<!-- BEGIN: assign_reorder -->
-		<!-- BEGIN: call_assignment_history -->
-		<ul>
-			<li><label class="inline">Updated by:</label> {call_history.updated_by} on {call_history.date_assigned} @ {call_history.time_assigned}</li>
-			<li><label class="inline">Call Status:</label> {call_history.call_status}</li>
-			<li><label class="inline">Call Priority:</label> {call_history.call_priority}</li>
-			<li><label class="inline">Assigned To:</label> {call_history.tlc_assigned_to}</li>
-			<li><label class="inline">Details:</label> {call_history.comments}</li>
-		</ul>
-		<hr style="width: 75%;" align="left">
-		<!-- END: call_assignment_history -->
-	<!-- END: assign_reorder -->
 
 <!-- END: main -->
