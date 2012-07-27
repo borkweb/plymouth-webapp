@@ -7,7 +7,6 @@ $fun_crew = array(
 	'sbudro',
 	'stirrell',
 	'ted',
-	'vkhauri',
 	'tlferm',
 	'nrporter'
 );
