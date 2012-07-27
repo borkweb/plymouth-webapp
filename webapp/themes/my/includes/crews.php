@@ -4,20 +4,16 @@ $fun_crew = array(
 	'cmkenny',
 	'djbramer',
 	'jgraton',
-	'max',
-	'mtbatchelder',
 	'sbudro',
 	'stirrell',
 	'ted',
-	'vkhauri',
-	'zbtirrell',
-	'ambackstrom'
+	'tlferm',
+	'nrporter'
 );
 
 $sketchy_crew = array(
 	'a_bake',
 	'djbramer',
-	'mtbatchelder',
-	'zbtirrell'
+	'tlferm'
 );
 ?>
