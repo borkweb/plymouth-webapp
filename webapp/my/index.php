@@ -59,8 +59,6 @@ if( isset($_GET['ticket']) ) {
 /*******************[End Authentication Stuff]*****************/
 $GLOBALS['identifier'] = PSU::is_wpid($_SESSION['username']) ? $_SESSION['username'] : $_SESSION['wp_id'];
 
-MyController::delegate();
-
 // session namespace for portal variables
 if( !isset($_SESSION['portal']) ) {
 	$_SESSION['portal'] = array();
@@ -70,3 +68,9 @@ if( !isset($_SESSION['portal']) ) {
 if( $_SESSION['generic_user_type'] == 'portalord' ) {
 	$_SESSION['messages'][] = 'You are currently logged in as PortaLord. <a href="' . $GLOBALS['BASE_URL'] . '/admin/unset-type">Resume your session</a>';
 }
+
+if( ! $GLOBALS['identifier'] ) {
+	$_SESSION['errors'][] = 'You are logged in as the default user! ANYTHING you do will be done for EVERY DEFAULT LAYOUT!';
+}//end if
+
+MyController::delegate();

@@ -202,21 +202,23 @@ class MyController_admin extends MyController
 		// is this user too privileged to be simulated?
 		//
 
-		if( PSU::get('idmobject')->hasAttribute($pidm, 'role', 'myplymouth') ) {
+		$p = new PSUPerson($wp_id);
+
+		if( PSU::get('idmobject')->hasAttribute($person->pidm, 'role', 'myplymouth') ) {
 			$_SESSION['errors'][] = "You cannot login as a portal administrator.";
 			PSU::redirect( $GLOBALS['BASE_URL'] . '/admin' );
 		}
 
-		$p = new PSUPerson($pidm);
-		
 		$session_stashed = $_SESSION;
-		$_SESSION = array();
 
-		$_SESSION['username'] = $p->username;
+		$_SESSION['wp_id'] = $wp_id;
+		// if editing the default layout (i.e. $wp_id = 0), make sure the username and pidm are both 0
+		$_SESSION['username'] = $p->username ?: 0;
+		$_SESSION['pidm'] = $p->pidm ?: 0;
 		$_SESSION['portal']['session_stashed'] = $session_stashed;
 
 		$_SESSION['messages'][] = "You are now logged in as {$wp_id}.";
-		
+
 		PSU::redirect( $GLOBALS['BASE_URL'] );
 	}//end set_layout
 
