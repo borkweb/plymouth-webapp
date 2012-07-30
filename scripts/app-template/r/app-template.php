@@ -31,22 +31,17 @@ respond( function( $request, $response, $app ) {
 	$app->tpl = new \PSU\Template;
 	$app->user = PSUPerson::get( $_SESSION['wp_id'] ); 
 
-	$app->config = new \PSU\Config;
-	$app->config->load();
-
-    $app->breadcrumbs = new \PSU\Template\Breadcrumbs;
-    $app->breadcrumbs->push( new \PSU\Template\Breadcrumb( 'Home', $app->config->get( '%CUSTDIR', 'base_url' ) . '/' ) );
+	/**
+	 * Not all apps need this cool breadcrumb
+	 * functionality, so delete it if you aren't going to 
+	 * use it. If you are, then uncomment it.
+	 *
+	 * $app->breadcrumbs = new \PSU\Template\Breadcrumbs;
+	 * $app->breadcrumbs->push( new \PSU\Template\Breadcrumb( 'Home', $app->config->get( '%CUSTDIR', 'base_url' ) . '/' ) );
+	 */
 
 	$app->tpl->assign( 'user', $app->user );
 	$app->tpl->assign( 'back_url', $_SERVER['HTTP_REFERER'] );
-
-	// setup search default pref
-	$wpid = $_SESSION['wp_id'];
-	$meta = PSUMeta::get( '%CUSTDIR%', "search:$wpid:gs" );
-
-	if( $meta ) {
-		$app->search_default_gs = $meta->value;
-	}
 });
 
 //
@@ -55,10 +50,3 @@ respond( function( $request, $response, $app ) {
 respond( 'GET', '/', function( $request, $response, $app ) {
 	$app->tpl->display( 'index.tpl' );
 });
-/**
- * Customize and uncomment lines below to populate the 
- * sub-routes within your application.
- *
- * Example:
- * with( "/admin", __DIR__ . "/%CUSTOM%/admin.php" );
- */

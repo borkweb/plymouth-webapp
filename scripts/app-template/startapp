@@ -30,8 +30,6 @@ mkdir $BASEDIR/app/$APPDIR
 mkdir $BASEDIR/routes/app/$APPDIR
 rsync -av --cvs-exclude --ignore-existing $BASEDIR/scripts/app-template/a/ $BASEDIR/app/$APPDIR &>/dev/null
 rsync -av --cvs-exclude --ignore-existing $BASEDIR/scripts/app-template/r/ $BASEDIR/routes/app/ &>/dev/null
-touch $BASEDIR/app/$APPDIR/js/$APPDIR.js
-touch $BASEDIR/app/$APPDIR/css/$APPDIR.css
 mv $BASEDIR/routes/app/app-template.php $BASEDIR/routes/app/$APPDIR.php
 
 #
@@ -48,4 +46,4 @@ echo "Done! Application layout:"
 echo
 
 find $BASEDIR/app/$APPDIR -mindepth 1
-find $BASEDIR/routes/app/ -mindepth 1
+find $BASEDIR/routes/app/ -mindepth 1 | grep $APPDIR
