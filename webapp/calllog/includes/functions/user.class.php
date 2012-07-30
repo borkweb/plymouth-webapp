@@ -1,5 +1,9 @@
 <?php
 
+if( !isset($go) ) {
+	$GLOBALS['go'] = new go();
+}
+
 class User
 {
 	var $db;
@@ -270,14 +274,15 @@ class User
 		return null;
 	}//end getCallerPhone
 
-	function getHighPriorityGroups( $all = false )
+	public static function getHighPriorityGroups( $all = false, $who = false )
 	{
 		$groups = display_all_groups();
 		
 		$high_priorities = array();
 		foreach( $groups as $group_id => $group ) {
-		
-			$high = $GLOBALS['go']->getUserMeta( $_SESSION['wp_id'], 'calllog.high_priority_'.$group_id );
+			
+			$p = new PSUPerson( $who ?: $_SESSION['wp_id'] );
+			$high = $GLOBALS['go']->getUserMeta( $p->wp_id, 'calllog.high_priority_'.$group_id );
 			
 			if( $all ) {
 				$high_priorities[$group_id] = $high;

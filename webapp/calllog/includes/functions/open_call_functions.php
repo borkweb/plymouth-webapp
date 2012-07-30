@@ -1,59 +1,79 @@
 <?php
 
-function returnOpenCalls($option, $caller_user_name='', $sort_by='', $what='*' ){
-	global $user;
-	$result = array(); 
+function returnOpenCalls( $which, $caller_user_name='', $sort_by='', $what='*' ) {
+	// zbt: 7/30/12 - this function is here for backwards compatibility
+	return getOpenCalls( array(
+								'which' => $which,
+								'who' => $caller_user_name ?: $_SESSION['username'],
+								'what' => $what,
+								'sort_by' => $sort_by,
+							) 
+						);
+}
+
+function getOpenCalls( $options = array() ) {
 	
-	/*
-	NOTE:
-		$options can equal the following three things:
-		'none'		 - No options, returns all open calls.
-		
-		'unassigned' - Unassigned calls, calls that no one has been assigned to.
-		'm_rondea'	 - User name, returns all open calls for the person with the user name m_rondea,
-					   I don't know who m_rondea is, but I bet he's super cool.
+	/* Options include the following:
+		which: 
+			all - all open calls
+			mygroup - all open calls in groups that option['calllog_username'] is in
+			unassigned - calls that are currently not assigned to a user or group
+			caller - open calls for $option['caller_user_name']
+			today - calls opened today
+			my_opened - calls that I opened
+			my - calls assigned to me, or opted into seeing via high priority groups setting
+		who: 
+			should contain the the username of the person you are searching on (could be caller or calllog_user)
+		what: 
+			a comma separated list of fields to fetch, defaults to * if not provided
+		sort_by:
+			call_date - when the call was created
+			call_updated - when the call was last updated
 	*/
 	
-	if ($option == 'mygroup') {
-		$query = "SELECT $what FROM call_log, call_history WHERE call_log.call_id = call_history.call_id";
-	}
-	elseif ($option == 'all') {
-		$query = "SELECT $what FROM call_log LEFT JOIN call_history ON call_log.call_id = call_history.call_id LEFT JOIN itsgroups ON its_assigned_group = itsgroups.itsgroupid WHERE call_history.call_status = 'open' AND (hide_in_all_calls != '1' OR hide_in_all_calls IS NULL)";
-	}
-	else {
-		$query = "SELECT $what FROM call_log, call_history WHERE call_log.call_id = call_history.call_id AND call_history.call_status='open'";
-	}
-
-	$person = new PSUPerson( $caller_user_name );
-	$pidm = $person->pidm;
-	$wp_id = $person->wp_id;
+	$options['what'] = $options['what'] ?: '*';
 	
-	switch($option) {
+	$query = "SELECT {$options['what']} FROM call_log, call_history WHERE call_log.call_id = call_history.call_id AND call_history.call_status='open'";
+
+
+	switch($options['which']) {
 		case '':
-			break;
 		case 'none':
-			break;
 		case 'all':
+			$query = "SELECT {$options['what']} 
+						FROM call_log 
+							LEFT JOIN call_history ON call_log.call_id = call_history.call_id 
+							LEFT JOIN itsgroups ON its_assigned_group = itsgroups.itsgroupid 
+						WHERE call_history.call_status = 'open' 
+							AND (
+								hide_in_all_calls != '1' 
+								OR hide_in_all_calls IS NULL
+								)";
+			break;
+		case 'mygroup':
+			$query = "SELECT {$options['what']} 
+						FROM call_log, call_history 
+						WHERE call_log.call_id = call_history.call_id 
+							AND call_history.its_assigned_group='{$options['who']}' 
+							AND call_history.call_status='open'";
 			break;
 		case 'unassigned':
 			$query .= " AND tlc_assigned_to='unassigned' AND (its_assigned_group='0' || its_assigned_group='unassigned' || its_assigned_group='')";
 			break;
 		case 'caller':
-			$query .= " AND (call_log.wp_id = '$wp_id' OR call_log.pidm = $pidm OR call_log.caller_username='$caller_user_name')";
+			$person = new PSUPerson( $options['who'] );
+			$query .= " AND (call_log.wp_id = '{$person->wp_id}' OR call_log.pidm = {$person->pidm} OR call_log.caller_username='{$options['who']}')";
 			break;
 		case 'today':
 			$query .= " AND call_log.call_date=NOW()";
 			break;
-		case 'mygroup':
-			$query .= " AND call_history.its_assigned_group='$caller_user_name' AND call_history.call_status='open'";
-			break;
 		case 'my_opened':
-			$query .= " AND call_log.calllog_username='{$_SESSION['username']}' AND call_history.call_status='open'";
+			$query .= " AND call_log.calllog_username='{$options['who']}' AND call_history.call_status='open'";
 			break;
 		case 'my':
-			$query .= " AND ( call_history.tlc_assigned_to='{$_SESSION['username']}'";
+			$query .= " AND ( call_history.tlc_assigned_to='{$options['who']}'";
 			
-			$high_priority_groups = implode( ',', $user->getHighPriorityGroups() );
+			$high_priority_groups = implode( ',', User::getHighPriorityGroups( false, $options['who'] ) );
 			if( $high_priority_groups ) {
 				$query .= " OR ( call_history.its_assigned_group IN ($high_priority_groups) AND call_history.call_priority = 'high' )";
 			}
@@ -61,21 +81,21 @@ function returnOpenCalls($option, $caller_user_name='', $sort_by='', $what='*' )
 			$query .= " )";
 			break;
 		default:
-			$query .= " AND call_history.tlc_assigned_to='{$_SESSION['username']}'";
+			$query .= " AND call_history.tlc_assigned_to='{$options['who']}'";
 			break;
 
 	}// end switch
 
 	$query .= " AND call_history.current='1'";
 	
-	if( !$sort_by || $sort_by == 'call_date' ) {
-		$sort_by = 'call_date, call_time';
+	if( !$options['sort_by'] || $options['sort_by'] == 'call_date' ) {
+		$options['sort_by'] = 'call_date, call_time';
 	} 
-	elseif( $sort_by == 'call_updated' ) {
-		$sort_by = 'date_assigned, time_assigned';
+	elseif( $options['sort_by'] == 'call_updated' ) {
+		$options['sort_by'] = 'date_assigned, time_assigned';
 	}
 
-	$query .= " ORDER BY $sort_by ASC";
+	$query .= " ORDER BY {$options['sort_by']} ASC";
 
 	return PSU::db('calllog')->GetAll($query);
 }// end function returnOpenCalls
