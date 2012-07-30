@@ -1,0 +1,51 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+	echo "Usage: startapp AppName app-dir"
+	exit 1
+fi
+
+if [ -z "$2" ]; then
+	echo "Usage: startapp AppName app-dir"
+	exit 1
+fi
+
+files=$(find $(dirname $0)/../../app/$2 -mindepth 1)
+
+if [ ! -z "$files" ]; then
+	echo "refusing to start app: directory is not empty" 1>&2
+	exit 1
+fi
+
+#
+# good to go; copy boilerplate
+#
+
+APPNAME=$1
+APPDIR=$2
+BASEDIR=$(dirname $0)/../..
+
+echo "Copying base files..."
+mkdir $BASEDIR/app/$APPDIR
+mkdir $BASEDIR/routes/app/$APPDIR
+rsync -av --cvs-exclude --ignore-existing $BASEDIR/scripts/app-template/a/ $BASEDIR/app/$APPDIR &>/dev/null
+rsync -av --cvs-exclude --ignore-existing $BASEDIR/scripts/app-template/r/ $BASEDIR/routes/app/ &>/dev/null
+touch $BASEDIR/app/$APPDIR/js/$APPDIR.js
+touch $BASEDIR/app/$APPDIR/css/$APPDIR.css
+mv $BASEDIR/routes/app/app-template.php $BASEDIR/routes/app/$APPDIR.php
+
+#
+# update filenames and contents with app name
+#
+
+echo "Applying custom application name..."
+find $BASEDIR/app/$APPDIR -type f -print0 | xargs -0 sed -i "s/%CUSTOM%/$APPNAME/"
+find $BASEDIR/routes/app/ -type f -print0 | xargs -0 sed -i "s/%CUSTOM%/$APPNAME/"
+find $BASEDIR/app/$APPDIR -type f -print0 | xargs -0 sed -i "s/%CUSTDIR%/$APPDIR/"
+find $BASEDIR/routes/app/ -type f -print0 | xargs -0 sed -i "s/%CUSTDIR%/$APPDIR/"
+
+echo "Done! Application layout:"
+echo
+
+find $BASEDIR/app/$APPDIR -mindepth 1
+find $BASEDIR/routes/app/ -mindepth 1
