@@ -27,7 +27,7 @@ $tpl->assign( 'search_setting', $search_setting );
 $groups = display_all_groups();
 $tpl->assign( 'groups', $groups );
 
-$high_priorities = $user->getHighPriorityGroups( true );
+$high_priorities = User::getHighPriorityGroups( true );
 $tpl->assign( 'high_priorities', $high_priorities );
 
 $my_groups = display_my_groups();
