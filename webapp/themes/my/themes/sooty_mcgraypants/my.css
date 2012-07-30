@@ -17,16 +17,26 @@ html, body{
 	border-bottom: none;
 }
 
+.myplymouth #webapp-head {
+	height: 135px;
+}
+
 #webapp-head .container{
 	background-image: none;
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
+.myplymouth #webapp-head .webapp-head{height: 135px;padding-top:0;}
 
 #webapp-head .webapp-head #search,
 .webapp-head h1{
 	color: #000;
+}
+
+.myplymouth #webapp-head .webapp-head #search,
+.myplymouth .webapp-head h1{
+	margin-top: 50px;
 }
 
 .webapp-head h1{
@@ -38,6 +48,7 @@ html, body{
 .webapp-head h1.myplymouth_logo{
 	background-image: url('http://s1.plymouth.edu/webapp/themes/my/themes/sooty_mcgraypants/images/my_logo.png');
 	background-repeat: none;
+	height: 112px;
 	width: 443px;
 	margin-top: 10px;
 	margin-left: 0px;
