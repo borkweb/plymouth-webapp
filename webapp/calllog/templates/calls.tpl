@@ -39,9 +39,9 @@
 							</div>
 						</td>
 						<td>
-							<div class="priority-status status-{$row.call_priority}">{$row.call_priority}{$row.feelings_face}</div>
+							<div class="priority-status status-{$row.call_priority}">{$row.call_priority|capitalize}{$row.feelings_face}</div>
 							<br clear="left">
-							{if $row.call_state}<div class="state-status state-{$row.call_state}">{$row.call_state}</div>{/if}
+							{if $row.call_state}<div class="state-status state-{$row.call_state}">{$row.call_state|capitalize}</div>{/if}
 						</td>
 						<td class="assignees">
 							<ul class="unstyled">
