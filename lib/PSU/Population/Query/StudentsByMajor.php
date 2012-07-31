@@ -7,6 +7,7 @@ class PSU_Population_Query_StudentsByMajor extends PSU_Population_Query {
 	public function query( $args = array() ) {
 
 		$defaults = array(
+			'identifier' => 'sourced_id',
 			'levl_code' => 'UG',
 			'majr_code' => 'NONE',
 			'termcode' => \PSUStudent::getCurrentTerm('UG'),
@@ -27,14 +28,15 @@ class PSU_Population_Query_StudentsByMajor extends PSU_Population_Query {
 			$majr_where = "= '".$args['majr_code']."'";
 		}//end if/else
 
-		$sql = "SELECT DISTINCT gobsrid_sourced_id
-				FROM v_curriculum_learner, 
-					 gobsrid 
-				WHERE pidm = gobsrid_pidm
-				  AND levl_code = :levl_code
-				  AND majr_code ".$majr_where." 
-				  AND lfst_code = 'MAJOR'
-				  AND catalog_term >= :termcode
+		$sql = "
+			SELECT DISTINCT ".$args['identifier']."
+			  FROM v_curriculum_learner
+			  JOIN psu_identity.person_identifiers
+				ON pidm = pid
+			 WHERE levl_code = :levl_code
+			   AND majr_code ".$majr_where." 
+			   AND lfst_code = 'MAJOR'
+			   AND catalog_term >= :termcode
 		";
 
 		$matches = PSU::db('banner')->GetCol( $sql, $args );
