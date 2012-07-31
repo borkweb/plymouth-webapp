@@ -145,11 +145,9 @@ class NewCall{
 
 		$keys = trim( $keys, ',');
 		$values = trim( $values, ',');
-		PSU::dbug($values);
 		$query = "INSERT INTO call_history ($keys) VALUES ($values)";
 
 		if($this->db->Execute($query, $call_info)){
-			die;
 			return true;
 		} else {
 			$_SESSION['user_message'] = 'Error inserting new call into call_history table in addToCallHistory().';
