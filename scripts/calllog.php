@@ -46,7 +46,7 @@ foreach( $users as $person ) {
 			$tpl->assign( 'user', $person );
 			
 			$html = $tpl->fetch( 'email.calls.tpl' );
-			$text = 'This email is optimized for HTML.  View your open calls here: ' . $GLOBALS['CALLLOG_WEB';
+			$text = 'This email is optimized for HTML.  View your open calls here: ' . $GLOBALS['CALLLOG_WEB'];
 	
 			$p = new PSUPerson($person['user_name']);
 			
