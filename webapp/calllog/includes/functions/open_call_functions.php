@@ -33,7 +33,11 @@ function getOpenCalls( $options = array() ) {
 	
 	$options['what'] = $options['what'] ?: '*';
 	
-	$query = "SELECT {$options['what']} FROM call_log, call_history WHERE call_log.call_id = call_history.call_id AND call_history.call_status='open'";
+	$query = "SELECT {$options['what']} 
+				FROM call_log, 
+					 call_history 
+				WHERE call_log.call_id = call_history.call_id 
+					AND call_history.call_status='open'";
 
 
 	switch($options['which']) {
