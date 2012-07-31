@@ -1,5 +1,9 @@
 <?php
 
+if( !isset($go) ) {
+	$GLOBALS['go'] = new go();
+}
+
 class User
 {
 	var $db;
@@ -270,14 +274,15 @@ class User
 		return null;
 	}//end getCallerPhone
 
-	function getHighPriorityGroups( $all = false )
+	public static function getHighPriorityGroups( $all = false, $who = false )
 	{
 		$groups = display_all_groups();
 		
 		$high_priorities = array();
 		foreach( $groups as $group_id => $group ) {
-		
-			$high = $GLOBALS['go']->getUserMeta( $_SESSION['wp_id'], 'calllog.high_priority_'.$group_id );
+			
+			$p = new PSUPerson( $who ?: $_SESSION['wp_id'] );
+			$high = $GLOBALS['go']->getUserMeta( $p->wp_id, 'calllog.high_priority_'.$group_id );
 			
 			if( $all ) {
 				$high_priorities[$group_id] = $high;
@@ -321,6 +326,25 @@ class User
 		return $this->db->GetOne("SELECT search_type FROM call_log_employee WHERE user_name = '$username'");
 	}//end getSearchSetting
 
+	
+	function getReminderSetting( $who = false ) {
+		// zbt: initially expeced values will be "yes" and "no"
+		// true and false may seem more obvious, but greater flexibility in notifications is inevitable
+		// building it as a string now will make that easier later
+	
+		$p = new PSUPerson( $who ?: $_SESSION['wp_id'] );
+		$reminder_setting = $GLOBALS['go']->getUserMeta( $p->wp_id, 'calllog.reminder' );
+		
+		return $reminder_setting ?: 'no';
+	} // end function
+
+
+	function setReminderSetting( $reminder_setting, $who = false ) {	
+		$p = new PSUPerson( $who ?: $_SESSION['wp_id'] );
+		$GLOBALS['go']->saveUserMeta( $_SESSION['wp_id'], 'calllog.reminder', $reminder_setting );
+	} // end function
+		
+		
 	function isFakeUser($username)
 	{
 		$fake_users = array('generic', 'clusteradm', 'kiosk', 'helpdesk');
@@ -335,7 +359,7 @@ class User
 			$this->db->Execute("UPDATE call_log_employee SET search_type = '$setting' WHERE user_name = '{$_SESSION['username']}'");
 		}//end if
 		
-	}//end getSearchSetting
+	}//end function
 
 	function userCallHistory($caller)
 	{
