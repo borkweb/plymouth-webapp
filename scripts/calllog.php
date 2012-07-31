@@ -25,8 +25,7 @@ $GLOBALS['CALLLOG_WEB'] = $GLOBALS['BASE_URL'] . '/calls/my/';
 
 $tpl = new PSU\Template;
 
-//$users = getTLCUsers( 'active' );
-$users = array( array( 'user_name' => 'zbtirrell' ) );
+$users = getTLCUsers( 'active' );	
 
 foreach( $users as $person ) {
 
