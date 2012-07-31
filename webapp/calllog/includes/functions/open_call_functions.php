@@ -134,7 +134,7 @@ function getOpenCalls( $options = array() ) {
 			$call['time_assigned'] = date( 'g:i a', strtotime( $assign_datetime ) );
 		}//end if
 
-		$call['call_activity_diff'] = \PSU::date_diff( $time, strtotime( $assign_datetime ), 'simple' );
+		$call['call_activity_diff'] = \PSU::date_diff( time(), strtotime( $assign_datetime ), 'simple' );
 
 		$call['call_summary'] = substr( $call['comments'], 0, 100) . ( ( strlen( $call['comments'] ) > 100 ) ? '...' : '' );
 
