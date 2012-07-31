@@ -141,7 +141,7 @@ function getOpenCalls( $options = array() ) {
 		$call['show_comments'] = str_replace( "\"", "&#34", addslashes( substr( strip_tags( str_replace( array("\n","\t","\r"), '', $call['comments'] ) ),0, 30 ) ) );
 
 		$call_datetime = $call['call_date'] . ' ' . $call['call_time'];
-		$call_open_time[$call['call_id']] = time() - strtotime( $call_datetime );
+		$call['call_open_time'] = time() - strtotime( $call_datetime );
 		$call['call_date'] = date('M j, Y', strtotime( $call_datetime ) );
 		$call['call_time'] = date('g:i a', strtotime( $call_datetime ) );
 		if( $call['feelings_face'] ) {
@@ -149,7 +149,7 @@ function getOpenCalls( $options = array() ) {
 		}//end if
 
 		// If the time that the call has been open (call_open_time) is greater than one week (604800 seconds)
-		if ( $call_open_time[$call['call_id']] > 604800 ) {
+		if ( $call['call_open_time'] > 604800 ) {
 			// Set a call age status variable and mark it as old
 			$call['call_age_status'] = 'old';
 		}

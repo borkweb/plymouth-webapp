@@ -58,18 +58,14 @@ if( $group ) {
 }
 
 $calls = returnOpenCalls($option, $suboption, $_GET['sort_by']);
-$i = 0;
-if(!empty($calls) && is_array($calls)){
-	$call_open_time = array();
+if( !empty($calls) && is_array($calls) ){
 
-	if(count($call_open_time)) {
-		$average = array_sum( $call_open_time ) / count( $call_open_time );
-	} 
-	else {
-		$average = 0;
-	}//end else
-
-	$average = PSU::seconds_to_time($average);
+	$total_open_time = 0;
+	foreach( $calls as $call ) {
+		$total_open_time += $call['call_open_time'];
+	}
+	
+	$average = PSU::seconds_to_time( $total_open_time / count( $calls ) );
 	$average_string = '';
 
 	if($average['years']) $average_string .= $average['years'].' years ';
