@@ -96,8 +96,87 @@ function getOpenCalls( $options = array() ) {
 	}
 
 	$query .= " ORDER BY {$options['sort_by']} ASC";
+	
+	$calls =  PSU::db('calllog')->GetAll($query);
+	
+	foreach( $calls as &$call ) {
+		// needed for the template, but a bit redundant
+		$call['call_title'] = $call['title'];
+			
+		// determine an assigned_to that combines person and queue/group
+		$groupArray = getGroupInfo( $call['its_assigned_group'] );
+		if ( ( $call['its_assigned_group'] != 0 ) || ( $groupArray[1] != '' ) ) {
+			if($call['tlc_assigned_to'] != 'unassigned'){
+				$call['assigned_to']['group'] = $groupArray[1];
+				$call['assigned_to'][] = $call['tlc_assigned_to'];
+			}
+			else{
+				$call['assigned_to']['group'] = $groupArray[1];
+			}
+		}
+		elseif( $call['tlc_assigned_to'] != '' ) {
+			$call['assigned_to'][] = $call['tlc_assigned_to'];
+		}
+		else{
+			$call['assigned_to'][] = 'None';
+		}
 
-	return PSU::db('calllog')->GetAll($query);
+		$call['building_name'] = getBuildingName( $call['location_building_id'] );
+		
+		if($call['date_assigned']) {
+			$assign_datetime = $call['date_assigned'].' '.$call['time_assigned'];
+			$call['activity_datetime'] = time() - strtotime( $assign_datetime );
+			$call['date_assigned'] = date( 'M j, Y', strtotime( $assign_datetime ) );
+			$call['time_assigned'] = date( 'g:i a', strtotime( $assign_datetime ) );
+		}//end if
+
+		$call['call_activity_diff'] = \PSU::date_diff( $time, strtotime( $assign_datetime ), 'simple' );
+
+		$call['call_summary'] = substr( $call['comments'], 0, 100) . ( ( strlen( $call['comments'] ) > 100 ) ? '...' : '' );
+
+		$call['show_comments'] = str_replace( "\"", "&#34", addslashes( substr( strip_tags( str_replace( array("\n","\t","\r"), '', $call['comments'] ) ),0, 30 ) ) );
+
+		$call_datetime = $call['call_date'] . ' ' . $call['call_time'];
+		$call_open_time[$call['call_id']] = time() - strtotime( $call_datetime );
+		$call['call_date'] = date('M j, Y', strtotime( $call_datetime ) );
+		$call['call_time'] = date('g:i a', strtotime( $call_datetime ) );
+		if( $call['feelings_face'] ) {
+			$call['feelings_face'] = '<br/><img src="/webapp/feedback/templates/images/feedback-' . $call['feelings_face'] . '.png" class="feedback-face" title="' . $call['feelings'] . '"/>';
+		}//end if
+
+		// If the time that the call has been open (call_open_time) is greater than one week (604800 seconds)
+		if ( $call_open_time[$call['call_id']] > 604800 ) {
+			// Set a call age status variable and mark it as old
+			$call['call_age_status'] = 'old';
+		}
+		else {
+			// Otherwise, mark it as normal
+			$call['call_age_status'] = 'normal';
+		}
+
+		// If the time since the call has been updated (activity_datetime) is greater than one week (604800 seconds)
+		if ( $call['activity_datetime'] > 604800 ) {
+			// Set an activity  age status variable and mark it as old
+			$call['activity_age_status'] = 'old';
+		}
+		else {
+			// Otherwise, mark it as normal
+			$call['activity_age_status'] = 'normal';
+		}
+		
+		$identifier = PSU::nvl( $call['caller_username'], $call['wp_id'], $call['pidm'] );
+		//grabs the person data for the call
+		$person = (array) $GLOBALS['user']->getCallerData( $identifier );
+		//overrides the username that was saved in the call with the username that was found from PSUPerson
+		//this is to prevent ~500 calls displaying improper information
+		//that were created with wp_ids instead of usernames as the username identifier
+		$call['caller_username'] = $person['username'] ?: $person['identifier'];
+		
+		//merges the person array and single call(row) array
+		$call = array_merge( $call, $person );
+	} // end foreach
+	
+	return $calls;
 }// end function returnOpenCalls
 
 
