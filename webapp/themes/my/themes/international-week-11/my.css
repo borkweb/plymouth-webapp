@@ -2,6 +2,12 @@ html, body {
 	background: #000 url(themes/international-week-11/images/bg.jpg) top center no-repeat;
 }
 
+#page{
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
 #webapp-apre-body,
 #webapp-avant-body,
 #webapp-body,
@@ -51,6 +57,14 @@ html, body {
 	height: 255px;
 	margin-top: 0;
 	text-indent: -999999px;
+}
+
+.fluid #webapp-nav,
+#webapp-nav{
+	background-color: transparent;
+	background-image: none;
+	background-repeat: repeat;
+	height: auto;
 }
 
 #webapp-nav .container {
@@ -108,13 +122,17 @@ html, body {
 	color: #fff;
 }
 
-.webapp-avant-body .message-container {
-	margin-top: 0;
+#webapp-avant-body{
+	background-color: transparent;
+	background-image: none;
+	background-repeat: repeat-x;
+	border-top: none;
 }
+
+.webapp-avant-body .message-container{margin-bottom: 0; margin-top: 0;}
 
 #webapp-avant-body { border-top: none; }
 
-.webapp-avant-body > .inner,
 .webapp-body > .inner {
 	padding-bottom: 20px;
 }

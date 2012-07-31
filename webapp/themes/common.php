@@ -52,7 +52,7 @@ if(isAdmin())
 	$theme_level[] = 'admin';
 }//end if
 
-if($_SESSION['username']=='mtbatchelder')
+if($_SESSION['username']=='nrporter')
 {
 	$theme_level[] = 'extreme';
 	$theme_level[] = 'dev';

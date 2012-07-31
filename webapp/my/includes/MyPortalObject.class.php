@@ -317,6 +317,11 @@ abstract class MyPortalObject extends MyMagicGetters {
 			'tables' => '',
 			'where' => array("(t.type = 'public' AND t.value = 'public')")
 		);
+
+		// don't use targeting if the global identifier is 0 (editing the default layout)
+		if( ! $GLOBALS['identifier'] ) {
+			self::use_targeting( false );
+		}//end if
 	
 		// should we show everything, regardless of targeting?
 		if( ! self::use_targeting() || IDMObject::authZ('role', 'myplymouth') ) {

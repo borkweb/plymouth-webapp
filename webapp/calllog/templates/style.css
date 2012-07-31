@@ -3,10 +3,23 @@
 	text-align:center; 
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
 }
+<<<<<<< HEAD
 
 .status-high{background: #cd0000 !important; color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);}
 .status-medium{background: #ffff7e !important;}
 .status-,.status-normal{background: #eeffee !important;}
+=======
+.status-high{ background: #cd0000 !important; color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+.status-medium{ background: #ffff7e !important; }
+.status-pending{ background: #5da3ff !important; }
+.status-delayed{ background: #c0c0c0 !important; }
+.status-inprogress{ background: #bd78c2 !important; color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+.status-install{ background: #69CF58 !important; }
+.status-upgrade{ background: #e88523 !important; color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+.status-collision{ background: #208ec1 !important; }
+.status-purchase{ background: #a2c1a9 !important; }
+.status-,.status-normal{ background: #eeffee !important; }
+>>>>>>> 2a1f06d33c130ae7755796ca3ff9e851f0d77d89
 
 .state-consult{background: #8e6f43 !important; color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);}
 .state-pending{background: #248ec1 !important;}

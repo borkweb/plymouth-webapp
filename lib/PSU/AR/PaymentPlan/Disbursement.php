@@ -180,11 +180,8 @@ class Disbursement extends \PSU_Banner_DataObject {
 		$success = false;
 
 		$amount = $this->amount;
-		$this->multiplier = 1;
-
-		if( $amount < 0 ) {
-			$this->multiplier = -1;
-		}//end if
+		//Disbursements are all types of payments, so they will always invert the balance.
+		$this->multiplier = -1;
 
 		$this->transaction = new \PSU\AR\Transaction\Receivable( $this->person(), $amount, $this->multiplier );
 		// set the level of the Disbursement (UG/GR).  UG avoids applying to winter and summer terms

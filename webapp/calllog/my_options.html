@@ -9,6 +9,10 @@ if($_GET['action'] == 'search_setting'){
    $GLOBALS['user']->setSearchSetting($setting);
    PSU::redirect('my_options.html');
 }// end if
+elseif($_GET['action'] == 'reminder_setting'){
+   $GLOBALS['user']->setReminderSetting( $_POST['reminder_setting'] );
+   PSU::redirect('my_options.html');
+}// end elseif
 
 $groups = display_all_groups();
 
@@ -24,10 +28,13 @@ if($_POST){
 $search_setting = $GLOBALS['user']->getSearchSetting();
 $tpl->assign( 'search_setting', $search_setting );
 
+$reminder_setting = $GLOBALS['user']->getReminderSetting( $_SESSION['username'] );
+$tpl->assign( 'reminder_setting', $reminder_setting );
+
 $groups = display_all_groups();
 $tpl->assign( 'groups', $groups );
 
-$high_priorities = $user->getHighPriorityGroups( true );
+$high_priorities = User::getHighPriorityGroups( true );
 $tpl->assign( 'high_priorities', $high_priorities );
 
 $my_groups = display_my_groups();

@@ -6,6 +6,12 @@
 	</fieldset>
 	</form>
 	
+	<form name="my_options_reminder" id="my_options_reminder" method="POST" action="?action=reminder_setting">
+	<fieldset>
+		<legend>Daily Open Call Reminder Settings</legend>
+		Receive a daily reminder of Open Calls? <input type="radio" name="reminder_setting" value="yes" {if $reminder_setting == 'yes'}checked="checked"{/if}/> Yes <input type="radio" name="reminder_setting" value="no" {if $reminder_setting == 'no'}checked="checked"{/if}/> No <button type="submit" class="btn">Save</button>
+	</fieldset>
+	</form>
 
 	<form name="my_options_group" id="my_options_group" method="POST">
 	<fieldset>

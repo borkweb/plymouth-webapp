@@ -1,17 +1,5 @@
 var global_caller_username;
 
-function addKeywords(){
-	$('keywords_list').value = $('keywordsList').innerHTML;
-}
-
-function addNewAttachment(){
-	var file = document.createElement("INPUT")
-		file.setAttribute('type','file')
-		file.setAttribute('name','attachment_file_1')
-		file.setAttribute('id','attachment_file_1')
-	attach-div.appendChild(file);
-}
-
 function addRow(id, i, totalGroups){
 	if(i <= totalGroups+1){
 		var j=i;
@@ -46,17 +34,7 @@ function addRow(id, i, totalGroups){
 }
 
 function addUserProfile(){
-	new Ajax.Updater('update_add_message', 'https://'+document.domain+'/webapp/calllog/admin/admin_ajax.html?return=userProfileAction&action=add&calllog_username='+$F('calllog_username')+'&user_id='+$F('user_id')+'&last_name='+$F('last_name')+'&first_name='+$F('first_name')+'&position='+$F('position')+'&work_phone='+$F('work_phone')+'&cell_phone='+$F('cell_phone')+'&home_phone='+$F('home_phone')+'&class_options='+$F('class_options')+'&comments='+$F('comments')+'&user_privileges='+$F('user_privileges')+'&status='+$F('status')+'&ferpa='+$F('ferpa_select'), {onComplete: redirect});
-}
-
-function calllog_toggle(element){
-	var status = $(element+'_div').style.display;
-	if(status == ''||status == 'none'){
-		$(element+'_div').style.display='block';
-	}else{
-		$(element+'_div').style.display='none';
-		symbol_toggle(element+'_symbol');
-	}
+	new Ajax.Updater('update_add_message', 'https://'+document.domain+'/webapp/calllog/admin/admin_ajax.html?return=userProfileAction&action=add&calllog_username='+$F('calllog_username')+'&user_id='+$F('user_id')+'&last_name='+$F('last_name')+'&first_name='+$F('first_name')+'&position='+$F('position')+'&work_phone='+$F('work_phone')+'&cell_phone='+$F('cell_phone')+'&home_phone='+$F('home_phone')+'&class_options='+$F('class_options')+'&comments='+$F('comments')+'&user_privileges='+$F('user_privileges')+'&status='+$F('status')+'&ferpa='+$F('ferpa_select'), {onComplete: redirectManageUsers});
 }
 
 function change_status(id){
@@ -69,20 +47,6 @@ function change_status(id){
 	}
 }
 
-function checkNewCallForm(){
-	var no_details;
-	if($F('problem_details')==""){
-	   no_details = confirm("Call has no problem details, proceed?"); 
-	}
-	if(no_details != false){
-		document.new_call.submit();
-	}
-
-}
-
-function delete_saved_data(caller){
-	new Ajax.Updater('recovered_information', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=deleteSavedData&caller='+caller);
-}
 
 function getEmployeeCalls(employee_calls_username){
 	Element.show('display_calls_loading');
@@ -119,11 +83,8 @@ function newRestoreRequest(){
 	new Ajax.Updater('restore_request_div', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=restoreRequest');
 }
 
-function problem_array(){
-	new Ajax.Updater('knowledgebase_div', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=knowledgebase_data&searchterm='+$('problem_details').value+'&caller_user_name='+$F('caller_user_name'));
-}
 
-function redirect(){
+function redirectManageUsers(){
 	window.location="manage_users.html?action=edittlcuser&user_name="+$F('calllog_username');
 }
 
@@ -193,31 +154,6 @@ function sendHelpDeskMail(call_id, its_group, action){
 	}
 }
 
-function showGroupUsers(){
-	var group_number = $F('its_group_assigned_to');
-	new Ajax.Updater('showGroupUsersDiv', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=showGroupUsers&group_number='+group_number);
-}
-
-function submit_new_call(){
-	Element.hide('open_calls_loading');
-	Element.hide('search_results_loading');
-	Element.show('main-new-call');
-}
-
-function switchPageSearchCalls(which){
-	new Ajax.Updater('main-search-results', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=searchResults&search_string='+$F('search_string')+'&search_type='+$F('search_type')+'&switch='+which, {onComplete: hideLoadingContent});
-}
-
-function symbol_toggle(id){
-	var element = $(id);
-	if (element.innerHTML == "+"){
-		element.innerHTML = "-";
-		$('userStatusLoadingText').innerHTML = "Loading Content Please Wait...";
-	}else{
-		element.innerHTML = "+";
-		$('userStatusLoadingText').innerHTML = "Closing Content Please Wait...";
-	}
-}
 
 function updateITSGroup(i, totalGroups){
 	var string = "";
@@ -285,20 +221,11 @@ function updateITSGroup(i, totalGroups){
 	new Ajax.Updater('update_add_message', 'https://'+document.domain+'/webapp/calllog/admin/admin_ajax.html?return=updateITSGroup&user_id='+$F('user_id')+string);
 }
 
-function updateOpenCalls(){
-	new Ajax.PeriodicalUpdater('main-open-calls', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=get_employee_group_info', {frequency:30});
-}
 
 function updateUserProfile(i){
 	new Ajax.Updater('update_add_message', 'https://'+document.domain+'/webapp/calllog/admin/admin_ajax.html?return=userProfileAction&action=update&calllog_username='+$F('calllog_username')+'&user_id='+$F('user_id')+'&last_name='+$F('last_name')+'&first_name='+$F('first_name')+'&position='+$F('position')+'&work_phone='+$F('work_phone')+'&cell_phone='+$F('cell_phone')+'&home_phone='+$F('home_phone')+'&class_options='+$F('class_options')+'&comments='+$F('comments')+'&user_privileges='+$F('user_privileges')+'&status='+$F('status')+'&ferpa='+$F('ferpa_select'));
 }
 
-function view_open_calls(option, group, type){
-	Element.hide('search_results_loading');
-	Element.hide('main-new-call');
-	Element.show('open_calls_loading');
-	new Ajax.Updater('open_calls_loading', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=openCalls&option='+option+'&group='+group+'&open_call_type='+type);
-}
 
 function viewCallHistoryDetails(call_id){
 	new Ajax.Updater('call-history', 'https://'+document.domain+'/webapp/calllog/ajax_backend.html?return=callHistoryDetails&caller_user_name='+$F('caller_user_name')+'&call_id='+call_id);

@@ -57,87 +57,15 @@ if( $group ) {
 	}
 }
 
-$result = returnOpenCalls($option, $suboption, $_GET['sort_by']);
-$i = 0;
-if(!empty($result) && is_array($result)){
-	$call_open_time = array();
+$calls = returnOpenCalls($option, $suboption, $_GET['sort_by']);
+if( !empty($calls) && is_array($calls) ){
 
-	foreach($result as $key => $row){
-		$groupArray = getGroupInfo($row['its_assigned_group']);
-		$row['building_name'] = getBuildingName($row['location_building_id']);
-		if (($row['its_assigned_group'] != 0) || ($groupArray[1] != "")){
-			if($row['tlc_assigned_to'] != 'unassigned'){
-				$row['assigned_to']['group'] = $groupArray[1];
-			  $row['assigned_to'][] = $row['tlc_assigned_to'];
-			}else{
-				$row['assigned_to']['group'] = $groupArray[1];
-			}
-		}else if($row['tlc_assigned_to'] != ""){
-			$row['assigned_to'][] = $row['tlc_assigned_to'];
-		}else{
-			$row['assigned_to'][] = "None";
-		}
-
-		if($row['date_assigned'])
-		{
-			$assign_datetime = $row['date_assigned'].' '.$row['time_assigned'];
-			$row['activity_datetime'] = time() - strtotime($assign_datetime);
-			$row['date_assigned'] = date('M j, Y', strtotime($assign_datetime));
-			$row['time_assigned'] = date('g:i a', strtotime($assign_datetime));
-		}//end if
-
-		$row['call_activity_diff'] = \PSU::date_diff( $time, strtotime( $assign_datetime ), 'simple' );
-		$row['call_title'] = $row['title'];
-		$row['call_summary'] = substr($row['comments'],0,100).((strlen($row['comments'])>100)?'...':'');
-		$row['show_comments'] = str_replace("\"", "&#34",addslashes(substr(strip_tags(str_replace(array("\n","\t","\r"),'',$row['comments'])),0,30)));
-
-		$call_datetime = $row['call_date'].' '.$row['call_time'];
-		$call_open_time[$row['call_id']] = time() - strtotime($call_datetime);
-		$row['call_date'] = date('M j, Y', strtotime($call_datetime));
-		$row['call_time'] = date('g:i a', strtotime($call_datetime));
-		if( $row['feelings_face'] ) {
-			$row['feelings_face'] = '<br/><img src="/webapp/feedback/templates/images/feedback-'.$row['feelings_face'].'.png" class="feedback-face" title="'.$row['feelings'].'"/>';
-		}//end if
-
-		// If the time that the call has been open (call_open_time) is greater than one week (604800 seconds)
-		if ($call_open_time[$row['call_id']] > 604800) {
-			// Set a call age status variable and mark it as old
-			$row['call_age_status'] = 'old';
-		}
-		else {
-			// Otherwise, mark it as normal
-			$row['call_age_status'] = 'normal';
-		}
-
-		// If the time since the call has been updated (activity_datetime) is greater than one week (604800 seconds)
-		if ($row['activity_datetime'] > 604800) {
-			// Set an activity  age status variable and mark it as old
-			$row['activity_age_status'] = 'old';
-		}
-		else {
-			// Otherwise, mark it as normal
-			$row['activity_age_status'] = 'normal';
-		}
-		$identifier = PSU::nvl($row['caller_username'], $row['wp_id'], $row['pidm']);
-		//grabs the person data for the call
-		$person = (array) $GLOBALS['user']->getCallerData( $identifier );
-		//overrides the username that was saved in the call with the username that was found from PSUPerson
-		//this is to prevent ~500 calls displaying improper information
-		//that were created with wp_ids instead of usernames as the username identifier
-		$row['caller_username'] = $person['username'] ?: $person['identifier'];
-		//merges the person array and single call(row) array
-		$row = array_merge($row, $person);
-		//$row['priority'] = $call_details['call_history'][$i]['call_priority'];
-		$calls[] = $row;
-	}// end foreach
-
-	if(count($call_open_time)) {
-		$average = array_sum($call_open_time)/count($call_open_time);
-	} else {
-		$average = 0;
-	}//end else
-
-	$average = PSU::seconds_to_time($average);
+	$total_open_time = 0;
+	foreach( $calls as $call ) {
+		$total_open_time += $call['call_open_time'];
+	}
+	
+	$average = PSU::seconds_to_time( $total_open_time / count( $calls ) );
 	$average_string = '';
 
 	if($average['years']) $average_string .= $average['years'].' years ';

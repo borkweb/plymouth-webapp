@@ -153,7 +153,9 @@ class MyPortal extends MyMagicGetters {
 	public static function force_clone( MyPortal $portal ) {
 		$identifier = $portal->wp_id;
 		
-		if( ! $portal->is_default_layout() ) {
+		// do not force a clone if the wp_id is 0 (manipulating the default layout)
+		//   or if the user ALREADY has a cloned layout
+		if( 0 == $identifier || ! $portal->is_default_layout() ) {
 			return;
 		}
 

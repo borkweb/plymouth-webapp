@@ -14,7 +14,8 @@
 						<th><a href="?sort_by=call_updated" title="Activity">{icon id=clock size=tiny flat=true}</a></th>
 						<th><a href="?sort_by=call_date">Ticket</a></th>
 						<th><a href="?sort_by=caller_last_name">Caller</a></th>
-						<th><a href="?sort_by=call_priority">Priority</a></th>
+						<th><a href="?sort_by=call_priority">Priority</a>/
+						<a href="?sort_by=call_state">State</a></th>
 						<th><a href="?sort_by=its_assigned_group ASC, tlc_assigned_to">Assigned To</a></th>
 					</tr>
 				</thead>
@@ -37,7 +38,11 @@
 								- <span class="activity-age-status-{$row.activity_age_status}">Updated by {$row.updated_by} {$row.call_activity_diff} ago</span>
 							</div>
 						</td>
-						<td class="priority-status status-{$row.call_priority}">{$row.call_priority}{$row.feelings_face}</td>
+						<td>
+							<div class="priority-status status-{$row.call_priority}">{$row.call_priority}{$row.feelings_face}</div>
+							<br clear="left">
+							{if $row.call_state}<div class="state-status state-{$row.call_state}">{$row.call_state}</div>{/if}
+						</td>
 						<td class="assignees">
 							<ul class="unstyled">
 							{foreach name=assignees from=$row.assigned_to item=assignee key=key}

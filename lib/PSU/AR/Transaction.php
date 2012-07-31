@@ -146,7 +146,7 @@ abstract class Transaction {
 		$temp_balance = $this->entries->sum( $this->entries->term( $term ) );
 		
 		// calculate the new value to insert
-		$value -= $temp_balance->amount() ?: 0;
+		$value = $temp_balance->amount() ?: 0;
 
 		// is amount remaining >= balance?
 		if($this->amount_paid_remaining > 0) {
