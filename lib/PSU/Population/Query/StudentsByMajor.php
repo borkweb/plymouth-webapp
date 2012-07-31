@@ -29,7 +29,7 @@ class PSU_Population_Query_StudentsByMajor extends PSU_Population_Query {
 		}//end if/else
 
 		$sql = "
-			SELECT DISTINCT :identifier
+			SELECT DISTINCT ".$args['identifier']."
 			  FROM v_curriculum_learner
 			  JOIN psu_identity.person_identifiers
 				ON pidm = pid
