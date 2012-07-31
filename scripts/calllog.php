@@ -40,13 +40,19 @@ foreach( $users as $person ) {
 		
 		$calls = getOpenCalls( $options );
 		
-		$tpl->assign( 'calls', $calls );
-		$tpl->assign( 'user', $person );
+		if( count( $calls ) >0 ) {
 		
-		$html = $tpl->fetch( 'email.calls.tpl' );
-
-		PSU::mail('zbtirrell@plymouth.edu', '[CallLog] Daily Open Call Report', array( 'no text!', $html ) );
-	}
-}
+			$tpl->assign( 'calls', $calls );
+			$tpl->assign( 'user', $person );
+			
+			$html = $tpl->fetch( 'email.calls.tpl' );
+			$text = 'This email is optimized for HTML.  View your open calls here: ' . $GLOBALS['CALLLOG_WEB';
+	
+			$p = new PSUPerson($person['user_name']);
+			
+			PSU::mail( $p->email['CA'][0], '[CallLog] Daily Open Call Report', array( $text, $html ) );
+		} // end if 
+	} // end if
+} // end foreach
 
 
