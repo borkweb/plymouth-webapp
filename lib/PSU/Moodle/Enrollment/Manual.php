@@ -21,7 +21,7 @@ class Manual extends \PSU\Moodle\Enrollment {
 
 	public function enroll() {
 		foreach( $this->population as $id ) {
-			self::add_to_flatfile( $id->scalar , $course );
+			self::add_to_flatfile( $id->scalar , $this->course );
 		}//end foreach
 
 		self::write_to_flatfile();
