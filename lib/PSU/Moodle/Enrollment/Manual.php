@@ -14,9 +14,6 @@ class Manual extends \PSU\Moodle\Enrollment {
 	 * @param    $url    Optional url parameted to post generated xml to.
 	 */
 	public function __construct( $course, $population, $role = 'student', $args = '' ){
-		if( !is_numeric( $course ) ) {
-			throw new Exception( 'Courses must be in the form of a Moodle course id!: '.$course );
-		}//end if
 
 		parent::__construct( $course, $population, $role, $args );
 
