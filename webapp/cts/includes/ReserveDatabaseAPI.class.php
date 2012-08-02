@@ -445,6 +445,51 @@ class ReserveDatabaseAPI{
 		return PSU::db('cts')->Execute( $sql, $agreement );
 
 	}//end function change_reservation_agreement
+	
+	public function insert_loans_recursive($dates, $reservation_idx){
+		//get the equipment for the loan
+		$equipment=self::get_equipment($reservation_idx);
+		//get the reservation itself
+		$reservation=self::by_id($reservation_idx);
+		$subitems = self::get_reserve_subitems($reservation_idx);
+		$reservation=$reservation[$reservation_idx];
+		foreach($dates as $date){
+			//for every date in the dates array,
+			//grab only the neccessary information
+			$data['wp_id'] = $reservation['wp_id'];
+			$data['lname'] = $reservation['lname'];
+			$data['fname'] = $reservation['fname'];
+			$data['phone'] = $reservation['phone'];
+			$data['email'] = $reservation['email'];
+			$data['application_date'] = $reservation['application_date'];
+			$data['start_date'] = $date;
+			$data['start_time'] = $reservation['start_time'];
+			$data['end_date'] = $date;
+			$data['end_time'] = $reservation['end_time'];
+			$data['memo'] = $reservation['memo'];
+			$data['building_idx'] = $reservation['building_idx'];
+			$data['room'] = $reservation['room'];
+			$data['title'] = $reservation['title'];
+			$data['delivery_type'] = $reservation['delivery_type'];
+			$data['request_items'] = $reservation['request_items'];
+			$data['status'] = 'pending';
+			$insert_id=self::insert_reservation($data);
+			//loop through and insert the equipment on the loan
+			foreach( $equipment as $item ){
+				self::add_equipment($insert_id, $item['glpi_id']);
+			}
+
+			//loop through and insert the subitems on the loan
+			foreach ( $subitems as $sub_item ){
+				self::insert_reservation_subitem($insert_id, $sub_item['subitem_id']);
+			}
+
+		}
+		//put the reserservation into the data array
+			return PSU::db('cts')->Insert_ID();
+
+
+	}//end function insert_loans_recursive
 
 	public function recursive_dates($args){
 		$start_date = $args['start_date'];
