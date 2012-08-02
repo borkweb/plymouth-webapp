@@ -14,7 +14,7 @@
 						<th><a href="?sort_by=call_updated" title="Activity">{icon id=clock size=tiny flat=true}</a></th>
 						<th><a href="?sort_by=call_date">Ticket</a></th>
 						<th><a href="?sort_by=caller_last_name">Caller</a></th>
-						<th><a href="?sort_by=call_priority">Priority</a>/
+						<th><a href="?sort_by=call_priority">Priority</a> /
 						<a href="?sort_by=call_state">State</a></th>
 						<th><a href="?sort_by=its_assigned_group ASC, tlc_assigned_to">Assigned To</a></th>
 					</tr>
