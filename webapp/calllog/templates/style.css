@@ -1040,5 +1040,10 @@ and (orientation : landscape) {
 	#problem_details{
 		height: 75px;
 	}
-
+	.submit-buttons {
+		margin-top: 1em;
+	}
+	.call-form label {
+		margin-top: 0.2em;
+	}
 }
