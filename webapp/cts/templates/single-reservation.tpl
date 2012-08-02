@@ -275,6 +275,7 @@ $(function(){
 		<li>
 		{if $user_level<=2}<!--If the user is CTS staff or manager -->
 		<a href="{$PHP.BASE_URL}/admin/reservation/search/id/{$reservation_idx}/edit" class="btn btn-warning">Edit Reservation</a>
+		<a href="{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/recurring" class="btn btn-info">Set Recurring</a>
 		{/if}
 		{if $user_level==1}<!--Don't show the delete button to anyone other than the manager -->
 		<a id="reservation_delete" href="{$PHP.BASE_URL}/admin/reservation/search/id/{$reservation_idx}/delete" class="btn btn-danger">Delete Reservation</a>

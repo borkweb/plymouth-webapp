@@ -446,6 +446,35 @@ class ReserveDatabaseAPI{
 
 	}//end function change_reservation_agreement
 
+	public function recursive_dates($args){
+		$start_date = $args['start_date'];
+		$end_date = $args['end_date'];
+
+		define('ONE_DAY', 60*60*24);//defining what one day is
+		define('ONE_WEEK', ONE_DAY * 7);
+		$start_date=date('Y-m-d',  strtotime('Sunday',strtotime($start_date)));
+		//determines the first sunday of the given week
+		$start_week=date('W',  strtotime($start_date));
+		//define the starting week
+		$end_date=date('Y-m-d',  strtotime('Sunday',strtotime($end_date)));
+		$end_week=date('W', strtotime($end_date));
+		//define the ending week
+		$weeks = $end_week-$start_week;
+		//determine how many weeks we are going to be recurring this loan for
+		for( $x=-1; $x<$weeks; $x++ ){
+			//starts at -1 to get the current week
+			//for loop from 1 to the amount of weeks
+			$next_week = date('Y-m-d',strtotime( "+$x week" ,strtotime($start_date)));
+			//grabs the next week
+			foreach( $args['day'] as $day ){
+				//adds the dates to the dates array
+				$dates[] = date('Y-m-d',strtotime("+$day day", strtotime($next_week)));
+			}
+		}
+		return $dates;
+
+	}//end function recurise_dates
+
 	public function search($request){
 		define('ONE_DAY', 60*60*24);//defining what one day is
 		$week=date('w');//define the current week

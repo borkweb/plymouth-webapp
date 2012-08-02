@@ -522,6 +522,32 @@ respond('/reservation/[i:id]/edit',function( $request, $response, $app){
 
 });//edit reservation
 
+respond('/reservation/id/[i:id]/recurring',function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	if(ReserveDatabaseAPI::check_reservation($reservation_idx)){
+		$app->tpl->init_all_reservation_info($reservation_idx);
+		$app->tpl->display( 'recurring-reservation.tpl' );
+	}else{
+		$_SESSION['errors'][]='This reservation does not exist.';
+		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation' );
+	}
+
+});//recurring reservation
+
+respond('/reservation/id/[i:id]/setrecurring',function( $request, $response, $app){
+	$reservation_idx=$request->id;
+	if(ReserveDatabaseAPI::check_reservation($reservation_idx)){
+		//if the reservation that is being set exists, do the math
+		$app->tpl->init_all_reservation_info($reservation_idx);
+		
+			PSU::dbug(ReserveDatabaseAPI::recursive_dates($_POST));
+	}else{
+		$_SESSION['errors'][]='This reservation does not exist.';
+		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation' );
+	}
+
+});//setrecurring reservation
+
 respond('/reservation/id/[i:id]/status', function( $request, $response, $app){
 	//when the staff member is trying to change the status of the loan
 	$reservation_idx=$request->id;
