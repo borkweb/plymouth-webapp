@@ -13,6 +13,7 @@ class Inventory extends \PSU\Collection{
 	//constuctor class
 	public function __construct( $args = array() ){
 		//grab and assign search
+		\PSU::db('mysql/glpi/pdo')->debug=true;	
 		$args = \PSU::params( $args );
 		$this->search = $args['search'];
 	}//end construct
@@ -26,10 +27,15 @@ class Inventory extends \PSU\Collection{
 	}//end get
 	
 	public function sql( $args  ) {
-		$args = array(
-			'item_type' => 'computer',
-			'item_status' => 'Surplused',
-			);
+		\PSU::dbug($args);
+		if( !isset($args['item_type']) ){
+			$args['item_type'] = 'computer';
+		}
+		
+		if( !isset($args['item_status']) ){
+			$args['item_status'] = 'Available for Loan';
+		}
+
 		$item_type = $args['item_type'];
 		$item_status = $args['item_status'];
 		
