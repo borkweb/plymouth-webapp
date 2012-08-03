@@ -77,7 +77,8 @@
 		<input type="text" name="keywords_list" id="keywords_list" size="51" placeholder="Nouns related to this ticket..." value="{$call_assignment_history_keywords}"/>
 		<div id="keywordsList"></div>
 		
-		<input type="hidden" id='call_status' name="call_status" value="{if isset($call_status)}{$call_status}{else}open{/if}" />
+		<input type="hidden" id="call_status" name="call_status" value="{if isset($call_status)}{$call_status}{else}open{/if}" />
+
 		{col size=4 class="alpha omega meta"}
 			<label for="call_priority" class="label">Priority:</label>
 				<select name="call_priority" id="call_priority">
@@ -85,7 +86,14 @@
 			</select>
 			
 			<br clear="left"/>
-			
+
+			<label for="call_state" class="label">State:</label>
+				<select name="call_state" id="call_state">
+				{$call_state_select_list}
+			</select>
+
+			<br clear="left"/>
+
 			<label for="call_location" class="label">Location:</label>
 			<select name="call_location">
 				<option value="n/a">No Building Selected</option>
@@ -114,11 +122,9 @@
 				{$its_select_group_list}
 			</select>
 		{/col}
-		{col size=10}
-			<div class="form-actions center submit-buttons">
-				<button type="submit" class="btn btn-info" name='toggle' value='1'>{if $call_status == 'open' || !$call_id}Close{else if $call_status == 'closed'}Reopen{/if} Ticket</button>
-				<button type="submit" class="btn btn-primary update_ticket" name='toggle' value='0'>{if $call_id}Update{else}Submit{/if} Ticket</button>
-			</div>
+		{col size=10 class="form-actions center submit-buttons"}
+			<button type="submit" class="btn btn-info" name='toggle' value='1'>{if $call_status == 'open' || !$call_id}Close{else if $call_status == 'closed'}Reopen{/if} Ticket</button>
+			<button type="submit" class="btn btn-primary update_ticket" name='toggle' value='0'>{if $call_id}Update{else}Submit{/if} Ticket</button>
 		{/col}
 	{/box}
 

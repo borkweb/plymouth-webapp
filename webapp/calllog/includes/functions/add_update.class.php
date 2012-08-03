@@ -55,6 +55,7 @@ class NewCall{
 			$call_history['time_assigned'] = 'NOW()';
 			$call_history['call_status'] = $new_call_form_vars['call_status']; //required
 			$call_history['call_priority'] = $new_call_form_vars['call_priority']; //required
+			$call_history['call_state'] = $new_call_form_vars['call_state']; //required
 			$call_history['current'] = 1;
 			
 			$status = $this->addToCallHistory($call_history);
@@ -120,6 +121,7 @@ class NewCall{
 		else{
 			$_SESSION['user_message'] = 'Error insert call into call_log table, and getting the new call_id in addToCallLog().';
 		}
+
 	}// end function addToCallLog
 
 	function addToCallHistory($call_info){		
@@ -127,7 +129,6 @@ class NewCall{
 		$this->db->Execute("UPDATE call_history SET current='0' WHERE call_id='{$call_info['call_id']}'");
 
 		$fields = tableFields('call_history');
-
 		$call_info['comments'] = stripslashes( $call_info['comments'] );
 
 		foreach($call_info as $key => $val) {
@@ -144,8 +145,8 @@ class NewCall{
 
 		$keys = trim( $keys, ',');
 		$values = trim( $values, ',');
-
 		$query = "INSERT INTO call_history ($keys) VALUES ($values)";
+
 		if($this->db->Execute($query, $call_info)){
 			return true;
 		} else {
@@ -184,6 +185,7 @@ class NewCall{
 		return $history;
 	}//end history
 
+
 	function returnCallLoggedFromLocation($ip_address=''){
 		$call_logged_from = '';
 		if($ip_address==''){
@@ -205,5 +207,6 @@ class NewCall{
 		}
 		return $call_logged_from;
 	}// end function returnCallLoggedFromLocation
+
 
 }

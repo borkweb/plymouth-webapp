@@ -1,18 +1,88 @@
-.priority-status {
+.priority-status, .state-status {
 	overflow: hidden;
 	text-align:center; 
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+	display: inline-block;
+	float: none;
+	padding: 0.3em;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 0.3em;
+	-moz-border-radius: 0.3em;
+	-webkit-border-radius: 0.3em;
 }
-.status-high{ background: #cd0000 !important; color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
-.status-medium{ background: #ffff7e !important; }
-.status-pending{ background: #5da3ff !important; }
-.status-delayed{ background: #c0c0c0 !important; }
-.status-inprogress{ background: #bd78c2 !important; color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
-.status-install{ background: #69CF58 !important; }
-.status-upgrade{ background: #e88523 !important; color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
-.status-collision{ background: #208ec1 !important; }
-.status-purchase{ background: #a2c1a9 !important; }
-.status-,.status-normal{ background: #eeffee !important; }
+
+.status-high{
+	background: #cd0000 !important; 
+	color: #fff; 
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.status-medium{
+	background: #ffff7e !important;
+}
+
+.status-,.status-normal{
+	background: #eeffee !important;
+}
+
+.status-high{ 
+	background: #cd0000 !important; 
+	color: #fff; 
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); 
+}
+
+.status-medium{ 
+	background: #ffff7e !important; 
+}
+
+.status-pending{ 
+	background: #5da3ff !important; 
+}
+
+.state-consult{
+	background: #8e6f43 !important; 
+	color: #fff; 
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.state-pending{
+	background: #248ec1 !important;
+}
+.state-pending{
+	background: #5da3ff !important; 
+	color: #fff; 
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.state-delayed{
+	background: #c0c0c0 !important;
+}
+
+.state-inprogress{
+	background: #bd78c2 !important; 
+	color: #fff; 
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.state-ordered{
+	background: #248ec1 !important; 
+	color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.state-install{
+	background: #69CF58 !important;
+}
+
+.state-upgrade{
+	background: #e88523 !important; 
+	color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.state-purchase{
+	background: #a2c1a9 !important;
+}
+
+.state-,.state-0{
+	background: #eeffee !important;
+}
 
 input[type=search] {
 	font-size: 16px;
@@ -142,16 +212,6 @@ tr:hover .muted{
 .history > .update {
 	border-bottom: 1px solid #ccc;
 	padding: 1em;
-}
-
-.history .update .priority-status {
-	display: inline-block;
-	float: none;
-	padding: 0.3em;
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	border-radius: 0.3em;
-	-moz-border-radius: 0.3em;
-	-webkit-border-radius: 0.3em;
 }
 
 .update-meta {
@@ -980,5 +1040,10 @@ and (orientation : landscape) {
 	#problem_details{
 		height: 75px;
 	}
-
+	.submit-buttons {
+		margin-top: 1em;
+	}
+	.call-form label {
+		margin-top: 0.2em;
+	}
 }
