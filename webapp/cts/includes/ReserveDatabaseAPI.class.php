@@ -495,8 +495,6 @@ class ReserveDatabaseAPI{
 		$start_date = $args['start_date'];
 		$end_date = $args['end_date'];
 
-		define('ONE_DAY', 60*60*24);//defining what one day is
-		define('ONE_WEEK', ONE_DAY * 7);
 		$start_date=date('Y-m-d',  strtotime('Sunday',strtotime($start_date)));
 		//determines the first sunday of the given week
 		$start_week=date('W',  strtotime($start_date));
