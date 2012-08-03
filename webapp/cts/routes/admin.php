@@ -544,10 +544,11 @@ respond('/reservation/id/[i:id]/setrecurring',function( $request, $response, $ap
 		//if the reservation that is being set exists, do the math
 			$app->tpl->init_all_reservation_info($reservation_idx);
 			$dates = ReserveDatabaseAPI::recursive_dates($_POST);
-			ReserveDatabaseAPI::insert_loans_recursive( $dates, $reservation_idx );
+			$count = ReserveDatabaseAPI::insert_loans_recursive( $dates, $reservation_idx );
+			$_SESSION['successes'][] = 'You have successfully added ' . $count . ' reservations.';
 		}
 		//grabs the recursive dates
-		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation/search/id' . $reservation_idx );
+		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation/search/id/' . $reservation_idx );
 	}else{
 		$_SESSION['errors'][]='This reservation does not exist.';
 		$response->redirect( $GLOBALS['BASE_URL'] . '/admin/reservation' );

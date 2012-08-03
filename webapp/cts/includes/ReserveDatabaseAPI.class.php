@@ -486,7 +486,7 @@ class ReserveDatabaseAPI{
 
 		}
 		//put the reserservation into the data array
-			return PSU::db('cts')->Insert_ID();
+			return count($dates);
 	}//end function insert_loans_recursive
 
 
