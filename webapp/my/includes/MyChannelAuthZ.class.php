@@ -23,7 +23,16 @@ class ChannelAuthZ {
 	 * @todo Family access should be limited to family of a ug_app
 	 */
 	public static function financial_aid_information() {
-		return IDMObject::authZ( 'banner', 'ug_app' ) || self::$grants['finaid'] || IDMObject::authZ('role', 'finaid');
+		//If this is a grantee user, see if the granter is still a ug_app
+		if( self::$grants['finaid'] ) {
+			foreach( self::$person->myrelationships->relationships as $identifier => $value ) {
+				$granter = new PSUPerson( $identifier );
+				if( array_key_exists( 'ug_app', $granter->banner_roles ) ) {
+					return true;
+				}//end if
+			}//end foreach
+		}//end if
+		return IDMObject::authZ( 'banner', 'ug_app' ) || IDMObject::authZ('role', 'finaid');
 	}//end financial_aid_information
 
 	public static function important_phone_numbers() {
