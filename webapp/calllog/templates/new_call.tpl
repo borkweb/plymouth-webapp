@@ -123,8 +123,8 @@
 			</select>
 		{/col}
 		{col size=10 class="form-actions center submit-buttons"}
-			<button type="submit" class="btn btn-info" name='toggle' value='1'>{if $call_status == 'open' || !$call_id}Close{else if $call_status == 'closed'}Reopen{/if} Ticket</button>
 			<button type="submit" class="btn btn-primary update_ticket" name='toggle' value='0'>{if $call_id}Update{else}Submit{/if} Ticket</button>
+			<button type="submit" class="btn btn-info" name='toggle' value='1'>{if $call_status == 'open' || !$call_id}Close{else if $call_status == 'closed'}Reopen{/if} Ticket</button>
 		{/col}
 	{/box}
 
