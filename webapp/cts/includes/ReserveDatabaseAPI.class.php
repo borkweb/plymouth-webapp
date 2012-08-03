@@ -487,13 +487,16 @@ class ReserveDatabaseAPI{
 		}
 		//put the reserservation into the data array
 			return PSU::db('cts')->Insert_ID();
-
-
 	}//end function insert_loans_recursive
+
+
 
 	public function recursive_dates($args){
 		$start_date = $args['start_date'];
 		$end_date = $args['end_date'];
+
+		$start_day = date('Y-m-d', strtotime($start_date));
+		$end_day = date('Y-m-d', strtotime($end_date));
 
 		$start_date=date('Y-m-d',  strtotime('Sunday',strtotime($start_date)));
 		//determines the first sunday of the given week
@@ -511,7 +514,12 @@ class ReserveDatabaseAPI{
 			//grabs the next week
 			foreach( $args['day'] as $day ){
 				//adds the dates to the dates array
-				$dates[] = date('Y-m-d',strtotime("+$day day", strtotime($next_week)));
+				$date = date('Y-m-d',strtotime("+$day day", strtotime($next_week)));
+				//set the date
+				if( $date <= $end_day && $date >= $start_day ){
+					//check to make sure that the date doesn't 
+					$dates[] = $date;
+				}
 			}
 		}
 		return $dates;
