@@ -12,17 +12,32 @@
 		</ul>
 		<h2>Event Information</h2>
 		<ul class="label-left">
-				<li><label>Start Date: </label>{$reservation.start_date|date_format:$date_format}</li>		
-				<li><label>Start Time: </label>{$reservation.start_time|date_format:$time_format}</li>		
-				<li><label>End Date: </label>{$reservation.end_date|date_format:$date_format}</li>		
-				<li><label>End Time: </label>{$reservation.end_time|date_format:$time_format}</li>		
-				<li><label>Event Type: </label>
-				{if $reservation.delivery_type=='1'}
-					<span class="bold">CTS Sponsored Event</span>
-				{else}
-					<span>Equipment Pickup</span>
-				{/if}
-				<li><label>Location: </label>{$locations[$reservation.building_idx]} <strong>in room</strong> {$reservation.room}</li>
+				<li>
+					<label>Start Date: </label>
+					{$reservation.start_date|date_format:$date_format}
+				</li>		
+				<li>
+					<label>Start Time: </label>
+					{$reservation.start_time|date_format:$time_format}
+				</li>		
+				<li>
+					<label>End Date: </label>
+					{$reservation.end_date|date_format:$date_format}
+				</li>		
+				<li>
+					<label>End Time: </label>
+					{$reservation.end_time|date_format:$time_format}
+				</li>		
+				<li>
+					<label>Event Type: </label>
+						{if $reservation.delivery_type=='1'}
+							<span class="bold">CTS Sponsored Event</span>
+						{else}
+							<span>Equipment Pickup</span>
+						{/if}
+				<li>
+					<label>Location: </label>{$locations[$reservation.building_idx]} <strong>in room</strong> {$reservation.room}
+				</li>
 		</ul>
 
 	{if $reservation.equipment}
@@ -51,18 +66,46 @@
 	{box size=7 title="Recursion"}
 	<form action = "{$PHP.BASE_URL}/admin/reservation/id/{$reservation_idx}/setrecurring" method="POST">
 		<ul class="clean label-left">
-			<li><label>From:</label><input id="startdate" type="text" name="start_date"
-			value="{$reservation.start_date|date_format:'%m/%d/%Y'}"></li>
-			<li><label>To:</label><input id="enddate" type="text" name="end_date"
-			value="{$reservation.end_date|date_format:'%m/%d/%Y'}"></li>
-			<li><label>Sunday:</label><input type="checkbox" name="day[]" value="0"></li>
-			<li><label>Monday:</label><input type="checkbox" name="day[]" value="1"></li>
-			<li><label>Tuesday:</label><input type="checkbox" name="day[]" value="2"></li>
-			<li><label>Wednesday:</label><input type="checkbox" name="day[]" value="3"></li>
-			<li><label>Thursday:</label><input type="checkbox" name="day[]" value="4"></li>
-			<li><label>Friday:</label><input type="checkbox" name="day[]" value="5"></li>
-			<li><label>Saturday:</label><input type="checkbox" name="day[]" value="6"></li>
-					<li><input type="submit" name="submit" value="Submit" class="btn btn-primary"></li>
+			<li>
+				<label>From:</label>
+				<input id="startdate" type="text" name="start_date"
+				value="{$reservation.start_date|date_format:'%m/%d/%Y'}">
+			</li>
+			<li>
+				<label>To:</label>
+				<input id="enddate" type="text" name="end_date"
+				value="{$reservation.end_date|date_format:'%m/%d/%Y'}">
+			</li>
+			<li>
+				<label>Sunday:</label>
+				<input type="checkbox" name="day[]" value="0">
+			</li>
+				<li><label>Monday:</label>
+				<input type="checkbox" name="day[]" value="1">
+			</li>
+			<li>
+				<label>Tuesday:</label>
+				<input type="checkbox" name="day[]" value="2">
+			</li>
+			<li>
+				<label>Wednesday:</label>
+				<input type="checkbox" name="day[]" value="3">
+			</li>
+			<li>
+				<label>Thursday:</label>
+				<input type="checkbox" name="day[]" value="4">
+			</li>
+			<li>
+				<label>Friday:</label>
+				<input type="checkbox" name="day[]" value="5">
+			</li>
+			<li>
+				<label>Saturday:</label>
+				<input type="checkbox" name="day[]" value="6">
+			</li>
+			<li>
+				<input type="submit" name="submit" value="Submit" class="btn btn-primary">
+			</li>
 		</ul>
 	</form>
 	{/box}
