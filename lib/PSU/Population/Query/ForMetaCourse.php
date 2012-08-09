@@ -7,7 +7,8 @@ class PSU_Population_Query_ForMetaCourse extends PSU_Population_Query {
 	public function query( $args = array() ) {
 
 		$defaults = array(
-			'term_code' => null,
+			'identifier' => 'sourced_id',
+			'term_code' => NULL,
 			'subj_code' => 'UG',
 			'level_code' => 'UG',
 			'rsts_code' => 'RE'
@@ -29,14 +30,17 @@ class PSU_Population_Query_ForMetaCourse extends PSU_Population_Query {
 		}
 		$rsts_where = substr( $rsts_where, 0, -4 );
 		
-		$sql = "SELECT DISTINCT gobsrid_sourced_id
-				FROM sfrstcr, ssbsect, gobsrid 
-				WHERE sfrstcr_pidm = gobsrid_pidm
-				AND sfrstcr_crn = ssbsect_crn
-				AND sfrstcr_term_code = ssbsect_term_code
-				AND (".$subj_where.") 
+		$sql = "
+			SELECT DISTINCT ".$args['identifier']."
+		      FROM sfrstcr 
+			  JOIN psu_identity.person_identifiers
+			    ON sfrstcr_pidm = pid
+			  JOIN ssbsect
+			    ON (sfrstcr_crn = ssbsect_crn AND 
+				    sfrstcr_term_code = ssbsect_term_code)
+			  WHERE (".$subj_where.") 
 				AND (".$rsts_where.") 
-				AND sfrstcr_term_code >= '".$args['term_code']."' 
+				AND sfrstcr_term_code >= :term_code 
 		";
 
 		$matches = PSU::db('banner')->GetCol( $sql, $args );
