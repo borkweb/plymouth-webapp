@@ -445,6 +445,86 @@ class ReserveDatabaseAPI{
 		return PSU::db('cts')->Execute( $sql, $agreement );
 
 	}//end function change_reservation_agreement
+	
+	public function insert_loans_recursive($dates, $reservation_idx){
+		//get the equipment for the loan
+		$equipment=self::get_equipment($reservation_idx);
+		//get the reservation itself
+		$reservation=self::by_id($reservation_idx);
+		$subitems = self::get_reserve_subitems($reservation_idx);
+		$reservation=$reservation[$reservation_idx];
+		foreach($dates as $date){
+			//for every date in the dates array,
+			//grab only the neccessary information
+			$data['wp_id'] = $reservation['wp_id'];
+			$data['lname'] = $reservation['lname'];
+			$data['fname'] = $reservation['fname'];
+			$data['phone'] = $reservation['phone'];
+			$data['email'] = $reservation['email'];
+			$data['application_date'] = $reservation['application_date'];
+			$data['start_date'] = $date;
+			$data['start_time'] = $reservation['start_time'];
+			$data['end_date'] = $date;
+			$data['end_time'] = $reservation['end_time'];
+			$data['memo'] = $reservation['memo'];
+			$data['building_idx'] = $reservation['building_idx'];
+			$data['room'] = $reservation['room'];
+			$data['title'] = $reservation['title'];
+			$data['delivery_type'] = $reservation['delivery_type'];
+			$data['request_items'] = $reservation['request_items'];
+			$data['status'] = 'pending';
+			$insert_id=self::insert_reservation($data);
+			//loop through and insert the equipment on the loan
+			foreach( $equipment as $item ){
+				self::add_equipment($insert_id, $item['glpi_id']);
+			}
+
+			//loop through and insert the subitems on the loan
+			foreach ( $subitems as $sub_item ){
+				self::insert_reservation_subitem($insert_id, $sub_item['subitem_id']);
+			}
+
+		}
+		//put the reserservation into the data array
+			return count($dates);
+	}//end function insert_loans_recursive
+
+
+
+	public function recursive_dates($args){
+		$start_date = $args['start_date'];
+		$end_date = $args['end_date'];
+
+		$start_day = date('Y-m-d', strtotime($start_date));
+		$end_day = date('Y-m-d', strtotime($end_date));
+
+		$start_date=date('Y-m-d',  strtotime('Sunday',strtotime($start_date)));
+		//determines the first sunday of the given week
+		$start_week=date('W',  strtotime($start_date));
+		//define the starting week
+		$end_date=date('Y-m-d',  strtotime('Sunday',strtotime($end_date)));
+		$end_week=date('W', strtotime($end_date));
+		//define the ending week
+		$weeks = $end_week-$start_week;
+		//determine how many weeks we are going to be recurring this loan for
+		for( $x=-1; $x<$weeks; $x++ ){
+			//starts at -1 to get the current week
+			//for loop from 1 to the amount of weeks
+			$next_week = date('Y-m-d',strtotime( "+$x week" ,strtotime($start_date)));
+			//grabs the next week
+			foreach( $args['day'] as $day ){
+				//adds the dates to the dates array
+				$date = date('Y-m-d',strtotime("+$day day", strtotime($next_week)));
+				//set the date
+				if( $date <= $end_day && $date >= $start_day ){
+					//check to make sure that the date doesn't 
+					$dates[] = $date;
+				}
+			}
+		}
+		return $dates;
+
+	}//end function recurise_dates
 
 	public function search($request){
 		define('ONE_DAY', 60*60*24);//defining what one day is
