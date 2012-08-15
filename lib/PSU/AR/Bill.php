@@ -239,14 +239,6 @@ class Bill extends \BannerObject
 
 		\PSU::add_filter( 'transaction_term_skip', __CLASS__.'::payment_plan_ug_skip_term_filter' , 10, 3 );
 
-		$transaction = new \PSU\AR\Transaction\Memo( $record['pidm'], $data['contract_balance'] );
-		$transaction->billable( FALSE );
-		$transaction->level='UG';
-		$transaction->split( $record );
-		if( ! $transaction->save() ) {
-			return false;
-		}//end if
-
 		// are there funds not disbursed?
 		if( $data['funds_not_disbursed'] > 0 ) {
 			$record['term_code'] = $current_term_code;
@@ -259,6 +251,14 @@ class Bill extends \BannerObject
 			if( ! self::updateMemo($record) ) {
 				return false;
 			}//end if
+		}//end if
+
+		$transaction = new \PSU\AR\Transaction\Memo( $record['pidm'], $data['contract_balance'] );
+		$transaction->billable( FALSE );
+		$transaction->level='UG';
+		$transaction->split( $record );
+		if( ! $transaction->save() ) {
+			return false;
 		}//end if
 
 		return true;

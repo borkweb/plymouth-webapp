@@ -144,7 +144,7 @@ abstract class Transaction {
 		
 		// retrieve any existing amounts for the term for TXRACCD
 		$temp_balance = $this->entries->sum( $this->entries->term( $term ) );
-		
+
 		// calculate the new value to insert
 		$value += $temp_balance->amount() ?: 0;
 
