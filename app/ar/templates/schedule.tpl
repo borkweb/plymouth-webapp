@@ -57,6 +57,24 @@
 				<td class="centered">M-F</td>
 				<td class="centered">6:30 pm</td>
 			</tr>
+			<tr>
+				<td>E-Commerce Feed File Arrival</td>
+				<td>N/A</td>
+				<td class="centered">Daily</td>
+				<td class="centered">4:00 pm</td>
+			</tr>
+			<tr>
+				<td>E-Commerce Feed File Loading</td>
+				<td>load.php</td>
+				<td class="centered">Every 15 Minutes</td>
+				<td class="centered">N/A</td>
+			</tr>
+			<tr>
+				<td>E-Commerce Feed Processing</td>
+				<td>ecommerce_process.php</td>
+				<td class="centered">M-F</td>
+				<td class="centered">4:20 pm</td>
+			</tr>
 		</tbody>
 	</table>
 {/box}
