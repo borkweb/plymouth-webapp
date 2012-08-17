@@ -59,3 +59,4 @@ respond( '/?', function( $request, $response, $app ) {
 
 with( '/ecommerce', __DIR__ . '/ar/ecommerce.php' );
 with( '/payment-plans', __DIR__ . '/ar/payment-plans.php' );
+with( '/schedule', __DIR__ . '/ar/schedule.php' );
