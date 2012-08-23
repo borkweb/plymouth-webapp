@@ -81,7 +81,7 @@ respond('POST', '/fate', function( $request, $response, $app ) {
 	$permission = $request->data[0];
 	$wpid = $request->data[1];
 
-	if ($permission == 'shift_leader' || $permission == 'sta' || $permission == 'trainee'){
+	if ($permission == 'supervisor' || $permission == 'shift_leader' || $permission == 'sta' || $permission == 'trainee'){
 		if(TrainingTracker::valid_wpid($wpid)){
 
 			$pidm = PSUPerson::get($wpid)->pidm;
@@ -110,7 +110,7 @@ respond( 'GET', '/fate', function( $request, $response, $app ) {
 	$staff_collection = new TrainingTracker\StaffCollection();
 	$staff_collection->load(); 
 
-	$staff = $staff_collection->staff();
+	$staff = $staff_collection->promotion_users();
 	foreach ($staff as $person){
 		$permission	= TrainingTracker::get_user_level($person->wpid);
 		$person->permission_slug = $permission;

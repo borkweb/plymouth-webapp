@@ -1,26 +1,23 @@
-{PSU_CSS src='../css/merit.css'}
-<link rel="stylesheet" type="text/css" href="../templates/style.css" media="screen" />
-<link rel='stylesheet' type='text/css' src='../css/merit.css'>
-<script>
-	//var merits = {$merits};
-</script>
-{PSU_JS scr='../js/merit.js'}
-<script type="text/javascript" src="../js/merit.js">// here for testing</script>
-
+{PSU_CSS src="$base_url/templates/style.css"}
+{PSU_CSS src="$base_url/css/merit.css"}
+{PSU_JS src="$base_url/js/merit.js"}
+{* <script type="text/javascript" src="{$base_url/js/merit.js"></script> *}
 {box title="Gold stars and dog houses" size="16"}
 	{foreach from=$staff item=person name=ct key=key}
 		{assign var=wpid value=$person->wpid} 
 		{col size = 16 class='person bordered-top striped' id=$person->wpid}
 				{col size=4}
+
+					<span class='name' data-wpid='{$person->wpid}'>{$person->name}</span>
+
 					{foreach from=$merits.$wpid.demerits item=demerit}
-						<img title = "{$demerit.notes}" data-merit-id='{$demerit.id}' class='merit demerit left' src='https://s0.plymouth.edu/images/icons/22x22/status/dialog-warning.png'>			
+						<span title = "{$demerit.notes}" data-merit-id='{$demerit.id}' class='merit demerit'>{icon id='ape-no' class='red'}</span>			
 					{/foreach}
 
 					{foreach from=$merits.$wpid.merits item=merit}
-						<img title = "{$merit.notes}" data-merit-id='{$merit.id}' class='merit left' src='../images/star.png'>
+						<span title = "{$merit.notes}" data-merit-id='{$merit.id}' class='merit'>{icon id='ape-yes' class='green'}</span>
 					{/foreach}
 
-					<span class='name' data-wpid='{$person->wpid}'>{$person->name}</span>
 				{/col}
 
 				{col size = 6}

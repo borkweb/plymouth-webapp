@@ -6,6 +6,7 @@ PSU::session_start(); // force ssl + start a session
 
 $GLOBALS['BASE_URL'] = '/webapp/training-tracker';
 $GLOBALS['BASE_DIR'] = __DIR__;
+$GLOBALS['BASE_URL'] = 'https://tlferm.psudev.com/webapp/training-tracker';
 
 $GLOBALS['TITLE'] = 'Training Tracker';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
@@ -110,6 +111,7 @@ respond( function( $request, $response, $app ) {
 	// assign user to template
 	$app->tpl->assign('active_user', $active_user);
 	$app->tpl->assign('user', $app->user);
+	$app->tpl->assign('base_url', $GLOBALS['BASE_URL']);
 	$app->tpl->assign('has_team', $has_team);
 	$app->tpl->assign('wpid', $wpid);
 	$app->tpl->assign('is_admin', $is_admin);

@@ -16,7 +16,6 @@ $(function() {
 
 	//var checkboxes = $(".chkbox-container");
 	$('.chkbox-container').each( function(){
-console.log($(this));
 		 $(this).mouseenter(function() {
 			 $(this).addClass('highlight');
 		 }).mouseleave(function() {

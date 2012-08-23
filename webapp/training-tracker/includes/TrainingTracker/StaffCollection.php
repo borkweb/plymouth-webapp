@@ -73,7 +73,14 @@ class StaffCollection extends \PSU\Collection {
 			return new Staff_meritFilterIterator( $it );
 	}//end mentors
 
-	
+	public function promotion_users($it = null){
+			if ( ! $it ){
+				$it = $this->getIterator();
+			}//end if
+			return new Promotion_FilterIterator( $it );
+	}//end mentors
+
+
 }//end function
 
 class admin_FilterIterator extends \PSU_FilterIterator {
@@ -88,9 +95,20 @@ class Staff_meritFilterIterator extends \PSU_FilterIterator {
 	public function accept() {
 		$staff = $this->current();
 
-		return 'trainee' == $staff->privileges || 'sta' == $staff->privileges || 'shift_leader' == $staff->privileges || 'manager' == $staff->privileges;
+		return 'trainee' == $staff->privileges || 'sta' == $staff->privileges || 'shift_leader' == $staff->privileges || 'supervisor' == $staff->privileges;
 	}//end accept
+
 }//end 
+
+class Promotion_FilterIterator extends \PSU_FilterIterator {
+	public function accept() {
+		$staff = $this->current();
+
+		return 'trainee' == $staff->privileges || 'sta' == $staff->privileges || 'shift_leader' == $staff->privileges || 'supervisor' == $staff->privileges;
+	}//end accept
+
+}//end 
+
 
 class Staff_FilterIterator extends \PSU_FilterIterator {
 	public function accept() {
