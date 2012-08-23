@@ -6,7 +6,6 @@ PSU::session_start(); // force ssl + start a session
 
 $GLOBALS['BASE_URL'] = '/webapp/training-tracker';
 $GLOBALS['BASE_DIR'] = __DIR__;
-$GLOBALS['BASE_URL'] = 'https://tlferm.psudev.com/webapp/training-tracker';
 
 $GLOBALS['TITLE'] = 'Training Tracker';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
