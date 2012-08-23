@@ -267,7 +267,14 @@ class User
 		$person->phone;
 
 		if( isset( $person->phone['OF'][0] ) ) {
-			return $person->phone['OF'][0]->phone_area .'-'.$person->phone['OF'][0]->phone_number_formatted;
+			$current = 0;
+			$seqno = 0;
+			foreach( $person->phone['OF'] as $i => $phone ) {
+				if( $phone->seqno > $seqno ) {
+					$current = $i;
+				}//end if
+			}//end foreach
+			return $person->phone['OF'][$current]->phone_area .'-'.$person->phone['OF'][$current]->phone_number_formatted;
 		} elseif( isset( $person->phone['VM'][0] ) ) {
 			return $person->phone['VM'][0]->phone_area .'-'.$person->phone['VM'][0]->phone_number_formatted;
 		}//end else
