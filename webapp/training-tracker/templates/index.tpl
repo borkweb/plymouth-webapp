@@ -1,5 +1,5 @@
-{PSU_JS src="/webapp/training-tracker/js/index.js"}
-{PSU_CSS href="css/index.css"}
+{PSU_JS src="$base_url/js/index.js"}
+{PSU_CSS src="$base_url/css/index.css"}
 {* TODO: OMG SPACES? Yea Bro. Spaces are the new thing. *}
 
 {box size="16" title="Person selection"}

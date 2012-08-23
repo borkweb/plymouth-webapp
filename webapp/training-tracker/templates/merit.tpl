@@ -1,7 +1,7 @@
 {PSU_CSS src="$base_url/templates/style.css"}
 {PSU_CSS src="$base_url/css/merit.css"}
 {PSU_JS src="$base_url/js/merit.js"}
-{* <script type="text/javascript" src="{$base_url/js/merit.js"></script> *}
+
 {box title="Gold stars and dog houses" size="16"}
 	{foreach from=$staff item=person name=ct key=key}
 		{assign var=wpid value=$person->wpid} 
