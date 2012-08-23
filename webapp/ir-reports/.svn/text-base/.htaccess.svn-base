@@ -1,0 +1,10 @@
+php_value auto_prepend_file none
+php_value auto_append_file none
+
+RewriteBase /webapp/portal/channel/ir_reports/
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) index.html/$1 [L,QSA]
+RewriteRule ^$ index.html/ [L,QSA]
