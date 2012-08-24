@@ -58,7 +58,7 @@ jQuery(function(){
 
 		debug: false,
 
-		file_size_limit : "15 MB",
+		file_size_limit : "20 MB",
 		flash_url: BASE_URL + "/includes/swfupload.swf",
 		file_dialog_complete_handler: rfswfup.file_dialog_complete,
 		upload_complete_handler: rfswfup.upload_complete,
