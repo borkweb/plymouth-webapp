@@ -1,135 +1,120 @@
 <?php
 require_once( 'autoload.php' );
 PSU::session_start();
-
+   
 IDMObject::authN();
-
-// *** Site Constants ***
-// **********************
-
+   
 // Base directory of application
 $GLOBALS['BASE_DIR'] = dirname(__FILE__);
-
+   
 // Base URL
-$GLOBALS['BASE_URL'] = 'https://'.$_SERVER['HTTP_HOST'].'/webapp/portal/channel/ir_reports';
-
+$GLOBALS['BASE_URL'] = '/webapp/training-tracker';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
-
+   
 $GLOBALS['TITLE'] = 'Academic Affairs Reports';
-
-// **************************
-// *** End Site Constants ***
-
-
-// *** Required files ***
-// **********************
-
+   
 require_once 'klein/klein.php';
-require_once 'includes/IrReportsAPI.class.php';
-
-// **************************
-// *** End required files ***
-
+require_once 'includes/IRReportsAPI.class.php';
+   
 respond( function( $request, $response, $app ) {
-	if( ! IDMObject::authZ('permission', 'ir_reports_dean') ) {
-	//if( ! IDMObject::authZ('permission', 'mis')   && ! $_SESSION['username'] == 'jnbernier'  && ! $_SESSION['username'] == 'jlarson' ) {
-		die('You do not have access to this application.');
-	}
-	if( IDMObject::authZ('permission', 'ir_reports_dean_admin') ) {
-		$app->tpl->assign('admin', 1);	
-	}
-
-	$app->tpl = new PSUTemplate;
-	$app->tpl->channel();
-
-	$app->tpl->assign('base_url', $GLOBALS['BASE_URL']);	
+ 	if( ! IDMObject::authZ('permission', 'ir_reports_dean') ) {
+ 		die('You do not have access to this application.');
+ 	}
+ 	if( IDMObject::authZ('permission', 'ir_reports_dean_admin') ) {
+ 		$app->tpl->assign('admin', 1);	
+ 		$app->admin = 1;	
+ 	}
+   
+ 	$app->tpl = new PSUTemplate;
+   
+ 	$app->tpl->assign('base_url', $GLOBALS['BASE_URL']);	
 });
-
+   
 respond( '/?', function( $request, $response, $app ) {
-	//display all the files
-
-	// Gets all the pdf file names from the files folder and 
-	// sorts them by display name
-	$files = IR::get_all_file_info('display_name');
-
-	$app->tpl->assign('files', $files);
-	$app->tpl->display('index.tpl');
+ 	//display all the files
+    
+ 	// Gets all the pdf file names from the files folder and 
+ 	// sorts them by display name
+ 	$files = IR::get_all_file_info('display_name');
+   
+ 	$app->tpl->assign('files', $files);
+ 	$app->tpl->display('index.tpl');
 });
-
-
+   
+   
 respond( '/reports/[:report_name]/?', function( $request, $response, $app ) {
-
-	$report_name = $request->report_name;
-
-	$file = 'files/'.$report_name;
-
-	header('Content-type: application/pdf');
-	header("Content-Disposition: inline; filename=".$file);
-	/*header("Content-Disposition: attachment; filename=".$file);*/
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s') . ' GMT');
-	header('Cache-Control: no-store, no-cache, must-revalidate');
-	header('Cache-Control: pre-check=0, post-check=0, max-age=0');
-	header('Pragma: anytextexeptno-cache', true);
-	header('Cache-control: private');
-	header('Expires: 0');
-
-	// read all the files!
-	readfile($file); 
-
+   
+ 	$report_name = $request->report_name;
+   
+ 	$file = 'files/'.$report_name;
+    
+ 	header('Content-type: application/pdf');
+ 	header("Content-Disposition: inline; filename=".$file);
+ 	header('Last-Modified: '.gmdate('D, d M Y H:i:s') . ' GMT');
+ 	header('Cache-Control: no-store, no-cache, must-revalidate');
+ 	header('Cache-Control: pre-check=0, post-check=0, max-age=0');
+ 	header('Pragma: anytextexeptno-cache', true);
+ 	header('Cache-control: private');
+ 	header('Expires: 0');
+   
+ 	// read all the files!
+ 	readfile($file); 
+   
 });
-
+   
 respond('POST', '/edit/?', function( $request, $response, $app ) {
-	$keys = array_keys($_POST);
-	$values = array_values($_POST);
-	foreach($keys as &$key){
-		$pos = strlen($key) - 4;
-		$key[$pos] = '.';
-	}
-
-	for($i = 0; $i < count($keys); $i++){
-		$file_name = $keys[$i];
-		$display_name = $values[$i];
-		if ($file_name != $display_name){
-			$files[$i]['file_name'] = $file_name;
-			$files[$i]['display_name'] = $display_name;
-		}
-	}
-
-	foreach ($files as $file){
-
-		$sql = 'SELECT * from ir_reports WHERE file = ?';
-		$file_db = PSU::db('myplymouth')->GetAll($sql, array($file['file_name']));
-
-		if ($file_db[0]['link_text'] && $file_db[0]['link_text'] != $file['display_name']){
-			// if there is an entry for a display name and it isn't the same as the current display name
-			$sql = 'UPDATE ir_reports SET link_text = ? WHERE file = ?';
-			PSU::db('myplymouth')->Execute($sql, array($file['display_name'], $file['file_name']));
-		}	elseif (!$file_db[0]['link_text']) {
-			// If there is no set display name
-			$sql = 'INSERT INTO ir_reports (file, link_text) VALUES (?, ?)';
-			PSU::db('myplymouth')->Execute($sql, array($file['file_name'], $file['display_name']));
-		}
-	}
-	$response->redirect($GLOBALS['BASE_URL']);
+ 	$keys = array_keys($_POST);
+ 	$values = array_values($_POST);
+ 	foreach($keys as &$key){
+ 		// $pos = strlen($key) - 4;
+ 		$key[(strlen($key)-4)] = '.';
+ 	}
+   
+ 	for($i = 0; $i < count($keys); $i++){
+ 		$file_name = $keys[$i];
+ 		$display_name = $values[$i];
+ 		if ($file_name != $display_name){
+ 			$files[$i]['file_name'] = $file_name;
+ 			$files[$i]['display_name'] = $display_name;
+ 		}
+ 	}
+     
+ 	foreach ($files as $file){
+      
+ 		$sql = 'SELECT * from ir_reports WHERE file = ?';
+ 		$file_db = PSU::db('myplymouth')->GetRow($sql, array($file['file_name']));
+   
+ 		if ($file_db['link_text'] && $file_db['link_text'] != $file['display_name']){
+ 			// if there is an entry for a display name and it isn't the same as the current display name
+ 			$sql = 'UPDATE ir_reports SET link_text = ? WHERE file = ?';
+ 			PSU::db('myplymouth')->Execute($sql, array($file['display_name'], $file['file_name']));
+ 		}	elseif (!$file_db['link_text']) {
+ 			// If there is no set display name
+ 			$sql = 'INSERT INTO ir_reports (file, link_text) VALUES (?, ?)';
+ 			PSU::db('myplymouth')->Execute($sql, array($file['file_name'], $file['display_name']));
+ 		}
+ 	}
+ 	$response->redirect($GLOBALS['BASE_URL']);
 });
+   
 respond('GET', '/edit/?', function( $request, $response, $app ) {
-	//edit all the files!
-
-	if( ! IDMObject::authZ('permission', 'ir_reports_dean') ) {
-		        die('You do not have access to this application.');
-	}
-
-	// get all the pdf files in the files folder and sorted by file name
-	$files = IR::get_all_file_info('file_name');
-
-	$app->tpl->assign('files', $files);	
-
-	$app->tpl->display('edit.tpl');
+ 	//edit all the files!
+   
+ 	if( ! $app->admin ) {
+ 		        die('You do not have access to this application.');
+ 	}
+   
+ 	// get all the pdf files in the files folder and sorted by file name
+ 	$files = IR::get_all_file_info('file_name');
+    
+ 	$app->tpl->assign('files', $files);	
+   
+ 	$app->tpl->display('edit.tpl');
 });
 $app_routes = array();
-
+   
 foreach( $app_routes as $base ) {
-		with( "/{$base}", $GLOBALS['BASE_DIR'] . "/routes/{$base}.php" );
+ 		with( "/{$base}", $GLOBALS['BASE_DIR'] . "/routes/{$base}.php" );
 }//end foreach
-
+   
 dispatch( $_SERVER['PATH_INFO'] );
