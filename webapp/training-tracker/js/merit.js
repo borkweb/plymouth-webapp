@@ -128,8 +128,8 @@ $(document).on('click', '.confirm', function(event){
 			success: function(data) {
 				// Data is returned containing the id number of the item inserted into the database
 				// star and dogHouse is the code inserted to show the icons.
-				var dogHouse = '<span data-merit-id="' + data['id'] + '" class="merit demerit" title="' + comment + '"><i class="psu-icon icon small red"><span class="icon-ape-no"></span></i></span>';
-				var star = '<span data-merit-id="' + data['id'] + '" class="merit" title="' + comment + '"><i class="psu-icon icon small green"><span class="icon-ape-yes"></span></i></span>';
+				var dogHouse = '<span data-merit-id="' + data['id'] + '" class="merit demerit" title="' + comment + '"><i class="psu-icon icon small red"><span class="icon-ape-home"></span></i></span>';
+				var star = '<span data-merit-id="' + data['id'] + '" class="merit" title="' + comment + '"><i class="psu-icon icon small gold"><span class="icon-star"></span></i></span>';
 				// type will always equal Star or Dog House this is used to determain what to insert
 				if (type == 'Star'){
 					// The next line adds the option removal checkbox under the Remove a merit button

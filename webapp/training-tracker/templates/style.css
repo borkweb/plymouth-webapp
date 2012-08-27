@@ -52,11 +52,13 @@
 	color: #C43C35;
 }
 
-.green{
-	color: #57A957;
+.gold{
+	color: #808000;
 }
 
-.green:hover{
-	color: #57A957;
+.gold:hover{
+	color: #808000;
 }
-
+.merit i span{
+	display: inline-block;
+}

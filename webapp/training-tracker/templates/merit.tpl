@@ -11,11 +11,11 @@
 					<span class='name' data-wpid='{$person->wpid}'>{$person->name}</span>
 
 					{foreach from=$merits.$wpid.demerits item=demerit}
-						<span title = "{$demerit.notes}" data-merit-id='{$demerit.id}' class='merit demerit'>{icon id='ape-no' class='red'}</span>			
+						<span title = "{$demerit.notes}" data-merit-id='{$demerit.id}' class='merit demerit'>{icon id='ape-home' class='red'}</span>			
 					{/foreach}
 
 					{foreach from=$merits.$wpid.merits item=merit}
-						<span title = "{$merit.notes}" data-merit-id='{$merit.id}' class='merit'>{icon id='ape-yes' class='green'}</span>
+						<span title = "{$merit.notes}" data-merit-id='{$merit.id}' class='merit'>{icon id='star' class='gold'}</span>
 					{/foreach}
 
 				{/col}
