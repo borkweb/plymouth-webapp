@@ -2,6 +2,14 @@
 
 namespace TrainingTracker;
 
+include 'FilterIterators/AdminFilterIterator.php';
+include 'FilterIterators/MeritFilterIterator.php';
+include 'FilterIterators/PromotionFilterIterator.php';
+include 'FilterIterators/StaffFilterIterator.php';
+include 'FilterIterators/ValidUserFilterIterator.php';
+include 'FilterIterators/MenteeFilterIterator.php';
+include 'FilterIterators/MentorFilterIterator.php';
+
 
 class StaffCollection extends \PSU\Collection {
 
@@ -11,136 +19,65 @@ class StaffCollection extends \PSU\Collection {
 	}
 
 	public function get(){
-		
-		$client = \PSU::api('backend'); //load api
-		$users = $client->get('support/users'); //get all the people that work at the help desk
+		// Load API
+		$client = \PSU::api('backend');
+		// Get all of the people that work at the helpdesk.
+		$users = $client->get('support/users');
 		return $users;
-		
 	}//end get
 
-
-	//mentees. selects the trainee and sta permission from callog
-	public function mentees($it = null){
-		if ( ! $it ){
-			$it = $this->getIterator();
+	// mentees. selects the trainee and sta permission from callog
+	public function mentees($person = null){
+		if ( ! $person ){
+			$person = $this->getIterator();
 		}//end if
-
-		return new Staff_MenteeFilterIterator( $it );
-
+		return new MenteeFilterIterator( $person );
 	}//end mentees
 
-//valid users have callog permissions and are active
-	public function valid_users($it = null){
-		if ( ! $it ){
-			$it = $this->getIterator();
+	// valid users have callog permissions and are active
+	public function valid_users($person = null){
+		if ( ! $person ){
+			$person = $this->getIterator();
 		}//end if
-
-		return new valid_FilterIterator( $it );
-
+		return new ValidUserFilterIterator( $person );
 	}//end staff_filter
 
-	//filter for admins, people with jr. shift supervisors or greater
-	public function admins($it = null){
-		if ( ! $it ){
-			$it = $this->getIterator();
+	// filter for admins, people with jr. shift supervisors or greater
+	public function admins($person = null){
+		if ( ! $person ){
+			$person = $this->getIterator();
 		}//end if
-
-		return new admin_FilterIterator( $it );
-
+		return new AdminFilterIterator( $person );
 	}//end staff
 
-	//filter for trainee, sta and shift_leader callog permissions
-	public function staff($it = null){
-		if ( ! $it ){
-			$it = $this->getIterator();
+	// filter for trainee, sta and shift_leader callog permissions
+	public function staff($person = null){
+		if ( ! $person ){
+			$person = $this->getIterator();
 		}//end if
-
-		return new Staff_FilterIterator( $it );
-
+		return new StaffFilterIterator( $person );
 	}//end staff
 	
-	public function mentors($it = null){
-			if ( ! $it ){
-				$it = $this->getIterator();
+	public function mentors($person = null){
+			if ( ! $person ){
+				$person = $this->getIterator();
 			}//end if
-			return new Staff_MentorFilterIterator( $it );
+			return new MentorFilterIterator( $person );
 	}//end mentors
 
-	public function merit_users($it = null){
-			if ( ! $it ){
-				$it = $this->getIterator();
+	public function merit_users($person = null){
+			if ( ! $person ){
+				$person = $this->getIterator();
 			}//end if
-			return new Staff_meritFilterIterator( $it );
+			return new MeritFilterIterator( $person );
 	}//end mentors
 
-	public function promotion_users($it = null){
-			if ( ! $it ){
-				$it = $this->getIterator();
+	public function promotion_users($person = null){
+			if ( ! $person ){
+				$person = $this->getIterator();
 			}//end if
-			return new Promotion_FilterIterator( $it );
+			return new PromotionFilterIterator( $person );
 	}//end mentors
 
+}// end StaffCollection 
 
-}//end function
-
-class admin_FilterIterator extends \PSU_FilterIterator {
-	public function accept() {
-		$staff = $this->current();
-
-		return 'manager' == $staff->privileges || 'supervisor' == $staff->privileges || 'webguru' == $staff->privileges;
-	}//end accept
-}//end 
-
-class Staff_meritFilterIterator extends \PSU_FilterIterator {
-	public function accept() {
-		$staff = $this->current();
-
-		return 'trainee' == $staff->privileges || 'sta' == $staff->privileges || 'shift_leader' == $staff->privileges || 'supervisor' == $staff->privileges;
-	}//end accept
-
-}//end 
-
-class Promotion_FilterIterator extends \PSU_FilterIterator {
-	public function accept() {
-		$staff = $this->current();
-
-		return 'trainee' == $staff->privileges || 'sta' == $staff->privileges || 'shift_leader' == $staff->privileges || 'supervisor' == $staff->privileges;
-	}//end accept
-
-}//end 
-
-
-class Staff_FilterIterator extends \PSU_FilterIterator {
-	public function accept() {
-		$staff = $this->current();
-
-		return 'trainee' == $staff->privileges || 'sta' == $staff->privileges || 'shift_leader' == $staff->privileges;
-	}//end accept
-}//end 
-
-
-class valid_FilterIterator extends \PSU_FilterIterator {
-	public function accept() {
-		$staff = $this->current();
-
-		return 'trainee' == $staff->privileges || 'sta' == $staff->privileges || 'shift_leader' == $staff->privileges || 'manager' == $staff->privileges || 'supervisor' == $staff->privileges || 'webguru' == $staff->privileges;
-	}//end accept
-}//end 
-
-
-class Staff_MenteeFilterIterator extends \PSU_FilterIterator {
-	public function accept() {
-		$mentee = $this->current();
-
-		return 'trainee' == $mentee->privileges || 'sta' == $mentee->privileges;
-	}//end accept
-}//end 
-
-
-class Staff_MentorFilterIterator extends \PSU_FilterIterator {
-	public function accept() {
-		$mentor = $this->current();
-
-		return 'shift_leader' == $mentor->privileges || 'supervisor' == $mentor->privileges;
-	}//end accept
-}//end class

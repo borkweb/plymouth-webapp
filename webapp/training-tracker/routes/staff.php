@@ -114,7 +114,7 @@ respond( 'GET', '/fate', function( $request, $response, $app ) {
 	foreach ($staff as $person){
 		$permission	= TrainingTracker::get_user_level($person->wpid);
 		$person->permission_slug = $permission;
-		$person->permission= TrainingTracker::level_translation($permission);
+		$person->permission = TrainingTracker::level_translation($permission);
 	}
 	$app->tpl->assign('staff', $staff);
 	$app->tpl->display('admin.tpl');

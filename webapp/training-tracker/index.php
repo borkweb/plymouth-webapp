@@ -6,7 +6,6 @@ PSU::session_start(); // force ssl + start a session
 
 $GLOBALS['BASE_URL'] = '/webapp/training-tracker';
 $GLOBALS['BASE_DIR'] = __DIR__;
-
 $GLOBALS['TITLE'] = 'Training Tracker';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
 
@@ -29,7 +28,6 @@ IDMObject::authN();
 
 //Catch all
 respond( function( $request, $response, $app ) {
-
 	// get the logged in user
 	$app->user = PSUPerson::get( $_SESSION['wp_id'] ); 
 
@@ -138,7 +136,6 @@ respond( '/?', function( $request, $response, $app ) {
 		
 		$person->merit = TrainingTracker::merit_get($pidm);
 		$person->demerit = TrainingTracker::demerit_get($pidm);
-
 		$type = TrainingTracker::checklist_type($person->privileges);
 		if (!TrainingTracker::checklist_exists($pidm, $type, 0)){
 			//get tybe based off of a persons privileges
