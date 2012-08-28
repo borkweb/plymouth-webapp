@@ -45,18 +45,18 @@
 	background: #FAA732; 
 }
 
-.red{
+.red span{
 	color: #C43C35;
 }
-.red:hover{
+.red:hover span{
 	color: #C43C35;
 }
 
-.gold{
+.gold span{
 	color: #808000;
 }
 
-.gold:hover{
+.gold:hover span{
 	color: #808000;
 }
 .merit i span{
