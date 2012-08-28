@@ -17,6 +17,7 @@ class HubUtils
  */
 
 	public $hub_config_id_msgofday = 'message_of_the_day';
+	public $hub_config_id_monthlystaffmtgsched = 'monthly_staff_meeting_schedule';
 	public $hub_config_id_email_who = 'portal_email_names';
 	public $hub_config_id_email_addresses = 'portal_email_addresses';
 	public $hub_config_id_ir_admin = 'ir_notify_admin';
