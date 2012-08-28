@@ -1,11 +1,11 @@
 <?php
 //the axax post part for checklist check boxes 
-respond('POST', '/checklist/item', function( $request, $responce, $app ) {
-	$checked_id = $request->data[0];
+respond('POST', '/checklist/checkbox', function( $request, $responce, $app ) {
+	$checked_id = $request->data['checkboxId'];
 	if (preg_match('/^\\d{1,3}$/', $checked_id)){
-		$wpid = $request->data[1];
+		$wpid = $request->data['wpid'];
 		if (TrainingTracker::valid_wpid($wpid)){
-			$response = $request->data[2];
+			$response = $request->data['response'];
 
 			$person = PSUPerson::get($wpid);
 			$pidm=$person->pidm;
@@ -78,8 +78,8 @@ respond('POST', '/checklist/comments/[:wpid]', function( $request, $responce, $a
 //promote/demote ajax page
 respond('POST', '/fate', function( $request, $response, $app ) {
 
-	$permission = $request->data[0];
-	$wpid = $request->data[1];
+	$permission = $request->data['permission'];
+	$wpid = $request->data['wpid'];
 
 	if ($permission == 'supervisor' || $permission == 'shift_leader' || $permission == 'sta' || $permission == 'trainee'){
 		if(TrainingTracker::valid_wpid($wpid)){
@@ -215,16 +215,16 @@ respond( 'GET', '/statistics/[:wpid]', function( $request, $responce, $app ) {
 
 respond( 'POST', '/merit/remove', function( $request, $responce, $app ) {
 	
-	$id = $request->data[0];
+	$id = $request->data['id'];
 	TrainingTracker::merit_remove($id);
 
 });
 
 respond( 'POST', '/merit', function( $request, $responce, $app ) {
 
-	$type = $request->data[0];
-	$comments = $request->data[1];
-	$wpid = $request->data[2];
+	$type = $request->data['type'];
+	$comments = $request->data['comments'];
+	$wpid = $request->data['wpid'];
 	if(TrainingTracker::valid_wpid($wpid)){
 		$comments = htmlentities($comments);
 		$comments = stripslashes($comments);

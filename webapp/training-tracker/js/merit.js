@@ -45,9 +45,9 @@ $(document).on('click', '.remove-old', function(event){
 	var $checked = $el.find('input:checked').parent();
 	// Foreach checkbox delete it from the data base then remove the element from the page
 	$checked.each(function(){
-		var postData = new Array();
+		//var postData = new Array();
 		var id = $(this).data('merit-id');
-		postData[0] = id;		
+		postData = {id: id};		
 		$.ajax({
 			type: 'POST',
 			url: 'merit/remove',
@@ -115,9 +115,7 @@ $(document).on('click', '.confirm', function(event){
 		var postData = new Array();
 		var postComment = $el.find('textarea').val();
 		var comment = html_escape_quotes(postComment);
-		postData[0] = $el.find('input:checked').val();
-		postData[1] = postComment;
-		postData[2] = $el.find('.name').data('wpid');
+		postData = {type: $el.find('input:checked').val(), comments: postComment, wpid: $el.find('.name').data('wpid')};
 
 		$.ajax({
 			type: 'POST',

@@ -27,8 +27,8 @@ var TrainingTracker = {
 							}
 							$row.find('.permission').text(demoteName);
 							var postData = Array();
-							postData[0] = demoteTo;
-							postData[1] = wpid;
+							postData = {permission: demoteTo, wpid: wpid};
+
 							$.ajax({
 									type: 'POST',
 									url: 'fate',
@@ -77,8 +77,8 @@ var TrainingTracker = {
 						}
 						$row.find('.permission').text(promoteName);
 						var postData = Array();
-						postData[0] = promoteTo;
-						postData[1] = wpid;
+						postData = {permission: promoteTo, wpid: wpid};
+
 						$.ajax({
 							type: 'POST',
 							url: 'fate',
@@ -97,11 +97,9 @@ var TrainingTracker = {
 			});
 	},
 
-	//statistics / checklist page function
-	outputDataCheck: function (e){
-		var postData = new Array();
-
-		//if it checkbox you clicked was just checked.
+	// Statistics / checklist page function
+	checkboxToggle: function (e){
+		// If it checkbox you clicked was just checked.
 		if (e.target.checked){
 			//pass complete
 			var response = 'complete';
@@ -109,14 +107,12 @@ var TrainingTracker = {
 			//pass n/a	
 			var response = 'incomplete';
 		}
-		//active user is the person looking at the page
-		//current user is the person they are looking at
-		postData[0]=e.target.id; //id of the checkbox
-		postData[1]=current_user_wpid;
-		postData[2]=response;
+		// Active user is the person looking at the page
+		// Current user is the person they are looking at
+		postData = { checkboxId: e.target.id, wpid: current_user_wpid, response: response};
 		$.ajax({
 			type: 'POST',
-			url: '/webapp/training-tracker/staff/checklist/item',
+			url: '../checklist/checkbox',
 			data: { data: postData }
 		});	
 	},

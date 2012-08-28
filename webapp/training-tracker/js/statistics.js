@@ -29,7 +29,7 @@ $(function() {
 
 
 // As the coments box is modified send the values to the database
-$(document).on('click', '.chkbox', TrainingTracker.outputDataCheck);
+$(document).on('click', '.chkbox', TrainingTracker.checkboxToggle);
 
 $(document).on('click', '.chkbox', TrainingTracker.recaculateProgress);
 

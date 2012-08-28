@@ -1,4 +1,4 @@
-{PSU_CSS href="/webapp/training-tracker/css/stats.css"} 
+{PSU_CSS href="$base_url/css/stats.css"} 
 
 {* setting javascript variables *}
 <script> 	
@@ -7,7 +7,7 @@
 	var current_user_level = "{$current_user_level}";
 </script>
 
-{PSU_JS src="/webapp/training-tracker/js/statistics.js"}
+{PSU_JS src="$base_url/js/statistics.js"}
 
 {box title=$title size="16"}
 	{* This is the outer accordian that shows the level ie trainee *}
