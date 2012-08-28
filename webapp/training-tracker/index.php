@@ -1,5 +1,6 @@
 <?php
-//require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
+
+require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
 require_once 'autoload.php';
 
 PSU::session_start(); // force ssl + start a session
@@ -9,15 +10,15 @@ $GLOBALS['BASE_DIR'] = __DIR__;
 $GLOBALS['TITLE'] = 'Training Tracker';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
 
+if( file_exists( $GLOBALS['BASE_DIR'] . '/debug.php' ) ) {
+	include $GLOBALS['BASE_DIR'] . '/debug.php';
+}
+
 includes_psu_register( 'TrainingTracker', $GLOBALS['BASE_DIR'] . '/includes' );
 
 require_once 'klein/klein.php';
 
 require_once $GLOBALS['BASE_DIR'] . '/includes/TrainingTrackerAPI.class.php';
-
-if( file_exists( $GLOBALS['BASE_DIR'] . '/debug.php' ) ) {
-	include $GLOBALS['BASE_DIR'] . '/debug.php';
-}
 
 IDMObject::authN();
 
@@ -142,13 +143,12 @@ respond( '/?', function( $request, $response, $app ) {
 			$type = TrainingTracker::checklist_type($person->privileges);
 			//insert new checklist (pidm, type)
 			TrainingTracker::checklist_insert($pidm, $type);
-
 		}
 	}
-
 	$app->tpl->assign('staff', $staff);
 	$app->tpl->display('index.tpl');
 });
+
 $app_routes = array(
 	 'staff', 
 	 'team' 
