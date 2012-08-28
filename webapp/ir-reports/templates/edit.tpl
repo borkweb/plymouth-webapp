@@ -1,4 +1,4 @@
-{box size="16" title="The Box Of Linkie Thinggies"}
+{box size="16" title="Link Editor"}
 	<form action='{$base_url}/edit/' method='POST'>
 		<table class='table table-striped'>
 			<thead>
