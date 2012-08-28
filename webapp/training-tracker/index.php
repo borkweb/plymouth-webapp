@@ -1,11 +1,17 @@
 <?php
 
-require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
+if( file_exists( 'dev-environment.php' ) ) {
+	include 'dev-environment.php';
+}
+
 require_once 'autoload.php';
 
 PSU::session_start(); // force ssl + start a session
 
-$GLOBALS['BASE_URL'] = '/webapp/training-tracker';
+if ( ! $GLOBALS['BASE_URL'] ){
+	$GLOBALS['BASE_URL'] = '/webapp/training-tracker';
+}
+
 $GLOBALS['BASE_DIR'] = __DIR__;
 $GLOBALS['TITLE'] = 'Training Tracker';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
