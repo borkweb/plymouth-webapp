@@ -32,7 +32,7 @@ class cron
 	var $_run_time;
 	var $_stdin;
 	var $_lock_override;
-	var $page = 'mtbatchelder@plymouth.edu,ambackstrom@plymouth.edu';
+	var $page = 'nrporter@plymouth.edu,djbramer@plymouth.edu';
 
 	/**
 	 * cron
