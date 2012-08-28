@@ -5,7 +5,7 @@ $(function () {
 		if (permission == 'Information Desk Trainee'){
 				$el.find('.demote').attr('disabled', 'disabled');
 		}
-		else if (permission == 'Senior Information Desk Consultant'){
+		else if (permission == 'Junior Shift Supervisor'){
 				$el.find('.promote').attr('disabled', 'disabled');
 		}
 	});

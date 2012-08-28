@@ -14,9 +14,7 @@ $(function() {
 		$(this).progressbar( 'option', 'value', $(this).data('progress'));
 	});
 
-	//var checkboxes = $(".chkbox-container");
 	$('.chkbox-container').each( function(){
-console.log($(this));
 		 $(this).mouseenter(function() {
 			 $(this).addClass('highlight');
 		 }).mouseleave(function() {
@@ -30,8 +28,8 @@ console.log($(this));
 });
 
 
-//as the coments box is modified send the values to the database
-$(document).on('click', '.chkbox', TrainingTracker.outputDataCheck);
+// As the coments box is modified send the values to the database
+$(document).on('click', '.chkbox', TrainingTracker.checkboxToggle);
 
 $(document).on('click', '.chkbox', TrainingTracker.recaculateProgress);
 

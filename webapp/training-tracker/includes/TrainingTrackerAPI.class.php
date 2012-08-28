@@ -42,7 +42,8 @@ class TrainingTracker{
 	}
 
 
-	public function checklist_insert($pidm, $type){
+	public function checklist_insert($indentifier, $type){
+		$pidm = \PSUPerson::get($indentifier)->pidm;
 		$sql = "INSERT INTO person_checklists (type, pidm, closed) VALUES (?, ?, ?)";
 		$inserted = PSU::db('hr')->Execute($sql, array($type, $pidm, 0));
 		return true;
@@ -101,10 +102,10 @@ class TrainingTracker{
 			$user_level = "Senior Information Desk Consultant";
 		}
 		else if ($user_level == 'supervisor'){
-			$user_level = 'Information Desk Shift Supervisor';
+			$user_level = 'Junior Shift Supervisor';
 		}
 		else {
-			$user_level = "FAIL!";
+			$user_level = false;
 		}
 		return $user_level;
 	}
@@ -387,4 +388,41 @@ class TrainingTracker{
 		return $return_value;
 	}
 	
+	public function merit_insert($item_id, $checklist_id, $response, $notes, $pidm){
+		$sql = "INSERT INTO person_checklist_items (item_id, checklist_id, response, notes, updated_by) VALUES (?, ?, ?, ?, ?)";
+		$inserted = PSU::db('hr')->Execute($sql, array($item_id, $checklist_id, $response, $notes, $pidm));
+		return true;
+	}
+	public function merit_remove($id){
+		$sql = "DELETE FROM person_checklist_items WHERE id = ? AND (response = ? or response = ?)";
+		\PSU::db('hr')->Execute( $sql, array($id, 'merit', 'demerit'));
+		return true;
+	}
+	public function merit_update($checklist_id_old, $pidm){
+				$checklist_id_current = TrainingTracker::get_checklist_id($pidm);
+				$sql = "UPDATE person_checklist_items SET checklist_id = ? WHERE (checklist_id = ? AND response = ?) OR (checklist_id = ? AND response = ?)";
+				$updated = PSU::db('hr')->Execute($sql, array($checklist_id_current, $checklist_id_old, 'merit', $checklist_id_old, 'demerit')); 
+	}
+
+	public function merit_get($wpid){
+		$pidm = \PSUPerson::get($wpid)->pidm;
+		$sql = "SELECT i.* FROM person_checklist_items i JOIN person_checklists c ON (i.checklist_id = c.id) WHERE c.pidm = ? AND i.response = ?";
+		$merits = PSU::db('hr')->GetAll( $sql, array($pidm, 'merit' ));
+		return $merits;
+	}
+
+	public function demerit_get($wpid){
+		$pidm = \PSUPerson::get($wpid)->pidm;
+		$sql = "SELECT i.* FROM person_checklist_items i JOIN person_checklists c ON (i.checklist_id = c.id) WHERE c.pidm = ? AND i.response = ?";
+		$demerits = PSU::db('hr')->GetAll( $sql, array($pidm, 'demerit' ));
+		return $demerits;
+	}
+
+	public function last_insert_id(){
+		$sql = 'SELECT max(id) AS id FROM person_checklist_items';
+		$id = \PSU::db('hr')->GetOne($sql);
+		return $id;
+	} 
+
 }
+

@@ -31,7 +31,6 @@
 }
 
 .hidden{
-	/* TODO: we might have this one declared centrally called clear */
 	visibility:hidden;
 }
 
@@ -40,10 +39,26 @@
 }
 
 .title{
-	/* TODO: don't do this shizzle here */
 	margin-bottom: .5em;
 }
 .tt-warning{
-	/* TODO: we have a warning style, I *think*.  Perhaps make this style more app specific... tt-warning */
 	background: #FAA732; 
+}
+
+.red{
+	color: #C43C35;
+}
+.red:hover{
+	color: #C43C35;
+}
+
+.gold{
+	color: #808000;
+}
+
+.gold:hover{
+	color: #808000;
+}
+.merit i span{
+	display: inline-block;
 }

@@ -1,4 +1,4 @@
-{PSU_JS src="/webapp/training-tracker/js/admin.js"}
+{PSU_JS src="$base_url/js/admin.js"}
 
 {box size="16" title="Table Of Fate"}
 	{* Used by the confirmation box *}

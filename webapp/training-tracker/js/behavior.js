@@ -1,3 +1,4 @@
+
 //TrainingTracker object to hold functions
 var TrainingTracker = {
 
@@ -12,25 +13,25 @@ var TrainingTracker = {
 					buttons: {
 						'Yes': function() {
 							var demoteText = $row.find('.permission').html();
-							if (demoteText == 'Senior Information Desk Consultant'){
+						 if (demoteText == 'Junior Shift Supervisor'){
+								var demoteTo = 'shift_leader';
+								var demoteName = 'Senior Information Desk Consultant';
+								$row.find('.promote').removeAttr('disabled');
+							}else	if (demoteText == 'Senior Information Desk Consultant'){
 								var demoteTo = 'sta';
 								var demoteName = 'Information Desk Consultant';
-								$row.find('.promote').removeAttr('disabled');
-							}
-							else{
+							}else if (demoteText == 'Information Desk Consultant'){
 								var demoteTo = 'trainee';
 								var demoteName = 'Information Desk Trainee';
-
 								$row.find('.demote').attr('disabled', 'disabled');
-								$row.find('.promote').removeAttr('disabled');
 							}
 							$row.find('.permission').text(demoteName);
 							var postData = Array();
-							postData[0] = demoteTo;
-							postData[1] = wpid;
+							postData = {permission: demoteTo, wpid: wpid};
+
 							$.ajax({
 									type: 'POST',
-									url: '/webapp/training-tracker/staff/fate',
+									url: 'fate',
 									data: { data: postData }
 							}); 
 							$.gritter.add({
@@ -45,32 +46,7 @@ var TrainingTracker = {
 				}
 		});
 	},
-
-	//statistics / checklist page function
-	outputDataCheck: function (e){
-		var postData = new Array();
-
-		//if it checkbox you clicked was just checked.
-		if (e.target.checked){
-			//pass complete
-			var response = 'complete';
-		}else{
-			//pass n/a	
-			var response = 'incomplete';
-		}
-		//active user is the person looking at the page
-		//current user is the person they are looking at
-		postData[0]=e.target.id; //id of the checkbox
-		postData[1]=current_user_wpid;
-		postData[2]=response;
-		$.ajax({
-			type: 'POST',
-			url: '/webapp/training-tracker/staff/checklist/item',
-			data: { data: postData }
-		});	
-
-	},
-
+ 
 	promotionPost: function (wpid, $row){
 		var name = $row.find('.name').html();
 		$('.popup_text').text('Are sure you want to promote ' + name + '?');
@@ -80,38 +56,65 @@ var TrainingTracker = {
 					modal: true,
 					buttons: {
 						'Yes': function() {
-							var promoteText = $row.find('.permission').html();
-							if (promoteText == 'Information Desk Trainee'){
-								var promoteTo = 'sta';
-								var promoteName = 'Information Desk Consultant';
-								$row.find('.demote').removeAttr('disabled');
-							}
-							else{
-								var promoteTo = 'shift_leader';
-								var promoteName = 'Senior Information Desk Consultant';
-								$row.find('.promote').attr('disabled', 'disabled');
-								$row.find('.demote').removeAttr('disabled');
-							}
-							$row.find('.permission').text(promoteName);
-							var postData = Array();
-							postData[0] = promoteTo;
-							postData[1] = wpid;
-							$.ajax({
-								type: 'POST',
-								url: '/webapp/training-tracker/staff/fate',
-								data: { data: postData }
-							});  
-							$( this ).dialog( 'close' );
-							$.gritter.add({
-								title: 'You just promoted ' + name,
-								text: name + ' was just promoted to a ' + promoteName + '.',
-							});
+						var promoteText = $row.find('.permission').html();
+						if (promoteText == 'Information Desk Trainee'){
+							var promoteTo = 'sta';
+							var promoteName = 'Information Desk Consultant';
+							$row.find('.demote').removeAttr('disabled');
+						}
+						else if (promoteText == 'Information Desk Consultant'){
+							var promoteTo = 'shift_leader';
+							var promoteName = 'Senior Information Desk Consultant';
+						}
+						else if (promoteText == 'Senior Information Desk Consultant'){
+							var promoteTo = 'supervisor';
+							var promoteName = 'Junior Shift Supervisor';
+							$row.find('.promote').attr('disabled', 'disabled');
+						}else{
+							var promoteTo = 'supervisor';
+							var promoteName = 'Junior Shift Supervisor';
+							$row.find('.promote').attr('disabled', 'disabled');
+						}
+						$row.find('.permission').text(promoteName);
+						var postData = Array();
+						postData = {permission: promoteTo, wpid: wpid};
+
+						$.ajax({
+							type: 'POST',
+							url: 'fate',
+							data: { data: postData }
+						});  
+						$( this ).dialog( 'close' );
+						$.gritter.add({
+							title: 'You just promoted ' + name,
+							text: name + ' was just promoted to a ' + promoteName + '.',
+						});
 					},
 						'No': function() {
 							$( this ).dialog( 'close' );
 						}
 					}
 			});
+	},
+
+	// Statistics / checklist page function
+	checkboxToggle: function (e){
+		// If it checkbox you clicked was just checked.
+		if (e.target.checked){
+			//pass complete
+			var response = 'complete';
+		}else{
+			//pass n/a	
+			var response = 'incomplete';
+		}
+		// Active user is the person looking at the page
+		// Current user is the person they are looking at
+		postData = { checkboxId: e.target.id, wpid: current_user_wpid, response: response};
+		$.ajax({
+			type: 'POST',
+			url: '../checklist/checkbox',
+			data: { data: postData }
+		});	
 	},
 
 	recaculateProgress: function (e){
@@ -147,5 +150,4 @@ var TrainingTracker = {
 		$('#total-progress').text(overallProgress);
 	}
 };
-
 

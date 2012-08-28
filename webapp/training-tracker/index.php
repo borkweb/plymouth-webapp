@@ -1,24 +1,30 @@
 <?php
-require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
+
+if( file_exists( 'dev-environment.php' ) ) {
+	include 'dev-environment.php';
+}
+
 require_once 'autoload.php';
 
 PSU::session_start(); // force ssl + start a session
 
-$GLOBALS['BASE_URL'] = '/webapp/training-tracker';
-$GLOBALS['BASE_DIR'] = __DIR__;
+if ( ! $GLOBALS['BASE_URL'] ){
+	$GLOBALS['BASE_URL'] = '/webapp/training-tracker';
+}
 
+$GLOBALS['BASE_DIR'] = __DIR__;
 $GLOBALS['TITLE'] = 'Training Tracker';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
+
+if( file_exists( $GLOBALS['BASE_DIR'] . '/debug.php' ) ) {
+	include $GLOBALS['BASE_DIR'] . '/debug.php';
+}
 
 includes_psu_register( 'TrainingTracker', $GLOBALS['BASE_DIR'] . '/includes' );
 
 require_once 'klein/klein.php';
 
 require_once $GLOBALS['BASE_DIR'] . '/includes/TrainingTrackerAPI.class.php';
-
-if( file_exists( $GLOBALS['BASE_DIR'] . '/debug.php' ) ) {
-	include $GLOBALS['BASE_DIR'] . '/debug.php';
-}
 
 IDMObject::authN();
 
@@ -29,7 +35,6 @@ IDMObject::authN();
 
 //Catch all
 respond( function( $request, $response, $app ) {
-
 	// get the logged in user
 	$app->user = PSUPerson::get( $_SESSION['wp_id'] ); 
 
@@ -110,6 +115,7 @@ respond( function( $request, $response, $app ) {
 	// assign user to template
 	$app->tpl->assign('active_user', $active_user);
 	$app->tpl->assign('user', $app->user);
+	$app->tpl->assign('base_url', $GLOBALS['BASE_URL']);
 	$app->tpl->assign('has_team', $has_team);
 	$app->tpl->assign('wpid', $wpid);
 	$app->tpl->assign('is_admin', $is_admin);
@@ -135,19 +141,20 @@ respond( '/?', function( $request, $response, $app ) {
 	foreach ($staff as $person){
 		$pidm = $person->person()->pidm;
 		
+		$person->merit = TrainingTracker::merit_get($pidm);
+		$person->demerit = TrainingTracker::demerit_get($pidm);
 		$type = TrainingTracker::checklist_type($person->privileges);
 		if (!TrainingTracker::checklist_exists($pidm, $type, 0)){
 			//get tybe based off of a persons privileges
 			$type = TrainingTracker::checklist_type($person->privileges);
 			//insert new checklist (pidm, type)
 			TrainingTracker::checklist_insert($pidm, $type);
-
 		}
 	}
-
 	$app->tpl->assign('staff', $staff);
 	$app->tpl->display('index.tpl');
 });
+
 $app_routes = array(
 	 'staff', 
 	 'team' 
