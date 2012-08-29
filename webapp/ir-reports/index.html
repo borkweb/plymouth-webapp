@@ -8,7 +8,7 @@ IDMObject::authN();
 $GLOBALS['BASE_DIR'] = dirname(__FILE__);
    
 // Base URL
-$GLOBALS['BASE_URL'] = '/webapp/training-tracker';
+$GLOBALS['BASE_URL'] = '/webapp/ir-reports';
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
    
 $GLOBALS['TITLE'] = 'Academic Affairs Reports';
@@ -17,15 +17,16 @@ require_once 'klein/klein.php';
 require_once 'includes/IRReportsAPI.class.php';
    
 respond( function( $request, $response, $app ) {
- 	if( ! IDMObject::authZ('permission', 'ir_reports_dean') ) {
+ 	if( ! IDMObject::authZ('permission', 'ir_reports_dean') && ! IDMObject::authZ('permission', 'mis')) {
  		die('You do not have access to this application.');
  	}
- 	if( IDMObject::authZ('permission', 'ir_reports_dean_admin') ) {
- 		$app->tpl->assign('admin', 1);	
- 		$app->admin = 1;	
- 	}
-   
+
  	$app->tpl = new PSUTemplate;
+
+ 	if( IDMObject::authZ('permission', 'ir_reports_dean_admin') ||  IDMObject::authZ('permission', 'mis')) {
+ 		$app->tpl->assign('admin', 1);	
+ 		$app->admin = true;	
+ 	}
    
  	$app->tpl->assign('base_url', $GLOBALS['BASE_URL']);	
 });
@@ -99,7 +100,7 @@ respond('POST', '/edit/?', function( $request, $response, $app ) {
    
 respond('GET', '/edit/?', function( $request, $response, $app ) {
  	//edit all the files!
-   
+
  	if( ! $app->admin ) {
  		        die('You do not have access to this application.');
  	}
