@@ -144,8 +144,8 @@ if ($_GET['call_id']) {
 		foreach ($call_details as $details) {
 			$details['comments'] = preg_replace("/[\*]{114}/", "____________________________________________", $details['comments']);
 			$details['comments'] = nl2br(htmlentities($details['comments']));
-			$details['its_assigned_group_name'] = getGroupInfo($details['its_assigned_group']);
-			$details['its_assigned_group_name'] = $details['its_assigned_group_name'][0]; 
+			$its_group = getGroupInfo($details['its_assigned_group']);
+			$details['its_assigned_group_name'] = $its_group[0]; 
 			$history[] = $details;
 		}//end foreach
 	}//end if
