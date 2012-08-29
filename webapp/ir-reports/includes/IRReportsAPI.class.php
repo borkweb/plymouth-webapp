@@ -4,7 +4,7 @@ class IR {
 
 	public function get_all_file_info($sort){
 
-		$handle = opendir('files')
+		$handle = opendir('files');
 
 		// Loop through all files in the files directory and only look at pdf files
 		while (false !== ($entry = readdir($handle))) {
