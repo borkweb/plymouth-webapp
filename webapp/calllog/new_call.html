@@ -144,12 +144,14 @@ if ($_GET['call_id']) {
 		foreach ($call_details as $details) {
 			$details['comments'] = preg_replace("/[\*]{114}/", "____________________________________________", $details['comments']);
 			$details['comments'] = nl2br(htmlentities($details['comments']));
+			$its_group = getGroupInfo($details['its_assigned_group']);
+			$details['its_assigned_group_name'] = $its_group[0]; 
 			$history[] = $details;
 		}//end foreach
 	}//end if
 
 	$tpl->assign('history', $history);
-	
+
 	$sql = "SELECT * FROM call_log, call_history WHERE call_log.call_id = '{$_GET[call_id]}' AND call_log.call_id = call_history.call_id ORDER BY date_assigned DESC, time_assigned DESC LIMIT 1";
 	$getOpenCallDetailsValue = $db->GetRow($sql);
 	$tlc_assigned_to = $getOpenCallDetailsValue['tlc_assigned_to'];
@@ -221,3 +223,4 @@ if($person['identifier'] != 'generic') {
 $tpl->assign('call_id', $_REQUEST['call_id']);
 
 $tpl->display('new_call.tpl');
+
