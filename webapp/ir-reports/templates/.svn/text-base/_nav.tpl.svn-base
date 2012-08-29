@@ -1,0 +1,4 @@
+<ul class='grid_16'>
+	<li><a href='{$base_url}'>Home</a></li>
+	<li><a href='{$base_url}/edit'>Edit Links</a></li>
+</ul>
