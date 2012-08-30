@@ -155,7 +155,7 @@ class MyPortal extends MyMagicGetters {
 		
 		// do not force a clone if the wp_id is 0 (manipulating the default layout)
 		//   or if the user ALREADY has a cloned layout
-		if( 0 == $identifier || ! $portal->is_default_layout() ) {
+		if( 0 === $identifier || ! $portal->is_default_layout() ) {
 			return;
 		}
 
