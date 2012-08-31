@@ -366,9 +366,7 @@ tr:hover .muted{
 .call-info-table{
 	border: hidden 1px;
 }
-.right{
-	float:right;
-}
+
 .show-border{
 	border: solid 1px; 
 }
