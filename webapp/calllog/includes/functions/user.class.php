@@ -250,7 +250,6 @@ class User
 
 		if( ! $this->isFakeUser( $caller_data['username'] ) && 'app.' != substr($caller_data['username'], 0, 4) && $caller_data['email'] ) {
 			$tpl->assign('fake', 1);
-		//	$tpl->parse('main.send_mail');
 		}
 		
 		if($call_id){
