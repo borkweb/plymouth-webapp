@@ -197,7 +197,7 @@ $tpl->assign('building_select_list', PSUHTML::getSelectOptions($building_options
 
 
 if($person['identifier'] != 'generic') {
-	$tpl->assign('caller_information', $GLOBALS['user']->getCallerInformation($caller, $_REQUEST['call_id'], $person));
+	$tpl->assign('caller_information', $GLOBALS['user']->getCallerInformation($tpl, $caller, $_REQUEST['call_id'], $person));
 	
 	$tpl->assign('caller_email', $GLOBALS['user']->userEmailFunction($person['username'], $_REQUEST['call_id'], $person));
 	
@@ -216,7 +216,7 @@ if($person['identifier'] != 'generic') {
 
 	$tpl->assign('call_history_summary', $GLOBALS['user']->userCallHistory($caller));
 } else {
-	$tpl->assign('caller_information', $GLOBALS['user']->getCallerInformation('generic', $_REQUEST['call_id'], '', '',''));
+	$tpl->assign('caller_information', $GLOBALS['user']->getCallerInformation($tpl, 'generic', $_REQUEST['call_id'], '', '',''));
 	$tpl->assign('call_history_summary', $GLOBALS['user']->userCallHistory('generic'));
 }//end else
 

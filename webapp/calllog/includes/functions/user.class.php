@@ -225,9 +225,8 @@ class User
 	/**
 	 * getCallerInformation
 	 */
-	function getCallerInformation($caller, $call_id = '', $person = false)
+	function getCallerInformation($tpl, $caller, $call_id = '', $person = false)
 	{
-		$tpl = new XTemplate(TEMPLATE_DIR.'/user_information.tpl');
 
 		$caller_data = $this->getCallerData($caller, $person);
 		$tpl->assign('call_log_username', $_SESSION['username']);		
@@ -235,32 +234,32 @@ class User
 
 		if($caller_data['pidm'] || $caller_data['wp_id'])
 		{
-			$tpl->parse('main.ape');	
+			$tpl->assign('ape', 1);
 		}//end if	
 		else
 		{
-			$tpl->parse('main.no_ape');
+			$tpl->assign('ape', 0);
 		}//end else
 		
-		if($caller_data['phone_number']) $tpl->parse('main.phone');
-		if($caller_data['title']) $tpl->parse('main.title');
-		if($caller_data['dept']) $tpl->parse('main.dept');
-		if($caller_data['location']) $tpl->parse('main.location');
-		if($caller_data['phone_number']) $tpl->parse('main.phone_number');
-		if($caller_data['role']) $tpl->parse('main.role');
+		if($caller_data['phone_number']) $tpl->assign('phone', 1);
+		if($caller_data['title']) $tpl->assign('title', 1);
+		if($caller_data['dept']) $tpl->assign('dept', 1);
+		if($caller_data['location']) $tpl->assign('location', 1);
+		if($caller_data['phone_number']) $tpl->assign('phone_number', 1);
+		if($caller_data['role']) $tpl->assign('role', 1);
 
 		if( ! $this->isFakeUser( $caller_data['username'] ) && 'app.' != substr($caller_data['username'], 0, 4) && $caller_data['email'] ) {
-			$tpl->parse('main.send_mail');
+			$tpl->assign('fake', 1);
+		//	$tpl->parse('main.send_mail');
 		}
 		
 		if($call_id){
 			$tpl->assign('call_id', $call_id);
-			$tpl->parse('main.edit_call_id');
+			$tpl->assign('edit_call_id', 1);
 			$tpl->assign('call_id_email', $call_id);
 		}
 
-		$tpl->parse('main');
-		return $tpl->text('main');
+		return(true);
 	}// end getCallerInformation
 
 	function getCallerPhone(PSUPerson $person) {

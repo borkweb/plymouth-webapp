@@ -17,10 +17,13 @@
 		{/box}
 	{/if}
 
+	{capture name="secondary"}
+		<a href='{$PHP.BASE_URL}/user/{$person.username}' class='btn'>New Call</a>
+	{/capture}
 
-	{box title="Caller Information"}
+	{box title="Caller Information" title_size=4 secondary_title=$smarty.capture.secondary}
 		<div id="caller_information_div">
-			{$caller_information}
+			{include file='user_information.tpl'}
 		</div>
 
 		<div class="center noprint">
