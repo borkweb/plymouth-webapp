@@ -35,7 +35,7 @@
 			{$caller.location}
 		</li>
 	{/if}
-	{if $title}
+	{if $caller_title}
 		<li>
 			<label>Title:</label>
 			{$caller.title}

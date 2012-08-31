@@ -242,7 +242,7 @@ class User
 		}//end else
 		
 		if($caller_data['phone_number']) $tpl->assign('phone', 1);
-		if($caller_data['title']) $tpl->assign('title', 1);
+		if($caller_data['title']) $tpl->assign('caller_title', 1);
 		if($caller_data['dept']) $tpl->assign('dept', 1);
 		if($caller_data['location']) $tpl->assign('location', 1);
 		if($caller_data['phone_number']) $tpl->assign('phone_number', 1);
