@@ -976,7 +976,7 @@ class BannerStudent extends BannerGeneral
 					   sxbconf_sighted_date = ".$date." 
 			     WHERE sxbconf_sighted is null 
 				   AND sxbconf_pidm_key = :pidm 
-				   AND sxbconf_term_code_key = f_get_currentterm('UG','".strtoupper(date('M',$plus_one_week))."','".date('Y',$plus_one_week)."','".date('d',$plus_one_week)."')");
+				   AND sxbconf_term_code_key = f_get_currentterm('UG','".strtoupper(date('M',$plus_one_week))."','".date('Y',$plus_one_week)."','".date('d',$plus_one_week)."')";
 
 			$args = array(
 				'how_code' => $how_code,
