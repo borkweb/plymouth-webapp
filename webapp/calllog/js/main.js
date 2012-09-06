@@ -7,7 +7,36 @@ $jQuery(document).ready(function($){
 	$jQuery('.call-age-status').popover({
 		placement: 'left'
 	});
+$jQuery(document).on('change', 'input:file', function (){
+	if (this.files[0]){
+		var fileName = this.files[0].name;
+		var ext = fileName.substr(fileName.lastIndexOf('.')+1).toLowerCase();
+		var reset = false;
+		var fileSize = false;
+		var invalidFileType = false;
 
+		if (this.files[0].size > 3145728){
+			var fileSize = true;
+			var reset = true;
+		}
+		if (ext != 'doc' && ext != 'docx' && ext != 'gif' && ext != 'jpg' && ext != 'pdf' && ext != 'png' && ext != 'txt' && ext != 'xls' && ext != 'xlsx'){
+			var invalidFileType = true;
+			var reset = true;
+		}
+		if (fileSize && invalidFileType){
+			alert('The file size is too large, and there was an invalid file type.');
+		}
+		else if (fileSize){
+			alert('The file size is too large.');
+		}
+		else if(invalidFileType){
+			alert('An invalid file type was supplied.');
+		}
+		if (reset){
+			$jQuery('#attach_files').replaceWith('<input type="file" name="attachment" id="attach_files"/>');
+		}
+	}
+});
 	$jQuery('.box .replace-toggle').on('click', function(e) {
 		e.preventDefault();
 		$jQuery(this).next().show();
