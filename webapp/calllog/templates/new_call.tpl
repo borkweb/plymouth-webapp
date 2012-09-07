@@ -37,7 +37,7 @@
 
 	{box title="Files" class="noprint"}
 		<input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
-		Attach File: <input type="file" name="attachment"/><br/>
+		Attach File: <input type="file" name="attachment" id='attach_files'/><br/>
 		<small><em>Supports: .doc, .docx, .gif, .jpg, .pdf, .png,<br/>.txt, .xls., .xlsx (3MB maximum)</em></small>
 		{if $files}
 		<h3>Attached Files</h3>
