@@ -12,6 +12,7 @@ $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'] . '/templates';
 require_once 'klein/klein.php';
 
 require_once $GLOBALS['BASE_DIR'] . '/includes/ITSurplusAPI.class.php';
+define('PSU_CDN', false);
 
 // Icons
 $GLOBALS['ICONS']='https://'.$_SERVER['HTTP_HOST'].'/images/icons';
@@ -42,17 +43,21 @@ respond( function( $request, $response, $app ) {
 		'nav-home' => array(
 			'title' => 'Home',
 			'url' => $GLOBALS['BASE_URL'].'/',
-			'class' => 'nav-icon nav-home',
+			'icon' => 'home',
+			'class' => 'nav-icon',
+
 		),
-		'pickup' => array(
+		'nav-pickup' => array(
 			'title' => 'Request Pickup',
 			'url' => 'http://go.plymouth.edu/supportticket/surplus',
-			'class' => 'nav-icon nav-pickup',
+			'icon' => 'truck',
+			'class' => 'nav-icon',
 		),
 		'nav-help' => array(
 			'title' => 'Help',
 			'url' => 'http://go.plymouth.edu/surplus-help/',
-			'class' => 'nav-icon nav-help',
+			'icon' => 'umbrella',
+			'class' => 'nav-icon',
 		),
 	);
 	$app->tpl->assign( 'nav_links', $nav_links );

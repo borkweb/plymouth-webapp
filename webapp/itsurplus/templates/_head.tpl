@@ -1,5 +1,5 @@
 <h1 class="grid_8">
-	<a href="{$PHP.BASE_URL}/" id="title-icon"> ITSurplus</a>
+	<a href="{$PHP.BASE_URL}/" id="title-icon">{icon id="tags" size=medium} ITSurplus</a>
 </h1>
 <div class="grid_8">
 	<form id="search" method="get" action="{$PHP.BASE_URL}/">
