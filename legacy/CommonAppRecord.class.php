@@ -2231,22 +2231,22 @@ class CommonAppRecord extends BannerObject
 				$row['resp_flag']="";
 				$row['wudq_no']="17";
 			}
-			if($this->parent1degree == 1)
+			if($this->parent1degree == 1 || $this->parent1degree == "2" || $this->parent1degree == "3")
 			{
 				$deg1ans="";
 				$row['ansr_desc']="";
 			}
-			elseif($this->parent1degree == "2" || $this->parent1degree == "3" || $this->parent1degree == "4" || $this->parent1degree == "5")
+			elseif($this->parent1degree == "4" || $this->parent1degree == "5" || $this->parent1degree == "6")
 			{
 				$deg1ans="H";
 				$row['ansr_desc']="H";
 			}
-			elseif($this->parent1degree == "6")
+			elseif($this->parent1degree == "7")
 			{
 				$deg1ans="A";
 				$row['ansr_desc']="A";
 			}
-				elseif($this->parent1degree == "7")
+				elseif($this->parent1degree == "8")
 			{
 				$deg1ans="B";
 				$row['ansr_desc']="B";

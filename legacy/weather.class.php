@@ -216,34 +216,42 @@ class Weather
 		if(!$weather)
 		{
 			$sFile = file_get_contents("http://forecast.weather.gov/MapClick.php?lat=43.75888268069382&lon=-71.68969631195068&site=gyx&smap=1&unit=0&lg=en&FcstType=text");
+			$tmp = explode("partial-width-borderbottom point-forecast-icons",$sFile);
+			$tmp2 = explode("one-ninth-first",$tmp[1]);
 			
-			$tmp = split("(.*)7dayfcst.jpg",$sFile);
-			$tmp2 = split("<table",$tmp[1]);
-			
-			preg_match_all('/<td width="11%"><b>(.*?)<\/b>/',$tmp2[1],$timetmp);
-			preg_match_all('/alt="(.*?)"/',$tmp2[1],$alttext);
-			preg_match_all('/(Hi|Lo) <font .*?">(.*?)&deg/',$tmp2[1],$temptext);
-			
-			for ($i=0;$i<=count($timetmp[1]);$i++) {
-				$timetext[$i] = str_replace("<br>"," ",$timetmp[1][$i]);
+			foreach ($tmp2 as $timeint) {
+				$timetmp = array();
+				preg_match_all('/<p class="txt-ctr-caps">(.*?)<\/p>/',$timeint,$timetmp);
+				$timetext[] = str_replace("<br>"," ",$timetmp[1][0]);
+				preg_match_all('/<p class="point-forecast-icons-(high|low)">(High|Low):(.*?) &deg/',$timeint,$temptmp);
+				$hiloind[] = $temptmp[1][0];
+				$temptext[] = $temptmp[3][0];
+				preg_match_all('/<p>(.*?)<\/p>/',$timeint,$alttmp);
+				$alttext[] = str_replace("<br>"," ",$alttmp[0][1]);
 			}
-			$highfirst = $temptext[1][0] == "Hi" ? 1:0;
-			
+			array_shift($timetext);
+			array_shift($temptext);
+			array_shift($hiloind);
+			array_shift($alttext);
+
+			$highfirst = $hiloind[0] == "high" ? 1:0;
+
 			$ind=0;
-			for ($i=0;$i<=count($temptext[2]);$i+=2) {
+			for ($i=0;$i<=count($temptext);$i+=2) {
 				if ($highfirst == 0) {
-					$fcstout[$ind]['lotemp'] = $temptext[2][$i];
-					$fcstout[$ind]['hitemp'] = $temptext[2][($i+1)];
+					$fcstout[$ind]['lotemp'] = $temptext[$i];
+					$fcstout[$ind]['hitemp'] = $temptext[($i+1)];
 					$fcstout[$ind]['date'] = $timetext[($i+1)];
-					$fcstout[$ind]['wxtext'] = $alttext[1][($i+1)];
+					$fcstout[$ind]['wxtext'] = $alttext[($i+1)];
 				} else {
-					$fcstout[$ind]['hitemp'] = $temptext[2][$i];
-					$fcstout[$ind]['lotemp'] = $temptext[2][($i+1)];
+					$fcstout[$ind]['hitemp'] = $temptext[$i];
+					$fcstout[$ind]['lotemp'] = $temptext[($i+1)];
 					$fcstout[$ind]['date'] = $timetext[$i];
-					$fcstout[$ind]['wxtext'] = $alttext[1][$i];
+					$fcstout[$ind]['wxtext'] = $alttext[$i];
 				}
-				if ($fcstout[$ind]['date'] == "This Afternoon") $fcstout[$ind]['date'] = "Today";
-				if ($fcstout[$ind]['date'] == "Late Afternoon") $fcstout[$ind]['date'] = "Today";
+				print_r($fcstout[$ind]['date']);
+				if ($fcstout[$ind]['date'] == "THIS AFTERNOON") $fcstout[$ind]['date'] = "Today";
+				if ($fcstout[$ind]['date'] == "LATE AFTERNOON") $fcstout[$ind]['date'] = "Today";
 				$fcstout[$ind]['date'] = substr($fcstout[$ind]['date'],0,3);
 				if ($fcstout[$ind]['date'] == "Tod") $fcstout[$i]['date'] = "Today";
 				if ($fcstout[$ind]['date'] == "Tom") $fcstout[$i]['date'] = "Tmrrw";
