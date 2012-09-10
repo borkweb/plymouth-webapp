@@ -2301,17 +2301,22 @@ class CommonAppRecord extends BannerObject
 				$deg1ans="";
 				$row['ansr_desc']="";
 			}
-			elseif($this->parent2degree == "2" || $this->parent2degree == "3" || $this->parent2degree == "4" || $this->parent2degree == "5")
+			elseif($this->parent2degree == "2" || $this->parent2degree == "3")
+			{
+				$deg1ans="S";
+				$row['ansr_desc']="S";
+			}
+			elseif($this->parent2degree == "4" || $this->parent2degree == "5" || $this->parent2degree == "6")
 			{
 				$deg1ans="H";
 				$row['ansr_desc']="H";
 			}
-			elseif($this->parent2degree == "6")
+			elseif($this->parent2degree == "7")
 			{
 				$deg1ans="A";
 				$row['ansr_desc']="A";
 			}
-				elseif($this->parent2degree == "7")
+				elseif($this->parent2degree == "8")
 			{
 				$deg1ans="B";
 				$row['ansr_desc']="B";
