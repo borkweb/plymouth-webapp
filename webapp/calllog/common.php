@@ -125,6 +125,7 @@ if(!checkEmployee() && $_SERVER['SCRIPT_NAME'] != '/webapp/calllog/add_new_call.
 	} else {
 		$_POST['caller_phone_number'] = '';
 	}//end else
+	$_POST['problem_details'] = filter_var( $_POST['problem_details'], FILTER_SANITIZE_STRING );
 
 	if( $_GET['call_source'] == 'feedback' ) {
 		$_POST['feelings_face'] = filter_var( $_POST['feelings_face'], FILTER_SANITIZE_STRING );
