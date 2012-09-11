@@ -8,6 +8,6 @@
 		<li><label class="muted inline">Call Info:</label> <span class="priority-status status-{$call_history.call_priority}">{$call_history.call_priority|capitalize}</span>{if $call_history.call_state} <span class="state-status state-{$call_history.call_state}">{$call_history.call_state|capitalize}</span>{/if} ({$call_history.call_status|capitalize})</li>
 	</ul>
 
-	<div class="update-details">{$call_history.comments}</div>
+	<div class="update-details">{$call_history.comments|html_entity_decode}</div>
 </li>
 {/foreach}

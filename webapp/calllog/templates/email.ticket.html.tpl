@@ -86,7 +86,7 @@ td {
 	</tr>
 	<tr id="body">
 		<td style="border-bottom:1px solid #cccccc;padding:0.5em;">
-		{$current.comments|default:"<em>No details entered</em>"|nl2br}
+		{$current.comments|default:"<em>No details entered</em>"|nl2br|html_entity_decode}
 		<br><br>
 		{if $call.call_status == 'closed'}
 			<strong>This ticket has been closed.  View the ticket <a href="https://www.plymouth.edu/webapp/{$smarty.capture.type}/ticket/{$call.call_id}">here</a>.</strong>
