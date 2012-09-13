@@ -19,7 +19,7 @@
 		<br /><small>Note: A maximum of 10 results will be returned. <a href="{$login_uri}">Login for more</a>.</small>
 	{else}
 		<p>Printable directories: <a href="/webapp/banner/psc1/printed_directory/loadFacultyPDF/Printed_Directory_FacStaff.pdf">Faculty/Staff <img src="/images/pdficonsm.gif" alt="PDF Icon" /></a>  or <a href="/webapp/banner/psc1/printed_directory/loadStudentPDF/Printed_Directory_Students.pdf">Students <img src="/images/pdficonsm.gif" alt="PDF Icon" /></a></p>
-		<p>Supplemental Information: <a href="/webapp/banner/psc1/printed_directory/deptandservices-2012.pdf">Departments, Services, Etc.<img src="/images/pdficonsm.gif" alt="PDF Icon" /></a> (updated 9/2012)</p>
+		<p>Supplemental Information: <a href="files/deptandservices-2012.pdf">Departments, Services, Etc.<img src="/images/pdficonsm.gif" alt="PDF Icon" /></a> (updated 9/2012)</p>
 	{/if}
 	</div>
 <div class="results">
