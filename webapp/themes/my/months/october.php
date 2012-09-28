@@ -20,6 +20,13 @@ if($year == 2011 && $month==10 && $day>=28 && $day <= 31) {
 	$theme->event = true;
 }//end elseif
 
+/****************[ LGBTQ Month 2012 ]********************/
+if($month==10 && ($day >= 1 && $day <= 7) && $year == 2012) {
+	$theme->add('lgbtq', 'my.css', true);
+	$theme->add('lgbtq/', 'queer-history-month.css', false);
+	$theme->event = true;
+}//end if
+
 /*---------- TODO: -------------*/
 /****************[ October: Pumpkins on Rounds ]*******************/
 /****************[ October: Columbus Day ]*******************/
