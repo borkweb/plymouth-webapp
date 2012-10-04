@@ -250,7 +250,6 @@ class HUBSQL
 
 /**
  *
- * @param int $pidm
  * @access public
  * @return string of query
  *
@@ -268,7 +267,6 @@ class HUBSQL
  *
  * @param int $pidm
  * @access public
- * @return string of query
  *
  */
   function getBMReports()
@@ -276,7 +274,7 @@ class HUBSQL
     $sql = "SELECT *
 							FROM `bm_reports` bmr
 							WHERE bmr.submitted = 1
-              ORDER BY bm_reports.a_datetime DESC";
+              ORDER BY bmr.a_datetime DESC";
 
     return PSU::db('hub')->GetAll($sql);
   }
@@ -286,7 +284,6 @@ class HUBSQL
  * 
  * @param int $id 
  * @access public
- * @return string of query
  *
  */ 
 	function getBMReportById($id) 
@@ -299,9 +296,7 @@ class HUBSQL
     if ($data = PSU::db('hub')->GetRow($sql, array($id)))
     {
 		  $sql = "SELECT * FROM `bm_rounds` rounds WHERE rounds.bmr_id=? ORDER BY time ASC";
-      $rs = PSU::db('hub')->Execute($sql, array($id));
-			$rounds = $rs->GetRows();
-			$data['rounds'] = $rounds;
+      $data['rounds'] = PSU::db('hub')->GetAll($sql, array($id));
       return $data;
     }
 
@@ -313,7 +308,6 @@ class HUBSQL
  * 
  * @param int $pidm 
  * @access public
- * @return string of query
  *
  */ 
 	function getBMReportByPidm($pidm) 
@@ -325,9 +319,7 @@ class HUBSQL
     if ($data = PSU::db('hub')->GetRow($sql, array($pidm)))
     {
 		  $sql = "SELECT * FROM `bm_rounds` rounds WHERE rounds.bmr_id=? ORDER BY time ASC";
-      $rs = PSU::db('hub')->Execute($sql, array($data['id']));
-			$rounds = $rs->GetRows();
-			$data['rounds'] = $rounds;
+      $data['rounds'] = PSU::db('hub')->GetAll($sql, array($data['id']));
       return $data;
     }
 
@@ -343,7 +335,7 @@ class HUBSQL
 		// don't save the round if the time is blank - didn't fill anything in...
 		// might be just doing a submit - didn't do a round
 	  if ($data['r_htime'] == '' && $data['r_mtime'] == '' && $data['notes'] == '')
-			return;
+			return null;
 
 		$data['time'] = date("H:i:s", strtotime($data['r_htime'] . ':' . $data['r_mtime'] . ' ' . $data['r_ampmtime']));
 
@@ -425,6 +417,7 @@ class HUBSQL
 								date('h:i a', strtotime($data['time'])),
 								$now,
 								));
+		return $rs;
 	}
 
 /**
@@ -432,7 +425,6 @@ class HUBSQL
  * 
  * @param int $pidm 
  * @access public
- * @return string of query
  *
  */ 
 	function saveBMR($filer, $now, $data) 
@@ -499,9 +491,7 @@ class HUBSQL
 		else
 		{
 			$data['created'] = $now;
-			// Since using MySQL, can use a single REPLACE instead of check for existence
-			// and then having to use INSERT or UPDATE
-			//
+			// this is an INSERT - endeavored to use REPLACE and neither Porter or Betsy could get it to function
 			$sql = "INSERT INTO bm_reports 
 								(
 									pidm,
@@ -569,7 +559,6 @@ class HUBSQL
  * 
  * @param int $pidm 
  * @access public
- * @return string of query
  *
  */ 
 	function submitBMR($id, $now) 
@@ -577,9 +566,6 @@ class HUBSQL
 		$sql = "SELECT SUM( `total` ) FROM `bm_rounds` WHERE bmr_id=?";
 		$shift_total = PSU::db('hub')->GetOne($sql, array($id));
 
-		// Since using MySQL, can use a single REPLACE instead of check for existence
-		// and then having to use INSERT or UPDATE
-		//
 		$sql = " UPDATE bm_reports
 							SET modified=?,
 									submitted=1,
