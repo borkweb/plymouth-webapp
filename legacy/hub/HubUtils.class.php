@@ -24,6 +24,7 @@ class HubUtils
 	public $hub_config_id_ir_rec = 'ir_notify_rec';
 	public $hub_config_id_ar_admin = 'ar_notify_admin';
 	public $hub_config_id_ar_rec = 'ar_notify_rec';
+	public $hub_config_id_bmr_notify = 'bmr_notify';
 
 	public function __construct()
 	{

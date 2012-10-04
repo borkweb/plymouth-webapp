@@ -247,9 +247,9 @@ class HUBSQL
 
 	return $null;
 	}
+
 /**
  *
- * @param int $pidm
  * @access public
  * @return string of query
  *
@@ -262,6 +262,325 @@ class HUBSQL
 
     return PSU::db('hub')->GetAll($sql);
   }
+
+/**
+ *
+ * @param int $pidm
+ * @access public
+ *
+ */
+  function getBMReports()
+  {
+    $sql = "SELECT *
+							FROM `bm_reports` bmr
+							WHERE bmr.submitted = 1
+              ORDER BY bmr.a_datetime DESC";
+
+    return PSU::db('hub')->GetAll($sql);
+  }
+
+/**
+ * get the building manager report by the id passed - these are submitted - this is used by administrators
+ * 
+ * @param int $id 
+ * @access public
+ *
+ */ 
+	function getBMReportById($id) 
+	{
+		$sql = "SELECT * FROM `bm_reports` bmr 
+						WHERE bmr.id = ? 
+							AND bmr.submitted = 1"; 
+
+		
+    if ($data = PSU::db('hub')->GetRow($sql, array($id)))
+    {
+		  $sql = "SELECT * FROM `bm_rounds` rounds WHERE rounds.bmr_id=? ORDER BY time ASC";
+      $data['rounds'] = PSU::db('hub')->GetAll($sql, array($id));
+      return $data;
+    }
+
+	return $null;
+	}
+
+/**
+ * get the open building manager report for this bm (if they currently have one that is saved and not submitted)
+ * 
+ * @param int $pidm 
+ * @access public
+ *
+ */ 
+	function getBMReportByPidm($pidm) 
+	{
+		$sql = "SELECT * FROM `bm_reports` bmr 
+						WHERE bmr.pidm = ? 
+							AND bmr.submitted = 0"; 
+
+    if ($data = PSU::db('hub')->GetRow($sql, array($pidm)))
+    {
+		  $sql = "SELECT * FROM `bm_rounds` rounds WHERE rounds.bmr_id=? ORDER BY time ASC";
+      $data['rounds'] = PSU::db('hub')->GetAll($sql, array($data['id']));
+      return $data;
+    }
+
+	return $null;
+	}
+
+/**
+ * add a Round Entry for Building Manager Report to the MySQL hub database
+ * 
+ */ 
+	function addBMRRound($now, $data) 
+	{
+		// don't save the round if the time is blank - didn't fill anything in...
+		// might be just doing a submit - didn't do a round
+	  if ($data['r_htime'] == '' && $data['r_mtime'] == '' && $data['notes'] == '')
+			return null;
+
+		$data['time'] = date("H:i:s", strtotime($data['r_htime'] . ':' . $data['r_mtime'] . ' ' . $data['r_ampmtime']));
+
+		$sql = "INSERT INTO bm_rounds
+							(
+								bmr_id,
+								courtroom,
+								cardio,
+								rm119,
+								rm109,
+								hage,
+								rm123,
+								tower,
+								fpl,
+								cluster,
+								fitness,
+								uniongrille,
+								aerobics,
+								total,
+								notes,
+								time,
+								disp_time,
+								created
+							)
+						VALUES 
+							(
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?,
+								?
+							)";
+
+		$rs = PSU::db('hub')->Execute($sql,
+						array(
+								$data['bmr_id'],
+								$data['r_rm_courtroom'],
+								$data['r_rm_cardio'],
+								$data['r_rm_119'],
+								$data['r_rm_109'],
+								$data['r_rm_hage'],
+								$data['r_rm_123'],
+								$data['r_rm_tower'],
+								$data['r_rm_fpl'],
+								$data['r_rm_cluster'],
+								$data['r_rm_fitness'],
+								$data['r_rm_grille'],
+								$data['r_rm_aerobics'],
+
+								//total field:
+								$data['r_rm_courtroom'] +
+								$data['r_rm_cardio'] +
+								$data['r_rm_119'] +
+								$data['r_rm_109'] +
+								$data['r_rm_hage'] +
+								$data['r_rm_123'] +
+								$data['r_rm_tower'] +
+								$data['r_rm_fpl'] +
+								$data['r_rm_cluster'] +
+								$data['r_rm_fitness'] +
+								$data['r_rm_grille'] +
+								$data['r_rm_aerobics'],
+
+								$data['r_notes'],
+								$data['time'],
+								date('h:i a', strtotime($data['time'])),
+								$now,
+								));
+		return $rs;
+	}
+
+/**
+ * save the updated Building Manager Report information to the database
+ * 
+ * @param int $pidm 
+ * @access public
+ *
+ */ 
+	function saveBMR($filer, $now, $data) 
+	{
+		$data['username'] = $filer->username;
+		$data['lastname'] = $filer->formatName('l');
+		$data['firstname'] = $filer->formatName('f');
+    $data['bmr_date'] = date('Y-m-d', strtotime($data['idate']));
+
+		// get previously saved version of the report...
+		$bmr = $this->getBMReportByPidm($filer->pidm);
+
+		$data['modified'] = $now;
+
+		// if created is set - already saved one "round" get prev. saved information...
+		if (isset($bmr['created']))
+		{
+			$data['created'] = $bmr['created'];
+
+			// Since using MySQL, can use a single REPLACE instead of check for existence
+			// and then having to use INSERT or UPDATE
+			//
+			$sql = " UPDATE bm_reports
+								SET 
+									pidm=?,
+									username=?,
+									lastname=?,
+									firstname=?,
+									bmr_date=?,
+									shift_id=?,
+									shift_start=?,
+									shift_end=?,
+									ar_ir_filed=?,
+									cash_box_turned_in=?,
+									fitness_room_checked=?,
+									salmon_book_checked=?,
+									submitted=?,
+									created=?,
+									modified=?
+							WHERE id=?";
+
+			$rs = PSU::db('hub')->Execute($sql,
+							array(
+									$filer->pidm,
+									$data['username'],
+									$data['lastname'],
+									$data['firstname'],
+									$data['bmr_date'],
+									$data['sh_id'],
+									$data['shift_start'],
+									$data['shift_end'],
+									$data['ar_ir_report'],
+									$data['cash_box'],
+									$data['rec_facility_conditions'],
+									$data['salmon_sheet'],
+									0,
+									$data['created'],
+									$data['modified'],
+									$bmr['id']
+									));
+
+			$data['bmr_id'] = $bmr['id'];
+		}
+		else
+		{
+			$data['created'] = $now;
+			// this is an INSERT - endeavored to use REPLACE and neither Porter or Betsy could get it to function
+			$sql = "INSERT INTO bm_reports 
+								(
+									pidm,
+									username,
+									lastname,
+									firstname,
+									bmr_date,
+									shift_id,
+									shift_start,
+									shift_end,
+									ar_ir_filed,
+									cash_box_turned_in,
+									fitness_room_checked,
+									salmon_book_checked,
+									submitted,
+									created,
+									modified
+								)
+							VALUES 
+								(
+									?,
+									?,
+									?,
+									?,
+									?,
+									?,
+									?,
+									?,
+									?,
+									?,
+									?,
+									?,
+									0,
+									?,
+									?
+								)";
+
+		$rs = PSU::db('hub')->Execute($sql,
+							array(
+									$filer->pidm,
+									$data['username'],
+									$data['lastname'],
+									$data['firstname'],
+									$data['idate'],
+									$data['sh_id'],
+									$data['shift_start'],
+									$data['shift_end'],
+									$data['ar_ir_report'],
+									$data['cash_box'],
+									$data['rec_facility_conditions'],
+									$data['salmon_sheet'],
+									$data['created'],
+									$data['modified'],
+									));
+
+		$bmr_id = PSU::db('hub')->Insert_ID();
+		$data['bmr_id'] = $bmr_id;
+		}
+
+	$this->addBMRRound($now, $data);
+	}
+
+/**
+ * submit the Building Manager Report
+ * 
+ * @param int $pidm 
+ * @access public
+ *
+ */ 
+	function submitBMR($id, $now) 
+	{
+		$sql = "SELECT SUM( `total` ) FROM `bm_rounds` WHERE bmr_id=?";
+		$shift_total = PSU::db('hub')->GetOne($sql, array($id));
+
+		$sql = " UPDATE bm_reports
+							SET modified=?,
+									submitted=1,
+									submittedwhen=?,
+									shift_total=?
+							WHERE id=? AND submitted=0";
+
+		$rs = PSU::db('hub')->Execute($sql,
+						array(
+								$now,
+								$now,
+								$shift_total,
+								$id,
+								));
+	}
 
 /**
  * add an Incident Report to the MySQL hub database
