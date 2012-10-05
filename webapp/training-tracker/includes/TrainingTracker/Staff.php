@@ -62,7 +62,7 @@ class Staff extends \PSU_DataObject {
 		$completed = sizeof($checkboxes); 
 
 		if ($current_level == 'trainee'){
-			$search = array("13","14","15","16");
+			$search = array("13","14","15","16","31");
 		}
 		else if ($current_level == 'sta'){
 			$search = array("17","18","19","20","21","22","23","24");
@@ -94,6 +94,9 @@ class Staff extends \PSU_DataObject {
 			}
 			else if ($item == 14){
 				$stat = $stat/9;
+			}
+			else if ($item == 31){
+				$stat = $stat/5;
 			}
 			else if ($item == 15){
 				$stat = $stat/8;
