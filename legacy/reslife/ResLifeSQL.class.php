@@ -1539,7 +1539,8 @@ class ResLifeSQL
 									 ON slrpreq.slrpreq_rdef_code=stvrdef.stvrdef_code
 								WHERE slrpreq.slrpreq_term_code IN (:term, :gterm)
 									AND slrpreq.slrpreq_pidm='".$student_id."'
-									AND slrpreq.slrpreq_rdef_code='SM'";
+									AND (slrpreq.slrpreq_rdef_code='SM' OR
+											slrpreq.slrpreq_rdef_code='NP' ) ";
 
 		$rs = PSU::db('banner')->Execute($sql, compact('term', 'gterm'));
 		return $rs->FetchRow();
@@ -2109,6 +2110,9 @@ mysql  if($results = PSU::db('reslife')->Execute/getRow/fetch($sql, array($pidm)
 		else
 			$data['created'] = $now;
 
+		if (isset($housingapp['hdeposit_date']))
+			$data['hdeposit_date'] = $housingapp['hdeposit_date'];
+
 		// Since using MySQL, can use a single REPLACE instead of check for existence
 		// and then having to use INSERT or UPDATE
 		//
@@ -2121,6 +2125,7 @@ mysql  if($results = PSU::db('reslife')->Execute/getRow/fetch($sql, array($pidm)
 								username,
 								lastname,
 								firstname,
+								gender,
 								housing_area,
 								application_type,
 								mealplan,
@@ -2168,11 +2173,14 @@ mysql  if($results = PSU::db('reslife')->Execute/getRow/fetch($sql, array($pidm)
 								rn_roompick_ntrad,
 								created,
 								modified,
+								hdeposit_date,
 								misc
 
 							)
 						VALUES 
 							(
+								?,
+								?,
 								?,
 								?,
 								?,
@@ -2239,6 +2247,7 @@ mysql  if($results = PSU::db('reslife')->Execute/getRow/fetch($sql, array($pidm)
 								$data['username'],
 								$data['lastname'],
 								$data['firstname'],
+								$data['gender'],
 								$data['housing_area'],
 								$data['application_type'],
 								$data['mealplan'],
@@ -2286,6 +2295,7 @@ mysql  if($results = PSU::db('reslife')->Execute/getRow/fetch($sql, array($pidm)
 								$data['rn_roompick_ntrad'],
 								$data['created'],
 								$data['modified'],
+								$data['hdeposit_date'],
 								1
 								
 								));
