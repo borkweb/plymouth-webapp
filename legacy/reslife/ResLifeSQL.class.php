@@ -2106,12 +2106,18 @@ mysql  if($results = PSU::db('reslife')->Execute/getRow/fetch($sql, array($pidm)
 		$data['modified'] = $now;
 
 		if (isset($housingapp['created']))
+		{
 			$data['created'] = $housingapp['created'];
+		}
 		else
+		{
 			$data['created'] = $now;
+		}
 
 		if (isset($housingapp['hdeposit_date']))
+		{
 			$data['hdeposit_date'] = $housingapp['hdeposit_date'];
+		}
 
 		// Since using MySQL, can use a single REPLACE instead of check for existence
 		// and then having to use INSERT or UPDATE
