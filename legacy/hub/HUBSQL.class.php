@@ -434,6 +434,11 @@ class HUBSQL
 		$data['firstname'] = $filer->formatName('f');
     $data['bmr_date'] = date('Y-m-d', strtotime($data['idate']));
 
+		$data['ar_ir_report'] = (isset($data['ar_ir_report'])) ?  $data['ar_ir_report'] : 0;
+		$data['cash_box'] =  (isset($data['cash_box'])) ?  $data['cash_box'] : 0;
+		$data['rec_facility_conditions'] =  (isset( $data['rec_facility_conditions'])) ?  $data['rec_facility_conditions'] : 0;
+		$data['salmon_sheet'] =  (isset( $data['salmon_sheet'])) ?  $data['salmon_sheet'] : 0;
+
 		// get previously saved version of the report...
 		$bmr = $this->getBMReportByPidm($filer->pidm);
 
@@ -535,7 +540,7 @@ class HUBSQL
 									$data['username'],
 									$data['lastname'],
 									$data['firstname'],
-									$data['idate'],
+									$data['bmr_date'],
 									$data['sh_id'],
 									$data['shift_start'],
 									$data['shift_end'],
