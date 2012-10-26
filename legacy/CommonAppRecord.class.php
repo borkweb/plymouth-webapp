@@ -402,6 +402,10 @@ class CommonAppRecord extends BannerObject
 					$actv_cde='BF';
 					$flag='T';
 				break;
+				case 'XCT':
+					$actv_cde='XC';
+					$flag='T';
+				break;
 			}//end switch
 			if($flag=='T')
 			{
