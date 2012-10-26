@@ -557,6 +557,21 @@ class HUBSQL
 		}
 
 	$this->addBMRRound($now, $data);
+	
+	// Keep running total of people in the building...
+	$sql = "SELECT SUM( `total` ) FROM `bm_rounds` WHERE bmr_id=?";
+	$shift_total = PSU::db('hub')->GetOne($sql, array($data['bmr_id']));
+
+	$sql = " UPDATE bm_reports
+						SET shift_total=?
+						WHERE id=?";
+
+	$rs = PSU::db('hub')->Execute($sql,
+					array(
+							$shift_total,
+							$data['bmr_id'],
+							));
+	return $rs;
 	}
 
 /**
@@ -568,21 +583,16 @@ class HUBSQL
  */ 
 	function submitBMR($id, $now) 
 	{
-		$sql = "SELECT SUM( `total` ) FROM `bm_rounds` WHERE bmr_id=?";
-		$shift_total = PSU::db('hub')->GetOne($sql, array($id));
-
 		$sql = " UPDATE bm_reports
 							SET modified=?,
 									submitted=1,
-									submittedwhen=?,
-									shift_total=?
+									submittedwhen=?
 							WHERE id=? AND submitted=0";
 
 		$rs = PSU::db('hub')->Execute($sql,
 						array(
 								$now,
 								$now,
-								$shift_total,
 								$id,
 								));
 	}
