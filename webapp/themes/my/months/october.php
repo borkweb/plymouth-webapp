@@ -15,7 +15,7 @@ if($month==10 && ($day >= 1 && $day <=3) && $year == 2010) {
 }//end if
 
 /****************[ October 31: Halloween ]*******************/
-if($year == 2011 && $month==10 && $day>=28 && $day <= 31) {
+if($year == 2012 && $month==10 && $day>=28 && $day <= 31) {
 	$theme->add('halloween11','my.css',true);
 	$theme->event = true;
 }//end elseif
