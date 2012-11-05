@@ -39,6 +39,25 @@ class ResLifeSQL
   {
   }
 
+  public $reslife_config_id_msgofday = 'message_of_the_day';
+
+/**
+ *
+ * @param string $config_id
+ * @access public
+ * @return value of the passed config value
+ * 
+ **/
+  function getConfigValue($config_id)
+  {
+    $sql = "SELECT config_value
+              FROM `reslife_config`
+              WHERE config_id=?";
+
+    return PSU::db('reslife')->GetOne($sql, array($config_id));
+  }
+
+
 /**
  * add an Incident Report to the MySQL reslife database
  * 
