@@ -1,6 +1,4 @@
 <?php
-require '/web/dev/com/nrporter.psudev.com/legacy/git-bootstrap.php';  // DEBUG Do not check this code into svn
-
 require_once 'autoload.php';
 PSU::session_start(); // force ssl + start a session
 
@@ -39,12 +37,6 @@ respond( function( $request, $response, $app ) {
 
 	if( $app->rave_user = \PSU\Rave\User::get( $app->user->wpid ) ) {
 
-		$app->primary_group = array(
-			'id' => 8306124,
-			'name' => 'PSU Emergency Alerts',
-			'description' => 'N/A',
-		);
-
 		// get the rave users groups for the app
 		$app->user_groups = array();
 		foreach( $app->rave_user->groups() as $group ) {
@@ -63,13 +55,6 @@ respond( function( $request, $response, $app ) {
 		unset( $app->groups[ $GLOBALS[ 'EMERGENCY_GROUP' ] ] );
 	}//end if
 
-});
-
-/**
- * Old /alerts/signup URL from eCampus Alerts.
- */
-respond( '/signup', function( $request, $response, $app ) {
-	$response->redirect( $app->config->get( 'webapp_url' ) . '/interrupt/' );
 });
 
 /**
