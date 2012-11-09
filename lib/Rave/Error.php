@@ -18,6 +18,9 @@ class Error{
 		elseif( strpos( $error, 'Carrier not found for ' ) !== false ) {
 			throw new Exception\UnknownCarrier( $error );
 		} // end elseif
+		elseif( $error == 'You can not unsubscribe to this group.' ) {
+			throw new Exception\CannotUnsubscribe( $error );
+		} // end elseif
 
 		throw new \Exception( $error );
 	} // end handle

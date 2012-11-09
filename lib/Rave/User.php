@@ -133,6 +133,24 @@ class User{
 	} // end getUserXML
 
 	/**
+	 * get the groups for this user
+	 */
+	public function groups() {
+		$this->groups = REST::getSubscribedGroupsForUser( $this->email );
+		return $this->groups;
+	}//end groups
+
+	public function groupXML( $group_id ){
+		$xml = '<?xml version="1.0" encoding="UTF-8"?>
+			<raveGroupMembership groupId="' . $group_id . '">
+			<alertByPhone>true</alertByPhone>
+			<alertByEmail>true</alertByEmail>
+			<role>MEMBER</role>
+			</raveGroupMembership>';
+		return $xml;
+	}//end groupXML
+
+	/**
 	 * determine whether or not a field has changed since loading it
 	 * @param field to chacek
 	 */
@@ -219,6 +237,11 @@ class User{
 		return true; // success!
 	} // end save
 
+
+	public function subscribeToGroup( $group_id ) {
+		return REST::subscribeToGroup( $this->email, $this->groupXML( $group_id ) );
+	}// end subscribeToGroup
+
 	/**
 	 * Transform a string 'true'/'false' into an actual boolean
 	 */
@@ -236,6 +259,17 @@ class User{
 		$this->mobile1Confirmed = false;
 		return $this->save();
 	} // end unconfirmPhone
+
+	public function unsubscribeFromGroup( $group_id ) {
+		try{
+			REST::unsubscribeToGroup( $this->email, $group_id );
+			return TRUE;
+		} //end try
+		catch( CannotUnsubscribe $e ) {
+			return false;
+		}//end catch
+	}//end unsubscribeFromGroups
+
 	/**
 	 * validate the carrier
 	 * @param which number to check (1, 2 or 3)
