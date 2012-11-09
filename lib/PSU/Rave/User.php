@@ -126,7 +126,7 @@ class User {
 			return call_user_func_array( array( $this->user, $method ), $args );
 		}//end if
 
-		throw new Exception('Cannot find method '.$name.' in \PSU\Rave\User or \Rave\User');
+		throw new \Exception('Cannot find method '.$name.' in \PSU\Rave\User or \Rave\User');
 	}//end __call
 
 	public function __get( $name ) {
