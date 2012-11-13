@@ -8,12 +8,14 @@ $fun_crew = array(
 	'stirrell',
 	'ted',
 	'tlferm',
-	'nrporter'
+	'nrporter',
+	'jncormier'
 );
 
 $sketchy_crew = array(
 	'a_bake',
 	'djbramer',
-	'tlferm'
+	'tlferm',
+	'jncormier'
 );
 ?>
