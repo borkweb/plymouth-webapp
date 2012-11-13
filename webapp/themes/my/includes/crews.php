@@ -27,7 +27,6 @@ $prank_crew = array(
 	'k_orlows',
 	'nrporter',
 	'pdmanseau',
-	'sbudro',
 	'stirrell',
 	'ted',
 	'tlferm',
