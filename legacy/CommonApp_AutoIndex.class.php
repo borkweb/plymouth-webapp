@@ -103,7 +103,9 @@ Class CommonApp_AutoIndex {
 			  JOIN sabnstu
 			    ON sabnstu_aidm = sabiden_aidm
 			 WHERE spriden_change_ind IS NULL
-			   AND sabnstu_id = '00'||:commonappid
+			   AND (sabnstu_id = '00'||:commonappid
+			   		 OR sabnstu_id = '0'||:commonappid
+						)
 			";
 
 			if ($results = PSU::db('banner')->Execute($sql,$data) ) {
