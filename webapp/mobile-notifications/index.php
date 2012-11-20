@@ -35,7 +35,10 @@ respond( function( $request, $response, $app ) {
 	$app->config = new PSU\Config;
 	$app->config->load();
 
-	if( $app->rave_user = \PSU\Rave\User::get( $app->user->wpid ) ) {
+	if( 'Registered and confirmed' == $app->user->rave_state ) {
+
+		$rave_user = \PSU\Rave\User::get( $app->user->wpid );
+		$app->rave_user = $rave_user;
 
 		// get the rave users groups for the app
 		$app->user_groups = array();
@@ -96,7 +99,7 @@ respond( 'POST', '/', function( $request, $response, $app ) {
 
 // klein catch-all
 respond( '/', function( $request, $response, $app ) {
-	if( $app->rave_user ) {
+	if( isset( $app->rave_user ) ) {
 		foreach( $app->groups as &$group ) {
 			$group[ 'subscribed' ] = ( in_array( $group[ 'id' ], $app->user_groups ) ) ? 'checked="checked"' : '';
 		}//end foreach
