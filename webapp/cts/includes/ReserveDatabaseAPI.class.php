@@ -208,9 +208,8 @@ class ReserveDatabaseAPI{
 	}//end function by_wp_id
 
 	public function by_outstanding($end_date){
-		//filter results by the wp_id and the fact that the reservation is pending
-		//this is used for the user to view their currently pending reservations
-		return self::by("end_date < ? AND status = 'loaned out'", $end_date);
+		//filter results by the end_date and if the status of the loan is loaned out or delievered
+		return self::by("end_date < ? AND status = 'loaned out' OR status = 'delivered'", $end_date);
 	}//end function by_wp_id
 
 
@@ -651,6 +650,16 @@ class ReserveDatabaseAPI{
 
 				$reservation = self::by_status($query);
 				break;
+
+			/*case "delivered":
+				//this shows any loans that are currently out
+				$query="delivered";
+
+				$title = "Loaned Reservations";
+
+				$reservation = self::by_status($query);
+				break;*/
+
 			case "outstanding":
 				//this shows any loans that are pending
 				$end_date=date('Y-m-d');	
