@@ -651,15 +651,6 @@ class ReserveDatabaseAPI{
 				$reservation = self::by_status($query);
 				break;
 
-			/*case "delivered":
-				//this shows any loans that are currently out
-				$query="delivered";
-
-				$title = "Loaned Reservations";
-
-				$reservation = self::by_status($query);
-				break;*/
-
 			case "outstanding":
 				//this shows any loans that are pending
 				$end_date=date('Y-m-d');	
