@@ -166,6 +166,9 @@ class APE
 					case 'drive_quota':
 						echo calcDriveQuota($person->username);
 					break;
+					case 'mail_quota':
+						echo calcMailQuota($person->username);
+					break;
 					case 'view_ssn':
 						if(IDMObject::authZ('permission','ape_ssn'))
 						{

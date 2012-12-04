@@ -387,8 +387,19 @@
 			</li>
 			<li>
 				<label>MyMail Quota Usage:</label>
-				<em>(not yet implemented)</em>
-				{$mymail_quota_graph}
+				{if $person->system_account_exists}
+				<script type="text/javascript">
+					var the_username = '{$person->login_name}';
+				{literal}
+					$(function(){
+					if( the_username != '' ) {
+						$('#mail_quota').load(BASE_URL + '/user.html?action=mail_quota&username=' + the_username);
+					}//end if
+					});
+				{/literal}
+				</script>
+				{/if}
+				<div id="mail_quota"></div>
 			</li>	
 			</ul>
 		</div>
