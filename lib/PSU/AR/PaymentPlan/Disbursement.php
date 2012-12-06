@@ -242,7 +242,7 @@ class Disbursement extends \PSU_Banner_DataObject {
        WHERE param = :param
 		";
 		$params = array(
-			'param' => strtolower( 'tms_' . $this->transaction->level . '_' . $this->plan_type . '_term_code',
+			'param' => strtolower( 'tms_' . $this->transaction->level . '_' . $this->plan_type . '_term_code' ),
 		);
 
 		return PSU::db( 'banner' )->GetOne( $sql, $params );
