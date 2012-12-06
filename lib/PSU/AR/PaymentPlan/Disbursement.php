@@ -159,6 +159,7 @@ class Disbursement extends \PSU_Banner_DataObject {
 			'trans_date'         => strtoupper($this->trans_date),
 			'document_number'    => $this->document_number(),
 			'payment_id'         => $this->id,
+			'term_code'          => $this->target_term(),
 		);
 
 		return $payment;
@@ -234,6 +235,18 @@ class Disbursement extends \PSU_Banner_DataObject {
 		}//end if
 	}//end save
 
+	public function target_term() {
+		$sql = "
+			SELECT value 
+			  FROM gxbparm 
+       WHERE param = :param
+		";
+		$params = array(
+			'param' => strtolower( 'tms_' . $this->transaction->level . '_' . $this->plan_type . '_term_code',
+		);
+
+		return PSU::db( 'banner' )->GetOne( $sql, $params );
+	}//end function target_term
 	public function type() {
 		return strpos( $this->file_name, 'Grad' ) === false ? 'UG' : 'GR';
 	}//end type

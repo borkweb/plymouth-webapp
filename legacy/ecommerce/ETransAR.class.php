@@ -31,7 +31,7 @@ class ETransAR extends ETrans {
 			'activity_date'      => strtoupper($this->entry_date),
 			'session_number'     => '000',
 			'trans_date'         => strtoupper($this->trans_date),
-			'term_code'          => $this->bursar_term,
+			'term_code'          => ($this->userchoice2 ?: $this->bursar_term),
 			'document_number'    => $this->document_number(),
 			'payment_id'         => $this->payment_id(),
 		);
@@ -69,7 +69,7 @@ class ETransAR extends ETrans {
 						$message = 'There was a "Transaction Status = 4" credit card refund fed by via Commerce Manager.  Here is the debug information:'."\n\n";
 						$message .= print_r( $this, true );
 						$email = array(
-							'mtbatchelder@plymouth.edu',
+							'nrporter@plymouth.edu',
 						);
 
 						if( ! \PSU::isDev() ) {
