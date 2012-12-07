@@ -1,0 +1,117 @@
+.grid .sep {
+        height: 0px;
+        border: none;
+}
+
+.grid {
+        margin: auto;
+        border-collapse: collapse;
+        margin-bottom: 1em;
+		margin-top: 1em;
+}
+.grid td, .grid th {
+        border: 1px solid #000;
+        white-space: no-wrap;
+        vertical-align: top;
+        text-align: left;
+        padding: 2px 1ex;
+        background-color: #F3F1E6;
+}
+.grid tr.clear td label
+{
+	font-weight: bold;
+}
+.grid tr.clear td.nav{
+	text-align: center;
+	padding-top:1ex;
+}
+.grid td{
+	border: 1px dotted #BFBEA3;
+}
+.grid th {
+	background-color: #BFBEA3;
+	border: 1px solid #BFBEA3;
+	color: #000;
+}
+.grid th a {
+        color: #000;
+        text-decoration: none;
+}
+.grid td.clear, .grid tr.clear td {
+        border: none;
+        background: transparent;
+}
+
+.notice
+{
+	text-align: center;
+}
+
+h2.error
+{
+	color: red;
+}
+
+.styled_notice
+{
+	text-align:center;
+	border: 1px solid #E1E0CD;
+	background-color:#E1E0CD;
+	margin:.5em 1em 0em 1em;
+	padding: .5em;
+	
+	border-top-right-radius: 0.5em;
+	border-top-left-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+	border-bottom-left-radius: 0.5em;
+	
+	-moz-border-radius-topleft:0.5em;
+	-moz-border-radius-topright:0.5em;
+	-moz-border-radius-bottomleft:0.5em;
+	-moz-border-radius-bottomright:0.5em;
+	
+	-webkit-border-top-left-radius:0.5em;
+	-webkit-border-top-right-radius:0.5em;
+	-webkit-border-bottom-left-radius:0.5em;
+	-webkit-border-bottom-right-radius:0.5em;
+}
+
+.button
+{
+	font: bold 11px Arial;
+	text-decoration: none;
+	border: 1px solid #E1E0CD;
+	background-color:#E1E0CD;
+	padding: 2px 6px 2px 6px;
+	border-top: 1px solid #CCCCCC;
+	border-right: 1px solid #333333;
+	border-bottom: 1px solid #333333;
+	border-left: 1px solid #CCCCCC;
+
+	border-top-right-radius: 0.5em;
+	border-top-left-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+	border-bottom-left-radius: 0.5em;
+	
+	-moz-border-radius-topleft:0.5em;
+	-moz-border-radius-topright:0.5em;
+	-moz-border-radius-bottomleft:0.5em;
+	-moz-border-radius-bottomright:0.5em;
+	
+	-webkit-border-top-left-radius:0.5em;
+	-webkit-border-top-right-radius:0.5em;
+	-webkit-border-bottom-left-radius:0.5em;
+	-webkit-border-bottom-right-radius:0.5em;
+}
+
+fieldset
+{
+	border: 2px solid #E1E0CD;
+	margin: 1em;
+	padding: 1em;
+}
+
+fieldset legend
+{
+	color: #85360f;
+}

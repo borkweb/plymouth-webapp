@@ -1,0 +1,74 @@
+<?php
+setlocale(LC_MONETARY, 'en_US');
+
+$tpl = new ECommerceSmarty();
+$tpl->template_dir = $GLOBALS['BASE_DIR']."/templates/report";
+$tpl->assign('title', 'E-Commerce Report');
+
+if($_GET['start_date_Day'] || $_GET['start_date_Month'] || $_GET['start_date_Year'])
+{
+	$start_date = $_GET['start_date_Year'].'-'.$_GET['start_date_Month'].'-'.$_GET['start_date_Day'];
+}//end if
+else
+{
+	$begin_date = date('Y-m-d');
+}//end else
+
+if($_GET['end_date_Day'] || $_GET['end_date_Month'] || $_GET['end_date_Year'])
+{
+	$end_date = $_GET['end_date_Year'].'-'.$_GET['end_date_Month'].'-'.$_GET['end_date_Day'];
+}//end if
+else
+{
+	$end_date = date('Y-m-d');
+}//end else
+
+$processors = $GLOBALS['ECommerceTransaction']->getProcessors('finance');
+$formatted_processors = array();
+foreach($processors as $key=>$proc)
+{
+	$formatted_processors[$key] = $proc['name'];
+}//end foreach
+$tpl->assign('processors', $formatted_processors);
+$tpl->assign('selected_processor', $formatted_processors[$_GET['processor']]);
+
+$report =  getTrans($start_date, $end_date);
+
+$to_display = $report['data'];
+
+$tpl->assign('foapal', $report['foapal']);
+$tpl->assign('start_date', $start_date);
+$tpl->assign('end_date', $end_date);	
+
+$tpl->assign('friendly_start_date', date('M j, Y', strtotime($start_date)));
+$tpl->assign('friendly_end_date',  date('M j, Y', strtotime($end_date)));	
+
+$tpl->assign('grand_total', number_format($GLOBALS['total'], 2));
+
+if($_POST['select_range']=='Go')
+{
+	$tpl->assign('data', $to_display);
+	$tpl->assign('content', 'index.tpl');
+	$tpl->display('main.tpl');
+}//end if
+elseif($_GET['csv_range']=='csv')
+{
+	header ( "Last-Modified: " . gmdate('D,d M YH:i:s') . " GMT" );
+	header ( "Cache-Control: no-cache, must-revalidate" );
+	header ( "Pragma: no-cache" );
+	header ( "Content-type: text/csv" );
+	header ( "Content-Disposition: attachment; filename=ecommerce_transactions.csv" );
+	header ( "Content-Description: PHP Generated CSV Data" ); 
+
+	$tpl->assign('newline', chr(10));
+	$tpl->assign('is_csv', $to_display);
+	$tpl->display('index.tpl');
+}//end else
+else
+{
+	//$to_display = getTrans();
+	$tpl->assign('data', $to_display);
+	$tpl->assign('content', 'index.tpl');
+	$tpl->display('main.tpl');
+}//end else
+?>

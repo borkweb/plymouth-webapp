@@ -1,0 +1,59 @@
+<?php
+require_once 'autoload.php';
+PSU::session_start();
+
+Channel::start();
+
+$GLOBALS['BannerGeneral'] = new BannerGeneral(PSU::db('banner'));
+
+$term = preg_replace('/[^0-9a-zA-Z]/','',$_GET['term']);
+
+if($_GET['processor'] == 'frost_tuition')
+{
+	//get the term description
+	$term_desc = $GLOBALS['BannerGeneral']->getDesc('stvterm', $term);
+
+	$url = 'https://www.plymouth.edu/office/bursar/';
+	//use term to choose which info to display
+	if(substr($term,4,2) == '10') $url .= 'frost-ecommerce-fall-spring';
+	elseif(substr($term,4,2) == '20') $url .= 'frost-ecommerce-winter-summer';
+	elseif(substr($term,4,2) == '30') $url .= 'frost-ecommerce-fall-spring';
+	elseif(substr($term,4,2) == '40') $url .= 'frost-ecommerce-winter-summer';
+
+	$url .= '?psu-channel';
+	
+	$text = PSU::curl( $url, PSU::FILE_GET_CONTENTS );
+	
+	echo $text;
+}//end if
+elseif($_GET['processor'] == 'billpay')
+{
+	echo '<div class="infotext_image"><img width="22" vspace="0" hspace="0" height="22" border="0" name="web_info" title="Information" alt="Information" src="https://www.plymouth.edu/webapp/banner/psc1/openssb/templates/images/icons/emblems/emblem-info.png"/></div><span class="infotext"><div class="no_print"><strong>Undergraduate E-Check Reminder</strong>: Your \'Balance Due\' amount will not carry forward to the payment page so please write it down.</div> <div class="print_only">
+<em><strong>This online bill is your official bill from PSU.</strong></em><br/>
+<img src="http://www.plymouth.edu/graphics/logocolor_271x70.png"/><br/>
+Plymouth State University, Plymouth, NH 03264
+</div></span>';
+}//end elseif
+
+//is the output javascript?
+if($_GET['output_method'] == 'js')
+{
+	//yes!  Set a callback and channel_id param
+	$params = array(
+		'callback' => 'ssb.message',
+		'channel_id' => '.remote-pay-info'
+	);
+	
+	//render the channel content
+	Channel::out('callback',$params);
+}//end if
+else
+{
+	//no!  set a page title and javascript init call
+	$params = array(
+		'title' => 'Pay Now'
+	);
+	
+	//render the channel content in html
+	Channel::out('html',$params);
+}//end else

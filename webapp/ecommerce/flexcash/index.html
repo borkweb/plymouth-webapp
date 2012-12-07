@@ -1,0 +1,35 @@
+<?php
+$GLOBALS['TITLE'] = 'PSU Flexcash';
+
+$tpl = new PSUTemplate();
+$tpl->template_dir = $GLOBALS['BASE_DIR']."/templates/flexcash";
+$tpl->assign('title', 'Flexcash');
+
+require_once( 'flexcash.lib.php' );	
+
+if($_POST['select_range']=='Go')
+{
+	$start_date = $_POST['StartDateDay'].'-'.$_POST['StartDateMonth'].'-'.$_POST['StartDateYear'];
+	$end_date = $_POST['EndDateDay'].'-'.$_POST['EndDateMonth'].'-'.$_POST['EndDateYear'];
+	$to_display = getTrans($start_date, $end_date);
+
+	$tpl->assign('stime', $_POST['StartDateYear'].'-'.$_POST['StartDateMonth'].'-'.$_POST['StartDateDay']);
+	$tpl->assign('etime', $_POST['EndDateYear'].'-'.$_POST['EndDateMonth'].'-'.$_POST['EndDateDay']);
+	
+	$tpl->assign('data', $to_display);
+	$tpl->display('body.tpl');
+}//end if
+elseif($_POST['csv_range']=='csv')
+{
+	$start_date = $_POST['StartDateDay'].'-'.$_POST['StartDateMonth'].'-'.$_POST['StartDateYear'];
+	$end_date = $_POST['EndDateDay'].'-'.$_POST['EndDateMonth'].'-'.$_POST['EndDateYear'];
+	$to_display=getTrans($start_date, $end_date);
+
+	die(PSU::csv($to_display, 'flexcash_transaction.csv'));
+}//end else
+else
+{
+	$to_display = getTrans();
+	$tpl->assign('data', $to_display);
+	$tpl->display('body.tpl');
+}//end else

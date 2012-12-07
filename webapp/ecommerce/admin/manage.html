@@ -1,0 +1,75 @@
+<?php
+	// *** manage.html ***
+	
+	// *** Begin Includes and Setup***
+	require_once('includes/AdminManager.class.php');
+	$manager = new AdminManager();
+	require_once('PSUHTML.class.php');
+	// *** End Includdes
+
+	// *** Setup Template ***
+	$smarty = new PSUSmarty();
+	$smarty->template_dir=$GLOBALS['BASE_DIR']."/templates/admin";
+	// *** End Template Setup ***
+
+	$smarty->assign('processes', $manager->getAllProcesses());
+	
+	// *** Handle adds and edits ***
+	if(is_numeric($_GET['edit'])){
+
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			$process = $_POST;
+			if($process['name']=='' || $process['type']=='' || $process['code']=='' || $process['class']==''){
+				$errors[]="Please fill in all fields.";
+				$smarty->assign('process', $process);
+				$smarty->assign('errors', $errors);
+			}
+			else{
+				$manager->updateProcess($process);
+				PSUHTML::redirect($GLOBALS['BASE_URL'].'/admin/manage.html?success=edit');
+			}
+			
+		}
+		else{
+			$smarty->assign('process', $manager->getProcess($_GET['edit']));
+		}
+		$smarty->assign('editing', $_GET['edit']);
+		$smarty->assign('subcontent', 'edit_process.tpl');
+	}
+	elseif($_GET['add']){
+
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			$process = $_POST;
+			if($process['name']=='' || $process['type']=='' || $process['code']=='' || $process['class']==''){
+				$errors[]="Please fill in all fields.";
+				$smarty->assign('process', $process);
+				$smarty->assign('errors', $errors);
+			}
+			else{
+				$manager->addProcess($process);
+				PSUHTML::redirect($GLOBALS['BASE_URL'].'/admin/manage.html?success=add');
+			}
+			
+		}
+
+		$smarty->assign('subcontent', 'add_process.tpl');
+
+	}
+	elseif($_GET['delete']){
+		
+		$manager->deleteProcess($_GET['delete']);
+		PSUHTML::redirect($GLOBALS['BASE_URL'].'/admin/manage.html?success=delet');
+	
+	}
+	elseif($_GET['success']){
+		$smarty->assign('success', $_GET['success']);
+	}
+
+	$smarty->assign('page_title', 'Manage');
+	$smarty->assign('content', 'manage.tpl');
+
+	// *** Display the main template ***
+	$smarty->display('main.tpl');
+	// *** End Display ***
+
+?>
