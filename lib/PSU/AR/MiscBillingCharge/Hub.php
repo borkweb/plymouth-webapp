@@ -26,6 +26,8 @@ class Hub extends \PSU\AR\MiscBillingCharge {
 		return array(
 			'IYHE' => \PSU\AR::detail_code( 'IYHE' ),
 			'IYHD' => \PSU\AR::detail_code( 'IYHD' ),
+			'IYHT' => \PSU\AR::detail_code( 'IYHT' ),
+			'IYHR' => \PSU\AR::detail_code( 'IYHR' ),
 		);
 	}//end detail_codes
 }//end class
