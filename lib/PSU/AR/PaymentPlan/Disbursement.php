@@ -245,7 +245,7 @@ class Disbursement extends \PSU_Banner_DataObject {
 			'param' => strtolower( 'tms_' . $this->transaction->level . '_' . $this->plan_type . '_term_code' ),
 		);
 
-		return PSU::db( 'banner' )->GetOne( $sql, $params );
+		return \PSU::db( 'banner' )->GetOne( $sql, $params );
 	}//end function target_term
 	public function type() {
 		return strpos( $this->file_name, 'Grad' ) === false ? 'UG' : 'GR';
