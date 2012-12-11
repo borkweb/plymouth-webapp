@@ -35,7 +35,7 @@ function calcDriveQuota($username)
 	if( ! $quota ) {
 		// unexpected error! (maybe being run on dev and no data was returned?)
 		// return something to fill the <div> on the page:
-		return "<i>unexpected error</i>";
+		return "<em>unexpected error</em>";
 	}
 	else {
 		return formatProgressBar($quota);
@@ -50,24 +50,24 @@ function calcMailQuota($username)
 	if( ! $quota ) {
 		// unexpected error! (maybe being run on dev and no data was returned?)
 		// return something to fill the <div> on the page:
-		return "<i>unexpected error</i>";
+		return "<em>unexpected error</em>";
 	}
-	else {
-		return formatProgressBar($quota);
-	}
+	return formatProgressBar($quota);
 }
 
+/**
+ * Quota info for display in a (CSS) "progress bar"
+ * Input: (not all these fields are currently being used)
+ *   [user] => djbramer
+ *   [quota_limit] => 2048
+ *   [quota_usage] => 589
+ *   [percent_usage] => 28.77
+ *   [quota_available] => 1459
+ *   [update_timestamp] => 2012-12-03 13:18:52
+ * Sample Output: a bar with a colored background (green==OK, etc)
+ *   "589 MB (28.77%)"
+ */
 function formatProgressBar($quota) {
-		// transform quota info for display in a (CSS) "progress bar"
-		// Sample Input: (not all these fields are currently being used)
-		//     [user] => djbramer
-		//     [quota_limit] => 2048
-		//     [quota_usage] => 589
-		//     [percent_usage] => 28.77
-		//     [quota_available] => 1459
-		//     [update_timestamp] => 2012-12-03 13:18:52
-		// Sample Output: a bar with a colored background (green==OK, etc)
-		//     "589 MB (28.77%)"
 	
 		$used_label = $quota['quota_usage'].' MB';
 		$max_label = $quota['quota_limit'].' MB';
