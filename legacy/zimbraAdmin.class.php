@@ -222,7 +222,9 @@ EOT;
 				return $quota;
 			}
 			else 
+			{
 				return false;
+			}
 		}
 		else
 		{
