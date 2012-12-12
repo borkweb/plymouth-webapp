@@ -71,7 +71,7 @@ $GLOBALS['SYSTEMS_DB'] = PSU::db('systems');
 // do whatever you do to authenticate the user....set the 
 // username into a session variable.
 // at PSU we use phpCAS:
-if( $GLOBALS['IS_HD'] || $GLOBALS['IP'][2]==112 || $GLOBALS['IP'][2]==114 || $GLOBALS['IP'][2]==33 || $GLOBALS['IP'][2]==32) {
+if( $GLOBALS['IS_HD'] || $GLOBALS['IP'][2]==112 || $GLOBALS['IP'][2]==114 || $GLOBALS['IP'][2]==33 || $GLOBALS['IP'][2]==32 || $GLOBALS['IP'][2]==115) {
 	// make sure we're either on an acceptable helpdesk computer, or on the 112 or 114 networks, otherwise deny access 
 	IDMObject::authN();
 	if( ! (
