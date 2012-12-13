@@ -5,7 +5,7 @@
 	<title>{if $selected_processor}{$selected_processor} | {/if}{$title}</title>
 	{strip}
 	{PSU_CSS href="https://www.plymouth.edu/webapp/style.css"}
-	{PSU_CSS href="`$PHP.BASE_URL`/../templates/style.css"}
+	{PSU_CSS href="`$PHP.BASE_URL`/templates/style.css"}
 	{PSU_JS src="/includes/js/jquery-1.2.6.js"}
 	{/strip}
 	
@@ -151,7 +151,7 @@
 	{if $content}
 		<div id="content">
 		{include file="`$content`"}
-		</div> <!-- end content -->
+		</div><!-- end content -->
 	{/if}
 </div> <!-- end page -->
 <div id="footer">&nbsp;</div>

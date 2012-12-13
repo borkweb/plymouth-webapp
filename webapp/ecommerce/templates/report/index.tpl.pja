@@ -108,7 +108,7 @@
 						</tr>
 				{/if}
 		</table>
-	</div> <!-- end block -->
+	</div>
 {else}
 {strip}
 	"Timestamp","Doc Number","Account Type","Transaction ID","Order Number","Order Name","Line Description","Debit Amount","Credit Amount","DC","FOAPAL"

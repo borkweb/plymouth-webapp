@@ -27,7 +27,7 @@ $GLOBALS['LOCAL_INCLUDES']=$GLOBALS['BASE_DIR'].'/includes';
 
 // Templates
 $GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'].'/templates';
-$GLOBALS['CSS'] = 'https://'.$_SERVER['HTTP_HOST'].'/webapp/style.css';
+$GLOBALS['CSS'] = 'https://'.$_SERVER['HTTP_HOST'].'/app/core/css/style.css';
 
 // Icons
 $GLOBALS['ICONS']='https://'.$_SERVER['HTTP_HOST'].'/images/icons';

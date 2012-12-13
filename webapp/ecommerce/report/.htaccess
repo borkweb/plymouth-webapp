@@ -1,2 +1,2 @@
-php_value auto_prepend_file /web/pscpages/webapp/ecommerce/report/common.php
+php_value auto_prepend_file ./common.php
 php_value auto_append_file none

@@ -1,6 +1,6 @@
 <div class="block">
 
-	<h2>Edit Process</h2>
+	<h2 id="edit">Edit Process</h2>
 	<fieldset>
 		<legend>Editing</legend>
 		
