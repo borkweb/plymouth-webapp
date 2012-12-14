@@ -189,6 +189,50 @@ EOT;
 	} // end setAccountOptions
 
 	/**
+	 * Originally writen by Alan Baker
+	 */
+	public function getAccountQuota($username)
+	{
+		$soap = '<GetAccountRequest xmlns="urn:zimbraAdmin">
+			<account by="name">'.$username.'@'.$this->_server.'</account>
+			</GetAccountRequest>';
+
+		$response = $this->soapRequest($soap);
+		if($response)
+		{
+			$array = $this->makeXMLTree($response);
+			$key = array_search("zimbraMailQuota",$array['soap:Envelope'][0]['soap:Body'][0]['GetAccountResponse'][0]['account'][0]['a_attribute_n'],true);
+			$id=$array['soap:Envelope'][0]['soap:Body'][0]['GetAccountResponse'][0]['account'][0]['id'];
+			$quota_in_bytes=$array['soap:Envelope'][0]['soap:Body'][0]['GetAccountResponse'][0]['account'][0][a][$key];
+			$quota_in_mb = $quota_in_bytes/1024/1024;
+			$quota['quota_limit']=round($quota_in_mb,1);
+
+			$soap = '<GetMailboxRequest xmlns="urn:zimbraAdmin">
+				<mbox id="'.$id.'" />
+				</GetMailboxRequest>';
+			$response = $this->soapRequest($soap);
+			if($response)
+			{
+				$array = $this->makeXMLTree($response);
+				$bytes_used = $array['soap:Envelope'][0]['soap:Body'][0]['GetMailboxResponse'][0]['mbox_attribute_s'][0];
+				$mb_used = $bytes_used/1024/1024;
+				$quota['quota_usage']=round($mb_used,1);
+				$quota['percent_usage']=round($quota['quota_usage']/$quota['quota_limit']*100 ,1 );
+				$quota['quota_available'] = $quota['quota_limit'] - $quota['quota_usage'];
+				return $quota;
+			}
+			else 
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	} // end getAccountQuota
+
+	/**
 	* createAccount
 	*
 	* create an account, assuming that an admin connection is required

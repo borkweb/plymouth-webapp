@@ -30,10 +30,45 @@ function buildWindow($win,$inline=false)
 
 function calcDriveQuota($username)
 {	
+
 	$quota = PSU::db('systems')->GetRow("SELECT * FROM home_quotas WHERE user = ?", array( $username ));
-	if( $quota )
-	{
-		// transform home quota info for display
+	if( ! $quota ) {
+		// unexpected error! (maybe being run on dev and no data was returned?)
+		// return something to fill the <div> on the page:
+		return "<em>unexpected error</em>";
+	}
+	else {
+		return formatProgressBar($quota);
+	}// end else
+}//end calcDriveQuota
+
+function calcMailQuota($username)
+{	
+	$zimbraAdmin = new zimbraAdmin();
+	$zimbraAdmin->connect();
+	$quota = $zimbraAdmin->getAccountQuota($username);
+	if( ! $quota ) {
+		// unexpected error! (maybe being run on dev and no data was returned?)
+		// return something to fill the <div> on the page:
+		return "<em>unexpected error</em>";
+	}
+	return formatProgressBar($quota);
+}
+
+/**
+ * Quota info for display in a (CSS) "progress bar"
+ * Input: (not all these fields are currently being used)
+ *   [user] => djbramer
+ *   [quota_limit] => 2048
+ *   [quota_usage] => 589
+ *   [percent_usage] => 28.77
+ *   [quota_available] => 1459
+ *   [update_timestamp] => 2012-12-03 13:18:52
+ * Sample Output: a bar with a colored background (green==OK, etc)
+ *   "589 MB (28.77%)"
+ */
+function formatProgressBar($quota) {
+	
 		$used_label = $quota['quota_usage'].' MB';
 		$max_label = $quota['quota_limit'].' MB';
 
@@ -50,8 +85,7 @@ function calcDriveQuota($username)
 
 		$tpl = new PSUTemplate();
 		return $tpl->psu_progress($params, $tpl);
-	}// end else
-}//end calcDriveQuota
+}
 
 function getManualMailingListMembers($list)
 {
