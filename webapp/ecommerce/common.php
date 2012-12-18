@@ -1,5 +1,7 @@
 <?php
-require dirname( dirname( __DIR__ ) ) . '/legacy/git-bootstrap.php';
+$toplevel = dirname( dirname( __DIR__ ) );
+require $toplevel . '/legacy/git-bootstrap.php';
+require $toplevel . '/lib/PSU/AR.php';
 require_once 'autoload.php';
 
 PSU::session_start();

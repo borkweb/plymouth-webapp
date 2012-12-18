@@ -1,37 +1,32 @@
 <?php
-function getTrans($begin_date=NULL, $end_date=NULL)
+/**
+ * Retrieve E-Commerce data
+ * See notes in PSU/AR.php for input arguments
+ *
+ * Return Array:
+ * - data : empty, or the selected transaction history indexed by 'fileid'
+ *     each fileid entry contains:
+ *     --- credit_total
+ *     --- debit_total, optional, missing if none
+ *     --- transactions, the array of data for this fileid
+ *         -- orderamount is amount without decimal, so $50 shows up as '5000'
+ *         this function appends to each DB 'transactions' row:
+ *         -- dollar_amount, 0 if a debit, otherwsie the decimal amount  ex: 50.75
+ *         -- debit_credit, a '+' or '-'
+ *         -- debit_amount, only if it was a debit, as a decimal ex: '80.75'
+ *         -- foapal, array
+ * - foapal: empty if nothing found, or set to the 1st row's foapal.
+ *
+ * -- Side effect: --
+ * - sets $GLOBALS['total']
+ */
+function getTrans($formatted_processors, $begin_date=NULL, $end_date=NULL, $processor=NULL)
 {
-	global $formatted_processors;
 	
 	$foapal = '';
 	
-	$GLOBALS['total'] = 0;
-	$sql = "SELECT t.*
-	          FROM ecommerce_transaction t
-	         WHERE (
-	                (transactiontype = 1 and transactionstatus = 1)
-	                OR
-	                (transactiontype = 3)
-									OR
-									(transactiontype = 2 and transactionstatus = 1)
-	               )
-	         	 AND (
-	                (t.activity_date BETWEEN to_date('".date('d-M-y',strtotime($begin_date))."', 'DD-Mon-YY') 
-	                 AND 
-	                 to_date('".date('d-M-y',strtotime($end_date))."', 'DD-Mon-YY')
-	                ) 
-	               ) ";
-	if($_GET['processor'])
-	{
-		$sql .= "  AND ordertype = '".$formatted_processors[$_GET['processor']]."'";
-	}//end if
-	else
-	{
-		$sql .= "  AND ordertype IN ('".implode("','", $formatted_processors)."')";
-	}//end else
-	         
-  $sql .= " AND psu_status = 'loaded' ORDER BY fileid, accounttype, timestamp, transactionid";
-	
+	$GLOBALS['total'] = 0; // used for "Grand Total" at the bottom of the report
+	$sql = PSU\AR::retrieveECommerceHistorySQL($formatted_processors, $begin_date, $end_date, $processor);
 	if($results = PSU::db('banner')->Execute($sql))
 	{
 		while($row = $results->FetchRow())
@@ -49,10 +44,10 @@ function getTrans($begin_date=NULL, $end_date=NULL)
 			$absolute_value_total = number_format(abs($row['totalamount'] / 100), 2);
 			
 			// was it a returned check or a credit card refund?
-			if(($row['transactiontype'] == 3 && $row['transactionstatus'] == 7) || ($row['transactiontype'] == 2 && $row['transactionstatus'] == 1))
+			if(PSU\AR::isReturned($row['transactiontype'], $row['transactionstatus']))
 			{
-				$row['debit_amount'] = $absolute_value_total;
 				$row['dollar_amount'] = 0;
+				$row['debit_amount'] = $absolute_value_total;
 				$row['debit_credit'] = '-';
 				
 				$data[$row['fileid']]['debit_total'] += ($row['totalamount']/100);
@@ -62,16 +57,16 @@ function getTrans($begin_date=NULL, $end_date=NULL)
 			{
 				$row['dollar_amount'] = $absolute_value_total;
 				$row['debit_credit'] = '+';
+
 				$data[$row['fileid']]['credit_total'] += ($row['totalamount']/100);
 				$GLOBALS['total'] += ($row['totalamount']/100);
 			}//end else
 			
 			$row['date'] = date('M j, Y', strtotime($row['timestamp']));
-			
-			$data[$row['fileid']]['transactions'][] = $row;
+			$data[$row['fileid']]['transactions'][] = $row; // put it into this fileid's transactions array
 			if(!$foapal) $foapal = $row['foapal'];
 		}//end while
 	}//end if
-	
+
 	return array('data' => $data, 'foapal' => $foapal);
 }//end getTrans

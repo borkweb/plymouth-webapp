@@ -11,7 +11,7 @@ if($_GET['start_date_Day'] || $_GET['start_date_Month'] || $_GET['start_date_Yea
 }//end if
 else
 {
-	$begin_date = date('Y-m-d');
+	$start_date = date('Y-m-d');
 }//end else
 
 if($_GET['end_date_Day'] || $_GET['end_date_Month'] || $_GET['end_date_Year'])
@@ -23,16 +23,11 @@ else
 	$end_date = date('Y-m-d');
 }//end else
 
-$processors = $GLOBALS['ECommerceTransaction']->getProcessors('finance');
-$formatted_processors = array();
-foreach($processors as $key=>$proc)
-{
-	$formatted_processors[$key] = $proc['name'];
-}//end foreach
+$formatted_processors = PSU\AR::formatProcessors($GLOBALS['ECommerceTransaction']->getProcessors('finance'));
 $tpl->assign('processors', $formatted_processors);
 $tpl->assign('selected_processor', $formatted_processors[$_GET['processor']]);
 
-$report =  getTrans($start_date, $end_date);
+$report =  getTrans($formatted_processors, $start_date, $end_date, $_GET['processor']);
 
 $to_display = $report['data'];
 
@@ -45,13 +40,7 @@ $tpl->assign('friendly_end_date',  date('M j, Y', strtotime($end_date)));
 
 $tpl->assign('grand_total', number_format($GLOBALS['total'], 2));
 
-if($_POST['select_range']=='Go')
-{
-	$tpl->assign('data', $to_display);
-	$tpl->assign('content', 'index.tpl');
-	$tpl->display('main.tpl');
-}//end if
-elseif($_GET['csv_range']=='csv')
+if($_GET['csv_range']=='csv')
 {
 	header ( "Last-Modified: " . gmdate('D,d M YH:i:s') . " GMT" );
 	header ( "Cache-Control: no-cache, must-revalidate" );
@@ -66,7 +55,6 @@ elseif($_GET['csv_range']=='csv')
 }//end else
 else
 {
-	//$to_display = getTrans();
 	$tpl->assign('data', $to_display);
 	$tpl->assign('content', 'index.tpl');
 	$tpl->display('main.tpl');
