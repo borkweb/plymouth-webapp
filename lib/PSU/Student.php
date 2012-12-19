@@ -415,7 +415,7 @@ class Student extends \BannerObject {
 		return \PSU::db('banner')->GetOne("SELECT f_get_currentterm(:level_code, :month, :year, :day) FROM dual", array( 'level_code' => $level, 'month' => strtoupper(date('M', $date)), 'year' => date('Y', $date), 'day' => date('d', $date)));
 	}//end getTerm
 
-	public function pretty_term( $term_code ) {
+	public static function pretty_term( $term_code ) {
 		$type = explode( '_', $this->term_type( $term_code ) );
 		$level = '';
 		switch( $type[0] ) {
