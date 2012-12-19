@@ -430,7 +430,7 @@ class Student extends \BannerObject {
 				break;
 		}//end switch
 
-		return $level . ucfirst( $type[1] ) . ' ' . substr( $term_code, 0, 4 );
+		return $level . ucfirst( $type[1] ) . ' ' . ( 'fall' == $type[1] ) ? ( ( substr( $term_code, 0, 4 )-1 ) : substr( $term_code, 0, 4 ) );
 	}//end pretty_term
 
 	public static function termRange( $level = 'any', $start_date = null, $end_date = null) {
