@@ -232,7 +232,7 @@ class PasswordManager
 			VALUES(?, ?, NOW())
 		";
 
-		PSU::db('')->Execute( $sql, $args );
+		$this->myplymouth->Execute( $sql, $args );
 	}//end logPassword	
 
 	/**
