@@ -1,0 +1,14 @@
+php_value auto_prepend_file ./common.php
+php_value auto_append_file none
+
+RewriteEngine on
+RewriteBase /webapp/ecommerce/
+
+RewriteCond   %{REQUEST_FILENAME}  -d
+RewriteRule   ^pay/(.+[^/])$            pay/$1/               [R,QSA]
+
+RewriteRule   ^pay/(.+)/    		        pay/?processor=$1  		[QSA,L]
+
+RewriteRule   ^flexcash/add/(.+)  pass_through.php?user=$1&processor=flexcash [QSA,L]
+RewriteRule   ^flexcash/add/?           pass_through.php?processor=flexcash [QSA,L]
+RewriteRule   ^flexcash/                flexcash.html [QSA,L]

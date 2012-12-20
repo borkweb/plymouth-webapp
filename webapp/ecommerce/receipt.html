@@ -1,0 +1,94 @@
+<?php
+if($_SERVER['HTTP_HOST'] == 'www.plymouth.edu')
+{
+	$GLOBALS['BANNER'] = PSUDatabase::connect('oracle/psc1_psu/fixcase');
+	$server = 'prod';
+}//end if
+else
+{
+	$GLOBALS['BANNER'] = PSUDatabase::connect('oracle/test_psu/fixcase');
+}//end else
+
+$params = $_GET;
+$hash = $params['hash'];
+
+unset($params['hash']);
+
+$fields = '';
+foreach($params as $param)
+{
+	$fields .= $param;
+}//end foreach
+
+$sql = "SELECT gxvsecr_code FROM gxvsecr WHERE gxvsecr_status_ind IS NULL";
+$shared_secret = ($server == 'prod') ? $GLOBALS['BANNER']->GetOne($sql) : 'key';
+
+$time = time();
+$trans_time = substr($params['timestamp'], 0, -3);
+
+if($hash == md5($fields.$shared_secret))
+{
+	if($trans_time >= ($time - 300) && $trans_time <= ($time + 300))
+	{
+		$params['totalamount'] = $params['transactionTotalAmount'];
+		$params['timestamp'] = $params['transactionDate'];
+		$params['resulttimestamp'] = $params['transactionDate'];
+		$params['accounttype'] = $params['transactionAcountType'];
+		$params['effectivedate'] = $params['transactionEffectiveDate'];
+		$params['description'] = $params['transactionDescription'];
+		$params['resultdate'] = $params['transactionResultDate'];
+		$params['resulteffectivedate'] = $params['transactionResultEffectiveDate'];
+		$params['resultcode'] = $params['transactionResultCode'];
+		$params['resultMessage'] = $params['transactionResultMessage'];
+		$params['payerid'] = $params['orderNumber'];
+		$params['actualpayerid'] = $params['actualPayerIdentifier'];
+		$params['fileid'] = 'receipt';
+		$params['activity_date'] = time();
+		$params['psu_status'] = 'receipt';
+		/***********************************
+		 * handle Transactions
+		 ***********************************/
+		$sql = "SELECT p.code,
+		               p.name,
+		               p.type,
+		               p.class 
+		          FROM ecommerce_processor p
+		         WHERE p.name = '".$params['orderType']."'";
+		if($row = $GLOBALS['BANNER']->GetRow($sql))
+		{
+			// include_path will find these class files in:  /web/dev/com/$USER.psudev.com/legacy/ecommerce
+			require_once('ecommerce/'.$row['class'].'.class.php');
+
+			if(!$GLOBALS['BANNER']->GetOne("SELECT 1 FROM ecommerce_transaction WHERE transactionid <> ".$params['transactionid']))
+			{			
+				$trans = new $row['class']($params, ($server == 'prod') ? true : false);
+				$trans->save();
+				if($trans->status_flag == 'success')
+				{
+					$trans->receipt();
+				}//end if
+			}//end if
+			else
+			{
+				$trans = new $row['class']($params['transactionid']);
+			}//end else
+		}//end if
+		
+		$trans->formatted_orderamount = number_format($trans->orderamount / 100, 2);
+		$trans->formatted_date = date('F j, Y', strtotime(preg_replace('/([0-9]{4})([0-9]{2})([0-9]{2})/', '\1-\2-\3', $trans->effectivedate)));
+		
+		$tpl = new PSUSmarty();
+		$tpl->assign('content', 'receipt.tpl');
+		$tpl->assign('trans', $trans);
+		$tpl->display('main.tpl');
+
+	}//end if
+	else
+	{
+		exit('Error: Your session has expired.');
+	}//end else
+}//end if
+else
+{
+	exit('Error: Invalid Data.');
+}//end else

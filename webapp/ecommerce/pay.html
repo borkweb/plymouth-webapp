@@ -1,0 +1,23 @@
+<?php
+require_once 'autoload.php';
+
+$go = explode('||',$_GET['go']);
+
+$url = $GLOBALS['BASE_URL'].'/';
+
+switch($go[0]) {
+	case 'ugdeposit':
+		$url .= 'pass_through.php?processor=ug_deposit&user=' . $go[1].$dev;
+		break;
+	case 'flexcash':
+		$url .= 'pass_through.php?processor=flexcash&user=' . $go[1].$dev;
+		break;
+	case 'pay2print':
+		$url .= 'pass_through.php?processor=pay2print&user=' . $go[1].$dev;
+		break;
+	default:
+		$url .= 'index.html';
+		break;
+}//end switch
+
+header('Location: ' . $url);

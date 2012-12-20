@@ -1,0 +1,115 @@
+.clear{height: 0px;visibility: hidden; clear: both;}
+
+table.space
+{
+	border-spacing:10px 2px
+}
+
+.logo{vertical-align: middle;}
+
+
+.flexcash{
+	border: 1px solid #BFBEA3;
+	float:left;
+	height: 70px;
+	margin-right: 10px;
+	width: 70px; 
+}
+
+.people{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.person .attributes{
+	list-style-type: none;
+	margin: 0 3px;
+	padding: 0;
+}
+
+.person .attributes li{
+	clear: left;
+}
+
+.person .attributes label{
+	float: left;
+	font-weight: bold;
+	width: 7em;
+}
+
+#person_search{
+	margin: 1em auto 2.5em auto;
+	width: 500px;
+}
+
+.add-flexcash{
+	background: #eee;
+	border: 1px solid #ccc;
+	margin: 5px;
+	padding: 3px;
+	float: right;
+}
+
+.note{
+	font-size: 0.9em;
+	text-align: justify;
+}
+
+.subtle{
+	color: #666;
+}
+
+.first{
+	margin-top: 0;
+}
+
+.brief{
+	margin: 1em auto 2.5em auto;
+	text-align: justify;
+	width: 700px;
+}
+
+.pad{
+	padding: 0 2em;
+}
+
+.receipt{
+	background: #fff;
+	border: 1px solid #bfbea3;
+	margin: 1em auto;
+	padding: 0;
+	width: 550px;
+}
+
+.receipt .head{
+	background: #f2f1eb;
+	font-style: italic;
+	padding: 1em;
+}
+
+.receipt label{
+	display: block;
+	float: left;
+	font-weight: bold;
+	margin-right: 0.5em;
+	text-align: right;
+	width: 11em;
+}
+
+.receipt li{
+	clear: both;
+	list-style: none;
+	padding: 0.5em 1em;
+}
+
+.receipt li div{
+	float: left;
+}
+
+.under-receipt{
+	clear: both;
+	color: #666;
+	font-size: 0.8em;
+	text-align: center;
+}

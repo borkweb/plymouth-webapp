@@ -1,0 +1,48 @@
+<?php
+require_once 'autoload.php';
+PSU::session_start();
+
+if( stristr( $_GET['type'], 'Recurring gift' ) !== false ) {
+	PSU::redirect('/advancement/your-recurring-gift/');
+	die;
+}//end if
+
+$TEST_URL = 'http://uatquikpayasp.com/usnh/psc/alumni/payer.do';
+$PROD_URL = 'https://quikpayasp.com/usnh/psc/alumni/payer.do';
+
+if( ! ( $_GET['id'] && $_GET['amount'] ) ) {
+	die('Please try again');
+}//end if
+
+$code = trim($_GET['id']);
+$type = 'PSC Alumni Payer';
+$desc = 'Web Donation';
+$email = trim($_GET['email']);
+$name = trim($_GET['name']);
+$amount = \PSU::clean_currency( $_GET['amount'] );
+$time = time().'000';
+
+/*
+orderNumber
+orderName
+userId
+amountDue
+*/ 
+
+if( PSU::isDev() ) {
+	$secret = 'sharedsecret';
+} else {
+	$sql = "
+		SELECT gxvsecr_code 
+			FROM gxvsecr 
+		 WHERE gxvsecr_status_ind IS NULL
+	";
+	$secret = PSU::db('banner')->GetOne( $sql );
+}//end else
+
+$hash = md5($code.$type.$desc.$amount.$time.$secret);
+$url = PSU::isDev() ? $TEST_URL : $PROD_URL;
+$url .= "?orderType={$type}&amp;orderNumber={$code}&amp;orderName={$name}&amp;orderDescription={$desc}&amp;amount={$amount}&amp;amountDue={$amount}&amp;email={$email}&amp;timestamp={$time}&amp;hash={$hash}";
+
+$url = str_replace('&amp;', '&', $url);
+\PSU::redirect( $url );

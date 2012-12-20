@@ -1,0 +1,22 @@
+<?php
+	// *** index.html ***
+	
+	// ***
+
+	// *** Setup Template ***
+	$smarty = new PSUTemplate();
+	$smarty->template_dir=$GLOBALS['BASE_DIR']."/templates/admin";
+	// *** End Template Setup ***
+
+	require_once('includes/AdminMetrics.class.php');
+	$metrics = new AdminMetrics();
+	$smarty->assign('metrics', $metrics->getAllAdminMetrics());
+
+	$smarty->assign('page_title', 'Dashboard');
+	$smarty->assign('content', 'dashboard.tpl');
+	
+	// *** Display the main template ***
+	$smarty->display('main.tpl');
+	// *** End Display ***
+
+?>

@@ -1,0 +1,75 @@
+<?php
+require_once('PSUTools.class.php');
+$GLOBALS['TITLE'] = 'Campus Flexcash';
+$tpl = new PSUTemplate();
+$tpl->assign('hide_nav', true);
+$tpl->assign('title', 'Campus FlexCash');
+$tpl->assign('header_title_code', 'flexcash');
+
+$empstu = ($_GET['empstu'] != 'all' && $_GET['empstu'] != '') ? $_GET['empstu'] : 'all';
+$display_images = (isset($_GET['display_images']))?$_GET['display_images']:0;
+$types = array("2"=>"Last Name", "1"=>"First Name", "7"=>"Full Name", "5"=>"Username");
+$type = ($_GET['type'])?$_GET['type']:2;
+// go-enabled 3/24/06
+$what = ($_GET['s'])?urldecode(stripslashes($_GET['s'])):urldecode(stripslashes($_GET['go']));
+
+$tpl->assign('empstu_'.$empstu, 'checked="checked"');
+$tpl->assign('display_images', (($display_images)?'checked="checked"':''));
+$tpl->assign('types', $types);
+$tpl->assign('what', stripslashes($what));
+
+
+$tpl->assign('person_what', $what);
+$tpl->assign('person_search_display', 'block');
+$tpl->assign('person_search_tab', 'current');
+$tpl->assign('person_checked', 'checked="checked"');
+
+if($what)
+{
+	if( $temp_people = PSUTools::searchPhonebook( array(
+			'search_phrase' => $what,
+			'everybody' => FALSE,
+			'public' => 1,
+			'count' => $_SESSION['username'] ? 100 : 10,
+			'start' => 0
+		)))
+	{
+		foreach($temp_people AS $person)
+		{
+			$person['id'] = $person['psu_id'];
+			$person['username'] = $person['username'];
+
+			if($person['public'] == 1 && $person['has_idcard'])
+			{
+		
+				if($empstu == 'all' || ($empstu == 'emp' && $person['emp']) || ($empstu == 'stu' && $person['stu_account']))
+				{					
+					$person['display_roles'] = array();
+					
+					$person['email']= ($person['email'] == 'jnbernier')? 'jbernier':$person['email'];
+					$person['email'] = ($person['email'] == 'ssteen')?'sjsteen':$person['email'];
+					
+					if($person['stu_account']) $person['display_roles'][] = 'Student';
+					if($person['emp']) $person['display_roles'][] = 'Employee';
+					
+					$person['display_roles'] = implode(', ', $person['display_roles']);
+					
+					if(strtolower($person['major']) == 'non-degree student')
+						unset($person['major']);
+					
+					if(strtolower($person['dept']) == 'unknown')
+						unset($person['dept']);
+	
+					if(strtolower($person['title']) == 'unknown')
+						unset($person['title']);
+	
+					$people[] = $person;
+				}//end if
+			}//end if
+		}//end foreach
+	}//end if
+
+	$tpl->assign('people',$people);
+}//end if
+
+$tpl->display('flexcash.tpl');
