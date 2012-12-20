@@ -1,6 +1,4 @@
-<div class="block">
-
-	<h2 id="edit">Edit Process</h2>
+{box title="Edit Process" size="16"}
 	<fieldset>
 		<legend>Editing</legend>
 		
@@ -8,7 +6,7 @@
 			<div class="error">{$error}</div>
 		{/foreach}
 
-		<form method="post" action="{$PHP.BASE_URL}/admin/manage.html?edit={$process.id}">
+		<form method="post" action="{$PHP.BASE_URL}/manage.html?edit={$process.id}">
 			<ul>
 				<li>
 					<label>Process ID:</label>
@@ -37,4 +35,4 @@
 			</ul>
 		</form>
 	</fieldset>
-</div>
+{/box}
