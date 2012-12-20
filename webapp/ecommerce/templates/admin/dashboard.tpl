@@ -1,8 +1,5 @@
-<div class="block">
-	
-	<h2>{$page_title}</h2>
-	
-	{if $metrics}
+{box title="Dashboard" size="16"}
+{if $metrics}
 		<table class="grid">
 			<tr>
 				<th>Department</th>
@@ -23,5 +20,4 @@
 			<h2>There is no data to be displayed in the dashboard at this time.</h2>
 		</div>
 	{/if}
-
-</div>
+{/box}

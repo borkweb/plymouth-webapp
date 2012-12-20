@@ -1,22 +1,19 @@
 <?php
-	// *** index.html ***
-	
-	// ***
+require_once 'autoload.php';
+PSU::session_start(); // force ssl + start a session
 
-	// *** Setup Template ***
-	$smarty = new PSUTemplate();
-	$smarty->template_dir=$GLOBALS['BASE_DIR']."/templates/admin";
-	// *** End Template Setup ***
+$GLOBALS['PARENT_URL'] = '/webapp/ecommerce';
+$GLOBALS['BASE_URL'] = '/webapp/ecommerce/admin';
+$GLOBALS['BASE_DIR'] = __DIR__;
 
-	require_once('includes/AdminMetrics.class.php');
-	$metrics = new AdminMetrics();
-	$smarty->assign('metrics', $metrics->getAllAdminMetrics());
+$GLOBALS['TITLE'] = 'PSU eCommerce Admin';
+$GLOBALS['TEMPLATES'] = $GLOBALS['BASE_DIR'].'/../templates/admin';
 
-	$smarty->assign('page_title', 'Dashboard');
-	$smarty->assign('content', 'dashboard.tpl');
-	
-	// *** Display the main template ***
-	$smarty->display('main.tpl');
-	// *** End Display ***
+$tpl = new PSUTemplate();
 
-?>
+require_once('includes/AdminMetrics.class.php');
+$metrics = new AdminMetrics();
+$tpl->assign('metrics', $metrics->getAllAdminMetrics());
+$tpl->assign('content', 'dashboard.tpl');
+
+$tpl->display('index.tpl');
