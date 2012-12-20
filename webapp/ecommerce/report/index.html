@@ -23,7 +23,7 @@ else
 	$end_date = date('Y-m-d');
 }//end else
 
-$formatted_processors = PSU\AR::formatProcessors($GLOBALS['ECommerceTransaction']->getProcessors('finance'));
+$formatted_processors= PSU\AR::format_processors($GLOBALS['ECommerceTransaction']->getProcessors('finance'));
 $tpl->assign('processors', $formatted_processors);
 $tpl->assign('selected_processor', $formatted_processors[$_GET['processor']]);
 

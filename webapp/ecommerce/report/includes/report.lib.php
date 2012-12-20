@@ -26,7 +26,7 @@ function getTrans($formatted_processors, $begin_date=NULL, $end_date=NULL, $proc
 	$foapal = '';
 	
 	$GLOBALS['total'] = 0; // used for "Grand Total" at the bottom of the report
-	$sql = PSU\AR::retrieveECommerceHistorySQL($formatted_processors, $begin_date, $end_date, $processor);
+	$sql = PSU\AR::get_history($formatted_processors, $begin_date, $end_date, $processor);
 	if($results = PSU::db('banner')->Execute($sql))
 	{
 		while($row = $results->FetchRow())
@@ -44,7 +44,7 @@ function getTrans($formatted_processors, $begin_date=NULL, $end_date=NULL, $proc
 			$absolute_value_total = number_format(abs($row['totalamount'] / 100), 2);
 			
 			// was it a returned check or a credit card refund?
-			if(PSU\AR::isReturned($row['transactiontype'], $row['transactionstatus']))
+			if(PSU\AR\Transaction::is_returned($row['transactiontype'], $row['transactionstatus']))
 			{
 				$row['dollar_amount'] = 0;
 				$row['debit_amount'] = $absolute_value_total;

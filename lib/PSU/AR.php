@@ -59,7 +59,7 @@ class AR {
  *   -- if empty, all processor codes are used
  *
  */
-	public static function retrieveECommerceHistorySQL($formatted_processors, $begin_date=NULL, $end_date=NULL, $processor=NULL) {
+	public static function get_history($formatted_processors, $begin_date=NULL, $end_date=NULL, $processor=NULL) {
 		$sql = "SELECT t.*
 	          FROM ecommerce_transaction t
 	         WHERE (
@@ -84,7 +84,7 @@ class AR {
 
 		$sql .= " AND psu_status = 'loaded' ORDER BY fileid, accounttype, timestamp, transactionid";
 		return $sql;
-	} // createSQL
+	} // get_history
 
 	public static function detail_code( $code ) {
 		static $detail_codes;
@@ -107,14 +107,14 @@ class AR {
 	 *     pay2print IT      Pay2Print
 	 *     business_office   Finance/Business Office
 	 */
-	public static function formatProcessors($allProcessors) {
+	public static function format_processors($all_processors) {
 		$formatted_processors = array();
-		foreach($allProcessors as $key=>$proc)
+		foreach($all_processors as $key=>$proc)
 		{
 			$formatted_processors[$key] = $proc['name'];
 		}//end foreach
 		return $formatted_processors;
-	}//end formatProcessors
+	}//end format_processors
 
 	/**
 	 * generates a receipt number from sobseqn_receipt
@@ -126,13 +126,5 @@ class AR {
 		\PSU::db('banner')->Execute($stmt);
 		return $receipt;
 	}//end generateReceiptNumber
-
-	/**
-	 * Returns true if this transaction was a returned check or a refund
-	 * Originally created for webapp/ecommerce/report
-	 */
-	public static function isReturned($transactiontype, $transactionstatus) {
-		return ($transactiontype == 3 && $transactionstatus == 7) || ($transactiontype == 2 && $transactionstatus == 1);
-	}
 
 }//end class

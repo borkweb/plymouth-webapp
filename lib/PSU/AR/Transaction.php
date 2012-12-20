@@ -41,6 +41,14 @@ abstract class Transaction {
 	}//end add_entry
 
 	/**
+	 * Returns true if this transaction was a returned check or a refund
+	 * Originally created for webapp/ecommerce/report
+	 */
+	public static function is_returned($transactiontype, $transactionstatus) {
+		return ($transactiontype == 3 && $transactionstatus == 7) || ($transactiontype == 2 && $transactionstatus == 1);
+	}
+
+	/**
 	 * save entries into base table
 	 */
 	public function save() {
