@@ -105,16 +105,32 @@ class cron
 	/**
 	 * log
 	 * 
-	 * log the cron
+	 * log the cron.  Sample entry:
+	 *    2013-01-02 15:07:37 :: message
 	 *
 	 * @access	public
 	 * @param	string $message message to post with cron in the log
 	 */
-	function log($message)
+	function log($message, $prefix='')
 	{
-		file_put_contents($this->log_file,date('Y-m-d H:i:s').' :: '.$message."\n",FILE_APPEND);
+		return file_put_contents($this->log_file,date('Y-m-d H:i:s')." $prefix:: $message\n",FILE_APPEND);
 	}//end log
 
+	/**
+	 * logError
+	 * 
+	 * log an error message. Sample:
+	 *    2013-01-02 15:07:37 Error:: message
+	 *
+	 * @access	public
+	 * @param	string $message message to post with cron in the log
+	 */
+	function logError($message)
+	{
+		return self::log($message, "Error");
+	}//end logError
+
+	/**
 	/**
 	 * lock
 	 *
