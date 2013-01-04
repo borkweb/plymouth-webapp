@@ -270,4 +270,49 @@ class searchPSU
 
 		return true;
 	}//end _connectTLCDB
+	
+/**
+ * search_wiki
+ *
+ * searches the wiki for the user provided search terms
+ *
+ *@params string $params
+ *@params string $args
+ *@return string 
+ */
+	function search_wiki($params, $args = NULL){
+		//included headers	
+		$headers[] = 'Accept: image/gif, image/x-bitmap, image/jpeg, image/pjpeg';
+		$headers[] = 'Connection: Keep-Alive';
+	 	$headers[] = 'Content-type: application/x-www-form-urlencoded;charset=UTF-8';
+
+		//create some defaults for the search
+		$default = array(
+			'target'=>'helpdesk',
+			'bot'=>'browser-agent/1.1'
+		);
+		
+		if( !empty($args) ){
+			$default[target] = $args;
+		}
+		
+		//merge the $args array and the $default arrays using the params function in the PSU api	
+		$args = PSU::params($default);
+
+		//create the url sent to the server
+		$url = 'http://www.plymouth.edu/webapp/'.$args[target].'/w/api.php?action=query&generator=search&gsrsearch='.$params.'&prop=info|revisions&rvprop=content&inprop=url&format=json';
+
+		$curl = curl_init();
+						curl_setopt($curl, CURLOPT_URL, $url);
+						curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($curl, CURLOPT_HEADER, 0);
+						curl_setopt($curl, CURLOPT_USERAGENT, $args[bot]);
+						curl_setopt($curl, CURLOPT_REFERER, 'www.plymouth.edu/webapp/');
+						curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+						curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);				
+		$return = curl_exec($curl);
+		curl_close($curl);
+		return $return;	
+	
+	}//end search_wiki
 }//end seachPSU
