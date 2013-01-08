@@ -293,7 +293,7 @@ class searchPSU
 		);
 		
 		if( !empty($args) ){
-			$default[target] = $args;
+			$default['target'] = $args;
 		}
 		
 		//merge the $args array and the $default arrays using the params function in the PSU api	
@@ -306,7 +306,7 @@ class searchPSU
 						curl_setopt($curl, CURLOPT_URL, $url);
 						curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 						curl_setopt($curl, CURLOPT_HEADER, 0);
-						curl_setopt($curl, CURLOPT_USERAGENT, $args[bot]);
+						curl_setopt($curl, CURLOPT_USERAGENT, $args['bot']);
 						curl_setopt($curl, CURLOPT_REFERER, 'www.plymouth.edu/webapp/');
 						curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 						curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);				
