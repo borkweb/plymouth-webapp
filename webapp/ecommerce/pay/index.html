@@ -1,0 +1,186 @@
+<?php
+Channel::start();
+$ecommerce = new PSUECommerce($GLOBALS['BANNER']);
+
+$GLOBALS['processors'] = $ecommerce->getProcessors();
+
+if($_GET['hash'])
+{
+	$shared_secret='z0mgsh4r3ds3cr3T';
+	if($_GET['hash'] != md5($_GET['amount'].$_GET['id'].$_GET['which'].$_GET['term'].$_GET['net_term_balance'].$shared_secret))
+	{
+		exit('Error 1.');
+	}//end if
+}//end if
+elseif(!$_SESSION['username'])
+{
+	exit('Error 2.');
+}//end else
+
+$smarty = new ECommerceSmarty();
+
+$params = array();
+$info = array();
+
+$params['id'] = preg_replace('/[^0-9a-zA-Z \-\_\.]/', '', $_GET['id']);
+$params['hash'] = $_GET['hash'];
+$params['amount'] = preg_replace('/[^0-9a-zA-Z \-\_\.]/', '', $_GET['amount']);
+$params['which'] = preg_replace('/[^0-9a-zA-Z \-\_\.]/', '', $_GET['which']);
+$params['term'] = preg_replace('/[^0-9a-zA-Z \-\_\.]/', '', $_GET['term']);
+$params['processor'] = preg_replace('/[^0-9a-zA-Z \-\_\.]/', '', $_GET['processor']);
+
+if(isset($params['amount']))
+{
+	//if no processor is specified
+	if(!$params['processor'])
+	{
+		$params['pidm'] = $GLOBALS['BannerIDM']->getIdentifier($params['id'], 'psu_id', 'pidm');
+		$info = $GLOBALS['BannerIDM']->db->GetRow("SELECT * FROM psu.v_student_account_active WHERE pidm = {$params['pidm']}");
+	
+		//is the person a UG and either a continuing ed OR viewing the winter or summer term
+		if(preg_match('/.{4}((20)|(40)|(85))/',$params['term']))
+		{
+			$params['processor'] = 'frost_tuition';
+		}//end if
+		elseif($info['styp_code'] == 'E')
+		{
+			if(preg_match('/.{4}((9[0-9])|(80))/',$params['term']))
+			{
+				$params['processor'] = 'registration';
+			}//end if
+			else
+			{	
+				$params['processor'] = 'frost_tuition';
+			}//end else
+		}//end elseif
+		elseif($info['levl_code'] == 'UG')
+		{
+			$params['processor'] = 'billpay';
+		}//end elseif
+		elseif($info['levl_code'] == 'GR')
+		{
+			$params['processor'] = 'registration';
+		}//end elseif
+		elseif($info = $GLOBALS['BannerIDM']->db->GetRow("SELECT count(*) FROM psu.v_ug_app_accept WHERE pidm = {$params['pidm']}"))
+		{
+			$params['processor'] = 'billpay';
+		}//end else
+		
+	}//end if
+	
+	$valid_processor = in_array($params['processor'], array_keys($GLOBALS['processors']));
+
+	//if the processor is set and it is a valid processor
+	if($params['processor'] && $valid_processor)
+	{
+		//handle legacy ecommerce urls
+		switch($params['processor'])
+		{
+			case 'billpay':
+				$processor_type = 'billpay';
+			break;
+			case 'registration':
+				$processor_type = 'registration';
+			break;
+			default:
+				$processor_type = 'commerce_manager';
+			break;
+		}//end switch
+
+		//initialize the PSUECommerceInterface object
+		$GLOBALS['ecommerce'] = new PSUECommerceInterface($GLOBALS['BANNER'], ($params['which']=='prod')?true:false, $processor_type);
+		
+		$params['amount'] = ($params['amount'] == '000') ? 0 : $params['amount'];
+
+		//set up the link to nelnet
+		if($params['processor'] == 'billpay')
+		{
+			$params['pidm'] = $GLOBALS['BannerIDM']->getIdentifier($params['id'], 'psu_id', 'pidm');
+			$params['name'] = $GLOBALS['BannerIDM']->getName($params['pidm'], 'l, f m');
+			$params['friendly_name'] = $GLOBALS['BannerIDM']->getName($params['pidm'], 'f m l');
+			
+			$GLOBALS['ecommerce']->legacy = true;
+			$params['email'] = $GLOBALS['BANNER']->GetOne("SELECT gobtpac_external_user FROM gobtpac WHERE gobtpac_pidm = '".$params['pidm']."'").'@plymouth.edu';
+			$params['method'] = 'ach';
+			$params['userId'] = $params['id'];
+			$params['fullName'] = $params['friendly_name'];
+			$params['paymentMethod'] = $params['method'];
+
+			$smarty->assign('title', $GLOBALS['processors'][$params['processor']]['name']);
+			$smarty->assign('link_title', $GLOBALS['processors'][$params['processor']]['name']);
+			$smarty->assign('url', $GLOBALS['ecommerce']->url($params));
+		}//end if billpay
+		elseif($params['processor'] == 'registration')
+		{
+			$params['pidm'] = $GLOBALS['BannerIDM']->getIdentifier($params['id'], 'psu_id', 'pidm');
+			$params['name'] = $GLOBALS['BannerIDM']->getName($params['pidm'], 'l, f m');
+			$params['friendly_name'] = $GLOBALS['BannerIDM']->getName($params['pidm'], 'f m l');
+
+			$GLOBALS['ecommerce']->legacy = true;
+			$params['userId'] = $params['id'];
+			$params['amountDue'] = $params['amount'];
+			$smarty->assign('title', $GLOBALS['processors'][$params['processor']]['name']);
+			$smarty->assign('link_title', $GLOBALS['processors'][$params['processor']]['name']);
+			$smarty->assign('url', $GLOBALS['ecommerce']->url($params));
+		}//end elseif registration
+		else
+		{
+			$sql = "SELECT * 
+			          FROM ecommerce_processor 
+			         WHERE code = '{$params['processor']}'";
+			if($processor = $GLOBALS['BANNER']->GetRow($sql))
+			{	
+				require_once('ecommerce/'.$processor['class'].'.class.php');
+				$processor_object = new $processor['class']();
+	
+				$smarty->assign('title', $processor['name']);
+				$smarty->assign('link_title', $processor['name']);
+
+				$smarty->assign('url', $processor_object->url($processor['name'], $params, $params['which']));
+			}//end if
+		}//end else			
+	}//end if
+}//end if
+else
+{
+	echo 'Error: no amount';
+}//end else
+
+if($user['processor'] == 'ug_app')
+{
+	$smarty->assign('button', 'Pay Application Fee');
+}//end if
+else
+{
+	$smarty->assign('button', 'Pay Now');
+}//end else
+
+$smarty->display('pay/index.tpl');
+
+//is the output javascript?
+if($_GET['output_method'] == 'js')
+{
+	//yes!  Set a callback and channel_id param
+	$params = array(
+		'callback' => 'ssb.pay.echo',
+		'channel_id' => $_GET['channel_id'], 
+		'js_callback' => 'ssb.get(\''.$GLOBALS['BASE_URL'].'/information.html?processor='.$params['processor'].'&term='.$_GET['term'].'\');'
+	);
+	
+	//render the channel content
+	Channel::out('callback',$params);
+}//end if
+elseif($_GET['output_method'] == 'link')
+{
+}//end elseif
+else
+{
+	//no!  set a page title and javascript init call
+	$params = array(
+		'title' => 'Pay Now'
+	);
+	
+	//render the channel content in html
+	Channel::out('html',$params);
+}//end else
+?>
