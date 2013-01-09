@@ -1,0 +1,88 @@
+<?php
+Channel::start();
+
+if($_GET['hash'])
+{
+	$shared_secret='z0mgsh4r3ds3cr3T';
+	if($_GET['hash'] != md5($_GET['id'].$_GET['term'].$shared_secret))
+	{
+		exit('Error 1.');
+	}//end if
+}//end if
+elseif(!$_SESSION['username'])
+{
+	exit('Error 2.');
+}//end else
+
+$smarty = new ECommerceSmarty();
+$user = array();
+$user['id'] = preg_replace('/[^0-9a-zA-Z]/','',$_GET['id']);
+$user['pidm'] = $GLOBALS['BannerIDM']->getIdentifier($user['id'],'psu_id','pid');
+$user['term'] = $_GET['term'];
+
+$info = array();
+$info = $GLOBALS['BANNER']->GetRow("SELECT * FROM psu.v_student_account_active WHERE pidm = {$user['pidm']}");
+
+if($user['id'])
+{
+	//is the person a UG and either a continuing ed OR viewing the winter or summer term
+		if(preg_match('/.{4}((20)|(40)|(85))/',$user['term']))
+		{
+			$user['processor'] = 'frost_tuition';
+		}//end if
+		elseif($info['styp_code'] == 'E')
+		{
+			if(preg_match('/.{4}((9[0-9])|(80))/',$user['term']))
+			{
+				$user['processor'] = 'registration';
+			}//end if
+			else
+			{	
+				$user['processor'] = 'frost_tuition';
+			}//end else
+		}//end elseif
+		elseif($info['levl_code'] == 'UG')
+		{
+			$user['processor'] = 'billpay';
+		}//end elseif
+		elseif($info['levl_code'] == 'GR')
+		{
+			$user['processor'] = 'registration';
+		}//end elseif
+	
+	if(in_array($user['processor'], array('frost_tuition','registration')))
+	{
+		$smarty->assign('show_button', true);
+	}//end if
+}//end if
+else
+{
+	echo 'Error: no id';
+}//end else
+
+$smarty->display('pay/registration.tpl');
+
+//is the output javascript?
+if($_GET['output_method'] == 'js')
+{
+	//yes!  Set a callback and channel_id param
+	$params = array(
+		'callback' => 'ssb.pay.echo',
+		'channel_id' => $_GET['channel_id'], 
+		'js_callback' => 'ssb.get(\''.$GLOBALS['BASE_URL'].'/information.html?processor='.$user['processor'].'&term='.$_GET['term'].'\');'
+	);
+	
+	//render the channel content
+	Channel::out('callback',$params);
+}//end if
+else
+{
+	//no!  set a page title and javascript init call
+	$params = array(
+		'title' => 'Pay Now'
+	);
+	
+	//render the channel content in html
+	Channel::out('html',$params);
+}//end else
+?>
