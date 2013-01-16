@@ -47,5 +47,33 @@ class HubUtils
     return PSU::db('hub')->GetOne($sql, array($config_id));
   }
 
+/**
+ *
+ * @param string $config_id
+ * @access public
+ * @return value of the passed config value
+ * 
+ */
+  function setConfigValue($config_id, $data)
+	{
+		$sql = "REPLACE INTO hub_config 
+							( 
+							config_id,
+							config_value
+							)
+						VALUES 
+							(
+							  ?,
+								?
+							)";
+
+		$rs = PSU::db('hub')->Execute($sql,
+						array(
+								$config_id,
+								$data,
+								));
+
+		return $rs;
+	}
 }
 
