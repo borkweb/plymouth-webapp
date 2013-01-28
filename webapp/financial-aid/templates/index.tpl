@@ -75,7 +75,7 @@
 		<p>This Requirements section will identify items which must be completed in order for PSU to help you obtain financial aid. <strong>Documents may be faxed to our office at 603-535-2627 or mailed to the PSU Financial Aid Team, Plymouth State University, 17 High Street, MSC #18, Plymouth, NH 03264</strong>. In addition, <strong>you may <a href="/office/financial-aid/contact-information/request-form/">electronically submit documents</a> using <a href="/office/financial-aid/contact-information/request-form/">our contact form</a></strong>.</p>
 		<p>Once all requirements are received (and you are admitted), your file will be pulled for Director review. Files are reviewed "once a week". At that time, your award will be determined or additional information may be required for further clarification. You will receive an e-mail once your award has been completed or if additional information is required based upon our review.</p>
 
-		{include file='index-requirements.tpl' title="Requirements Students Need to Complete or Submit" requirements=$unsatisfied show_instructions=true as_of_label="Date Posted"}
+		{include file='index-requirements.tpl' title="Action Required" requirements=$unsatisfied show_instructions=true as_of_label="Date Posted"}
 		{include file='index-requirements.tpl' title="Requirements Received and/or Completed" requirements=$satisfied show_instructions=false as_of_label="Date Completed"}
 	{else}
 		<p>There are no requirements to show for this aid year.</p>
