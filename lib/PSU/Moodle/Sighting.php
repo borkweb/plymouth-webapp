@@ -46,9 +46,10 @@ class Sighting {
 		$successes = array();
 		foreach( (array)self::get_active_users( $timestamp ) as $idnumber ) {
 			$pidm = \PSU::get('idmobject')->getIdentifier( $idnumber, 'psu_id', 'pid' );
-			//if( $BannerStudent->sightStudent( $pidm, 'MC' ) ) {
 			if( \PSU::db('psc1')->GetOne("SELECT 1 FROM v_student_active WHERE pidm = :pidm", array('pidm' => $pidm)) ) {
-				$successes[] = $idnumber;
+				if( $BannerStudent->sightStudent( $pidm, 'MC' ) ) {
+					$successes[] = $idnumber;
+				}//end if
 			}//end if
 		}//end foreach
 
