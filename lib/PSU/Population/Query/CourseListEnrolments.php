@@ -40,7 +40,8 @@ class PSU_Population_Query_CourseListEnrolments extends PSU_Population_Query {
 			    ON (sfrstcr_crn = ssbsect_crn AND 
 				    sfrstcr_term_code = ssbsect_term_code)
 			  WHERE " . $where . " 
-				AND sfrstcr_term_code >= :term_code 
+				AND sfrstcr_term_code >= :term_code
+				AND sfrstcr_rsts_code IN ('RE', 'RW')
 		";
 
 		unset( $args['courses'] );
