@@ -21,7 +21,7 @@ class Sighting {
 		$sql = "
 			SELECT idnumber 
 			FROM mdl_user 
-			WHERE last_access >= ? 
+			WHERE lastaccess >= ? 
 			AND idnumber > ''
 		";
 
