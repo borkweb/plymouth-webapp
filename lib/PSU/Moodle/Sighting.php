@@ -10,22 +10,32 @@ class Sighting {
 	 * function called to retrieve a list of users that have been active 
 	 * since the passed in timestamp.
 	 *
-	 * @param string $timestamp (Optional) timestamp for active window
+	 * @param array $args (Optional) args for population selection
 	 */
-	public static function get_active_users( $timestamp = NULL ) {
+	public static function get_active_users( $args = NULL) {
 
-		if( !$timestamp ) {
-			$timstamp = time();
-		}//end if
+		$defaults = array(
+			'timestamp' => time(),
+			'termcode' => \PSU\Student::getCurrentTerm('UG'),
+		);
+
+		$args = \PSU::params( $args, $defaults );
+		$args['termcode'] = '%' . $args['termcode'] . '%';
 
 		$sql = "
-			SELECT idnumber 
-			FROM mdl_user 
-			WHERE lastaccess >= ? 
-			AND idnumber > ''
+			SELECT distinct(u.idnumber) 
+			  FROM mdl_user u 
+			  JOIN mdl_user_lastaccess l
+			    ON l.userid = u.id 
+			  JOIN mdl_course c
+			    ON l.courseid = c.id
+			 WHERE l.timeaccess > ?
+			   AND u.idnumber > '' 
+			   AND l.courseid > ''
+			   AND c.shortname LIKE ?
 		";
 
-			return \PSU::db('moodle2')->GetCol( $sql, array( $timestamp ) );
+			return \PSU::db('moodle2')->GetCol( $sql, array( $args['timestamp'], $args['termcode'] ) );
 	}//end function
 
 	/**
@@ -34,17 +44,20 @@ class Sighting {
 	 * Function called to loop over an array of users and mark them as 
 	 * sighted in moodle in Banner.
 	 *
-	 * @param string $timestamp (Optional) Time for activity window.
+	 * @param array $args (Optional) args for population selection
 	 */
-	public static function sight( $timestamp = NULL ) {
+	public static function sight( $args = NULL ) {
 
-		if( !$timestamp ) {
-			$timstamp = time();
-		}//end if
+		$defaults = array(
+			'timestamp' => time(),
+			'termcode' => \PSU\Student::getCurrentTerm('UG'),
+		);
+
+		$args = \PSU::params( $args, $defaults );
 
 		$BannerStudent = new \BannerStudent( \PSU::db('banner') );
 		$successes = array();
-		foreach( (array)self::get_active_users( $timestamp ) as $idnumber ) {
+		foreach( (array)self::get_active_users( $args ) as $idnumber ) {
 			$pidm = \PSU::get('idmobject')->getIdentifier( $idnumber, 'psu_id', 'pid' );
 			if( \PSU::db('psc1')->GetOne("SELECT 1 FROM v_student_active WHERE pidm = :pidm", array('pidm' => $pidm)) ) {
 				if( $BannerStudent->sightStudent( $pidm, 'MC' ) ) {
