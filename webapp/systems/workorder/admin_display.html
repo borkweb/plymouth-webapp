@@ -26,16 +26,18 @@ $statuses[4]['text']="Delayed: waiting for parts";
 $statuses[4]['priv']= false;
 $statuses[5]['text']="Delayed: waiting for user contact";
 $statuses[5]['priv']= false;
-$statuses[6]['text']="Ready for pickup";
-$statuses[6]['priv']= true; //user must be privileged in database to see or use
-$statuses[7]['text']="Transferred to LLC";
-$statuses[7]['priv']= false;
-$statuses[8]['text']="Close: returned to user";
+$statuses[6]['text']="Requires Inspection";
+$statuses[6]['priv']= false;
+$statuses[7]['text']="Ready for pickup";
+$statuses[7]['priv']= true; //user must be privileged in database to see or use
+$statuses[8]['text']="Transferred to LLC";
 $statuses[8]['priv']= false;
-$statuses[9]['text']="Close: duplicate workorder";
-$statuses[9]['priv']= true;
-$statuses[10]['text']="Close: transferred to surplus";
+$statuses[9]['text']="Close: returned to user";
+$statuses[9]['priv']= false;
+$statuses[10]['text']="Close: duplicate workorder";
 $statuses[10]['priv']= true;
+$statuses[11]['text']="Close: transferred to surplus";
+$statuses[11]['priv']= true;
 
 /******** Populate Variables *********************/
 $query = "SELECT *,DATE_FORMAT(time_entered,'%c/%e/%Y %l:%i %p') AS submitted FROM shop_workorder,shop_patrons WHERE shop_workorder.username=shop_patrons.username AND shop_workorder.id=?";
