@@ -66,6 +66,14 @@ ul.clean li{
 	margin-right: 0.5em;
 }
 
+.password-alarm {
+	color: red;
+}
+
+.password-warning {
+	color: #c7905c;
+}
+
 #overlay{
 	position: absolute;
 	top: 0;

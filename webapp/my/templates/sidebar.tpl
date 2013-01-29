@@ -45,6 +45,10 @@
 		</li>
 		<li><a href="{$PHP.BASE_URL}/channels/name/" class="add-stuff"><img src="/images/icons/16x16/apps/preferences-system-windows.png" alt="Add Stuff"/>Add Stuff to myPlymouth</a></li>
 		<li>
+			<span class="change-password" data-content="Your password was last changed on {$portal->password_info.changed} ( {$portal->password_info.days} days ago )." data-original-title="Password Status">
+				<a href="http://go.plymouth.edu/password" class="{$portal->password_info.class}" target="_blank"><img src="/images/icons/16x16/apps/profile-change-pwd.png" />Change Password</a>
+			</span>
+		<li>
 			<a href="//www.plymouth.edu/webapp/chat/phplive.php?d=0" target="new"><img src="/images/icons/16x16/apps/internet-group-chat.png" alt="Live Support">Chat with ITS</a>
 		</li>
 	</ul>
