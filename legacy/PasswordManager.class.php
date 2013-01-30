@@ -134,6 +134,38 @@ class PasswordManager
 	}//end isExpired
 
 	/**
+	 * Check to see if a new password that the user is trying to use is 
+	 * usable. Do this by checking that it is not within the history 
+	 * table, or within a certain age.
+	 */
+	public function isUsablePassword( $ident, $pw, $reserve = 9, $time_limit = 730 ) {
+		$p = PSUPerson::get( $ident );
+		$hasher = new PasswordHash( 8, FALSE );
+		$args = array(
+			$p->wpid,
+			strtotime( $time_limit . ' days ago' ),
+			$reserve,
+		);
+
+		$sql = "
+			SELECT * 
+			  FROM password_history 
+			 WHERE wpid = ?
+				 AND activity_date <= ?
+		ORDER BY activity_date ASC
+		   LIMIT ?
+		";
+
+		foreach( (array)PSU::db('myplymouth')->GetAll( $sql, $args ) as $invalid ) {
+			if( $hasher->CheckPassword( $pw, $invalid['password'] ) ) {
+				return FALSE;
+			}//end if
+		}//end foreach
+
+		return TRUE;
+	}//end isUsablePassword
+
+	/**
 	 * defaultCredentials
 	 *
 	 * Get the default credentials for a username or pidm.
@@ -178,6 +210,30 @@ class PasswordManager
 	{
 		PSU::db('mysql/systems')->Execute("INSERT INTO password_change (`username`,`date_changed`,`time_changed`,`changed_by`,`type`) VALUES(?, NOW(), NOW(), ?, 'user')", array($username, $username));
 	}//end logChange
+
+	/**
+	 * Log old password for user upon successful update for history 
+	 * purposes.
+	 */
+	function logPassword( $username, $old_pw ) {
+		$person = PSUPerson::get( $username );
+		$hasher = new PasswordHash( 8, FALSE );
+		$args = array(
+			$person->wp_id,
+			$hasher->HashPassword( $old_pw ),
+		);
+
+		$sql = "
+			INSERT INTO password_history (
+				`wpid`, 
+				`password`, 
+				`activity_date` 
+			) 
+			VALUES(?, ?, NOW())
+		";
+
+		PSU::db('myplymouth')->Execute( $sql, $args );
+	}//end logPassword	
 
 	/**
 	 * setADPassword
