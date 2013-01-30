@@ -156,7 +156,7 @@ class PasswordManager
 		   LIMIT ?
 		";
 
-		foreach( (array)$this->myplymouth::GetAll( $sql, $args ) as $invalid ) {
+		foreach( (array)PSU::db('myplymouth')->GetAll( $sql, $args ) as $invalid ) {
 			if( $hasher->CheckPassword( $pw, $invalid['password'] ) ) {
 				return FALSE;
 			}//end if
@@ -232,7 +232,7 @@ class PasswordManager
 			VALUES(?, ?, NOW())
 		";
 
-		$this->myplymouth->Execute( $sql, $args );
+		PSU::db('myplymouth')->Execute( $sql, $args );
 	}//end logPassword	
 
 	/**
