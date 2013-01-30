@@ -227,7 +227,7 @@ class PasswordManager
 			INSERT INTO password_history (
 				`wpid`, 
 				`password`, 
-				`activity_date`, 
+				`activity_date` 
 			) 
 			VALUES(?, ?, NOW())
 		";
