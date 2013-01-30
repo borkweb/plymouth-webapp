@@ -518,6 +518,8 @@ $(document).ready(function(){
 		$.fn.supermodal.defaults.height = 500;
 	}
 
+	$('.change-password').popover();
+
 	//$(document).pngFix();
 
 	var waypoint_cb = function() {

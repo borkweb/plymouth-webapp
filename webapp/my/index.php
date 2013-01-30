@@ -15,6 +15,7 @@ $GLOBALS['WEBAPP_URL']='https://'.$_SERVER['HTTP_HOST'].'/webapp';
 // Base URL
 $GLOBALS['BASE_URL']='https://'.$_SERVER['HTTP_HOST'].'/webapp/my';
 $GLOBALS['WEBAPP_URL']='https://'.$_SERVER['HTTP_HOST'].'/webapp';
+$GLOBALS['OLD_WEBAPP_URL']='https://www' . (PSU::isdev()?'.dev':'') . '.plymouth.edu/webapp';
 $GLOBALS['HOST_URL']='https://'.$_SERVER['HTTP_HOST'];
 
 // Local Includes

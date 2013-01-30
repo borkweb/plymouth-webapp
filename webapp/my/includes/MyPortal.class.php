@@ -280,5 +280,18 @@ class MyPortal extends MyMagicGetters {
 	public function setUser( $identifier ) {
 		$this->wp_id = $identifier;
 		$this->person = new PSUPerson($_SESSION['username']);
+		if( $ad_info = PSU::get('ad')->user_info( $this->person->username, array('pwdlastset') ) ) {
+			$ad_stamp = round(($ad_info[0]['pwdlastset'][0]-116444736000000000)/10000000);
+			$this->password_info = array(
+				'changed' => date('F j, Y', $ad_stamp ),
+				'days' => round( ( time() - $ad_stamp )/60/60/24 ),
+			);
+
+			if( $this->password_info['days'] > 160 ) {
+				$this->password_info['class'] = 'password-alarm';
+			} elseif( $this->password_info['days'] > 120 ) {
+				$this->password_info['class'] = 'password-warning';
+			}//end elseif
+		}//end if
 	}//end setUser
 }//end class MyPortal
