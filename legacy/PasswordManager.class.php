@@ -150,7 +150,7 @@ class PasswordManager
 		$sql = "
 			SELECT * 
 			  FROM password_history 
-			 WHERE wp_id = ?
+			 WHERE wpid = ?
 				 AND activity_date <= ?
 		ORDER BY activity_date ASC
 		   LIMIT ?
