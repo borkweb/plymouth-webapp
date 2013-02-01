@@ -1059,6 +1059,11 @@ class PSUPerson_Loader_SIS extends PSUPerson_Loader implements PSUPerson_Loader_
 
 		try {
 			$this->person->has_zimbra = PSU::get('zimbraadmin')->accountExists( $this->person->login_name );
+			$ad_info = PSU::get('ad')->user_info( $this->person->login_name, array('mail'));
+			$this->person->zimbra = array(
+				'alias' => $ad_info[0]['mail'][0],
+				'actual' => $this->person->login_name . '@plymouth.edu',
+			);
 		} catch( Exception $e ) {
 			// leave it null.
 			// @todo logging?
