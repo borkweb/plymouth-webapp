@@ -5,6 +5,18 @@
 		<label>Has Account?</label>
 		{ape_bool value=$person->system_account_exists} {if $person->system_account_exists}<small>(created: {$person->account_creation_date|date_format:"%B %d, %Y %l:%M:%S %p"})</small>{/if}
 	</li>
+	<li>
+		<label>Has Zimbra Account?</label>
+		{ape_bool value=$person->has_zimbra}
+	</li>		
+	<li>
+		<label>Zimbra Email:</label>
+		{$person->zimbra.actual}
+	</li>		
+	<li>
+		<label>Zimbra Email Alias:</label>
+		{$person->zimbra.alias}
+	</li>		
 	{if $person->oracle_account_exists}
 	<li>
 		<label>Has Oracle Account?</label>
@@ -23,10 +35,6 @@
 		{/if}
 	</li>		
 	{/if}
-	<li>
-		<label>Has Zimbra Account?</label>
-		{ape_bool value=$person->has_zimbra}
-	</li>		
 	<li>
 		<label>Has Moodle Account?</label>
 		{ape_bool value=$person->has_moodle_account}
