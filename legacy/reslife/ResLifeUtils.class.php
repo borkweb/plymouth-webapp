@@ -742,7 +742,8 @@ class ResLifeUtils
 		foreach ($applicationoptions as $opt)
 		{
 				$link = 
-					'<a href=' . $GLOBALS['BASE_URL'] . 'housingapp/index.html?student_type='. $student_type .'&amp;area='. $opt['app_area'] .'&amp;term='. $opt['year_term']. 
+					'<a href=' . $GLOBALS['BASE_URL'] . 'housingapp/' . $opt['version'] . '/index.html?student_type='. 
+					$student_type .'&amp;area='. $opt['app_area'] .'&amp;term='. $opt['year_term']. 
 					'>' .  $this->getSemName($opt['year_term']) . ' Housing Application';
 				if ($student_type == 'RE')
 					$link .= ($opt['app_area'] == 'TR') ? ' - Traditional Halls' : ' - ResNorth';
