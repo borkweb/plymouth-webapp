@@ -259,7 +259,7 @@ class Calllog {
 						}//end if
 					}//end else
 					
-					$portal_roles = $GLOBALS['portal']->getRoles($key['email']);
+					$portal_roles = PSU::get('idmobject')->GetAllBannerRoles($key['pidm']);
 					if(is_array($portal_roles) && in_array('alumni',$portal_roles)) {
 						$class_prepend = 'Alumni'.(($class_prepend)? '/ '.$class_prepend : '');
 					}//end if
