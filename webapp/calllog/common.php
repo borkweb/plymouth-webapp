@@ -81,7 +81,6 @@ include(FUNCTIONS_DIR . "/restore.class.php");
 include(FUNCTIONS_DIR . "/tlc_users_functions.php");
 include(FUNCTIONS_DIR . "/user.class.php");
 
-require_once 'portal.class.php';
 
 if( file_exists( __DIR__ . '/debug.php') ) {
 	include __DIR__ . '/debug.php';
@@ -96,8 +95,6 @@ $idm = new IDMObject($GLOBALS['BANNER']);
 $GLOBALS['BannerIDM'] =& $idm;
 
 $GLOBALS['BannerGeneral'] =  new BannerGeneral($GLOBALS['BANNER']);
-$portal = new Portal('prod'); // Portal object
-$GLOBALS['portal'] =& $portal;
 
 $user = new User($db); // User object
 $GLOBALS['user'] =& $user;
