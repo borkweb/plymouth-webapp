@@ -1218,7 +1218,16 @@ class PSUPerson_Loader_SIS extends PSUPerson_Loader implements PSUPerson_Loader_
 	{
 		$roles = array();
 		
-		$roles = PSU::get('idmobject')->getAllBannerRoles($this->person->login_name);
+		// if possible, return current user's banner roles
+		if( isset( $_SESSION['wp_id'] ) &&
+			$person->wp_id == $_SESSION['wp_id'] &&
+			isset( $_SESSION['AUTHZ'] ) &&
+			isset( $_SESSION['AUTHZ']['banner'] )
+		) {
+			$roles =  array_values( $_SESSION['AUTHZ']['banner'] );
+		} else {
+			$roles = PSU::get('idmobject')->getAllBannerRoles($this->person->login_name);
+		}//end if/else
 		
 		if($roles)
 		{
