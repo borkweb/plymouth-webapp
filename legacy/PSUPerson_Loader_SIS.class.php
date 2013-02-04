@@ -1218,7 +1218,7 @@ class PSUPerson_Loader_SIS extends PSUPerson_Loader implements PSUPerson_Loader_
 	{
 		$roles = array();
 		
-		$roles = PSU::get('luminisportal')->getRoles($this->person->login_name);
+		$roles = PSU::get('idmobject')->getAllBannerRoles($this->person->login_name);
 		
 		if($roles)
 		{
