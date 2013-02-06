@@ -2736,6 +2736,10 @@ class IDMObject
 	 * @param $portal_roles array person's existing portal roles
 	 */
 	public function syncLuminisRoles( $person, $portal_roles = null ) {
+		/**
+		 * We DONT HAVE AN LDAP
+		 */
+		return;
 		
 		// if $person isn't a PSUPerson, instantiate
 		if( !($person instanceof PSUPerson) ) {
@@ -2744,11 +2748,6 @@ class IDMObject
 
 		// if the person doesn't have a pidm, they won't exist in luminis
 		if( !$person->pidm ) return;
-
-		// if roles weren't passed in, grab 'em
-		if( !$portal_roles ) {
-			$portal_roles = PSU::get('luminisportal')->getRoles($person->login_name);
-		}//end if
 
 		// force a banner role calc
 		PSU::get('idmobject')->maintainBannerRoles($person->pidm);
@@ -2819,10 +2818,8 @@ class IDMObject
 		$intended_roles = array();
 
 		// figure out which roles the user should have
-		if(is_array($portal_roles) && is_array($banner_roles)) {
+		if(is_array($banner_roles)) {
 			$managed_banner_roles = array_intersect($banner_roles, $managed_roles);
-			$portal_only_roles = array_diff($portal_roles, $managed_roles);
-			$intended_roles = array_merge($portal_only_roles, $managed_banner_roles);
 		}
 
 		if($intended_roles) {

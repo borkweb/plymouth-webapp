@@ -56,7 +56,6 @@ $GLOBALS['TITLE'] = 'Analysis and Provisioning Engine | APE';
 
 /*******************[Common Includes]**********************/
 require_once 'PSUWordPress.php';
-require_once 'portal.class.php';    //portal functions
 require_once 'workflow.class.php';
 require_once 'adldap/adLDAP.php';
 require_once 'zimbraAdmin.class.php';
@@ -96,8 +95,7 @@ $GLOBALS['LOG'] = new PSULog('ape',$_SESSION['username']);
 $GLOBALS['ZimbraAdmin'] = new zimbraAdmin();
 
 /*******************[Authorization Stuff]*****************/
-$GLOBALS['portal'] = new Portal();
-$GLOBALS['user_roles'] = $GLOBALS['portal']->getRoles($_SESSION['username']);
+$GLOBALS['user_roles'] = PSU::get('idmobject')->getAllBannerRoles( $_SESSION['username'] );
 
 $path_parts = pathinfo( $_SERVER['SCRIPT_FILENAME'] );
 
