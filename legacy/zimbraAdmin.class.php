@@ -97,6 +97,26 @@ class ZimbraAdmin extends Zimbra
 	}//end factory
 
 	/**
+	 * getAccountAliases
+	 *
+	 * Return the aliases that a user has setup for them in zimbra
+	 *
+	 * @param String $username The given username of the user in question
+	 * @return mixed Returns an array of aliases or false
+	 */
+	public function getAccountAliases( $username ) {
+		$soap = '<GetAccountRequest xmlns="urn:zimbraAdmin" attrs="zimbraMailAlias"><account by="name">' . $username . '@' . $this->_server . '</account></GetAccountRequest>';
+
+		$response = $this->soapRequest( $soap );
+		if( $response ) {
+			$array = $this->makeXMLTree( $response );
+			return $array['soap:Envelope'][0]['soap:Body'][0]['GetAccountResponse'][0]['account'][0]['a'];
+		} else {
+			return false;
+		}//end else
+	} // end getAccountAliases
+
+	/**
 	 * getAccountInfo
 	 *
 	 * Return the Zimbra ID and mail host for this account.
