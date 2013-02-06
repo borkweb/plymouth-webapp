@@ -99,6 +99,7 @@
 li.click:hover { background-color:#FFFFBB; }
 
 dl dd, dl dt{float: left;}
+.zimbra-aliases{float: left;}
 
 dl .flush dt, .apedata .flush li { margin-left: 0;}
 

@@ -11,11 +11,20 @@
 	</li>		
 	<li>
 		<label>Zimbra Email:</label>
-		{$person->zimbra.actual}
+		<a
+		href="mailto:{$person->zimbra.actual}">{$person->zimbra.actual}</a>
 	</li>		
 	<li>
-		<label>Zimbra Email Alias:</label>
-		{$person->zimbra.alias}
+		<label class="zimbra-aliases">Zimbra Email Alias:</label>
+		<span class="zimbra-aliases">
+		<ul class="flush">
+		{foreach from=$person->zimbra.alias item=alias}
+			<li><a href="mailto:{$alias}">{$alias}</a></li>
+		{foreachelse}
+			<li><small>No aliases for this user.</small></li>
+		{/foreach}
+		</ul>
+		</span>
 	</li>		
 	{if $person->oracle_account_exists}
 	<li>
