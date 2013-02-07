@@ -15,7 +15,7 @@
 		href="mailto:{$person->zimbra.actual}">{$person->zimbra.actual}</a>
 	</li>		
 	<li>
-		<label class="zimbra-aliases">Zimbra Email Alias(s):</label>
+		<label class="zimbra-aliases">Zimbra Email Alias(es):</label>
 		<span class="zimbra-aliases">
 		<ul class="flush">
 		{foreach from=$person->zimbra.alias item=alias}
@@ -27,7 +27,7 @@
 		</span>
 	</li>		
 	<li>
-		<label class="zimbra-lists">Distribution Lists:</label>
+		<label class="zimbra-lists">Distribution List(s):</label>
 		<span class="zimbra-lists">
 		<ul class="flush">
 		{foreach from=$person->zimbra.distribution_lists item=list}
