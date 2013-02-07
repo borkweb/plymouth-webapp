@@ -15,7 +15,7 @@
 		href="mailto:{$person->zimbra.actual}">{$person->zimbra.actual}</a>
 	</li>		
 	<li>
-		<label class="zimbra-aliases">Zimbra Email Alias:</label>
+		<label class="zimbra-aliases">Zimbra Email Alias(s):</label>
 		<span class="zimbra-aliases">
 		<ul class="flush">
 		{foreach from=$person->zimbra.alias item=alias}
@@ -26,6 +26,18 @@
 		</ul>
 		</span>
 	</li>		
+	<li>
+		<label class="zimbra-lists">Distribution Lists:</label>
+		<span class="zimbra-lists">
+		<ul class="flush">
+		{foreach from=$person->zimbra.distribution_lists item=list}
+			<li><a href="mailto:{$list}">{$list}</a></li>
+		{foreachelse}
+			<li><small>Not a member of any lists.</small></li>
+		{/foreach}
+		</ul>
+		</span>
+	</li>
 	{if $person->oracle_account_exists}
 	<li>
 		<label>Has Oracle Account?</label>

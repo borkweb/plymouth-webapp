@@ -117,6 +117,32 @@ class ZimbraAdmin extends Zimbra
 	} // end getAccountAliases
 
 	/**
+	 * getAccountDistributionLists
+	 *
+	 * function to return all of the distribution lists that a user is a 
+	 * member of
+	 *
+	 * @param String $username The username to retrieve lists for
+	 * @return mixed Returns array of lists, or false
+	 */
+	public function getAccountDistributionLists( $username ) {
+		$soap = '<SearchDirectoryRequest xmlns="urn:zimbraAdmin" attrs="mail" types="distributionlists"><query>(zimbraMailForwardingAddress=' . $username . '@' . $this->_server . ')</query></SearchDirectoryRequest>';
+		$response = $this->soapRequest( $soap );
+
+		if( $response ) {
+			$array = $this->makeXMLTree( $response );
+			$lists = array();
+
+			for ( $i = 0; $i < count( $array['soap:Envelope'][0]['soap:Body'][0]['SearchDirectoryResponse'][0]['dl'] ); $i++ ){
+				$lists[$i]=$array['soap:Envelope'][0]['soap:Body'][0]['SearchDirectoryResponse'][0]['dl'][$i]['a'][0];
+			}//end foreach
+			return $lists;
+		}//end if
+
+		return false;
+	}//end getAccountDistributionLists
+
+	/**
 	 * getAccountInfo
 	 *
 	 * Return the Zimbra ID and mail host for this account.
