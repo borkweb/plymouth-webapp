@@ -27,7 +27,7 @@
 		</span>
 	</li>		
 	<li>
-		<label class="zimbra-lists">Zimbra Distribution List(s):</label>
+		<label class="zimbra-lists">Zimbra Dist. List(s):</label>
 		<span class="zimbra-lists">
 		<ul class="flush">
 		{foreach from=$person->zimbra.distribution_lists item=list}
