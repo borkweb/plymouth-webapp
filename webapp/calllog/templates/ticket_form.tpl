@@ -4,7 +4,7 @@
 	<select name="checklist">
 		<option value=""></option>
 		<option value="account">Account Creation and Privileges</option>
-		<option value="banner">Banner (INB, Finance, Reporting)</option>
+		<option value="banner">Banner (Student, INB, HR, Finance)</option>
 		<option value="cts">Classroom Application/Operating System (Installation, Problem, etc)</option>
 		<option value="desktop">Desktop Application/Operating System (Installation, Problem, etc)</option>
 		<option value="repair">Device Repair</option>
@@ -297,9 +297,10 @@
 			<label rel="Banner Issue:">What type of Banner issue is this?</label>
 			<select name="checklist_banner_issue">
 				<option value=""></option>
+				<option value="Student">INB</option>
 				<option value="INB">INB</option>
 				<option value="Banner Finance">Banner Finance</option>
-				<option value="Reporting">Reporting</option>
+				<option value="HR">HR</option>
 				<option value="Training">Training</option>
 			</select>
 			<p class="sub" rel="Banner Finance">
