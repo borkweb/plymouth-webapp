@@ -6,16 +6,16 @@
 		{ape_bool value=$person->system_account_exists} {if $person->system_account_exists}<small>(created: {$person->account_creation_date|date_format:"%B %d, %Y %l:%M:%S %p"})</small>{/if}
 	</li>
 	<li>
-		<label>Has Zimbra Account?</label>
+		<label>Has Email Account?</label>
 		{ape_bool value=$person->has_zimbra}
 	</li>		
 	<li>
-		<label>Zimbra Email:</label>
+		<label>Email Address:</label>
 		<a
 		href="mailto:{$person->zimbra.actual}">{$person->zimbra.actual}</a>
 	</li>		
 	<li>
-		<label class="zimbra-aliases">Zimbra Email Alias(es):</label>
+		<label class="zimbra-aliases">Email Alias(es):</label>
 		<span class="zimbra-aliases">
 		<ul class="flush">
 		{foreach from=$person->zimbra.alias item=alias}
@@ -27,7 +27,7 @@
 		</span>
 	</li>		
 	<li>
-		<label class="zimbra-lists">Zimbra Dist. List(s):</label>
+		<label class="zimbra-lists">Distribution List(s):</label>
 		<span class="zimbra-lists">
 		<ul class="flush">
 		{foreach from=$person->zimbra.distribution_lists item=list}
@@ -90,7 +90,7 @@
 	{if $person->system_account_exists && $AUTHZ.permission.ape_profilereset}
 		<li>
 			<label>Delete Windows profile:</label>
-			<a class="ajaxify" id="delete-vista" href="{$PHP.BASE_URL}/actions/profile-reset.php?username={$person->username}&amp;profile=0">Vista roaming</a>, <a class="ajaxify" id="delete-roaming" href="{$PHP.BASE_URL}/actions/profile-reset.php?username={$person->username}&amp;profile=1">terminal services</a>
+			<a class="ajaxify" id="delete-vista" href="{$PHP.BASE_URL}/actions/profile-reset.php?username={$person->username}&amp;profile=0">Roaming</a>, <a class="ajaxify" id="delete-roaming" href="{$PHP.BASE_URL}/actions/profile-reset.php?username={$person->username}&amp;profile=1">Terminal Services</a>
 		</li>
 	{/if}
 	</ul>
