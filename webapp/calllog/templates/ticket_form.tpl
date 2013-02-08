@@ -297,7 +297,7 @@
 			<label rel="Banner Issue:">What type of Banner issue is this?</label>
 			<select name="checklist_banner_issue">
 				<option value=""></option>
-				<option value="Student">INB</option>
+				<option value="Student">Student</option>
 				<option value="INB">INB</option>
 				<option value="Banner Finance">Banner Finance</option>
 				<option value="HR">HR</option>
