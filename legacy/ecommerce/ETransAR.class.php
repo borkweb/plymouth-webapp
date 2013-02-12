@@ -69,7 +69,7 @@ class ETransAR extends ETrans {
 						$message = 'There was a "Transaction Status = 4" credit card refund fed by via Commerce Manager.  Here is the debug information:'."\n\n";
 						$message .= print_r( $this, true );
 						$email = array(
-							'nrporter@plymouth.edu',
+							'psu-its-mis@plymouth.edu',
 						);
 
 						if( ! \PSU::isDev() ) {
