@@ -73,6 +73,16 @@ abstract class Transaction {
 	public function split( $record_template ) {
 		$this->amount_paid_remaining = $this->amount;
 
+		/**
+		 * Implementing the below code to work with AR office in an effort 
+		 * to have student payments only apply to the term that they select 
+		 * within the online billing app.
+		 */
+		$term_code = $record_template['term_code'] ?: $this->term_code;
+		$this->term_payment($term_code, $record_template, $this->amount );
+		return $this;
+		//------------Currently Ignoring Everything Below Here--------------- 
+
 		// find the earliest unsatisfied term
 		$early_term = $this->person->bill->earliest_unsatisfied_term;
 

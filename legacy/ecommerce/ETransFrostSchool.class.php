@@ -51,6 +51,7 @@ class ETransFrostSchool extends ETransAR {
 		$this->setURLParam('orderNumber', $params['id']);
 		$this->setURLParam('orderName', $person->formatName('l, f m'));
 		$this->setURLParam('orderDescription', $processor);
+		$this->setURLParam('userChoice2', $params['term']);
 
 		$server = 'prod';
 		
