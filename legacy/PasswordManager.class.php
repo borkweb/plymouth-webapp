@@ -611,7 +611,7 @@ class PasswordManager
 						 * from population one.
 						 */
 						if( 282 >= $age_from ) {
-							$max_days = 1
+							$max_days = 1;
 						}//end if
 
 						/**
