@@ -585,9 +585,7 @@ class PasswordManager
 					 * Only do these calculations now that we know we care
 					 */
 					$ad_stamp = round(($ad_info[0]['pwdlastset'][0]-116444736000000000)/10000000);
-					$age_today = round( ( time() - $ad_stamp )/60/60/24 );
 					$age_from = round( ( strtotime('21 February 2013') - $ad_stamp )/60/60/24 );
-					$age_from=181;
 
 					/**
 					 * From our histogram we know that on the 21st we want to 
