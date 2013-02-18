@@ -536,11 +536,11 @@ class PasswordManager
 	}//end authenticate
 
 	/**
-	 * Determine if user's password is expired, based on some PSU rules.
+	 * Determine if user's password is expired
 	 *
 	 * @param        $ident string|int username or pidm
 	 * @param        $max_days int number of days stale to check. -1 (default) to force the password to be considered fresh
-	 * @return       int password age in days
+	 * @return       boolean True for password change, false on valid pass
 	 */
 	function isPasswordStale($ident, $max_days = -1)
 	{
@@ -587,6 +587,7 @@ class PasswordManager
 					$ad_stamp = round(($ad_info[0]['pwdlastset'][0]-116444736000000000)/10000000);
 					$age_today = round( ( time() - $ad_stamp )/60/60/24 );
 					$age_from = round( ( strtotime('21 February 2013') - $ad_stamp )/60/60/24 );
+					$age_from=181;
 
 					/**
 					 * From our histogram we know that on the 21st we want to 
@@ -610,7 +611,7 @@ class PasswordManager
 						 * to. This is just a discount double check on the people 
 						 * from population one.
 						 */
-						if( 282 >= $age_from ) {
+						if( $age_from >= 282 ) {
 							$max_days = 1;
 						}//end if
 
