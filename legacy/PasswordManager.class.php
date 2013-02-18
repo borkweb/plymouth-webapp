@@ -643,11 +643,9 @@ class PasswordManager
 				}//end if
 			}//end if
 
-			/**
-			 * Uncomment this return so we can bring back the dummy ability of 
-			 * this function in case of future policy changes
-			 */
-			//	return false;
+			if( $max_days === -1 ) {
+				return false;
+			}//end if
 		}
 
 		if(is_numeric($ident))
