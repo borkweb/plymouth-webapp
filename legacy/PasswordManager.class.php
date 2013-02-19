@@ -536,16 +536,115 @@ class PasswordManager
 	}//end authenticate
 
 	/**
-	 * Determine if user's password is expired, based on some PSU rules.
+	 * Determine if user's password is expired
 	 *
 	 * @param        $ident string|int username or pidm
 	 * @param        $max_days int number of days stale to check. -1 (default) to force the password to be considered fresh
-	 * @return       int password age in days
+	 * @return       boolean True for password change, false on valid pass
 	 */
 	function isPasswordStale($ident, $max_days = -1)
 	{
 		if( $max_days === -1 ) {
-			return false;
+			/**
+			 * ALL FEAR THE ROLLING PASSWORD EXPIRATION THAT IS FORTHCOMING!!!
+			 *
+			 * BOW DOWN TO ME AS I CONTROL HOW LONG YOU CAN KEEP YOUR MEASLY 
+			 * PASSWORD THAT MAY OR MAY NOT BE THE NAME OF YOUR CAT AND A 
+			 * NUMBER THAT WILL PROBABLY BE EASILY GUESSABLE AS AN IMPORTANT 
+			 * DATE IN YOUR LIFE...
+			 */
+
+			/**
+			 * Just good practice to only get the time once for logic checks
+			 */
+			$now = time();
+
+			/**
+			 * Do the identifier check here just for now (I know it happens 
+			 * again later, but this is going away!)
+			 */
+			if( is_numeric( $ident ) ) {
+				$pidm = $ident;
+				$username = $this->idm->getIdentifier($ident, 'pidm', 'username');
+			} else {
+				$username = $ident;
+			}//end else
+
+			/**
+			 * Kick off the dog and pony show only if we can actually get 
+			 * their AD info
+			 */
+			if( $ad_info = PSU::get('ad')->user_info( $username, array('pwdlastset') ) ) {
+
+				/**
+				 * Let's start the game on Feb 21st.
+				 */
+				if( $now >= 1361422800 ) {//Feb 21st
+
+					/**
+					 * Only do these calculations now that we know we care
+					 */
+					$ad_stamp = round(($ad_info[0]['pwdlastset'][0]-116444736000000000)/10000000);
+					$age_from = round( ( strtotime('21 February 2013') - $ad_stamp )/60/60/24 );
+
+					/**
+					 * From our histogram we know that on the 21st we want to 
+					 * expire users whos password was greater than 282 days old as 
+					 * of the 21st, so set the max days for this check to 
+					 * something we KNOW will get caught
+					 */
+					if( $age_from > 282 ) {
+						$max_days = 1;
+					}//end if
+
+					/**
+					 * Only do into our next population if it is, or is after Feb. 
+					 * 28th
+					 */
+					if( $now >= 1362027600 ) {//Feb 28th
+
+						/**
+						 * Now only grab people who have an age as of the 21st EQUAL 
+						 * TO 282 days. Note that I'm grabbing greater than or equal 
+						 * to. This is just a discount double check on the people 
+						 * from population one.
+						 */
+						if( $age_from >= 282 ) {
+							$max_days = 1;
+						}//end if
+
+						/**
+						 * Dive into the third population if it is on or after March 
+						 * 7th.
+						 */
+						if( $now >= 1362632400 ) {//March 7th
+
+							/**
+							 * Now our limiter is 275 days. Even though it's not 
+							 * needed, this is a double check on the last population, 
+							 * and a tripple check on the first.
+							 */
+							if( $age_from >= 275 ) {
+								$max_days = 1;
+							}//end if
+
+							/**
+							 * At this point, we are sooooo over doing hard catches. 
+							 * We'll start the 180 day policy until we can pull this 
+							 * cruft out and make that the default logic simply passed 
+							 * into this function.
+							 */
+							if( $now >= 1363233600 ) {//March 14th
+								$max_days = 180;
+							}//end if
+						}//end if
+					}//end if
+				}//end if
+			}//end if
+
+			if( $max_days === -1 ) {
+				return false;
+			}//end if
 		}
 
 		if(is_numeric($ident))
