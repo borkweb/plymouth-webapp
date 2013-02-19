@@ -75,7 +75,7 @@
 				<li>This user has an invalid character in their username.</li>
 			{/if}
 			{if $person->issues.swipe_issue_mismatch}
-				<li>This user has a mismatched issue number between the card swipe system and Banner.  Please notify Donnie Perrin, the new issue number is: {$person->idcard_issue_num}</li>
+				<li>This user has a mismatched issue number between the card swipe system and Banner.  Please notify Chris Chiocca, the new issue number is: {$person->idcard_issue_num}</li>
 			{/if}			
 			{if $person->issues.no_app_zack}
 				<li>Admissions has not flagged this applicant to receive a myPlymouth invitation. He/she may still receive an account through finaid eligibility. (Does WPID exist? Is there a "Date of Portal Invite?")</li>
