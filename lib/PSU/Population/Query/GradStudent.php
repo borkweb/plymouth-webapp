@@ -17,10 +17,11 @@ class PSU_Population_Query_GradStudent extends PSU_Population_Query {
 			  FROM PSU.v_student_account_active_terms a
 			  JOIN PSU_IDENTITY.person_identifiers b
 				ON a.pidm = b.pid
-			 WHERE a.egc_code <> '000000'
+			 WHERE a.degc_code <> '000000'
 			   AND a.levl_code = 'GR'
 		";
 
+		unset( $args['identifier']);
 		\PSU::db('banner')->debug = true;
 		$matches = PSU::db('banner')->GetCol( $sql, $args );
 		
