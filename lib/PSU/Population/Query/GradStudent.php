@@ -17,8 +17,8 @@ class PSU_Population_Query_GradStudent extends PSU_Population_Query {
 			  FROM PSU.v_student_account_active_terms a
 			  JOIN PSU_IDENTITY.person_identifiers b
 				ON a.pidm = b.pid
-			 WHERE degc_code <> '000000'
-			   AND levl_code = 'GR'
+			 WHERE a.egc_code <> '000000'
+			   AND a.levl_code = 'GR'
 		";
 
 		\PSU::db('banner')->debug = true;
