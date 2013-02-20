@@ -525,8 +525,8 @@ class Bill extends \BannerObject
 
 		$record = array(
 			'pidm' => $pidm,
-			'userfield' => 'TMS_CONTRACT',
-			'user' => 'TMS_CONTRACT',
+			'userfield' => 'TMS_PAYMENT_PLAN',
+			'user' => 'TMS_PAYMENT_PLAN',
 			'entry_date' => $time,
 			'effective_date' => $time,
 			'activity_date' => $time,
@@ -542,7 +542,7 @@ class Bill extends \BannerObject
 		$del_data = array(
 			'pidm' => $pidm,
 			'detail_code' => 'IQPP',
-			'user' => 'TMS_CONTRACT',
+			'user' => 'TMS_PAYMENT_PLAN',
 			'data_origin' => 'feed_'.$data['file_sub_type'],
 			'create_user' => 'tms_'.$data['tms_customer_number'],
 		);
