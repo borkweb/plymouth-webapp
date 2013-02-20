@@ -14,7 +14,7 @@ class PSU_Population_Query_GradStudent extends PSU_Population_Query {
 
 		$sql = "
 			SELECT DISTINCT b.".$args['identifier']."
-			  FROM PSU.v_student_account_active a
+			  FROM PSU.v_student_account_active_terms a
 			  JOIN PSU_IDENTITY.person_identifiers b
 				ON a.pidm = b.pid
 			 WHERE degc_code <> '000000'
