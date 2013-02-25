@@ -362,14 +362,15 @@ class FinaidExitLoansPDF extends FPDF
 		$this->SetFont('Times','I',10);
 		$this->Cell(25,5,"Important Links",'B',1,'L');
 		$this->ln(2); 
-		$this->SetFont('Times','',10);
+		$this->SetFont('Times','B',10);
 		$this->Cell(70,5,"NSLDS & Exit Counseling",0,0,'L');
 		$this->Cell(80,5,"http://www.nslds.ed.gov/",0,1,'L');
+		$this->SetFont('Times','',10);
+		$this->Cell(70,5,"\$ALT Program",0,0,'L');
+		$this->Cell(80,5,"http://www.saltmoney.org",0,1,'L');
 		$this->Cell(70,5,"Repayment Information",0,0,'L');
 		$this->Cell(80,5,"http://studentaid.ed.gov/PORTALSWebApp/students/english/repaying.jsp",0,1,'L');
-		$this->Cell(70,5,"Repayment Plans",0,0,'L');
-		$this->Cell(80,5,"http://studentaid.ed.gov/PORTALSWebApp/students/english/OtherFormsOfRepay.jsp",0,1,'L');
-		$this->Cell(70,5,"Public Service loan Forgiveness",0,0,'L');
+		$this->Cell(70,5,"Public Service Loan Forgiveness",0,0,'L');
 		$this->Cell(80,5,"http://studentaid.ed.gov/PORTALSWebApp/students/english/PSF.jsp",0,1,'L');
 		$this->Cell(70,5,"Credit Report",0,0,'L');
 		$this->Cell(80,5,"https://www.annualcreditreport.com/cra/index.jsp",0,1,'L');
@@ -854,207 +855,6 @@ class FinaidExitLoansPDF extends FPDF
 		}
 	}
 
-	function contactInfoStudent()
-	{
-		$line=0;
-		$this->AddPage('P','Portrait');
-		$this->ln(5);
-
-
-		$this->setBorderTop();
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->setBorderLeft();
-		$this->SetFont('Times','BU',12);
-		$this->Cell(192.1,5,"Contact Information: Federal Loan Servicers",0,0,'C');
-		$this->SetFont('Times','',10);
-		$this->setBorderRight();
-		$this->ln();
-		$line++;
-		for ($i = 1; $i <= 7; $i++) 
-		{			
-			$this->setSideBorders(" ",'C');
-			$line++;
-		}
-    $this->Image($this->ExitLoansImages.'/greatLakes.png',70,20,0,0);
-		$this->SetFont('Times','B',10);
-		$this->setSideBorders("NSLDS Name: Department of ED/Great Lakes",'C');
-		$line++;
-		$this->setSideBorders("NSLDS Servicer Code 700581",'C');
-		$line++;
-		$this->setSideBorders("Borrower Phone: 800-236-4300",'C');
-		$line++;
-		$this->setSideBorders("Web: http://www.mygreatlakes.org",'C');
-		$line++;
-		for ($i = 1; $i <= 5; $i++) 
-		{			
-			$this->setSideBorders(" ",'C');
-			$line++;
-		}
-    $this->Image($this->ExitLoansImages.'/nelnet.png',77,75,0,0);
-		$this->setSideBorders("NSLDS Name: Department of ED/Nelnet",'C');
-		$line++;
-		$this->setSideBorders("NSLDS Servicer Code 700580",'C');
-		$line++;
-		$this->setSideBorders("Borrower Phone: 888-486-4722",'C');
-		$line++;
-		$this->setSideBorders("Web: http://www.nelnet.com",'C');
-		$line++;
-		for ($i = 1; $i <= 5; $i++) 
-		{			
-			$this->setSideBorders(" ",'C');
-			$line++;
-		}
-    $this->Image($this->ExitLoansImages.'/pheaa.png',75,120,0,0);
-		$this->setSideBorders("NSLDS Name: Department of ED/Federal Loan Servicing (PHEAA)",'C');
-		$line++;
-		$this->setSideBorders("NSLDS Servicer Code 700579",'C');
-		$line++;
-		$this->setSideBorders("Borrower Phone: 800-699-2908",'C');
-		$line++;
-		$this->setSideBorders("Web: http://www.myfedloan.org",'C');
-		$line++;
-		for ($i = 1; $i <= 4; $i++) 
-		{			
-			$this->setSideBorders(" ",'C');
-			$line++;
-		}
-    $this->Image($this->ExitLoansImages.'/salliemae.png',82,165,0,0);
-		$this->setSideBorders("NSLDS Name: Department of ED/Sallie Mae",'C');
-		$line++;
-		$this->setSideBorders("NSLDS Servicer Code 700578",'C');
-		$line++;
-		$this->setSideBorders("Borrower Phone: 800-722-1300",'C');
-		$line++;
-		$this->setSideBorders("Web: http://www.salliemae.org",'C');
-		$line++;
-		for ($i = 1; $i <= 7; $i++) 
-		{			
-			$this->setSideBorders(" ",'C');
-			$line++;
-		}
-    $this->Image($this->ExitLoansImages.'/startHereGoFurther.png',42,205,0,0);
-		$this->setSideBorders("NSLDS Name: Direct Loan Servicing Center",'C');
-		$line++;
-		$this->setSideBorders("NSLDS Servicer Code 00100",'C');
-		$line++;
-		$this->setSideBorders("Borrower Phone: 800-848-0979",'C');
-		$line++;
-		$this->setSideBorders("Web: http://www.dl.ed.gov",'C');
-		$line++;
-
-		$line=0;
-		$this->AddPage('P','Portrait');
-		$this->ln(5);
-
-
-		$this->setBorderTop();
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->setBorderLeft();
-		$this->SetFont('Times','BU',12);
-		$this->Cell(192.1,5,"Contact Information for Student Loans",0,0,'C');
-		$this->SetFont('Times','B',12);
-		$this->setBorderRight();
-		$this->ln();
-		$line++;
-		$this->setBorderLeft();
-		$this->SetFont('Times','BU',12);
-		$this->Cell(192.1,5,"Additional Federal Loan Lenders",0,0,'C');
-		$this->SetFont('Times','B',12);
-		$this->setBorderRight();
-		$this->ln();
-		$this->SetFont('Times','',10);
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->setSideBorders("(ACS) NLSDS will read Dept of Ed/ACS GA Code: 577 Lender Servicer code: 700577",'C');
-		$line++;
-		$this->setSideBorders("Phone: (800) 848-0979",'C');
-		$line++;
-
-		$this->SetFont('Times','B',10);
-		$this->setSideBorders("Federal Stafford Loans serviced by NHHEAF",'C');
-		$line++;
-		$this->SetFont('Times','',10);
-		$this->setSideBorders("Phone:  (800)-525-2577",'C');
-		$line++;
-		$this->setSideBorders("Website:  http://www.nhheaf.org",'C');
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->SetFont('Times','B',10);
-		$this->setSideBorders("Federal Stafford Loans serviced by Sallie Mae",'C');
-		$line++;
-		$this->SetFont('Times','',10);
-		$this->setSideBorders("Phone: (888) 272-5543",'C');
-		$line++;
-		$this->setSideBorders("Website: http://www.salliemae.com",'C');
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->SetFont('Times','B',10);
-		$this->setSideBorders("Federal Stafford Loans serviced by VSAC (Vermont)",'C');
-		$line++;
-		$this->SetFont('Times','',10);
-		$this->setSideBorders("Phone:  (800)-798-8722",'C');
-		$line++;
-		$this->setSideBorders("Website:  http://services.vsac.org/ilwwcm/connect/VSAC/Loan+Repayment+-+Consolidation/",'C');
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->SetFont('Times','B',10);
-		$this->setSideBorders("Federal Stafford Loans services by MEFA",'C');
-		$line++;
-		$this->SetFont('Times','',10);
-		$this->setSideBorders("Phone:  (800) 449-6332",'C');
-		$line++;
-		$this->setSideBorders("Website:  http://www.mefa.org",'C');
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->SetFont('Times','B',10);
-		$this->setSideBorders("Federal Perkins Loan serviced by ACS Campus Products & Services",'C');
-		$line++;
-		$this->SetFont('Times','',10);
-		$this->setSideBorders("Phone: (800) 826-4470",'C');
-		$line++;
-		$this->setSideBorders("Website: https://www.acs-education.com/CS/Jsp/general/home.jsp",'C');
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->SetFont('Times','B',10);
-		$this->setSideBorders("Federal Stafford Loans serviced by Finance Authority of Maine",'C');
-		$line++;
-		$this->SetFont('Times','',10);
-		$this->setSideBorders("Phone: (800)-228-3734",'C');
-		$line++;
-		$this->setSideBorders("Website: http://www.famemaine.com",'C');
-		$line++;
-		while($line < 54)
-		{
-			$this->setSideBorders(" ",'C');
-			$line++;
-		}
-	}
 
 	function contactInfoPrivate()
 	{
@@ -1178,30 +978,6 @@ class FinaidExitLoansPDF extends FPDF
 		$line++;
 
 		$this->SetFont('Times','B',10);
-		$this->setSideBorders("TERI Undergraduate Loan",'C');
-		$line++;
-		$this->SetFont('Times','',10);
-		$this->setSideBorders("Phone: (800) 255-8374",'C');
-		$line++;
-		$this->setSideBorders("Website: http://www.teri.org",'C');
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->SetFont('Times','B',10);
-		$this->setSideBorders("Key Alternative Loan",'C');
-		$line++;
-		$this->SetFont('Times','',10);
-		$this->setSideBorders("Phone: (800) 236-4300",'C');
-		$line++;
-		$this->setSideBorders("Website: http://www.key.com/college",'C');
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->SetFont('Times','B',10);
 		$this->setSideBorders("RISLA Alternative loan",'C');
 		$line++;
 		$this->SetFont('Times','',10);
@@ -1220,36 +996,6 @@ class FinaidExitLoansPDF extends FPDF
 		$this->setSideBorders("Phone:  1-800-487-4404",'C');
 		$line++;
 		$this->setSideBorders("Website:  http://www.chasestudentloans.com",'C');
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		while($line < 54)
-		{
-			$this->setSideBorders(" ",'C');
-			$line++;
-		}
-
-		$line=0;
-		$this->AddPage('P','Portrait');
-		$this->ln(5);
-
-
-		$this->setBorderTop();
-		$line++;
-		$this->setSideBorders(" ",'C');
-		$line++;
-
-		$this->setSideBorders(" ",'C');
-		$line++;
-		$this->SetFont('Times','B',12);
-		$this->setSideBorders("Wachovia Student loans",'C');
-		$line++;
-		$this->SetFont('Times','',12);
-		$this->setSideBorders("Phone:  1-800-347-7667",'C');
-		$line++;
-		$this->setSideBorders("Website: http://www.wachovia.com/education",'C');
 		$line++;
 
 		$this->setSideBorders(" ",'C');
@@ -1274,8 +1020,6 @@ class FinaidExitLoansPDF extends FPDF
 		$line++;
 		$this->setSideBorders(" ",'C');
 		$line++;
-		$this->setSideBorders(" ",'C');
-		$line++;
 		$this->SetBorderLeft();
 		$this->SetFont('Times','B',12);
 		$this->Cell(98,5,"              Private alternative student loan consolidation",0,0,'L');
@@ -1286,26 +1030,13 @@ class FinaidExitLoansPDF extends FPDF
 		$line++;
 		$this->setSideBorders("              1-877-336-1307 or website: http://www.wellsfargo.com/jump/regional/privateconsolidation",'L');
 		$line++;
-
-		while($line < 50)
+		
+		while($line < 54)
 		{
 			$this->setSideBorders(" ",'C');
 			$line++;
 		}
-
-		if(fmod($this->GroupPageNo(),2)&&$this->GroupPageNo()>1)
-		{
-			$this->StartPageGroup();
-			//$this->AddPage('P','Portrait');
-			$this->SetFont('Times','BI',7);
-			$this->setSideBorders(' Page '.$this->GroupPageNo().' of '.$this->PageGroupAlias(),'L');
-			$this->setSideBorders('','L');
-			$this->setBorderBottom();
-		}
-		if($this->type != "Public")
-		{
-			$this->type="";
-		}
+		
 	}
 
 	function Footer()
