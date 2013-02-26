@@ -163,6 +163,7 @@ class PSU
 		'mc' => array('PSUMemcache', '__construct'),
 		'zimbraadmin' => 'ZimbraAdmin::factory',
 		'phpmailer' => array('PHPMailer', '__construct'),
+		'pwman' => array('PasswordManager', '__construct'),
 	);
 
 	// functions that can be mimicked by curl()

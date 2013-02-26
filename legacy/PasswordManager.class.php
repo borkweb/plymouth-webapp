@@ -151,7 +151,7 @@ class PasswordManager
 			SELECT * 
 			  FROM password_history 
 			 WHERE wpid = ?
-				 AND activity_date <= ?
+				 AND activity_date >= ?
 		ORDER BY activity_date ASC
 		   LIMIT ?
 		";
