@@ -12,6 +12,6 @@ if($day >= 20 && $day <= 21 && $year == 2012) {
 }//end elseif
 /****************[ April 22: Earth Day ]*******************/
 /****************[ April 26-28: Chili Cook-Off ]*******************/
-if($day >= 26 && $day <= 28 && $year == 2012) {
+if($day >= 22 && $day <= 27 && $year == 2013) {
 	$theme->add('chili-cookoff','my.css',true);
 }//end elseif
