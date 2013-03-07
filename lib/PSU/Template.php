@@ -452,7 +452,7 @@ class Template extends \PSUSmarty
 				$this->addCSS('/webapp/my/templates/channels.css');
 			}//end if
 
-			$this->addJS('http'.($_SERVER['HTTPS'] ? 's':'').'://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.js', array('head'=>true));
+			$this->addJS('http'.($_SERVER['HTTPS'] ? 's':'').'://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.js', array('head'=>true));
 
 			// psu-standard scripts
 			if( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) {
