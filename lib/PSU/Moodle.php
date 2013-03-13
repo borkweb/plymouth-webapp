@@ -21,7 +21,7 @@ class Moodle {
 					OR mdl_enrol_shebang_person.userid_sctid = ?
 					OR mdl_enrol_shebang_person.userid_email = ?
 					OR mdl_enrol_shebang_person.email = ?
-		ORDER BY mdl_user.insert_date DESC
+		ORDER BY mdl_user.timecreated DESC
 			 LIMIT 1
 		";
 		$args = array(
